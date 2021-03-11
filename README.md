@@ -32,8 +32,6 @@ Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed a
  - Probably some other stuff I'm forgetting somewhere
  
 ## Contributing ##
-The biggest way I can get help is just testing as many PKGBUILDs as possible.
-
-Go on over to the [Issue Page](https://github.com/hwittenborn/makedeb/issues) and report bugs if you can too! Until I can get this thing fully up-to-spec, feel free to make and vote on feature requests as well.
+The biggest way I can get help is just testing as many PKGBUILDs as possible and reporting bugs on the [Issue Page](https://github.com/hwittenborn/makedeb/issues). Until I can get things fully up to spec, feel free to make feature requests as well if there's something you really need.
 
 Lastly, if you're able and want to, code contributions are always welcome!
