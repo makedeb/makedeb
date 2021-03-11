@@ -5,8 +5,6 @@
 ##                                            ##
 ##  PKGBUILD, makepkg and related assets are  ##
 ##   properties of their respective owners.   ##
-##                                            ##
-##       ** SCRIPT STARTS AT LINE 136 **      ##
 ################################################
 
 
@@ -26,6 +24,10 @@ setup() {
   ## DEFAULT VALUES FOR SOME VARIABLES ##
   pkgdir="${DIR}/pkg"
   srcdir="${DIR}/src"
+  
+  ## CLEANUP TASKS ##
+  rm ${DIR}/makedeb.log &> /dev/null
+  rm ${pkgdir} -R &> /dev/null
   }
 
 import_pkgbuild() {
@@ -99,19 +101,27 @@ convert_dependencies() {
     done
   fi
   }
-  
+
 pull_sources() {
-  for package in ${source[@]}; do
-    echo ${package} | grep "http" &> /dev/null
+    echo ${1} | grep "http" &> /dev/null
     if [[ ${?} == "0" ]]; then
-      echo "[#] Pulling $(basename ${package}) ..."
-      wget ${package} -q --show-progress
+      echo "[#] Pulling $(basename ${1}) ..."
+      wget ${1} -q --show-progress
     else
-      echo "[#] Copying ${package} to source directory ..."
-      cp ${DIR}/${package} "${srcdir}"
+      echo "[#] Copying ${1} to source directory ..."
+      cp ${DIR}/${1} "${srcdir}"
     fi
-  done
   }
+  
+source_files() {
+  for source_check in ${source[@]}; do
+    (find "${srcdir}/$(basename ${source_check})" &> /dev/null)
+    if [[ ${?} != "0" ]]; then
+    pull_sources ${source_check}
+    fi
+    done
+    }
+    
 
 count_sums() {
   sum_count=$(($(echo ${sha256sums} | wc -w) - 1))
@@ -120,10 +130,11 @@ count_sums() {
 verify_sources() {
   sum_current="0"
   while [[ ${sum_current} -le ${sum_count} ]]; do
-    echo "[#] Checking integrety of ${source[${sum_current}]} ..."
+    echo "[#] Checking integrety of $(basename ${source[${sum_current}]}) ..."
     current_sum=$(sha256sum ${srcdir}/$(basename ${source[${sum_current}]}) | awk '{print $1}')
     if [[ ${current_sum} != ${sha256sums[${sum_current}]} ]]; then
-      echo "[!] ${source[${sum_current}]}) failed the integrety check."
+      echo "[!] $(basename ${source[${sum_current}]}) failed the integrety check."
+      echo "[!] Try deleting the file from '${srcdir}/$(basename ${source[${sum_current}]})' and run makedeb again"
       exit 1
     else
       echo "[#] Passed."
@@ -131,8 +142,16 @@ verify_sources() {
     fi
   done
   }
-    
 
+run_functions() {
+    type ${1} &> /dev/null
+    if [[ ${?} == "0" ]]; then
+    echo "[#] Running '${1}' function ..."
+    ${1}
+    fi
+  }
+
+  
 ####################
 ##  START SCRIPT  ##
 ####################
@@ -160,13 +179,16 @@ echo "" >> "${pkgdir}"/DEBIAN/control
 mkdir -p "${srcdir}"
 cd "${srcdir}"
 
-pull_sources
+source_files
 verify_sources
 
 ## RUN PREPARE, BUILD, and PACKAGE FUNCTIONS ##
-echo "[#] Running prepare function ..."
-prepare
+cd "${srcdir}"
+run_functions prepare
+run_functions build
+cd "${DIR}"
+run_functions package
 
-echo "[#] Running package function ..."
-package
-
+## BUILD PACKAGE ##
+echo "[#] Building package ..."
+dpkg -b "${pkgdir}"

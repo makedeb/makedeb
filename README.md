@@ -10,3 +10,26 @@ Makdeb is NOT a clone/fork of `makepkg`. Rather, Makedeb is written from scratch
 
 ## Updating Packages ##
 Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed above.
+
+## Things I Still Need to Add(via the PKGBUILD Wiki Page) ##
+ - url
+ - license
+ - groups
+ - makedepends
+ - checkdepends
+ - optdepends
+ - provides
+ - conflicts
+ - replaces
+ - backup
+ - options
+ - noextract
+ - validpgpkeys
+ - SKIP hash support
+ - support for md5, sha1, sha224, sha384, sha512, and b2 hashsums
+ - check function
+ - Git Support(HTTP/HTTPS URLs work fine)
+ - Probably some other stuff I'm forgetting somewhere
+ 
+## Contributing ##
+The biggest way I can get help is just testing as many PKGBUILDs as possible. 
