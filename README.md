@@ -12,6 +12,7 @@ Makdeb is NOT a clone/fork of `makepkg`. Rather, Makedeb is written from scratch
 Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed above.
 
 ## Things I Still Need to Add(via the PKGBUILD Wiki Page) ##
+ - Chroot support(Nothing is confined ATM!)
  - url
  - license
  - groups
