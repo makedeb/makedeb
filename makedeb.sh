@@ -73,6 +73,7 @@ config_import() {
   }
   
 pkgsetup() {
+  rm -r ${pkgdir}
   mkdir -p "${pkgdir}"/DEBIAN/
   touch "${pkgdir}"/DEBIAN/control
   }
@@ -136,9 +137,9 @@ verify_sources() {
   sum_current="0"
   while [[ ${sum_current} -le ${sum_count} ]]; do
     echo "[#] Checking integrety of $(basename ${source[${sum_current}]}) ..."
-    current_sum=$(sha256sum ${srcdir}/$(basename ${source[${sum_current}]}) | awk '{print $1}')
-    if [[ ${current_sum} != ${sha256sums[${sum_current}]} ]]; then
-      echo "[!] $(basename ${source[${sum_current}]}) failed the integrety check."
+    current_sum=$(sha256sum "${srcdir}"/$(basename "${source[${sum_current}]}") | awk '{print $1}')
+    if [[ ${current_sum} != "${sha256sums[${sum_current}]}" ]]; then
+      echo "[!] "$(basename "${source[${sum_current}]}")" failed the integrety check."
       echo "[!] Try deleting the file from '${srcdir}/$(basename ${source[${sum_current}]})' and run makedeb again"
       exit 1
     else
@@ -156,7 +157,21 @@ run_functions() {
     fi
   }
 
+build_package() {
+  echo "[#] Building package ${pkgname}_${pkgver}_${arch} ..."
+  dpkg -b "${pkgdir}" >> /dev/null
+  dpkg-name "${pkgdir}.deb" >> /dev/null
+  }
   
+check_build() {
+  find "${srcdir}/.pkg_built" &> /dev/null
+  if [[ ${?} == "0" ]]; then
+    echo "[#] Package functions already ran ..."
+    build_package
+    echo "[#] Package ${pkgname}_${pkgver}_${arch} sucessfully built."
+    exit 0
+  fi
+  }
 ####################
 ##  START SCRIPT  ##
 ####################
@@ -166,6 +181,7 @@ setup
 import_pkgbuild
 sanity_check
 config_setup
+check_build
 
 echo "[#] Preparing ..."
 pkgsetup
@@ -193,7 +209,7 @@ run_functions prepare
 run_functions build
 cd "${DIR}"
 run_functions package
+touch "${srcdir}/.pkg_built"
 
 ## BUILD PACKAGE ##
-echo "[#] Building package ..."
-dpkg -b "${pkgdir}"
+build_package
