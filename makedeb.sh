@@ -260,7 +260,7 @@ echo "" >> "${pkgdir}"/DEBIAN/control
 
 ## PULL AND VERIFY SOURCES ##
 if [[ ${DOWNLOAD} == "TRUE" ]]; then
-  rm -r "${srcdir}"
+  rm -r "${srcdir}" &> /dev/null
   mkdir -p "${srcdir}"
   cd "${srcdir}"
 
