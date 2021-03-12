@@ -14,7 +14,7 @@ Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed a
 ## Quick Notes ##
  - Dependencies will *probably* need to be changed inside the PKGBUILD [as of now](https://github.com/hwittenborn/makedeb#things-i-want-to-add). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically does so).
 
-## Things I Still Need to Add ##
+## Things I Still **Need** to Add ##
  - Chroot support(Nothing is confined ATM!)
  - Fakeroot support
  - url
@@ -32,7 +32,7 @@ Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed a
  - check function
  - Probably some other stuff I'm forgetting somewhere
 
-## Things I Want to Add(not necessary to function) ##
+## Things I Want to Add ##
  - Dependency substitution system(for converting Arch Linux dependencies to Debian dependencies)
 
 ## Contributing ##
