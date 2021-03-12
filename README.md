@@ -24,15 +24,11 @@ Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed a
  - conflicts
  - replaces
  - backup
- - options
  - noextract
  - validpgpkeys
- - SKIP hash support
- - support for md5, sha1, sha224, sha384, sha512, and b2 hashsums
  - check function
- - Git Support(HTTP/HTTPS URLs work fine)
  - Probably some other stuff I'm forgetting somewhere
- 
+
 ## Contributing ##
 The biggest way I can get help is just testing as many PKGBUILDs as possible and reporting bugs on the [Issue Page](https://github.com/hwittenborn/makedeb/issues). Until I can get things fully up to spec, feel free to make feature requests as well if there's something you really need.
 
