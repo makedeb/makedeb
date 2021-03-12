@@ -17,23 +17,26 @@ Dependencies will *probably* need to be changed inside the PKGBUILD [as of now](
 ## Things I Still **Need** to Add ##
  - Chroot support(Nothing is confined ATM!)
  - Fakeroot support
- - url
- - license
- - groups
- - makedepends
- - checkdepends
- - optdepends
- - provides
- - conflicts
- - replaces
- - backup
- - noextract
- - validpgpkeys
- - check function
+ - url()
+ - license()
+ - groups()
+ - makedepends()
+ - checkdepends()
+ - optdepends()
+ - provides()
+ - conflicts()
+ - replaces()
+ - backup()
+ - noextract()
+ - validpgpkeys()
+ - check()
  - Probably some other stuff I'm forgetting somewhere
 
 ## Things I Want to Add ##
 Dependency substitution system(for converting Arch Linux dependencies to Debian dependencies)
+
+## Things that Probably won't be Added ##
+- options()
 
 ## Contributing ##
 The biggest way I can get help is just testing as many PKGBUILDs as possible and reporting bugs on the [Issue Page](https://github.com/hwittenborn/makedeb/issues). Until I can get things fully up to spec, feel free to make feature requests as well if there's something you really need.
