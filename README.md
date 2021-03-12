@@ -6,7 +6,7 @@ Makdeb is NOT a clone/fork of `makepkg`. Rather, Makedeb is written from scratch
 
 ## Building and Installing Packages ##
 1. Obtain the PKGBUILD and other files if necessary, most often with `git clone *URL*`
-2. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./*PKGNAME*.deb`
+2. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./*PKGNAME*.deb`, or alternatively specify the `--install` flag when running.
 
 ## Updating Packages ##
 Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed above.
