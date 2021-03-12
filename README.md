@@ -12,13 +12,14 @@ Makdeb is NOT a clone/fork of `makepkg`. Rather, Makedeb is written from scratch
 Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed above.
 
 ## Quick Notes ##
-Dependencies will *probably* need to be changed inside the PKGBUILD [as of now](https://github.com/hwittenborn/makedeb#things-i-want-to-add). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
+- Dependencies will *probably* need to be changed inside the PKGBUILD [as of now](https://github.com/hwittenborn/makedeb#things-i-want-to-add). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
 
 ## Things I Still *Need* to Add ##
  - Chroot support(Nothing is confined atm!)
  - Fakeroot support
  - Automatic package extraction
  - *arch*-hashsum(only normal hashsums supported atm)
+ - *arch*-source(only normal sources supported atm)
  - groups()
  - makedepends()
  - checkdepends()
