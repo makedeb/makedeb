@@ -19,6 +19,7 @@
 
 DOWNLOAD='TRUE'
 INSTALL='FALSE'
+BUILD='TRUE'
 
 
 #################
@@ -39,9 +40,12 @@ echo ""
 echo "makedeb takes PKGBUILD files and compiles APT-installable archives."
 echo ""
 echo "Options:"
+echo "  Items must be space-separated, i.e. '-I -S'"
+echo ""
 echo "  --help - bring up this help menu"
-echo "  --install - automatically install after building"
-echo "  --skip-download - skip downloading of files"
+echo "  -I, --install - automatically install after building"
+echo "  -B, --build-only - skip functions, and go straight to build the .deb archive"
+echo "  -S, --skip-download - skip downloading of files"
 echo ""
 echo "A config file is located in '~/.config/makedeb/config'."
 echo "Options for this file:"
@@ -55,8 +59,9 @@ setup() {
   ## DEFAULT VALUES FOR SOME VARIABLES ##
   pkgdir="${DIR}/pkg"
   srcdir="${DIR}/src"
+}
 
-  ## CLEANUP TASKS ##
+cleanup() {
   rm "${DIR}"/makedeb.log &> /dev/null
   rm "${pkgdir}" -R &> /dev/null
   }
@@ -125,17 +130,16 @@ convert_arch() {
   }
 
 convert_dependencies() {
-  if [[ ${depends} != "" ]]; then
-    echo "Depends:" >> "${pkgdir}"/DEBIAN/control
-    sed -i "/Depends/s/$/ ${depends}/" "${pkgdir}"/DEBIAN/control
+  if [[ ${2} != "" ]]; then
+    echo "${1}:" >> "${pkgdir}"/DEBIAN/control
+    sed -i "/${1}/s/$/ ${2}/" "${pkgdir}"/DEBIAN/control
     for package in ${depends[@]:1}; do
-      sed -i "/Depends/s/$/, ${package}/" "${pkgdir}"/DEBIAN/control
+      sed -i "/${1}/s/$/, ${package}/" "${pkgdir}"/DEBIAN/control
     done
   fi
   }
 
 pull_sources() {
-if [[ ${DOWNLOAD} == "TRUE" ]]; then
   for pkg in ${source[@]}; do
 
     echo "${pkg}" | grep "::" &> /dev/null
@@ -169,12 +173,9 @@ if [[ ${DOWNLOAD} == "TRUE" ]]; then
       fi
     fi
   done
-else
-  echo "[#] Skipping download ..."
-  fi
-  }
+}
 
-hashsum_check() {
+integrity_check() {
   for do_hash in md5sums sha256sums sha1sums sha224sums sha384sums sha512sums b2sums; do
     ## CHECK IF HASHES ARE SET FOR EACH TYPE ##
     if [[ ${!do_hash} != "" ]]; then
@@ -195,27 +196,25 @@ hashsum_check() {
   done
 }
 
-run_functions() {
-    type ${1} &> /dev/null
-    if [[ ${?} == "0" ]]; then
-    echo "[#] Running '${1}' function ..."
+do_function() {
+  check_function=$(printf "$(type ${1} 2> /dev/null | sed "1,3d" | sed "$ d")")
+  if [[ ${check_function} != "" ]]; then
+    echo "[#] Running ${1}() ..."
     ${1}
-    fi
-  }
+  fi
+}
 
 build_package() {
-  echo "[#] Building package ${pkgname}_${pkgver}_${arch} ..."
+  rm "${DIR}/${pkgdir}.deb" &> /dev/null
+  rm "${DIR}/${pkgname}_${pkgver}_${arch}.deb" &> /dev/null
+  echo "[#] Building '${pkgname}_${pkgver}_${arch}.deb' ..."
   dpkg -b "${pkgdir}" >> /dev/null
   dpkg-name "${pkgdir}.deb" >> /dev/null
-  }
+  echo "[#] Built '${pkgname}_${pkgver}_${arch}.deb'"
 
-check_build() {
-  find "${srcdir}/.pkg_built" &> /dev/null
-  if [[ ${?} == "0" ]]; then
-    echo "[#] Package functions already ran ..."
-    build_package
-    echo "[#] Package ${pkgname}_${pkgver}_${arch} sucessfully built."
-    exit 0
+  if [[ "${INSTALL}" == "TRUE" ]]; then
+    echo "[#] Installing ''${pkgname}_${pkgver}_${arch}.deb'"
+    sudo apt install "${pkgdir}/${pkgname}_${pkgver}_${arch}.deb"
   fi
   }
 
@@ -227,8 +226,9 @@ config_setup
 while true; do
   case "${1}" in
   --help)                                 help; exit 0 ;;
-  --install)                              INSTALL="TRUE" ;;
-  --skip-download)                        DOWNLOAD="FALSE" ;;
+  -I | --install)                              INSTALL="TRUE" ;;
+  -B | --build-only)                         BUILD="FALSE" ;;
+  -S | --skip-download)                        DOWNLOAD="FALSE" ;;
   "")                                     break ;;
   esac
   shift
@@ -236,8 +236,12 @@ while true; do
 root_check
 setup
 import_pkgbuild
+if [[ ${BUILD} == "FALSE" ]]; then
+  build_package
+  exit 0
+fi
+cleanup
 sanity_check
-check_build
 
 echo "[#] Preparing ..."
 pkgsetup
@@ -249,28 +253,33 @@ export_control "Source:" "${source}"
 export_control "Version:" "${pkgver}"
 export_control "Architecture:" "${arch}"
 export_control "Maintainer:" "${MAINTAINER}"
-# convert_dependencies
+convert_dependencies "Depends:" "${depends}"
+convert_dependencies "Recommends:" "${optdepends}"
+convert_dependencies "Conflicts:" "${conflicts}"
 echo "" >> "${pkgdir}"/DEBIAN/control
 
 ## PULL AND VERIFY SOURCES ##
-mkdir -p "${srcdir}"
-cd "${srcdir}"
+if [[ ${DOWNLOAD} == "TRUE" ]]; then
+  rm -r "${srcdir}"
+  mkdir -p "${srcdir}"
+  cd "${srcdir}"
 
-pull_sources
-hashsum_check
-exit 0
+  pull_sources
+else
+  cd "${srcdir}"
+  echo "[#] Skipping file downloads ..."
+fi
+integrity_check
 
-## RUN PREPARE, BUILD, and PACKAGE FUNCTIONS ##
-cd "${srcdir}"
-run_functions prepare
-run_functions build
-cd "${DIR}"
-run_functions package
-touch "${srcdir}/.pkg_built"
+## MAKE PACKAGE ##
+if [[ "${BUILD}" == "TRUE" ]]; then
+  cd "${srcdir}"
+  do_function prepare
+  do_function pkgver
+  do_function build
+  do_function check
+  do_function package
+fi
 
 ## BUILD AND INSTALL PACKAGE ##
 build_package
-if [[ ${INSTALL} == "TRUE" ]]; then
-  echo "[#] Installing ${pkgname}_${pkgver}_${arch}.deb"
-  sudo apt install "${pkgdir}/${pkgname}_${pkgver}_${arch}.deb"
-fi
