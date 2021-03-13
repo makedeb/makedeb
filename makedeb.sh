@@ -117,9 +117,9 @@ export_control() {
 
 convert_version() {
   if [[ ${epoch} == "" ]]; then
-    export pkgver="${pkgver}-${pkgrel}"
+    export controlver="${pkgver}-${pkgrel}"
   else
-    export pkgver="${epoch}:${pkgver}-${pkgrel}"
+    export controlver="${epoch}:${pkgver}-${pkgrel}"
   fi
   }
 
@@ -130,11 +130,11 @@ convert_arch() {
   }
 
 convert_dependencies() {
-  if [[ ${2} != "" ]]; then
-    echo "${1}:" >> "${pkgdir}"/DEBIAN/control
-    sed -i "/${1}/s/$/ ${2}/" "${pkgdir}"/DEBIAN/control
-    for package in ${depends[@]:1}; do
-      sed -i "/${1}/s/$/, ${package}/" "${pkgdir}"/DEBIAN/control
+  if [[ ${3} != "" ]]; then
+    echo "${1}" >> "${pkgdir}"/DEBIAN/control
+    sed -i "/${1}/s/$/ $(echo ${3} | awk -F: '{print $1}')/" "${pkgdir}"/DEBIAN/control
+    for package in $(eval "echo \${$2[@]:1}" | awk -F: '{print $1}'); do
+      sed -i "/${1}/s/$/, $(echo ${package})/" "${pkgdir}"/DEBIAN/control
     done
   fi
   }
@@ -187,12 +187,19 @@ integrity_check() {
       source_total=$(( $(echo ${source[@]} | wc -w) -1 ))
 
       while [[ ${source_file} -le ${source_total} ]]; do
-        recorded_hash=${!do_hash[$source_file]}
-        current_hash=$( ${do_hash::-1} "$(url_convert `basename ${source[$source_file]}`)" | awk '{print $1}' )
+        ## CHECK IF DOWNLOADED FILE WAS RENAMED AND GET HASHES ##
+        recorded_hash=$(eval "echo \${$do_hash[$source_file]}" | awk '{print $1}')
 
+        if [[ $( echo ${source[$source_file]} | awk -F:: '{print $2}' ) != "" ]]; then
+          current_hash=$( ${do_hash::-1} "$( echo ${source[$source_file]} | awk -F:: '{print $1}' )" | awk '{print $1}')
+        else
+          current_hash=$( ${do_hash::-1} "$(url_convert `basename ${source[$source_file]}`)" | awk '{print $1}' )
+        fi
+
+        ## CHECK HASHES ##
         if [[ $(eval "echo \${$do_hash[$source_file]}") == "SKIP" ]]; then
-          echo "[#] Skipping ${do_hash::-1} check on $(url_convert `basename ${source[$source_file]}`)."
-        elif [[ ${current_hash} != ${recorded_hash} ]]; then
+          echo "[#] Skipping ${do_hash::-1} integrity check on $(url_convert `basename ${source[$source_file]}`)."
+        elif [[ ${current_hash} != "${recorded_hash}" ]]; then
           echo "[!] "$(url_convert `basename ${source[$source_file]}`)" failed the integrity check on ${do_hash}."
           exit 1
         else
@@ -202,6 +209,17 @@ integrity_check() {
       done
     fi
   done
+}
+
+extract_sources() {
+  for file in $(ls | grep .tar.xz); do
+    echo "[#] Extracting ${file} ..."
+    tar -xf $file
+    done
+  for file in $(ls | grep .deb); do
+    echo "[#] Extracting ${file} ..."
+    ar xv ${file}
+    done
 }
 
 do_function() {
@@ -259,12 +277,12 @@ convert_arch
 export_control "Package:" "${pkgname}"
 export_control "Description:" "${pkgdesc}"
 export_control "Source:" "${source}"
-export_control "Version:" "${pkgver}"
+export_control "Version:" "${controlver}"
 export_control "Architecture:" "${arch}"
 export_control "Maintainer:" "${MAINTAINER}"
-convert_dependencies "Depends:" "${depends}"
-convert_dependencies "Recommends:" "${optdepends}"
-convert_dependencies "Conflicts:" "${conflicts}"
+convert_dependencies "Depends:" "depends" "${depends}"
+convert_dependencies "Recommends:" "optdepends" "${optdepends}"
+convert_dependencies "Conflicts:" "conflicts" "${conflicts}"
 echo "" >> "${pkgdir}"/DEBIAN/control
 
 ## PULL AND VERIFY SOURCES ##
@@ -279,6 +297,7 @@ else
   echo "[#] Skipping file downloads ..."
 fi
 integrity_check
+extract_sources
 
 ## MAKE PACKAGE ##
 if [[ "${BUILD}" == "TRUE" ]]; then
