@@ -139,6 +139,10 @@ convert_dependencies() {
   fi
   }
 
+url_convert() {
+  echo ${1} | sed "s/%20/ /g"
+}
+
 pull_sources() {
   for pkg in ${source[@]}; do
 
@@ -152,7 +156,7 @@ pull_sources() {
       ## CHECK FOR URL IN SECOND STRING ##
       echo "${string2}" | grep "http" &> /dev/null
       if [[ ${?} == 0 ]]; then
-      echo "[#] Downloading '$(basename $string2)' to '${string1}' ..."
+      echo "[#] Downloading '$(url_convert `basename $string2`)' to '${string1}' ..."
         wget -q --show-progress ${string2}
         echo "[#] Moving '$(basename $string2)' to '${string1}' ..."
         mv $(basename $string2) ${string1}
@@ -165,11 +169,11 @@ pull_sources() {
       ## CHECK FOR URL IN SINGLE STRING ##
       echo "${pkg}" | grep "http" &> /dev/null
       if [[ ${?} == 0 ]]; then
-      echo "[#] Downloading '$(basename $pkg)' ..."
-        wget -q --show-progress ${pkg}
+      echo "[#] Downloading " $(url_convert `basename "${pkg}"`) " ..."
+        wget -q --show-progress "${pkg}"
       else
-        echo "[#] Copying '${pkg}' to source directory"
-        cp "${DIR}"/"${pkg}" .
+        echo "[#] Copying " "`basename ${pkg}`" " to source directory"
+        cp "${DIR}"/"`basename ${pkg}`" .
       fi
     fi
   done
@@ -181,17 +185,21 @@ integrity_check() {
     if [[ ${!do_hash} != "" ]]; then
       source_file="0"
       source_total=$(( $(echo ${source[@]} | wc -w) -1 ))
-      recorded_hash=${!do_hash[$source_file]}
-      current_hash=$( ${do_hash::-1} $(basename ${source[$source_file]}) | awk '{print $1}')
 
-      if [[ ${!do_hash} == "SKIP" ]]; then
-        echo "[#] Skipping ${do_hash::-1} check on '$(basename ${source[$source_file]})'."
-      elif [[ ${current_hash} != ${recorded_hash} ]]; then
-        echo "[!] '$(basename ${source[$source_file]})' failed the integrity check on ${do_hash}."
-        exit 1
-      else
-        echo "[#] '$(basename ${source[$source_file]})' passed the integrity check on ${do_hash}."
-      fi
+      while [[ ${source_file} -le ${source_total} ]]; do
+        recorded_hash=${!do_hash[$source_file]}
+        current_hash=$( ${do_hash::-1} "$(url_convert `basename ${source[$source_file]}`)" | awk '{print $1}' )
+
+        if [[ $(eval "echo \${$do_hash[$source_file]}") == "SKIP" ]]; then
+          echo "[#] Skipping ${do_hash::-1} check on $(url_convert `basename ${source[$source_file]}`)."
+        elif [[ ${current_hash} != ${recorded_hash} ]]; then
+          echo "[!] "$(url_convert `basename ${source[$source_file]}`)" failed the integrity check on ${do_hash}."
+          exit 1
+        else
+          echo "[#] "$(url_convert `basename ${source[$source_file]}`)" passed the integrity check on ${do_hash}."
+        fi
+        source_file=$(( ${source_file} + 1 ))
+      done
     fi
   done
 }
@@ -199,6 +207,7 @@ integrity_check() {
 do_function() {
   check_function=$(printf "$(type ${1} 2> /dev/null | sed "1,3d" | sed "$ d")")
   if [[ ${check_function} != "" ]]; then
+    "${2}" &> /dev/null
     echo "[#] Running ${1}() ..."
     ${1}
   fi
@@ -274,10 +283,10 @@ integrity_check
 ## MAKE PACKAGE ##
 if [[ "${BUILD}" == "TRUE" ]]; then
   cd "${srcdir}"
-  do_function prepare
-  do_function pkgver
-  do_function build
-  do_function check
+  do_function prepare "set -e"
+  do_function pkgver "set -e"
+  do_function build "set -e"
+  do_function check "set -e"
   do_function package
 fi
 
