@@ -17,10 +17,8 @@ Obtain the latest PKGBUILD and other files if needed, and follow step 2 listed a
 ## Things I Still *Need* to Add ##
  - Chroot support(Nothing is confined atm!)
  - Fakeroot support
- - Automatic package extraction
  - *arch*-hashsum(only normal hashsums supported atm)
  - *arch*-source(only normal sources supported atm)
- - groups()
  - makedepends()
  - checkdepends()
  - backup()
@@ -33,6 +31,8 @@ Dependency substitution system(for converting Arch Linux dependencies to Debian 
 ## Things that Probably won't be Added ##
 - options()
 - startdir
+- groups()
+
 
 ## Contributing ##
 The biggest way I can get help is just testing as many PKGBUILDs as possible and reporting bugs on the [Issue Page](https://github.com/hwittenborn/makedeb/issues). Until I can get things fully up to spec, feel free to make feature requests as well if there's something you really need.
