@@ -171,6 +171,7 @@ while true; do
   shift
   done
 
+source PKGBUILD
 if [[ ${CONVERT} == "TRUE" ]]; then
   source PKGBUILD
   echo "[#] Attempting to convert dependencies in PKGBUILD..."
