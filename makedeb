@@ -68,10 +68,21 @@ install_makedeps() {
     sudo apt install ${packages}
   fi
 }
-
 rm_makedeps() {
   echo "[#] Removing unneeded make dependencies..."
   sudo dpkg -r ${makedepends[@]} &> /dev/null
+}
+
+install_checkdeps() {
+  if [[ "${checkdepends}" != "" ]]; then
+    echo "[#] Installing make dependencies..."
+    local packages="$(apt list ${checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
+    sudo apt install ${packages}
+  fi
+}
+rm_makedeps() {
+  echo "[#] Removing unneeded make dependencies..."
+  sudo dpkg -r ${checkdepends[@]} &> /dev/null
 }
 
 config_setup() {
@@ -133,11 +144,13 @@ while true; do
   done
 source PKGBUILD
 install_makedeps
+install_checkdeps
 
 echo "[#] Running makepkg..."
-makepkg
+makepkg ${OPTIONS[@]}
 
 rm_makedeps
+rm_checkdeps
 
 echo "[#] Generating control file..."
 pkgsetup
