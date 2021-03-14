@@ -1,7 +1,7 @@
 # Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
 
 pkgname=makedeb
-pkgver=1.0.5
+pkgver=1.0.6
 pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros"
 arch=('any')
@@ -15,4 +15,6 @@ sha256sums=('SKIP')
 package() {
   mkdir -p "${pkgdir}/usr/bin/"
   cp "${srcdir}/makedeb-${pkgver}/makedeb" "${pkgdir}/usr/bin/"
+  mkdir -p "${pkgdir}/etc/makedeb"
+   cp "${srcdir}/makedeb-${pkgver}/packages.db" "${pkgdir}/etc/makedeb/"
 }
