@@ -12,10 +12,6 @@ sudo apt update
 sudo apt install makedeb -y
 ```
 
-## Building ##
-1. Clone/Download this repo
-2. Run `./makedeb`
-
 ## Building and Installing PKGBUILDs ##
 1. Obtain the PKGBUILD and other files if necessary, most often with `git clone url`
 2. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./package.deb`, or alternatively specify the `--install` flag when running
