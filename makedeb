@@ -1,0 +1,192 @@
+#!/bin/bash
+
+################################################
+##  Copyright Hunter Wittenborn 2020          ##
+##                                            ##
+##  PKGBUILD, makepkg and related assets are  ##
+##  properties of their respective owners.    ##
+##                                            ##
+##  This program is free software; you can    ##
+##  redistribute it and/or modify it under    ##
+##  the terms of the GNU General Public       ##
+##  License v3.0                              ##
+################################################
+
+
+####################
+## DEFAULT VALUES ##
+####################
+INSTALL='FALSE'
+
+DIR="$(echo $PWD)"
+srcdir="${DIR}/src"
+pkgdir="${DIR}/pkg"
+files="$(ls)"
+
+
+#################
+##  FUNCTIONS  ##
+#################
+
+help() {
+echo "makedeb v0.1.1"
+echo "Usage: makedeb [options]"
+echo ""
+echo "makedeb takes PKGBUILD files and compiles APT-installable archives."
+echo ""
+echo "Options:"
+echo "  Items must be space-separated, i.e. '-I -S'"
+echo ""
+echo "  --help - bring up this help menu"
+echo "  -I, --install - automatically install after building"
+
+echo ""
+echo "A config file is located in '~/.config/makedeb/config'."
+echo "Options for this file:"
+echo "    MAINTAINER - set a maintainer for built packages"
+echo ""
+echo "Report bugs at https://github.com/hwittenborn/makedeb"
+}
+
+root_check() {
+  if [[ "$(whoami)" == "root" ]]; then
+    echo "[!] Running makedeb as root is not allowed."
+    exit 1
+  fi
+}
+
+pkgsetup() {
+  rm -r "${pkgdir}" &> /dev/null
+  mkdir -p "${pkgdir}"/DEBIAN/
+  touch "${pkgdir}"/DEBIAN/control
+  }
+
+install_makedeps() {
+  if [[ "${makedepends}" != "" ]]; then
+    echo "[#] Installing make dependencies..."
+    local packages="$(apt list ${makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
+    sudo apt install ${packages}
+  fi
+}
+
+rm_makedeps() {
+  echo "[#] Removing unneeded make dependencies..."
+  sudo dpkg -r ${makedepends[@]} &> /dev/null
+}
+
+config_setup() {
+  find ~/.config/makedeb/config &> /dev/null
+  if [[ "$?" != "0" ]]; then
+    mkdir -p ~/.config/makedeb/ &> /dev/null
+    touch ~/.config/makedeb/config
+  fi
+
+  . ~/.config/makedeb/config
+  }
+
+config_import() {
+  source ~/.config/makedeb/config
+  }
+
+export_control() {
+  if [[ {$2} != "" ]]; then
+    echo "${1} ${2}" >> "${pkgdir}"/DEBIAN/control
+  fi
+  }
+
+convert_version() {
+  if [[ ${epoch} == "" ]]; then
+    export controlver="${pkgver}-${pkgrel}"
+  else
+    export controlver="${epoch}:${pkgver}-${pkgrel}"
+  fi
+  }
+
+convert_arch() {
+  if [[ ${arch} == "x86_64" ]]; then
+    export arch="amd64"
+  fi
+  }
+
+convert_dependencies() {
+  if [[ ${3} != "" ]]; then
+    echo "${1}" >> "${pkgdir}"/DEBIAN/control
+    sed -i "/${1}/s/$/ $(echo ${3} | awk -F: '{print $1}')/" "${pkgdir}"/DEBIAN/control
+    for package in $(eval "echo \${$2[@]:1}" | awk -F: '{print $1}'); do
+      sed -i "/${1}/s/$/, $(echo ${package})/" "${pkgdir}"/DEBIAN/control
+    done
+  fi
+  }
+
+####################
+##  START SCRIPT  ##
+####################
+root_check
+config_setup
+while true; do
+  case "${1}" in
+  --help)                                 help; exit 0 ;;
+  -I | --install)                         INSTALL="TRUE" ;;
+  "")                                     break ;;
+  esac
+  shift
+  done
+source PKGBUILD
+install_makedeps
+
+echo "[#] Running makepkg..."
+makepkg
+
+rm_makedeps
+
+echo "[#] Generating control file..."
+pkgsetup
+convert_version
+convert_arch
+export_control "Package:" "${pkgname}"
+export_control "Description:" "${pkgdesc}"
+export_control "Source:" "${source}"
+export_control "Version:" "${controlver}"
+export_control "Architecture:" "${arch}"
+export_control "Maintainer:" "${MAINTAINER}"
+convert_dependencies "Depends:" "depends" "${depends}"
+convert_dependencies "Recommends:" "optdepends" "${optdepends}"
+convert_dependencies "Conflicts:" "conflicts" "${conflicts}"
+echo "" >> "${pkgdir}"/DEBIAN/control
+
+echo "[#] Extracting $(ls | grep ".pkg.tar.zst") to pkgdir..."
+mkdir -p "${DIR}/makedeb.temp"
+cp "$(ls | grep ".pkg.tar.zst")" "${DIR}/makedeb.temp"
+rm "$(ls | grep ".pkg.tar.zst")"
+
+cd "${DIR}/makedeb.temp"
+tar -xf "$(ls | grep ".pkg.tar.zst")"
+rm "$(ls | grep ".pkg.tar.zst")"
+
+transfer="$(ls)"
+for thing in ${transfer}; do
+  cp ${thing} "${pkgdir}" -r
+done
+
+cd "${DIR}"
+rm -r makedeb.temp
+
+field() {
+  cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
+}
+
+debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
+
+if [[ $(find "${DIR}/${debname}.deb" &> /dev/null | echo $?) == "0" ]]; then
+  echo "[#] Built package detected. Removing..."
+  rm "${DIR}/${debname}.deb"
+fi
+
+echo "[#] Building package..."
+dpkg -b "${pkgdir}" >> /dev/null
+dpkg-name $(basename "${pkgdir}").deb >> /dev/null
+echo "[#] Built package..."
+
+if [[ ${INSTALL} == "TRUE" ]]; then
+  sudo apt install "${DIR}/${pkgdir}.deb"
+fi
