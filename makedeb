@@ -137,6 +137,14 @@ convert_dependencies() {
   fi
   }
 
+transform_deps() {
+  for pkg in $(cat /etc/makedeb/packages.db); do
+    string1=$(echo "${pkg}" | awk -F= '{print $1}')
+    string2=$(echo "${pkg}" | awk -F= '{print $2}')
+    sed -i "s/\<$string1\>/$string2/g" "${DIR}/PKGBUILD"
+  done
+}
+
 ####################
 ##  START SCRIPT  ##
 ####################
@@ -150,7 +158,12 @@ while true; do
   esac
   shift
   done
+
+echo "[#] Patching dependencies in PKGBUILD..."
+transform_deps
+
 source PKGBUILD
+
 install_makedeps
 install_checkdeps
 
@@ -164,6 +177,7 @@ echo "[#] Generating control file..."
 pkgsetup
 convert_version
 convert_arch
+
 export_control "Package:" "${pkgname}"
 export_control "Description:" "${pkgdesc}"
 export_control "Source:" "${source}"
@@ -171,7 +185,7 @@ export_control "Version:" "${controlver}"
 export_control "Architecture:" "${arch}"
 export_control "Maintainer:" "${MAINTAINER}"
 convert_dependencies "Depends:" "depends" "${depends}"
-convert_dependencies "Recommends:" "optdepends" "${optdepends}"
+convert_dependencies "Suggests:" "optdepends" "${optdepends}"
 convert_dependencies "Conflicts:" "conflicts" "${conflicts}"
 echo "" >> "${pkgdir}"/DEBIAN/control
 
