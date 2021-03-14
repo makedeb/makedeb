@@ -1,4 +1,3 @@
-gtk-engine-murrine=gtk2-engines-murrine
-gtk-engines=gtk2-engines
-gtk3=libgtk-3-0
-
+gtk-engine-murrine="gtk2-engines-murrine"
+gtk-engines="gtk2-engines"
+gtk3="libgtk-3-0"

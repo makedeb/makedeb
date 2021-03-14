@@ -141,8 +141,8 @@ convert_dependencies() {
 transform_deps() {
   for pkg in $(cat /etc/makedeb/packages.db); do
     string1=$(echo "${pkg}" | awk -F= '{print $1}')
-    string2=$(echo "${pkg}" | awk -F= '{print $2}')
-    sed -i "s/\<$string1\>/$string2/g" "${DIR}/PKGBUILD"
+    string2="$(echo "${pkg}" | awk -F= '{print $2}')"
+    sed -i "s/${1}/${2[@]}/g" "${DIR}/PKGBUILD"
   done
 }
 
