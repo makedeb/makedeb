@@ -120,6 +120,8 @@ convert_version() {
 convert_arch() {
   if [[ ${arch} == "x86_64" ]]; then
     export arch="amd64"
+  elif [[${arch} == "armv7l" ]]; then
+    export arch="armhf"
   fi
   }
 
