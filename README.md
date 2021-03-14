@@ -1,3 +1,6 @@
+## Disclaimer ##
+While this program is relatively stable, features are constantly being added which may cause it to act up. Do **not** use the program right now if you're expecting stability. Instead, feel free to use it after this disclaimer is no longer here.
+
 ## Overview ##
 Makedeb takes PKGBUILD files and creates Debian archives installable with APT
 
