@@ -2,9 +2,10 @@
 
 pkgname=makedeb
 pkgver=1.0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="Make PKGBUILDs work on Debian-based distros"
 arch=('any')
+depends=('makepkg')
 license=('GPL3')
 url="https://github.com/hwittenborn/makedeb"
 
