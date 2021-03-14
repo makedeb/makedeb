@@ -8,7 +8,7 @@ Makedeb takes PKGBUILD files and creates Debian archives installable with APT
 3. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./*PKGNAME*.deb`, or alternatively specify the `--install` flag when running
 
 ## Other Notes ##
-Dependencies might need to be changed inside the PKGBUILD as of now(see #Things I Want to Add). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
+Dependencies might need to be manually changed inside the PKGBUILD if the dependency names on Debian differ from the Arch Linux counterparts as of now. Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
 
 ## Things I Still *Need* to Add ##
  Pushing environment variables to makepkg
