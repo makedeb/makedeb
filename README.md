@@ -11,7 +11,7 @@ Makedeb takes PKGBUILD files and creates Debian archives installable with APT
 Dependencies might need to be changed inside the PKGBUILD [as of now](https://github.com/hwittenborn/makedeb#things-i-want-to-add). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
 
 ## Things I Still *Need* to Add ##
- - Pushing environment variables to makepkg
+ Pushing environment variables to makepkg
 
 ## Things I Want to Add ##
 Dependency substitution system(for converting Arch Linux dependencies to Debian dependencies)
