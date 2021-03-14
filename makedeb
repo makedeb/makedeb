@@ -210,5 +210,5 @@ dpkg-name $(basename "${pkgdir}").deb >> /dev/null
 echo "[#] Built package..."
 
 if [[ ${INSTALL} == "TRUE" ]]; then
-  sudo apt install "${DIR}/${pkgdir}.deb"
+  sudo apt install "${DIR}/${debname}.deb"
 fi
