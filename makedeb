@@ -69,20 +69,24 @@ install_makedeps() {
   fi
 }
 rm_makedeps() {
-  echo "[#] Removing unneeded make dependencies..."
-  sudo dpkg -r ${makedepends[@]} &> /dev/null
+  if [[ "${makedepends}" != "" ]]; then
+    echo "[#] Removing unneeded make dependencies..."
+    sudo dpkg -r ${makedepends[@]} &> /dev/null
+  fi
 }
 
 install_checkdeps() {
   if [[ "${checkdepends}" != "" ]]; then
-    echo "[#] Installing make dependencies..."
+    echo "[#] Installing check dependencies..."
     local packages="$(apt list ${checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
     sudo apt install ${packages}
   fi
 }
 rm_checkdeps() {
-  echo "[#] Removing unneeded make dependencies..."
-  sudo dpkg -r ${checkdepends[@]} &> /dev/null
+  if [[ "${checkdepends}" != "" ]]; then
+    echo "[#] Removing unneeded check dependencies..."
+    sudo dpkg -r ${checkdepends[@]} &> /dev/null
+  fi
 }
 
 config_setup() {
@@ -190,7 +194,8 @@ field() {
 
 debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
 
-if [[ $(find "${DIR}/${debname}.deb" &> /dev/null | echo $?) == "0" ]]; then
+find "${DIR}/${debname}.deb" &> /dev/null
+if [[ ${?} == "0" ]]; then
   echo "[#] Built package detected. Removing..."
   rm "${DIR}/${debname}.deb"
 fi
