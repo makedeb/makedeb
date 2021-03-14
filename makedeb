@@ -29,7 +29,7 @@ files="$(ls)"
 #################
 
 help() {
-echo "makedeb v0.1.1"
+echo "makedeb"
 echo "Usage: makedeb [options]"
 echo ""
 echo "makedeb takes PKGBUILD files and compiles APT-installable archives."
@@ -39,6 +39,7 @@ echo "  Items must be space-separated, i.e. '-I -S'"
 echo ""
 echo "  --help - bring up this help menu"
 echo "  -I, --install - automatically install after building"
+echo "  --convert - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
 
 echo ""
 echo "A config file is located in '~/.config/makedeb/config'."
@@ -154,13 +155,16 @@ while true; do
   case "${1}" in
   --help)                                 help; exit 0 ;;
   -I | --install)                         INSTALL="TRUE" ;;
+  --convert)                              CONVERT="TRUE" ;;
   "")                                     break ;;
   esac
   shift
   done
 
-echo "[#] Patching dependencies in PKGBUILD..."
-transform_deps
+if [[ ${CONVERT} == "TRUE" ]]; then
+  echo "[#] Attempting to convert dependencies in PKGBUILD..."
+  transform_deps
+fi
 
 source PKGBUILD
 
