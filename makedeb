@@ -147,7 +147,7 @@ install_makedeps
 install_checkdeps
 
 echo "[#] Running makepkg..."
-makepkg ${OPTIONS[@]}
+makepkg ${OPTIONS[@]} || exit 1
 
 rm_makedeps
 rm_checkdeps
