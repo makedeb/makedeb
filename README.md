@@ -12,6 +12,7 @@ Dependencies will need to be manually changed inside the PKGBUILD if the depende
 
 ## Things I Still *Need* to Add ##
 - Pushing environment variables to makepkg
+- Picking a file(i.e. a file named other than PKGBUILD)
 
 ## Things I Want to Add ##
 - Dependency substitution system(for converting Arch Linux dependencies to Debian dependencies)
