@@ -139,17 +139,27 @@ convert_dependencies() {
   }
 
 transform_deps() {
+  echo "[#] The dependency converter is currently in beta. Report bugs to the URL listed on the help page(--help)"
+  sleep 1
+
   for pkg in $(cat /etc/makedeb/packages.db); do
     string1=$(echo "${pkg}" | awk -F= '{print $1}')
     string2="$(echo "${pkg}" | awk -F= '{print $2}')"
-    sed -i "s/${1}/${2[@]}/g" "${DIR}/PKGBUILD"
+
+    sed -i "s/${string1}/${string2[@]}/g" PKGBUILD
+    source PKGBUILD
   done
+
+  new_depends=$(echo $(echo ${depends[@]} | sed "s/ /\n/g")); sed -i "s/depends=.*/depends=($new_depends)/g" PKGBUILD
+  new_optdepends=$(echo $(echo ${optdepends[@]} | sed "s/ /\n/g")); sed -i "s/optdepends=.*/optdepends=($new_optdepends)/g" PKGBUILD
+  new_conflicts=$(echo $(echo ${conflicts[@]} | sed "s/ /\n/g")); sed -i "s/conflicts=.*/conflicts=($new_conflicts)/g" PKGBUILD
+  source PKGBUILD
 }
 
 ####################
 ##  START SCRIPT  ##
 ####################
-root_check
+root_check${conflicts[@]}
 config_setup
 while true; do
   case "${1}" in
@@ -162,11 +172,10 @@ while true; do
   done
 
 if [[ ${CONVERT} == "TRUE" ]]; then
+  source PKGBUILD
   echo "[#] Attempting to convert dependencies in PKGBUILD..."
   transform_deps
 fi
-
-source PKGBUILD
 
 install_makedeps
 install_checkdeps
