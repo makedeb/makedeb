@@ -17,7 +17,7 @@ sudo apt install makedeb -y
 2. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./package.deb`, or alternatively specify the `--install` flag when running
 
 ## Other Notes ##
-Dependencies might need to be manually changed inside the PKGBUILD if the dependency names on Debian differ from the Arch Linux counterparts(or try the [beta] dependency converter with `--convert`. Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
+Dependencies will need to be manually changed inside the PKGBUILD if the dependency names on Debian differ from the Arch Linux counterparts(or try the [beta] dependency converter with option `--convert`). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
 
 ## Things I Still *Need* to Add ##
 - Pushing environment variables to makepkg
