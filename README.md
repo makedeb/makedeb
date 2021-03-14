@@ -15,7 +15,7 @@ sudo apt install makedeb -y
 
 ## Building and Installing PKGBUILDs ##
 1. Obtain the PKGBUILD and other files if necessary, most often with `git clone url`
-2. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./*PKGNAME*.deb`, or alternatively specify the `--install` flag when running
+2. Run `makedeb` in the directory containing the PKGBUILD. After, install the package with `apt install ./package.deb`, or alternatively specify the `--install` flag when running
 
 ## Other Notes ##
 Dependencies will need to be manually changed inside the PKGBUILD if the dependency names on Debian differ from the Arch Linux counterparts. Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
