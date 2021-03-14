@@ -80,7 +80,7 @@ install_checkdeps() {
     sudo apt install ${packages}
   fi
 }
-rm_makedeps() {
+rm_checkdeps() {
   echo "[#] Removing unneeded make dependencies..."
   sudo dpkg -r ${checkdepends[@]} &> /dev/null
 }
@@ -182,7 +182,7 @@ for thing in ${transfer}; do
 done
 
 cd "${DIR}"
-rm -r makedeb.temp
+sudo rm -r makedeb.temp
 
 field() {
   cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
