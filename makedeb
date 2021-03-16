@@ -43,8 +43,9 @@ echo "  Items must be space-separated, i.e. '-I -S'"
 echo
 echo "  --help - bring up this help menu"
 echo "  -I, --install - automatically install after building"
+echo "  -F, --file, -p - specify a file to build from other than 'PKGBUILD'"
 echo "  --convert[beta] - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
-echo "  -O, -p, --options[beta] - passes all arguments specified after to makepkg"
+echo "  -O, --options[beta] - passes all arguments specified after to makepkg"
 echo
 echo "A config file is located in '~/.config/makedeb/config'."
 echo "Options for this file:"
@@ -181,9 +182,9 @@ config_setup
 while true; do
   case "${1}" in
   --help)                                 help; exit 0 ;;
-  -F | --file)                            FILE=${2}; shift;;
+  -F | --file | -p)                       FILE=${2}; shift;;
   -I | --install)                         INSTALL="TRUE" ;;
-  -O | --options | -p)                    shift; OPTIONS="${@}"; break ;;
+  -O | --options)                         shift; OPTIONS="${@}"; break ;;
   --convert)                              CONVERT="TRUE" ;;
   "")                                     break ;;
   esac
