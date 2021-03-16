@@ -17,11 +17,15 @@
 ## DEFAULT VALUES ##
 ####################
 INSTALL='FALSE'
+FILE='PKGBUILD'
 
+#################
+## OTHER STUFF ##
+#################
+files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src"
 pkgdir="${DIR}/pkg"
-files="$(ls)"
 
 
 #################
@@ -31,21 +35,21 @@ files="$(ls)"
 help() {
 echo "makedeb"
 echo "Usage: makedeb [options]"
-echo ""
+echo
 echo "makedeb takes PKGBUILD files and compiles APT-installable archives."
-echo ""
+echo
 echo "Options:"
 echo "  Items must be space-separated, i.e. '-I -S'"
-echo ""
+echo
 echo "  --help - bring up this help menu"
 echo "  -I, --install - automatically install after building"
-echo "  --convert - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
-
-echo ""
+echo "  --convert[beta] - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
+echo "  -O, -p, --options[beta] - passes all arguments specified after to makepkg"
+echo
 echo "A config file is located in '~/.config/makedeb/config'."
 echo "Options for this file:"
 echo "    MAINTAINER - set a maintainer for built packages"
-echo ""
+echo
 echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
 
@@ -90,6 +94,14 @@ rm_checkdeps() {
   fi
 }
 
+makepkg_helpcheck() {
+  echo "${OPTIONS}" | grep -e "--help" &> /dev/null
+  if [[ ${?} == "0" ]]; then
+    makepkg --help
+    exit 0
+  fi
+}
+
 config_setup() {
   find ~/.config/makedeb/config &> /dev/null
   if [[ "$?" != "0" ]]; then
@@ -120,13 +132,18 @@ convert_version() {
 
 convert_arch() {
   if [[ ${arch} == "x86_64" ]]; then
-    export arch="amd64"
+    export makedeb_arch="amd64"
   elif [[ ${arch} == "armv7l" ]]; then
-    export arch="armhf"
+    export makedeb_arch="armhf"
   elif [[ ${arch} == "any" ]]; then
-    export arch="all"
+    export makedeb_arch="all"
   fi
   }
+
+extract_pkg() {
+  echo "[#] Extracting ${pkgname}-${controlver}-${arch} package to pkgdir..."
+  tar -xf "${pkgname}-${controlver}-${arch}.pkg.tar.zst" -C "${pkgdir}"
+}
 
 convert_dependencies() {
   if [[ ${3} != "" ]]; then
@@ -146,14 +163,14 @@ transform_deps() {
     string1=$(echo "${pkg}" | awk -F= '{print $1}')
     string2="$(echo "${pkg}" | awk -F= '{print $2}')"
 
-    sed -i "s/${string1}/${string2[@]}/g" PKGBUILD
-    source PKGBUILD
+    sed -i "s/${string1}/${string2[@]}/g" "${FILE}"
+    source "${FILE}"
   done
 
-  new_depends=$(echo $(echo ${depends[@]} | sed "s/ /\n/g")); sed -i "s/depends=.*/depends=($new_depends)/g" PKGBUILD
-  new_optdepends=$(echo $(echo ${optdepends[@]} | sed "s/ /\n/g")); sed -i "s/optdepends=.*/optdepends=($new_optdepends)/g" PKGBUILD
-  new_conflicts=$(echo $(echo ${conflicts[@]} | sed "s/ /\n/g")); sed -i "s/conflicts=.*/conflicts=($new_conflicts)/g" PKGBUILD
-  source PKGBUILD
+  new_depends=$(echo $(echo ${depends[@]} | sed "s/ /\n/g")); sed -i "s/depends=.*/depends=($new_depends)/g" "${FILE}"
+  new_optdepends=$(echo $(echo ${optdepends[@]} | sed "s/ /\n/g")); sed -i "s/optdepends=.*/optdepends=($new_optdepends)/g" "${FILE}"
+  new_conflicts=$(echo $(echo ${conflicts[@]} | sed "s/ /\n/g")); sed -i "s/conflicts=.*/conflicts=($new_conflicts)/g" "${FILE}"
+  source "${FILE}"
 }
 
 ####################
@@ -164,16 +181,18 @@ config_setup
 while true; do
   case "${1}" in
   --help)                                 help; exit 0 ;;
+  -F | --file)                            FILE=${2}; shift;;
   -I | --install)                         INSTALL="TRUE" ;;
+  -O | --options | -p)                    shift; OPTIONS="${@}"; break ;;
   --convert)                              CONVERT="TRUE" ;;
   "")                                     break ;;
   esac
   shift
   done
 
-source PKGBUILD
+source "${FILE}"
 if [[ ${CONVERT} == "TRUE" ]]; then
-  source PKGBUILD
+  source "${FILE}"
   echo "[#] Attempting to convert dependencies in PKGBUILD..."
   transform_deps
 fi
@@ -182,43 +201,31 @@ install_makedeps
 install_checkdeps
 
 echo "[#] Running makepkg..."
-makepkg ${OPTIONS[@]} || exit 1
+makepkg_helpcheck
+makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
 rm_makedeps
 rm_checkdeps
 
-echo "[#] Generating control file..."
 pkgsetup
 convert_version
 convert_arch
 
+extract_pkg
+
+echo "[#] Generating control file..."
 export_control "Package:" "${pkgname}"
 export_control "Description:" "${pkgdesc}"
 export_control "Source:" "${source}"
 export_control "Version:" "${controlver}"
-export_control "Architecture:" "${arch}"
+
+arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
+export_control "Architecture:" "${makedeb_arch}"
 export_control "Maintainer:" "${MAINTAINER}"
 convert_dependencies "Depends:" "depends" "${depends}"
 convert_dependencies "Suggests:" "optdepends" "${optdepends}"
 convert_dependencies "Conflicts:" "conflicts" "${conflicts}"
 echo "" >> "${pkgdir}"/DEBIAN/control
-
-echo "[#] Extracting $(ls | grep ".pkg.tar.zst") to pkgdir..."
-mkdir -p "${DIR}/makedeb.temp"
-cp "$(ls | grep ".pkg.tar.zst")" "${DIR}/makedeb.temp"
-rm "$(ls | grep ".pkg.tar.zst")"
-
-cd "${DIR}/makedeb.temp"
-tar -xf "$(ls | grep ".pkg.tar.zst")"
-rm "$(ls | grep ".pkg.tar.zst")"
-
-transfer="$(ls)"
-for thing in ${transfer}; do
-  cp ${thing} "${pkgdir}" -r
-done
-
-cd "${DIR}"
-sudo rm -r makedeb.temp
 
 field() {
   cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
