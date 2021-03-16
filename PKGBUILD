@@ -1,7 +1,7 @@
 # Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
 
 pkgname=makedeb
-pkgver=1.0.9.1
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros"
 arch=('any')
