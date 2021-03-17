@@ -26,7 +26,6 @@ files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src"
 pkgdir="${DIR}/pkg"
-USER=$(whoami)
 
 
 #################
@@ -56,10 +55,13 @@ echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
 
 root_check() {
-  if [[ "$(whoami)" != "root" ]]; then
-    echo "[!] Root is required to run makedeb"
+  if [[ "$(whoami)" = "root" ]]; then
+    echo "[!] Running makedeb as root is not allowed"
     exit 1
   fi
+
+  echo "[#] Obtaining root privileges..."
+  sudo printf "" || echo "[!] COuldn't get root privileges"
 }
 
 pkgsetup() {
@@ -72,13 +74,13 @@ install_makedeps() {
   if [[ "${makedepends}" != "" ]]; then
     echo "[#] Installing make dependencies..."
     local packages="$(apt list ${makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    apt install ${packages}
+    sudo apt install ${packages}
   fi
 }
 rm_makedeps() {
   if [[ "${makedepends}" != "" ]]; then
     echo "[#] Removing unneeded make dependencies..."
-    dpkg -r ${makedepends[@]} &> /dev/null
+    sudo dpkg -r ${makedepends[@]} &> /dev/null
   fi
 }
 
@@ -86,13 +88,13 @@ install_checkdeps() {
   if [[ "${checkdepends}" != "" ]]; then
     echo "[#] Installing check dependencies..."
     local packages="$(apt list ${checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    apt install ${packages}
+    sudo apt install ${packages}
   fi
 }
 rm_checkdeps() {
   if [[ "${checkdepends}" != "" ]]; then
     echo "[#] Removing unneeded check dependencies..."
-    dpkg -r ${checkdepends[@]} &> /dev/null
+    sudo dpkg -r ${checkdepends[@]} &> /dev/null
   fi
 }
 
@@ -178,7 +180,7 @@ transform_deps() {
 ####################
 ##  START SCRIPT  ##
 ####################
-root_check${conflicts[@]}
+root_check
 config_setup
 while true; do
   case "${1}" in
@@ -204,7 +206,7 @@ install_checkdeps
 
 echo "[#] Running makepkg..."
 makepkg_helpcheck
-sudo -u ${USER} makepkg -p "${FILE}" ${OPTIONS} || exit 1
+makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
 rm_makedeps
 rm_checkdeps
@@ -247,5 +249,5 @@ dpkg-name $(basename "${pkgdir}").deb >> /dev/null
 echo "[#] Built package..."
 
 if [[ ${INSTALL} == "TRUE" ]]; then
-  apt install "${DIR}/${debname}.deb"
+  sudo apt install "${DIR}/${debname}.deb"
 fi
