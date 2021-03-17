@@ -61,7 +61,10 @@ root_check() {
   fi
 
   echo "[#] Obtaining root privileges..."
-  sudo printf "" || echo "[!] COuldn't get root privileges"; exit 1
+  sudo printf ""
+  if [[ ${?} != "0" ]]; then
+     echo "[!] Couldn't get root privileges"
+     exit 1
 }
 
 pkgsetup() {
