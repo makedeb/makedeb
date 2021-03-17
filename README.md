@@ -20,4 +20,4 @@ sudo apt install makedeb -y
 Dependencies will need to be manually changed inside the PKGBUILD if the dependency names on Debian differ from the Arch Linux counterparts(or try the [beta] dependency converter with option `--convert`). Keep the formatting in the PKGBUILD the same though(don't add commas, the script automatically formats the control file).
 
 ## Things I Want to Add ##
-- Automated installation and updates for PKGBUILDs from the AUR
+- Automated installation and updates for PKGBUILDs from the AUR(in progress)
