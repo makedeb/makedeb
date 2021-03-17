@@ -9,12 +9,14 @@ depends=('makepkg')
 license=('GPL3')
 url="https://github.com/hwittenborn/makedeb"
 
-source=("https://github.com/hwittenborn/makedeb/archive/v${pkgver}.zip")
-sha256sums=('SKIP')
+source=("makedeb"
+        "packages.db")
+sha256sums=('SKIP'
+	          'SKIP')
 
 package() {
   mkdir -p "${pkgdir}/usr/bin/"
-  cp "${srcdir}/makedeb-${pkgver}/makedeb" "${pkgdir}/usr/bin/"
+  cp "${srcdir}/makedeb" "${pkgdir}/usr/bin/"
   mkdir -p "${pkgdir}/etc/makedeb"
-   cp "${srcdir}/makedeb-${pkgver}/packages.db" "${pkgdir}/etc/makedeb/"
+   cp "${srcdir}/packages.db" "${pkgdir}/etc/makedeb/"
 }
