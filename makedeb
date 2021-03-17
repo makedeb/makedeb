@@ -151,6 +151,7 @@ convert_arch() {
 extract_pkg() {
   echo "[#] Extracting ${pkgname}-${controlver}-${arch} package to pkgdir..."
   tar -xf "${pkgname}-${controlver}-${arch}.pkg.tar.zst" -C "${pkgdir}"
+  sudo rm "${pkgdir}/{.BUILDINFO,.MTREE,.PKGINFO}"
 }
 
 convert_dependencies() {
