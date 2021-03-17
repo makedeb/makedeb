@@ -26,6 +26,7 @@ files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src"
 pkgdir="${DIR}/pkg"
+USER=$(whoami)
 
 
 #################
@@ -55,8 +56,8 @@ echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
 
 root_check() {
-  if [[ "$(whoami)" == "root" ]]; then
-    echo "[!] Running makedeb as root is not allowed."
+  if [[ "$(whoami)" != "root" ]]; then
+    echo "[!] Root is required to run makedeb"
     exit 1
   fi
 }
@@ -71,13 +72,13 @@ install_makedeps() {
   if [[ "${makedepends}" != "" ]]; then
     echo "[#] Installing make dependencies..."
     local packages="$(apt list ${makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    sudo apt install ${packages}
+    apt install ${packages}
   fi
 }
 rm_makedeps() {
   if [[ "${makedepends}" != "" ]]; then
     echo "[#] Removing unneeded make dependencies..."
-    sudo dpkg -r ${makedepends[@]} &> /dev/null
+    dpkg -r ${makedepends[@]} &> /dev/null
   fi
 }
 
@@ -85,13 +86,13 @@ install_checkdeps() {
   if [[ "${checkdepends}" != "" ]]; then
     echo "[#] Installing check dependencies..."
     local packages="$(apt list ${checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    sudo apt install ${packages}
+    apt install ${packages}
   fi
 }
 rm_checkdeps() {
   if [[ "${checkdepends}" != "" ]]; then
     echo "[#] Removing unneeded check dependencies..."
-    sudo dpkg -r ${checkdepends[@]} &> /dev/null
+    dpkg -r ${checkdepends[@]} &> /dev/null
   fi
 }
 
@@ -104,17 +105,17 @@ makepkg_helpcheck() {
 }
 
 config_setup() {
-  find ~/.config/makedeb/config &> /dev/null
+  find /home/${USER}/.config/makedeb/config &> /dev/null
   if [[ "$?" != "0" ]]; then
-    mkdir -p ~/.config/makedeb/ &> /dev/null
-    touch ~/.config/makedeb/config
+    mkdir -p /home/${USER}/.config/makedeb/ &> /dev/null
+    touch /home/${USER}/.config/makedeb/config
   fi
 
-  . ~/.config/makedeb/config
+  . /home/${USER}/.config/makedeb/config
   }
 
 config_import() {
-  source ~/.config/makedeb/config
+  source /home/${USER}/.config/makedeb/config
   }
 
 export_control() {
@@ -203,7 +204,7 @@ install_checkdeps
 
 echo "[#] Running makepkg..."
 makepkg_helpcheck
-makepkg -p "${FILE}" ${OPTIONS} || exit 1
+sudo -u ${USER} makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
 rm_makedeps
 rm_checkdeps
@@ -246,5 +247,5 @@ dpkg-name $(basename "${pkgdir}").deb >> /dev/null
 echo "[#] Built package..."
 
 if [[ ${INSTALL} == "TRUE" ]]; then
-  sudo apt install "${DIR}/${debname}.deb"
+  apt install "${DIR}/${debname}.deb"
 fi
