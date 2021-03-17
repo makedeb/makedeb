@@ -151,7 +151,6 @@ convert_arch() {
 extract_pkg() {
   echo "[#] Extracting ${pkgname}-${controlver}-${arch} package to pkgdir..."
   tar -xf "${pkgname}-${controlver}-${arch}.pkg.tar.zst" -C "${pkgdir}"
-  sudo rm "${pkgdir}/{.BUILDINFO,.MTREE,.PKGINFO}"
 }
 
 convert_dependencies() {
@@ -236,6 +235,11 @@ convert_dependencies "Suggests:" "optdepends" "${optdepends}"
 convert_dependencies "Conflicts:" "conflicts" "${conflicts}"
 echo "" >> "${pkgdir}"/DEBIAN/control
 
+echo "[#] Cleaning up..."
+sudo rm "${pkgdir}/.BUILDINFO"
+sudo rm "${pkgdir}/.MTREE"
+sudo rm "${pkgdir}/.PKGINFO"
+  
 field() {
   cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
 }
