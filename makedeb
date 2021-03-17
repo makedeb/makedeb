@@ -65,6 +65,7 @@ root_check() {
   if [[ ${?} != "0" ]]; then
      echo "[!] Couldn't get root privileges"
      exit 1
+   fi
 }
 
 pkgsetup() {
