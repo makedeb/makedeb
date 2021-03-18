@@ -184,7 +184,6 @@ transform_deps() {
 ####################
 ##  START SCRIPT  ##
 ####################
-root_check
 config_setup
 while true; do
   case "${1}" in
@@ -198,6 +197,7 @@ while true; do
   shift
   done
 
+root_check
 source "${FILE}"
 if [[ ${CONVERT} == "TRUE" ]]; then
   source "${FILE}"
@@ -239,7 +239,7 @@ echo "[#] Cleaning up..."
 sudo rm "${pkgdir}/.BUILDINFO"
 sudo rm "${pkgdir}/.MTREE"
 sudo rm "${pkgdir}/.PKGINFO"
-  
+
 field() {
   cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
 }
