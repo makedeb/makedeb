@@ -16,4 +16,4 @@ sudo apt install makedeb -y
 Instructions can be found after installing with `makedeb --help`
 
 ## Things to Add ##
-- Searching, updating, and installing packages directly from the AUR
+- Pulling and installing packages directly from the AUR
