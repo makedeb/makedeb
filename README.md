@@ -13,3 +13,6 @@ sudo apt install makedeb -y
 
 ## Usage ##
 Instructions can be found after installing with `makedeb --help`
+
+## Things to Add ##
+- Pulling and installing packages directly from the AUR
