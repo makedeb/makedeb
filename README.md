@@ -1,6 +1,5 @@
 ## Overview ##
 makedeb takes PKGBUILD files and creates Debian archives installable with APT
-
 Note: It is highly recommended to install [mpm](https://github.com/hwittenborn/mpm) alongside this program for automated AUR updates.
 
 ## Installation ##
@@ -12,7 +11,4 @@ sudo apt install makedeb -y
 ```
 
 ## Usage ##
-Instructions can be found after installing with `makedeb --help`
-
-## Things to Add ##
-- Pulling and installing packages directly from the AUR
+Instructions can be found after installation with `makedeb --help`
