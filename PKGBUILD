@@ -2,7 +2,7 @@
 # Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
 
 pkgname=makedeb
-pkgver=2.0.0
+pkgver=1.1.2.8
 pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros"
 arch=('any')
@@ -10,14 +10,14 @@ depends=('makepkg')
 license=('GPL3')
 url="https://github.com/hwittenborn/makedeb"
 
-source=("makedeb.sh"
+source=("makedeb"
         "packages.db")
 sha256sums=('SKIP'
 	          'SKIP')
 
 package() {
   mkdir -p "${pkgdir}/usr/bin/"
-  cp "${srcdir}/makedeb.sh" "${pkgdir}/usr/bin/makedeb"
+  cp "${srcdir}/makedeb" "${pkgdir}/usr/bin/"
   mkdir -p "${pkgdir}/etc/makedeb"
    cp "${srcdir}/packages.db" "${pkgdir}/etc/makedeb/"
 }
