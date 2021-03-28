@@ -26,8 +26,6 @@ files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src"
 pkgdir="${DIR}/pkg"
-CURRENT_USER="$(id -u)"
-BUILD_USER="$(whoami)"
 
 
 #################
@@ -41,55 +39,33 @@ echo
 echo "makedeb takes PKGBUILD files and compiles APT-installable archives."
 echo
 echo "Options:"
-echo "  Items must be space-separated, i.e. '-I -F'"
+echo "  Items must be space-separated, i.e. '-I -S'"
 echo
 echo "  --help - bring up this help menu"
 echo "  -I, --install - automatically install after building"
 echo "  -F, --file, -p - specify a file to build from other than 'PKGBUILD'"
 echo "  --convert[beta] - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
-echo "  -U, --user - specifies a user to build as when running as root"
+echo "  -O, --options[beta] - passes all arguments specified after to makepkg"
 echo
-echo "  --skip-rootcheck - skip checking of root privileges"
+echo "A config file is located in '~/.config/makedeb/config'."
+echo "Options for this file:"
+echo "    MAINTAINER - set a maintainer for built packages"
 echo
 echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
 
-arg_check() {
-  while true; do
-    case "${1}" in
-      --help)                                 help; exit 0 ;;
-      -F | --file | -p)                       FILE=${2}; shift;;
-      -I | --install)                         INSTALL="TRUE" ;;
-      --convert)                              CONVERT="TRUE" ;;
-      -U | --user)                            BUILD_USER="${2}"; shift 1 ;;
-
-      --skip-rootcheck)                        SKIP_ROOTCHECK="TRUE" ;;
-      -*)                                     echo "Unknown option '${1}'"; exit 1 ;;
-      "")                                     break ;;
-    esac
-    shift 1
-    done
-}
-
 root_check() {
-  ## CHECKS WHEN RUNNING AS ROOT ##
-	if [[ "${CURRENT_USER}" == "0" ]] && [[ ${BUILD_USER} == "root" ]]; then
-		echo "A user other than 'root' must be specified to build as when running mpm as root"
-		exit 1
+  if [[ "$(whoami)" = "root" ]]; then
+    echo "[!] Running makedeb as root is not allowed"
+    exit 1
+  fi
 
-	elif [[ "${CURRENT_USER}" == "0" ]] && ! id ${BUILD_USER} &> /dev/null; then
-		echo "User '${BUILD_USER}' doesn't exist"
-		exit 1
-
-	## OBTAIN ROOT PRIVILEGES WHEN NOT RUNNING AS ROOT ##
-	else
-		echo "Obtaining root privileges..."
-		sudo echo &> /dev/null
-		if [[ ${?} != "0" ]]; then
-	 		echo "Couldn't get root privileges"
-	 		exit 1
- 		fi
-	fi
+  echo "[#] Obtaining root privileges..."
+  sudo printf ""
+  if [[ ${?} != "0" ]]; then
+     echo "[!] Couldn't get root privileges"
+     exit 1
+   fi
 }
 
 pkgsetup() {
@@ -99,34 +75,57 @@ pkgsetup() {
   }
 
 install_makedeps() {
-  if [[ "${new_makedepends}" != "" ]]; then
+  if [[ "${makedepends}" != "" ]]; then
     echo "[#] Installing make dependencies..."
-    local packages="$(apt list ${new_makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
+    local packages="$(apt list ${makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
     sudo apt install ${packages}
   fi
 }
 rm_makedeps() {
-  if [[ "${new_makedepends}" != "" ]]; then
+  if [[ "${makedepends}" != "" ]]; then
     echo "[#] Removing unneeded make dependencies..."
-    sudo dpkg -r ${new_makedepends[@]} &> /dev/null
+    sudo dpkg -r ${makedepends[@]} &> /dev/null
   fi
 }
 
 install_checkdeps() {
-  if [[ "${new_checkdepends}" != "" ]]; then
+  if [[ "${checkdepends}" != "" ]]; then
     echo "[#] Installing check dependencies..."
-    local packages="$(apt list ${new_checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
+    local packages="$(apt list ${checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
     sudo apt install ${packages}
   fi
 }
 rm_checkdeps() {
-  if [[ "${new_checkdepends}" != "" ]]; then
+  if [[ "${checkdepends}" != "" ]]; then
     echo "[#] Removing unneeded check dependencies..."
-    sudo dpkg -r ${new_checkdepends[@]} &> /dev/null
+    sudo dpkg -r ${checkdepends[@]} &> /dev/null
   fi
 }
+
+makepkg_helpcheck() {
+  echo "${OPTIONS}" | grep -e "--help" &> /dev/null
+  if [[ ${?} == "0" ]]; then
+    makepkg --help
+    exit 0
+  fi
+}
+
+config_setup() {
+  find /home/${USER}/.config/makedeb/config &> /dev/null
+  if [[ "$?" != "0" ]]; then
+    mkdir -p /home/${USER}/.config/makedeb/ &> /dev/null
+    touch /home/${USER}/.config/makedeb/config
+  fi
+
+  . /home/${USER}/.config/makedeb/config
+  }
+
+config_import() {
+  source /home/${USER}/.config/makedeb/config
+  }
+
 export_control() {
-  if [[ ${2} != "" ]]; then
+  if [[ {$2} != "" ]]; then
     echo "${1} ${2}" >> "${pkgdir}"/DEBIAN/control
   fi
   }
@@ -154,58 +153,64 @@ extract_pkg() {
   tar -xf "${pkgname}-${controlver}-${arch}.pkg.tar.zst" -C "${pkgdir}"
 }
 
-rm_dep_description() {
-  NUM=0
-  while [[ "${optdepends[$NUM]}" != "" ]]; do
-    new_optdepends+=" $(echo ${optdepends[$NUM]} | awk -F: '{print $1}')"
-    NUM=$(( ${NUM} + 1 ))
-  done
-  new_optdepends=$(echo ${new_optdepends[@]} | cut -c1-)
+convert_dependencies() {
+  if [[ ${3} != "" ]]; then
+    echo "${1}" >> "${pkgdir}"/DEBIAN/control
+    sed -i "/${1}/s/$/ $(echo ${3} | awk -F: '{print $1}')/" "${pkgdir}"/DEBIAN/control
+    for package in $(eval "echo \${$2[@]:1}" | awk -F: '{print $1}'); do
+      sed -i "/${1}/s/$/, $(echo ${package})/" "${pkgdir}"/DEBIAN/control
+    done
+  fi
+  }
 
-}
+transform_deps() {
+  echo "[#] The dependency converter is currently in beta. Report bugs to the URL listed on the help page(--help)"
+  sleep 1
 
-convert_deps() {
-  rm_dep_description
-  new_depends=${depends[@]}
-  new_optdepends=${new_optdepends[@]}
-  new_conflicts=${conflicts[@]}
-  new_makedepends=${makedepends[@]}
-  new_checkdepends=${checkdepends[@]}
-
-  for pkg in $(cat /etc/makedeb/packages.db | sed 's/"//g'); do
+  for pkg in $(cat /etc/makedeb/packages.db); do
     string1=$(echo "${pkg}" | awk -F= '{print $1}')
     string2="$(echo "${pkg}" | awk -F= '{print $2}')"
 
-    new_depends=$(echo ${new_depends[@]} | sed "s/${string1}/${string2}/g")
-    new_optdepends=$(echo ${new_optdepends[@]} | sed "s/${string1}/${string2}/g")
-    new_conflicts=$(echo ${new_conflicts[@]} | sed "s/${string1}/${string2}/g")
-    new_makedepends=$(echo ${new_makedepends[@]} | sed "s/${string1}/${string2}/g")
-    new_checkdepends=$(echo ${new_checkdepends[@]} | sed "s/${string1}/${string2}/g")
+    sed -i "s/${string1}/${string2[@]}/g" "${FILE}"
+    source "${FILE}"
   done
 
-  new_depends=$(echo ${new_depends[@]} | sed 's/ /, /g')
-  new_optdepends=$(echo ${new_optdepends[@]} | sed 's/ /, /g')
-  new_conflicts=$(echo ${new_conflicts[@]} | sed 's/ /, /g')
-
+  new_depends=$(echo $(echo ${depends[@]} | sed "s/ /\n/g")); sed -i "s/depends=.*/depends=($new_depends)/g" "${FILE}"
+  new_optdepends=$(echo $(echo ${optdepends[@]} | sed "s/ /\n/g")); sed -i "s/optdepends=.*/optdepends=($new_optdepends)/g" "${FILE}"
+  new_conflicts=$(echo $(echo ${conflicts[@]} | sed "s/ /\n/g")); sed -i "s/conflicts=.*/conflicts=($new_conflicts)/g" "${FILE}"
+  source "${FILE}"
 }
 
 ####################
 ##  START SCRIPT  ##
 ####################
-arg_check "${@}"
+config_setup
+while true; do
+  case "${1}" in
+  --help)                                 help; exit 0 ;;
+  -F | --file | -p)                       FILE=${2}; shift;;
+  -I | --install)                         INSTALL="TRUE" ;;
+  -O | --options)                         shift; OPTIONS="${@}"; break ;;
+  --convert)                              CONVERT="TRUE" ;;
+  "")                                     break ;;
+  esac
+  shift
+  done
 
-if [[ ${SKIP_ROOTCHECK} != "TRUE" ]]; then
-  root_check
-fi
-
+root_check
 source "${FILE}"
-convert_deps
+if [[ ${CONVERT} == "TRUE" ]]; then
+  source "${FILE}"
+  echo "[#] Attempting to convert dependencies in PKGBUILD..."
+  transform_deps
+fi
 
 install_makedeps
 install_checkdeps
 
 echo "[#] Running makepkg..."
-sudo -u "${BUILD_USER}" makepkg -p "${FILE}" ${OPTIONS} || exit 1
+makepkg_helpcheck
+makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
 rm_makedeps
 rm_checkdeps
@@ -224,11 +229,10 @@ export_control "Version:" "${controlver}"
 
 arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
 export_control "Architecture:" "${makedeb_arch}"
-export_control "Maintainer:" "$(cat ${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //')"
-export_control "Depends:" "${new_depends[@]}"
-export_control "Suggests:" "${new_optdepends[@]}"
-export_control "Conflicts:" "${new_conflicts[@]}"
-
+export_control "Maintainer:" "${MAINTAINER}"
+convert_dependencies "Depends:" "depends" "${depends}"
+convert_dependencies "Suggests:" "optdepends" "${optdepends}"
+convert_dependencies "Conflicts:" "conflicts" "${conflicts}"
 echo "" >> "${pkgdir}"/DEBIAN/control
 
 echo "[#] Cleaning up..."
