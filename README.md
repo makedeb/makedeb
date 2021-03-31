@@ -13,7 +13,8 @@ sudo apt update
 sudo apt install makedeb -y
 ```
 
-
-
 ## Usage ##
 Instructions can be found after installation with `makedeb --help`
+
+## Get in touch ##
+A Matrix room is available at [#git:hunterwittenborn.me](https://matrix.to/#/#git:hunterwittenborn.me) for discussion of any of my projects. Feel free to hop in if you need any help.
