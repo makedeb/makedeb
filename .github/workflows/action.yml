@@ -1,9 +1,0 @@
-name: Build Package
-on: [push]
-jobs:
-  job:
-    run: export GEMFURY_PUSH_TOKEN="${GEMFURY_PUSH_TOKEN}"
-    run: echo "deb [trusted=yes] https://apt.fury.io/hwittenborn/ /" | sudo tee /etc/apt/sources.list.d/hwittenborn.list
-    run: sudo apt update
-    run: sudo apt install makedeb -y
-    run: makedeb
