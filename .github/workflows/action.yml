@@ -1,0 +1,44 @@
+name: Build and publish to repo
+on:
+  push:
+    paths:
+      - 'PKGBUILD'
+      - 'makedeb.sh'
+      - 'packages.db'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Grab copy of code
+        uses: actions/checkout@v2
+        
+      - name: Obtain current copy of makepkg
+        run: |
+             echo "deb [trusted=yes] https://apt.fury.io/hwittenborn/ /" | sudo tee /etc/apt/sources.list.d/hwittenborn.list
+             sudo apt update
+             sudo apt install makepkg -y
+        
+      - name: Build makedeb into deb
+        run: |
+             bash makedeb.sh
+             mv makedeb*.deb makedeb.deb
+        
+      - name: Copy built deb for publish job
+        uses: actions/upload-artifact@v2
+        with:
+          name: makedeb
+          path: makedeb.deb				
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      GEMFURY_PAT: ${{ secrets.GEMFURY_PAT }}
+    steps: 
+      - name: Pull built deb
+        uses: actions/download-artifact@v2
+        with:
+          name: makedeb
+          
+      - name: Push package to repo
+        run: curl -F package=@makedeb.deb "https://${GEMFURY_PAT}@push.fury.io/hwittenborn/"
