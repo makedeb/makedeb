@@ -1,5 +1,4 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/hwittenborn/makedeb/Build%20and%20publish%20to%20repo?label=build%20status&logo=github&style=flat-square)
-![GitHub](https://img.shields.io/github/license/hwittenborn/makedeb?style=flat-square)
+![Build Status](https://webhooks.hunterwittenborn.me/static/GitHub/makedeb/build-status.svg)
 
 ## Overview ##
 makedeb takes PKGBUILD files and creates Debian archives installable with APT
