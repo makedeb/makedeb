@@ -2,11 +2,11 @@
 # Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
 
 pkgname=makedeb
-pkgver=2.0.1
-pkgrel=2
+pkgver=2.0.2
+pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros"
 arch=('any')
-depends=('makepkg')
+depends=('makepkg' 'dpkg-dev')
 license=('GPL3')
 url="https://github.com/hwittenborn/makedeb"
 
