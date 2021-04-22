@@ -7,15 +7,11 @@ Note: It is highly recommended to install [mpm](https://github.com/hwittenborn/m
 
 ## Installation ##
 To install, run the following commands:
+```sh
 sudo wget 'https://hunterwittenborn.com/keys/apt.asc' -O /etc/apt/trusted.gpg.d/hwittenborn.asc
 echo 'deb [arch=all] https://repo.hunterwittenborn.com/debian/makedeb any main' | sudo tee /etc/apt/sources.list.d/makedeb.list
 sudo apt update
 sudo apt install makedeb
-```sh
-
-
-sudo apt update
-sudo apt install makedeb -y
 ```
 
 ## Usage ##
