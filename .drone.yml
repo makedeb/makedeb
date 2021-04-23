@@ -11,9 +11,7 @@ steps:
     commands:
       # INSTALL NEEDED PACKAGES
       - apt update
-      - apt install sudo wget -y
-      # TEMP PACKAGES UNTILL NEXT UPDATE
-      - apt install binutils file -y
+      - apt install ubuntu-server -y
       # SET UP REPO AND INSTALL MAKEPKG
       - wget 'https://hunterwittenborn.com/keys/apt.asc' -O /etc/apt/trusted.gpg.d/hwittenborn.asc
       - echo 'deb [arch=all] https://repo.hunterwittenborn.com/debian/makedeb any main' | tee /etc/apt/sources.list.d/makedeb.list
