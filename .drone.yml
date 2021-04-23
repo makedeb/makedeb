@@ -24,5 +24,8 @@ steps:
       - chown user:user /drone/
       - chown user:user /drone/src -R
       - ./makedeb.sh --user user
-      # COPY PACKAGE TO TEMP VOLUME FOR PUBLISH STAGE
-      -
+
+      # TESTING CHECKS
+      - type dpkg-name
+      - apt list dpkg-dev
+      - /usr/bin/dpkg-name
