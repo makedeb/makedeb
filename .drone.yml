@@ -3,10 +3,10 @@ type: docker
 name: makedeb
 
 steps:
-  name: Build
+  - name: Build
     image: ubuntu
     volumes:
-      name: Package Directory
+      - name: Package Directory
         path: /tmp/makedeb/package
     commands:
       # SET UP REPO
