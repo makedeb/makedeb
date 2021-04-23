@@ -27,6 +27,5 @@ steps:
       - ./makedeb.sh --user user
 
       # TESTING CHECKS
-      - type dpkg-name
       - apt list dpkg-dev
       - /usr/bin/dpkg-name
