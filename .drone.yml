@@ -1,0 +1,23 @@
+kind: pipeline
+type: docker
+name: makedeb
+
+steps:
+  name: Build
+    image: ubuntu
+    volumes:
+      name: Package Directory
+        path: /tmp/makedeb/package
+    commands:
+      # SET UP REPO
+      - wget 'https://hunterwittenborn.com/keys/apt.asc' -O /etc/apt/trusted.gpg.d/hwittenborn.asc
+      - echo 'deb [arch=all] https://repo.hunterwittenborn.com/debian/makedeb any main' | tee /etc/apt/sources.list.d/makedeb.list
+      # INSTALL MAKEPKG AND OTHER NEEDED PACKAGES
+      - apt update
+      - apt install sudo makepkg -y
+      # CREATE BUILD USER
+      - useradd -m user
+      # BUILD MAKEDEB
+      - ./makedeb.sh --user user
+      # COPY PACKAGE TO TEMP VOLUME FOR PUBLISH STAGE
+      -
