@@ -20,7 +20,8 @@ steps:
       # CREATE BUILD USER
       - useradd -m user
       # SET FOLDER PERMS AND BUILD MAKEDEB
-      - chown user:user $(ls -A) -R
+      - chown user:user /drone/
+      - chown user:user /drone/src -R
       - ./makedeb.sh --user user
       # COPY PACKAGE TO TEMP VOLUME FOR PUBLISH STAGE
       -
