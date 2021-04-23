@@ -10,6 +10,7 @@ steps:
         path: /tmp/makedeb/package
     commands:
       # INSTALL NEEDED PACKAGES
+      - dpkg-reconfigure debconf -f noninteractive
       - apt update
       - apt dist-upgrade -y
       - apt install wget sudo -y
