@@ -19,7 +19,8 @@ steps:
       - apt install sudo makepkg -y
       # CREATE BUILD USER
       - useradd -m user
-      # BUILD MAKEDEB
+      # SET FOLDER PERMS AND BUILD MAKEDEB
+      - chown user:user $(ls -A) -R
       - ./makedeb.sh --user user
       # COPY PACKAGE TO TEMP VOLUME FOR PUBLISH STAGE
       -
