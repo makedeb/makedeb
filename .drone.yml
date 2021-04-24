@@ -10,7 +10,7 @@ steps:
     image: ubuntu
     volumes:
       - name: Package Directory
-        path: /tmp/makedeb/package
+        path: /tmp/makedeb/package/
     commands:
       # INSTALL NEEDED PACKAGES
       - export DEBIAN_FRONTEND=noninteractive
