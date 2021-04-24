@@ -29,4 +29,6 @@ steps:
       - chown user:user /drone/src -R
       - ./makedeb.sh --user user
       # COPY MAKEDEB TO TEMP VOLUME FOR PUBLISH STEP
-      - cp makedeb*.deb /tmp/makedeb/package/
+      #- cp makedeb*.deb /tmp/makedeb/package/
+      - ls /tmp -A
+      - ls /tmp/makedeb -A
