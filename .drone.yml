@@ -1,6 +1,9 @@
 kind: pipeline
 type: docker
 name: makedeb
+volumes:
+  - name: package directory
+    temp: {}
 trigger:
   event:
     - push
@@ -9,7 +12,7 @@ steps:
   - name: build
     image: ubuntu
     volumes:
-      - name: Package Directory
+      - name: package directory
         path: /tmp/makedeb/package/
     commands:
       # INSTALL NEEDED PACKAGES
@@ -29,6 +32,4 @@ steps:
       - chown user:user /drone/src -R
       - ./makedeb.sh --user user
       # COPY MAKEDEB TO TEMP VOLUME FOR PUBLISH STEP
-      #- cp makedeb*.deb /tmp/makedeb/package/
-      - ls /tmp -A
-      - ls /tmp/makedeb -A
+      - cp makedeb*.deb /tmp/makedeb/package/
