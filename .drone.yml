@@ -44,9 +44,11 @@ steps:
       nexus_pass:
         from_secret: repo_pass
     commands:
-      # CHECK FOR UPDATES
+      # INSTALL CURL
+      - export DEBIAN_FRONTEND=noninteractive
       - apt update
       - apt dist-upgrade -y
+      - apt install curl -y
       # PUBLISH PACKAGE TO REPOSITORY
       - package="$(ls /tmp/makedeb/package/*.deb)"
       ## EXIT WITH CODE 1 IF MULTIPLE PACKAGES WERE LISTED IN PACKAGE DIRECTORY
