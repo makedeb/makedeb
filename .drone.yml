@@ -55,3 +55,4 @@ steps:
       - if [ "$(echo $${package} | awk -F ' ' '{print $2}')" != "" ]; then exit 1; fi
       - |
         curl -u "system:$${nexus_pass}" -H "Content-Type: multipart/form-data" --data-binary "@$${package}" "https://nexus.hunterwittenborn.com/repository/makedeb/"
+      - echo $${package}
