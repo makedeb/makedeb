@@ -33,3 +33,21 @@ steps:
       - ./makedeb.sh --user user
       # COPY MAKEDEB TO TEMP VOLUME FOR PUBLISH STEP
       - cp makedeb*.deb /tmp/makedeb/package/
+
+  - name: publish
+    image: ubuntu
+    volumes:
+      - name: package directory
+        path: /tmp/makedeb/package/
+    environment:
+      nexus_pass:
+        from_secret: repo_pass
+    commands:
+      # CHECK FOR UPDATES
+      - apt update
+      - apt dist-upgrade -y
+      # PUBLISH PACKAGE TO REPOSITORY
+      - package="$(ls /tmp/makedeb/package/*.deb)"
+      ## EXIT WITH CODE 1 IF MULTIPLE PACKAGES WERE LISTED IN PACKAGE DIRECTORY
+      - if [[ "$(echo ${package[@]} | awk -F " " '{print $2}')" != "" ]]; then exit 1; fi
+      - curl -u "system:${nexus_pass}" -H "Content-Type: multipart/form-data" --data-binary "@./tmp/makedeb/package/${package}" "https://nexus.hunterwittenborn.com/repository/makedeb/"
