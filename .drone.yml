@@ -36,6 +36,7 @@ steps:
 
   - name: publish
     image: ubuntu
+    shell: bash
     volumes:
       - name: package directory
         path: /tmp/makedeb/package/
