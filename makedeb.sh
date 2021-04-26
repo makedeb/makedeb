@@ -51,9 +51,6 @@ echo "  --help - bring up this help menu"
 echo "  -I, --install - automatically install after building"
 echo "  -F, --file, -p - specify a file to build from other than 'PKGBUILD'"
 echo "  --convert[beta] - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
-echo "  -U, --user - specifies a user to build as when running as root"
-echo
-echo "  --skip-rootcheck - skip checking of root privileges"
 echo
 echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
@@ -65,9 +62,6 @@ arg_check() {
       -F | --file | -p)                       FILE=${2}; shift;;
       -I | --install)                         INSTALL="TRUE" ;;
       --convert)                              CONVERT="TRUE" ;;
-      -U | --user)                            BUILD_USER="${2}"; shift 1 ;;
-
-      --skip-rootcheck)                        SKIP_ROOTCHECK="TRUE" ;;
       -*)                                     echo "Unknown option '${1}'"; exit 1 ;;
       "")                                     break ;;
     esac
@@ -76,24 +70,9 @@ arg_check() {
 }
 
 root_check() {
-  ## CHECKS WHEN RUNNING AS ROOT ##
-	if [[ "${CURRENT_USER}" == "0" ]] && [[ ${BUILD_USER} == "root" ]]; then
-		echo "A user other than 'root' must be specified to build as when running mpm as root"
-		exit 1
-
-	elif [[ "${CURRENT_USER}" == "0" ]] && ! id ${BUILD_USER} &> /dev/null; then
-		echo "User '${BUILD_USER}' doesn't exist"
-		exit 1
-
-	## OBTAIN ROOT PRIVILEGES WHEN NOT RUNNING AS ROOT ##
-	else
-		echo "Obtaining root privileges..."
-		sudo echo &> /dev/null
-		if [[ ${?} != "0" ]]; then
-	 		echo "Couldn't get root privileges"
-	 		exit 1
- 		fi
-	fi
+  if [[ "$(whoami)" == "root" ]]; then
+    echo "Running makedeb as root is not allowed as it can cause irreversable damage to your system."
+    exit 1
 }
 
 pkgsetup() {
@@ -215,7 +194,7 @@ install_makedeps
 install_checkdeps
 
 echo "[#] Running makepkg..."
-sudo -u "${BUILD_USER}" makepkg -p "${FILE}" ${OPTIONS} || exit 1
+makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
 rm_makedeps
 rm_checkdeps
@@ -242,9 +221,9 @@ export_control "Conflicts:" "${new_conflicts[@]}"
 echo "" >> "${pkgdir}"/DEBIAN/control
 
 echo "[#] Cleaning up..."
-sudo rm "${pkgdir}/.BUILDINFO"
-sudo rm "${pkgdir}/.MTREE"
-sudo rm "${pkgdir}/.PKGINFO"
+rm -f "${pkgdir}/.BUILDINFO"
+rm -f "${pkgdir}/.MTREE"
+rm -f "${pkgdir}/.PKGINFO"
 
 field() {
   cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
