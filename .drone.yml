@@ -30,7 +30,7 @@ steps:
       # SET FOLDER PERMS AND BUILD MAKEDEB
       - chown user:user /drone/
       - chown user:user /drone/src -R
-      - ./makedeb.sh --user user
+      - sudo -u user ./makedeb.sh
       # COPY MAKEDEB TO TEMP VOLUME FOR PUBLISH STEP
       - cp makedeb*.deb /tmp/makedeb/package/
 
