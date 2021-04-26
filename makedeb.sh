@@ -183,9 +183,10 @@ convert_deps() {
 ##  START SCRIPT  ##
 ####################
 arg_check "${@}"
+root_check
 
-if [[ ${SKIP_ROOTCHECK} != "TRUE" ]]; then
-  root_check
+if [[ "${FILE}" == "PKGBUILD" ]]; then
+  find PKGBUILD &> /dev/null || { help; exit 0; }
 fi
 
 source "${FILE}"
