@@ -106,7 +106,10 @@ install_makedeps() {
   if [[ "${new_makedepends}" != "" ]]; then
     echo "[#] Installing make dependencies..."
     local packages="$(apt list ${new_makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    sudo apt install ${packages}
+    if ! sudo apt install ${packages}; then
+      echo "[!] Couldn't install packages."
+      exit 1
+    fi
   fi
 }
 rm_makedeps() {
@@ -120,7 +123,10 @@ install_checkdeps() {
   if [[ "${new_checkdepends}" != "" ]]; then
     echo "[#] Installing check dependencies..."
     local packages="$(apt list ${new_checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    sudo apt install ${packages}
+    if ! sudo apt install ${packages}; then
+      echo "[!] Couldn't install packages."
+      exit 1
+    fi
   fi
 }
 rm_checkdeps() {
