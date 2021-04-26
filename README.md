@@ -2,7 +2,7 @@
 
 <div align="center">
 <a href="https://drone.hunterwittenborn.com/hwittenborn/makedeb">
-  <img src="https://drone.hunterwittenborn.com/api/badges/hwittenborn/makedeb/status.svg" />
+  <img src="https://drone.hunterwittenborn.com/api/badges/hwittenborn/makedeb/status.svg?ref=refs/heads/stable" />
 </a>
 </div>
 
