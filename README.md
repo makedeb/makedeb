@@ -1,9 +1,15 @@
-![Build Status](https://webhooks.hunterwittenborn.me/static/GitHub/makedeb/build-status.svg)
+<h1 align="center">Makedeb</h1>
+
+<div align="center">
+<a href="https://drone.hunterwittenborn.com/hwittenborn/makedeb">
+  <img src="https://drone.hunterwittenborn.com/api/badges/hwittenborn/makedeb/status.svg" />
+</a>
+</div>
 
 ## Overview ##
 makedeb takes PKGBUILD files and creates Debian archives installable with APT
 
-*Automatic AUR updates are available via [mpm](https://github.com/hwittenborn/mpm).*
+*Automated installation and updates of AUR packages are available with [mpm](https://github.com/hwittenborn/mpm).*
 
 ## Installation ##
 To install, run the following commands:
