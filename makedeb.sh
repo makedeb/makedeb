@@ -84,35 +84,63 @@ pkgsetup() {
 
 install_makedeps() {
   if [[ "${new_makedepends}" != "" ]]; then
-    echo "[#] Installing make dependencies..."
-    local packages="$(apt list ${new_makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    if ! sudo apt install ${packages}; then
-      echo "[!] Couldn't install packages."
+    echo "Checking make dependencies. One second..."
+    for package in ${new_makedepends[@]}; do
+      if [[ "$(apt list ${package} 2> /dev/null | sed 's/Listing...//g')" == "" ]]; then
+        unknown_pkg+=" ${package}"
+      fi
+    done
+
+    if [[ "${unknown_pkg}" != "" ]]; then
+      echo "Couldn't find the following packages:${unknown_pkg[@]}"
       exit 1
+    fi
+
+    make_packages="$(apt list ${new_makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -E "$(dpkg --print-architecture)|all" | grep -v "installed" | awk -F/ '{print $1}')"
+    if [[ ${make_packages} != "" ]]; then
+      echo "Installing make dependencies..."
+      if ! sudo apt install ${make_packages}; then
+        echo "Couldn't install packages."
+        exit 1
+      fi
     fi
   fi
 }
 rm_makedeps() {
-  if [[ "${new_makedepends}" != "" ]]; then
-    echo "[#] Removing unneeded make dependencies..."
-    sudo dpkg -r ${new_makedepends[@]} &> /dev/null
+  if [[ "${make_packages}" != "" ]]; then
+    echo "Removing unneeded make dependencies..."
+    sudo dpkg -r ${make_packages[@]} &> /dev/null
   fi
 }
 
 install_checkdeps() {
   if [[ "${new_checkdepends}" != "" ]]; then
-    echo "[#] Installing check dependencies..."
-    local packages="$(apt list ${new_checkdepends} 2> /dev/null | sed 's/Listing...//g' | grep -v "installed" | awk -F/ '{print $1}')"
-    if ! sudo apt install ${packages}; then
-      echo "[!] Couldn't install packages."
+    echo "Checking check dependencies. One second..."
+    for package in ${new_checkdepends[@]}; do
+      if [[ "$(apt list ${package} 2> /dev/null | sed 's/Listing...//g')" == "" ]]; then
+        unknown_pkg+=" ${package}"
+      fi
+    done
+
+    if [[ "${unknown_pkg}" != "" ]]; then
+      echo "Couldn't find the following packages:${unknown_pkg[@]}"
       exit 1
+    fi
+
+    check_packages="$(apt list ${new_makedepends} 2> /dev/null | sed 's/Listing...//g' | grep -E "$(dpkg --print-architecture)|all" | grep -v "installed" | awk -F/ '{print $1}')"
+    if [[ ${check_packages} != "" ]]; then
+      echo "Installing check dependencies..."
+      if ! sudo apt install ${check_packages}; then
+        echo "Couldn't install packages."
+        exit 1
+      fi
     fi
   fi
 }
 rm_checkdeps() {
-  if [[ "${new_checkdepends}" != "" ]]; then
-    echo "[#] Removing unneeded check dependencies..."
-    sudo dpkg -r ${new_checkdepends[@]} &> /dev/null
+  if [[ "${check_packages}" != "" ]]; then
+    echo "Removing unneeded check dependencies..."
+    sudo dpkg -r ${check_packages[@]} &> /dev/null
   fi
 }
 export_control() {
@@ -140,7 +168,7 @@ convert_arch() {
   }
 
 extract_pkg() {
-  echo "[#] Extracting ${pkgname}-${controlver}-${arch} package to pkgdir..."
+  echo "Extracting ${pkgname}-${controlver}-${arch} package to pkgdir..."
   tar -xf "${pkgname}-${controlver}-${arch}.pkg.tar.zst" -C "${pkgdir}"
 }
 
@@ -195,7 +223,7 @@ convert_deps
 install_makedeps
 install_checkdeps
 
-echo "[#] Running makepkg..."
+echo "Running makepkg..."
 makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
 rm_makedeps
@@ -207,7 +235,7 @@ convert_arch
 
 extract_pkg
 
-echo "[#] Generating control file..."
+echo "Generating control file..."
 export_control "Package:" "${pkgname}"
 export_control "Description:" "${pkgdesc}"
 export_control "Source:" "${source}"
@@ -222,7 +250,7 @@ export_control "Conflicts:" "${new_conflicts[@]}"
 
 echo "" >> "${pkgdir}"/DEBIAN/control
 
-echo "[#] Cleaning up..."
+echo "Cleaning up..."
 rm -f "${pkgdir}/.BUILDINFO"
 rm -f "${pkgdir}/.MTREE"
 rm -f "${pkgdir}/.PKGINFO"
@@ -235,14 +263,14 @@ debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
 
 find "${DIR}/${debname}.deb" &> /dev/null
 if [[ ${?} == "0" ]]; then
-  echo "[#] Built package detected. Removing..."
+  echo "Built package detected. Removing..."
   rm "${DIR}/${debname}.deb"
 fi
 
-echo "[#] Building package..."
+echo "Building package..."
 dpkg -b "${pkgdir}" >> /dev/null
 dpkg-name $(basename "${pkgdir}").deb >> /dev/null
-echo "[#] Built package..."
+echo "Built package..."
 
 if [[ ${INSTALL} == "TRUE" ]]; then
   sudo apt install "${DIR}/${debname}.deb"
