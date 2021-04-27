@@ -50,7 +50,6 @@ echo
 echo "  --help - bring up this help menu"
 echo "  -I, --install - automatically install after building"
 echo "  -F, --file, -p - specify a file to build from other than 'PKGBUILD'"
-echo "  --convert[beta] - attempt to automatically convert Arch Linux dependencies to Debian dependencies"
 echo
 echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
@@ -61,7 +60,6 @@ arg_check() {
       --help)                                 help; exit 0 ;;
       -F | --file | -p)                       FILE=${2}; shift;;
       -I | --install)                         INSTALL="TRUE" ;;
-      --convert)                              CONVERT="TRUE" ;;
       -*)                                     echo "Unknown option '${1}'"; exit 1 ;;
       "")                                     break ;;
     esac
