@@ -3,7 +3,7 @@
 
 pkgname=makedeb
 pkgver=2.0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Make PKGBUILDs work on Debian-based distros"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
