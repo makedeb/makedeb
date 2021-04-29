@@ -14,4 +14,4 @@ useradd -m user
 # SET FOLDER PERMS AND BUILD MAKEDEB
 chown user:user /drone/
 chown user:user /drone/src -R
-sudo -u user ./makedeb
+sudo -u user ./makedeb.sh
