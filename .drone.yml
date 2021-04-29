@@ -8,9 +8,8 @@ trigger:
   event:
     - push
   paths:
-    include:
-      - makedeb.sh
-      - packages.db
+    - PKGBUILD
+    - .drone/trigger
 
 steps:
   - name: build
