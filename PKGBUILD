@@ -1,10 +1,10 @@
 # Author: Hunter Wittenborn <git@hunterwittenborn.me>
 # Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
 
-pkgname=makedeb
+pkgname="${pkgname:-makedeb}"
 pkgver=2.0.5
-pkgrel=4
-pkgdesc="Make PKGBUILDs work on Debian-based distros"
+pkgrel=7
+pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type:-custom} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
 conflicts=('makedeb-alpha')
