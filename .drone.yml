@@ -14,7 +14,7 @@ steps:
   - name: build
     image: ubuntu
     commands:
-      - release_type=stable
+      - export _release_type=stable
       - bash .drone/build.sh
 
   - name: publish
@@ -43,8 +43,8 @@ steps:
   - name: build
     image: ubuntu
     commands:
-      - export pkgname=makedeb-alpha
-      - export release_type=alpha
+      - export _pkgname=makedeb-alpha
+      - export _release_type=alpha
       - bash .drone/build.sh
 
   - name: publish

@@ -1,10 +1,10 @@
 # Author: Hunter Wittenborn <git@hunterwittenborn.me>
 # Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
 
-pkgname="${pkgname:-makedeb}"
+pkgname="${_pkgname:-makedeb}"
 pkgver=2.0.5
-pkgrel=7
-pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type:-custom} release)"
+pkgrel=8
+pkgdesc="Make PKGBUILDs work on Debian-based distros (${_release_type:-custom} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
 conflicts=('makedeb-alpha')
@@ -25,6 +25,6 @@ package() {
 
 # You shouldn't touch this unless you have an explicit reason to. This is
 # normally used in the CI for deploying an alpha package if set.
-if [[ "${release_type}" == "alpha" ]]; then
+if [[ "${_release_type}" == "alpha" ]]; then
   conflicts=('makedeb')
 fi
