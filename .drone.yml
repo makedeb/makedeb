@@ -14,7 +14,6 @@ steps:
   - name: build
     image: ubuntu
     commands:
-      - export _release_type=stable
       - bash .drone/build.sh
 
   - name: publish
@@ -23,6 +22,7 @@ steps:
     environment:
       nexus_pass:
         from_secret: repo_pass
+      _release_type: stable
     commands:
       - bash .drone/publish.sh
 
@@ -43,8 +43,6 @@ steps:
   - name: build
     image: ubuntu
     commands:
-      - export _pkgname=makedeb-alpha
-      - export _release_type=alpha
       - bash .drone/build.sh
 
   - name: publish
@@ -53,5 +51,7 @@ steps:
     environment:
       nexus_pass:
         from_secret: nexus_pass
+      _pkgname: makedeb-alpha
+      _release_type: alpha
     commands:
       - bash .drone/publish.sh
