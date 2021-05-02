@@ -1,57 +1,53 @@
+---
+name: Build and Publish (Stable Release)
 kind: pipeline
 type: docker
-name: makedeb - stable
 trigger:
-  event:
-    - push
   branch:
     - stable
-  paths:
-    - PKGBUILD
-    - .drone/trigger
-
 steps:
   - name: build
     image: ubuntu
+    environment:
+      # PKGBUILD variables
+      release_type: stable
+      # Other stuff
+      DEBIAN_FRONTEND: noninteractive
     commands:
-      - bash .drone/build.sh
+      - scripts/build.sh
 
   - name: publish
     image: ubuntu
-    shell: bash
     environment:
-      nexus_pass:
-        from_secret: repo_pass
-      _release_type: stable
+      nexus_repository_password:
+        from_secret: nexus_repository_password
+      DEBIAN_FRONTEND: noninteractive
     commands:
-      - bash .drone/publish.sh
+      - scripts/publish.sh
 
 ---
+name: Build and Publish (Alpha Release)
 kind: pipeline
 type: docker
-name: makedeb - alpha
 trigger:
-  event:
-    - push
   branch:
     - alpha
-  paths:
-    - PKGBUILD
-    - .drone/trigger
-
 steps:
   - name: build
     image: ubuntu
+    environment:
+      # PKGBUILD variables
+      release_type: alpha
+      # Other stuff
+      DEBIAN_FRONTEND: noninteractive
     commands:
-      - bash .drone/build.sh
+      - scripts/build.sh
 
   - name: publish
     image: ubuntu
-    shell: bash
     environment:
-      nexus_pass:
-        from_secret: nexus_pass
-      _pkgname: makedeb-alpha
-      _release_type: alpha
+      nexus_repository_password:
+        from_secret: nexus_repository_password
+      DEBIAN_FRONTEND: noninteractive
     commands:
-      - bash .drone/publish.sh
+      - scripts/publish.sh
