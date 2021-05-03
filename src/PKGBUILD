@@ -16,6 +16,11 @@ source=("makedeb.sh"
 sha256sums=('SKIP'
 	          'SKIP')
 
+prepare() {
+  # Set variables in makedeb.sh
+  sed "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|"
+}
+
 package() {
   mkdir -p "${pkgdir}/usr/bin/"
     cp "${srcdir}/makedeb.sh" "${pkgdir}/usr/bin/makedeb"
