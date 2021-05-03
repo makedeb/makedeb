@@ -3,7 +3,7 @@
 
 pkgname="${pkgname}"
 pkgver=2.0.6
-pkgrel=2
+pkgrel=3
 pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
@@ -18,7 +18,7 @@ sha256sums=('SKIP'
 
 prepare() {
   # Set variables in makedeb.sh
-  sed "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|"
+  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|" "${srcdir}"/makedeb.sh
 }
 
 package() {
