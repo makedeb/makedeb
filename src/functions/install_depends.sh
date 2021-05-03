@@ -12,7 +12,7 @@ install_depends() {
       exit 1
     fi
 
-    ${2}_packages="$(apt list $(eval echo \${$1}) 2> /dev/null | sed 's/Listing...//g' | grep -E "$(dpkg --print-architecture)|all" | grep -v "installed" | awk -F/ '{print $1}')"
+    export ${2}_packages="$(apt list $(eval echo \${$1}) 2> /dev/null | sed 's/Listing...//g' | grep -E "$(dpkg --print-architecture)|all" | grep -v "installed" | awk -F/ '{print $1}')"
     if [[ "$(eval echo \${${2}_packages})" != "" ]]; then
       echo "Installing ${2} dependencies..."
       if ! sudo apt install $(eval echo \${${2}_packages}); then
