@@ -14,7 +14,12 @@ elif [[ "${release_type}" == "alpha" ]]; then
   export pkgname="makedeb-alpha"
   sed -i "s/conflicts=.*/conflicts=('makedeb')/" src/PKGBUILD
 fi
-cat src/PKGBUILD | envsubst '$pkgname $release_type $FUNCTIONS_DIR $REPO_DIR' | tee src/PKGBUILD
+
+for i in pkgname release_type; do
+  variable_name="\${$i}"
+  variable_product="$(eval echo \${$i})"
+  sed -i "s;$variable_name;$variable_product;g" src/PKGBUILD
+done
 
 # Set up repository and install current copy of makedeb
 echo "+ Setting up repository"
