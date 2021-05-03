@@ -3,7 +3,7 @@
 
 pkgname="${pkgname}"
 pkgver=2.0.6
-pkgrel=3
+pkgrel=4
 pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
@@ -26,6 +26,6 @@ package() {
     cp "${srcdir}/makedeb.sh" "${pkgdir}/usr/bin/makedeb"
   mkdir -p "${pkgdir}/etc/makedeb"
     cp "${srcdir}/packages.db" "${pkgdir}/etc/makedeb/"
-  mkdir -p "${pkgdir}/usr/lib/makedeb"
-    cp -R "${srcdir}"/../functions/* "${pkgdir}"/usr/lib/makedeb/
+  mkdir -p "${pkgdir}/usr/lib/makedeb/functions/"
+    cp -R "${srcdir}"/../functions/* "${pkgdir}"/usr/lib/makedeb/functions/
 }
