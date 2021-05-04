@@ -4,6 +4,7 @@ arg_check() {
       --help)                                 help; exit 0 ;;
       -F | --file | -p)                       FILE=${2}; shift;;
       -I | --install)                         INSTALL="TRUE" ;;
+      -B | --prebuilt)                        PREBUILT="TRUE" ;;
       -*)                                     echo "Unknown option '${1}'"; exit 1 ;;
       "")                                     break ;;
     esac

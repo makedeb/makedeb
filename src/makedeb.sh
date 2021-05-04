@@ -1,6 +1,6 @@
 #!/bin/bash
-# Copyright 2020 Hunter Wittenborn <git@hunterwittenborn.me>
-#
+# Copyright 2020-2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
+##
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,15 +13,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-# PKGBUILD, makepkg and related assets are properties of their
-# respective owners.
+##
+# makepkg and it's related assets are properties of their respective owners.
 
 ####################
 ## DEFAULT VALUES ##
 ####################
 INSTALL='FALSE'
 FILE='PKGBUILD'
+PREBUILT='FALSE'
 FUNCTIONS_DIR="./"
 
 #################
@@ -42,21 +42,21 @@ source <(cat "${FUNCTIONS_DIR}"/functions/*/*.sh)
 arg_check "${@}"
 root_check
 
-if [[ "${FILE}" == "PKGBUILD" ]]; then
-  find PKGBUILD &> /dev/null || { help; exit 0; }
-fi
-
+find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
+pkgbuild_check
 convert_deps
 
-install_depends new_makedepends make
-install_depends new_checkdepends check
+if [[ "${PREBUILT}" == "FALSE" ]]; then
+  install_depends new_makedepends make
+  install_depends new_checkdepends check
 
-echo "Running makepkg..."
-makepkg -p "${FILE}" ${OPTIONS} || exit 1
+  echo "Running makepkg..."
+  makepkg -p "${FILE}" ${OPTIONS} || exit 1
 
-remove_depends make
-remove_depends check
+  remove_depends make
+  remove_depends check
+fi
 
 pkgsetup
 convert_version
