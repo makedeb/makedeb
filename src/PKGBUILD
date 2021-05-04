@@ -1,9 +1,9 @@
-# Author: Hunter Wittenborn <git@hunterwittenborn.me>
-# Maintainer: Hunter Wittenborn <git@hunterwittenborn.me>
+# Author: Hunter Wittenborn <hunter@hunterwittenborn.com>
+# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 
 pkgname="${pkgname}"
-pkgver=2.0.6
-pkgrel=5
+pkgver=2.1.0
+pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
