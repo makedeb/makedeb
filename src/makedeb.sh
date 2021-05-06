@@ -72,7 +72,7 @@ export_control "Version:" "${controlver}"
 
 arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
 export_control "Architecture:" "${makedeb_arch}"
-export_control "Maintainer:" "$(cat ${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //')"
+export_control "Maintainer:" "$(cat ${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
 export_control "Depends:" "${new_depends[@]}"
 export_control "Suggests:" "${new_optdepends[@]}"
 export_control "Conflicts:" "${new_conflicts[@]}"
