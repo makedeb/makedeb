@@ -3,7 +3,7 @@
 
 pkgname="${pkgname}"
 pkgver=2.1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
