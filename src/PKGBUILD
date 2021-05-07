@@ -19,6 +19,7 @@ sha256sums=('SKIP'
 prepare() {
   # Set variables in makedeb.sh
   sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|" "${srcdir}"/makedeb.sh
+  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/etc/makedeb/|" "${srcdir}"/makedeb.sh
 }
 
 package() {
