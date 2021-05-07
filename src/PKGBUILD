@@ -2,8 +2,8 @@
 # Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 
 pkgname="${pkgname}"
-pkgver=2.1.2
-pkgrel=2
+pkgver=2.2.0
+pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type} release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
