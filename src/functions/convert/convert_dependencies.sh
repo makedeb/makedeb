@@ -6,7 +6,13 @@ convert_deps() {
   new_makedepends=${makedepends[@]}
   new_checkdepends=${checkdepends[@]}
 
-  for pkg in $(cat /etc/makedeb/packages.db | sed 's/"//g'); do
+             # Pipe explanation:
+             # 1. Read package database with 'cat'
+             # 2. Append a semicolon(;) to the end of each line
+             # 3. Put everything onto one line with 'xargs'
+             # 4. Delete everything until the first occurance of "# General dependencies"
+             # 5. Correct formatting by replacing semicolons(;) with newlines(\n)
+  for pkg in $(cat "${DATABASE_DIR}"/packages.db | sed 's|$|;|g' | xargs | sed 's|[^:]*\# General dependencies||' | sed 's|;|\n|g'); do
     string1=$(echo "${pkg}" | awk -F= '{print $1}')
     string2="$(echo "${pkg}" | awk -F= '{print $2}')"
 
@@ -16,9 +22,4 @@ convert_deps() {
     new_makedepends=$(echo ${new_makedepends[@]} | sed "s/${string1}/${string2}/g")
     new_checkdepends=$(echo ${new_checkdepends[@]} | sed "s/${string1}/${string2}/g")
   done
-
-  new_depends=$(echo ${new_depends[@]} | sed 's/ /, /g')
-  new_optdepends=$(echo ${new_optdepends[@]} | sed 's/ /, /g')
-  new_conflicts=$(echo ${new_conflicts[@]} | sed 's/ /, /g')
-
 }

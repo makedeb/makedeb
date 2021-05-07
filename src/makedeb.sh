@@ -23,6 +23,7 @@ INSTALL='FALSE'
 FILE='PKGBUILD'
 PREBUILT='FALSE'
 FUNCTIONS_DIR="./"
+DATABASE_DIR="./"
 
 #################
 ## OTHER STUFF ##
@@ -45,7 +46,10 @@ root_check
 find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
+
 convert_deps
+add_dependencies
+add_dependency_commas
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
   install_depends new_makedepends make

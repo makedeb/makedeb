@@ -1,16 +1,27 @@
+# Package-specific dependencies. These get added to the list of preexisting
+# dependencies in the PKGBUILD.
+##
+#
+function yq() {
+  db_depends=('python-is-python3')
+  db_makedepends=('python-is-python3')
+}
+
+# General dependencies
+alsa-lib="libasound2"
+awk="mawk"
+go="golang-go"
+gtk3="libgtk-3-0"
 gtk-engine-murrine="gtk2-engines-murrine"
 gtk-engines="gtk2-engines"
-gtk3="libgtk-3-0"
-alsa-lib="libasound2"
+libarchive="libarchive-tools"
 libnotify="libnotify-bin"
 libsecret="libsecret-common"
 libxss="libxss1"
 libxtst="libxtst6"
 nspr="libnspr4"
 nss="libnss3"
-go="golang-go"
-awk="mawk"
-libarchive="libarchive-tools"
+python="python3"
 python-argcomplete="python3-argcomplete"
 python-toml="python3-toml"
 python-xmltodict="python3-xmltodict"
