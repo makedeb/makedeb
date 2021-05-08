@@ -9,7 +9,7 @@ add_dependencies() {
 
   if [[ $(type -t ${pkgname}) == "function" ]]; then
     "${pkgname}"
-    for i in depends optdepends makedepends checkdepends; do
+    for i in depends optdepends conflicts makedepends checkdepends; do
       ${pkgname}
       if [[ $(eval echo \${db_${i}}) != "" ]]; then
         export new_${i}="$(eval echo "\${new_${i}[@]} \${db_${i}[@]}")"
