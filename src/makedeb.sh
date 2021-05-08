@@ -104,10 +104,10 @@ if [[ ${?} == "0" ]]; then
   rm "${DIR}/${debname}.deb"
 fi
 
-echo "Building package..."
+echo "Building ${pkgname}..."
 dpkg -b "${pkgdir}" >> /dev/null
 dpkg-name $(basename "${pkgdir}").deb >> /dev/null
-echo "Built package..."
+echo "Built ${pkgname}"
 
 if [[ ${INSTALL} == "TRUE" ]]; then
   sudo apt install "${DIR}/${debname}.deb"
