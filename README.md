@@ -31,5 +31,7 @@ As expected, don't run the alpha release if you're expecting stability. Things c
 ## Usage ##
 Instructions can be found after installation with `makedeb --help`
 
+Documentation on the inner working of makedeb, as well as guides to contributing, are available in the [makedeb wiki](https://github.com/hwittenborn/makedeb/wiki).
+
 ## Get in touch ##
 A Matrix room is available at [#git:hunterwittenborn.com](https://matrix.to/#/#git:hunterwittenborn.com) for discussion of any of my projects. Feel free to hop in if you need any help.
