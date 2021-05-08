@@ -22,6 +22,7 @@
 INSTALL='FALSE'
 FILE='PKGBUILD'
 PREBUILT='FALSE'
+package_convert="true"
 FUNCTIONS_DIR="./"
 DATABASE_DIR="./"
 
@@ -47,8 +48,12 @@ find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 
-convert_deps
-add_dependencies
+if [[ "${package_convert}" == "true" ]]; then
+  convert_deps
+  add_dependencies
+  convert_arch
+fi
+
 add_dependency_commas
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
@@ -64,7 +69,6 @@ fi
 
 pkgsetup
 convert_version
-convert_arch
 
 extract_pkg
 

@@ -8,6 +8,7 @@ add_dependencies() {
   source <(cat "${DATABASE_DIR}"/packages.db | sed 's|$|;|g' | xargs | sed 's|# General dependencies.*||' | sed 's|;|\n|g')
 
   if [[ $(type -t ${pkgname}) == "function" ]]; then
+    echo "Adding package-specific dependencies..."
     "${pkgname}"
     for i in depends optdepends conflicts makedepends checkdepends; do
       ${pkgname}

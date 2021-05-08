@@ -1,4 +1,5 @@
 convert_arch() {
+  echo "Converting architectures..."
   if [[ ${arch} == "x86_64" ]]; then
     export makedeb_arch="amd64"
   elif [[ ${arch} == "armv7l" ]]; then
