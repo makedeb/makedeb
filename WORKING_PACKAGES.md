@@ -15,5 +15,11 @@ asp (asp)
 ## G
 Google Chrome (google-chrome)
 
+## M
+Matcha GTK Theme (matcha-gtk-theme)
+
+## P
+Papirus Icon Theme (papirus-icon-theme)
+
 ## Z
 Zoho Mail Desktop (zoho-mail-desktop)
