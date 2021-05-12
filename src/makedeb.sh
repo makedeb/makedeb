@@ -23,6 +23,7 @@ INSTALL='FALSE'
 FILE='PKGBUILD'
 PREBUILT='FALSE'
 package_convert="true"
+
 FUNCTIONS_DIR="./"
 DATABASE_DIR="./"
 
@@ -50,7 +51,7 @@ pkgbuild_check
 
 if [[ "${package_convert}" == "true" ]]; then
   convert_deps
-  add_dependencies
+  modify_dependencies
   convert_arch
 fi
 
