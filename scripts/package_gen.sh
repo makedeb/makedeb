@@ -19,3 +19,4 @@ if [[ "${3}" == "aur" ]]; then
 'prepare() {
   bash "${srcdir}"/
 }'
+fi
