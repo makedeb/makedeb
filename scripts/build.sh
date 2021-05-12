@@ -8,18 +8,7 @@ apt install sudo wget gettext-base -y
 
 # Set up PKGBUILD
 echo "+ Setting up PKGBUILD"
-if [[ "${release_type}" == "stable" ]]; then
-  export pkgname="makedeb"
-elif [[ "${release_type}" == "alpha" ]]; then
-  export pkgname="makedeb-alpha"
-  sed -i "s/conflicts=.*/conflicts=('makedeb')/" src/PKGBUILD
-fi
-
-for i in pkgname release_type; do
-  variable_name="\${$i}"
-  variable_product="$(eval echo \${$i})"
-  sed -i "s;$variable_name;$variable_product;g" src/PKGBUILD
-done
+scripts/package_gen.sh "${release_type}"
 
 # Set up repository and install current copy of makedeb
 echo "+ Setting up repository"
