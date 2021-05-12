@@ -5,7 +5,7 @@ if [[ "${1}" == "stable" ]]; then
   sed -i "s|custom release|stable release|g" src/PKGBUILD
 
 elif [[ "${1}" == "alpha" ]]; then
-  sed -i "s|makedeb|makedeb-alpha|g" src/PKGBUILD
+  sed -i "s|pkgname=makedeb|pkgname=makedeb-alpha|g" src/PKGBUILD
   sed -i "s|custom release|alpha release|g" src/PKGBUILD
 
 else
