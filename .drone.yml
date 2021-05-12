@@ -1,53 +1,95 @@
 ---
-name: Build and Publish (Stable Release)
 kind: pipeline
 type: docker
+name: Build and Publish (Stable Release)
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: ubuntu
+  commands:
+  - scripts/build.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    release_type: stable
+
+- name: publish
+  image: ubuntu
+  commands:
+  - scripts/publish.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    nexus_repository_password:
+      from_secret: nexus_repository_password
+
 trigger:
   branch:
-    - stable
-steps:
-  - name: build
-    image: ubuntu
-    environment:
-      # PKGBUILD variables
-      release_type: stable
-      # Other stuff
-      DEBIAN_FRONTEND: noninteractive
-    commands:
-      - scripts/build.sh
-
-  - name: publish
-    image: ubuntu
-    environment:
-      nexus_repository_password:
-        from_secret: nexus_repository_password
-      DEBIAN_FRONTEND: noninteractive
-    commands:
-      - scripts/publish.sh
+  - stable
 
 ---
-name: Build and Publish (Alpha Release)
 kind: pipeline
 type: docker
+name: Build and Publish (Alpha Release)
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: ubuntu
+  commands:
+  - scripts/build.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    release_type: alpha
+
+- name: publish
+  image: ubuntu
+  commands:
+  - scripts/publish.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    nexus_repository_password:
+      from_secret: nexus_repository_password
+
 trigger:
   branch:
-    - alpha
-steps:
-  - name: build
-    image: ubuntu
-    environment:
-      # PKGBUILD variables
-      release_type: alpha
-      # Other stuff
-      DEBIAN_FRONTEND: noninteractive
-    commands:
-      - scripts/build.sh
+  - alpha
 
-  - name: publish
-    image: ubuntu
-    environment:
-      nexus_repository_password:
-        from_secret: nexus_repository_password
-      DEBIAN_FRONTEND: noninteractive
-    commands:
-      - scripts/publish.sh
+---
+kind: pipeline
+type: docker
+name: Publish GitHub Release
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: ubuntu
+  commands:
+  - scripts/build.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: publish
+  image: ubuntu
+  commands:
+  - scripts/github_release.sh
+  environment:
+    kavplex_github_pat:
+      from_secret: kavplex_github_pat
+
+trigger:
+  branch:
+  - stable
+
+depends_on:
+- Build and Publish (Stable Release)
+
+...
