@@ -1,13 +1,13 @@
 # Author: Hunter Wittenborn <hunter@hunterwittenborn.com>
 # Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 
-pkgname="${pkgname}"
-pkgver=2.2.2
-pkgrel=2
-pkgdesc="Make PKGBUILDs work on Debian-based distros (${release_type} release)"
+pkgname=makedeb
+pkgver=2.2.3
+pkgrel=1
+pkgdesc="Make PKGBUILDs work on Debian-based distros (custom release)"
 arch=('any')
-depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
-conflicts=('makedeb-alpha')
+depends=('pacman' 'dpkg')
+conflicts=()
 license=('GPL3')
 url="https://github.com/hwittenborn/makedeb"
 
@@ -17,11 +17,9 @@ sha256sums=('SKIP'
 	          'SKIP')
 
 prepare() {
-  # Set variables in makedeb.sh
-  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|" "${srcdir}"/makedeb.sh
-  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/etc/makedeb/|" "${srcdir}"/makedeb.sh
+  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|" makedeb.sh
+  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/etc/makedeb/|" makedeb.sh
 }
-
 package() {
   mkdir -p "${pkgdir}/usr/bin/"
     cp "${srcdir}/makedeb.sh" "${pkgdir}/usr/bin/makedeb"
