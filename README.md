@@ -31,8 +31,6 @@ As expected, don't run the alpha release if you're expecting stability. Things c
 ## Usage ##
 Instructions can be found after installation with `makedeb --help`
 
-A list of packages that are known to work with makedeb (Debian systems) is available in [WORKING_PACKAGES.md](./WORKING_PACKAGES.md)
-
 Documentation on the inner working of makedeb, as well as guides to contributing, are available in the [makedeb wiki](https://github.com/hwittenborn/makedeb/wiki).
 
 ## Get in touch ##
