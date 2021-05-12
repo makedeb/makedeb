@@ -1,15 +1,30 @@
+#!/usr/bin/env bash
+##
 # Package-specific dependencies. These get added to the list of preexisting
 # dependencies in the PKGBUILD.
 ##
 #
-function yq() {
-  db_depends=('python-is-python3')
-  db_makedepends=('python-is-python3')
+makedeb() {
+  add_depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
+  add_conflicts=('makedeb-alpha')
+  remove_depends=('pacman')
+}
+
+makedeb_alpha() {
+  add_depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
+  add_conflicts=('makedeb')
+  remove_depends=('pacman')
+}
+
+yq() {
+  add_depends=('python-is-python3')
+  add_makedepends=('python-is-python3')
 }
 
 # General dependencies
 alsa-lib="libasound2"
 awk="mawk"
+glibc="libc6"
 go="golang-go"
 gtk3="libgtk-3-0"
 gtk-engine-murrine="gtk2-engines-murrine"
@@ -20,6 +35,7 @@ libnotify="libnotify-bin"
 libsecret="libsecret-common"
 libxss="libxss1"
 libxtst="libxtst6"
+mailcap="mime-support"
 nspr="libnspr4"
 nss="libnss3"
 python="python3"
