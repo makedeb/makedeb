@@ -1,4 +1,4 @@
-// Function - Build and Publish
+// Function - Build and Publish 
 local buildAndPublish(nameCap, name) = {
   name: "Build and Publish (" + nameCap + " Release)",
   kind: "pipeline",
