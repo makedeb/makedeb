@@ -14,8 +14,8 @@ source=("makedeb.sh")
 sha256sums=('SKIP')
 
 prepare() {
-  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb-db/|" makedeb.sh
-  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/etc/makedeb/|" makedeb.sh
+  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|" makedeb.sh
+  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/usr/lib/makedeb-db/|" makedeb.sh
 }
 package() {
   mkdir -p "${pkgdir}/usr/bin/"
