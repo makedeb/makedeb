@@ -57,6 +57,10 @@ if [[ "${package_convert}" == "true" ]]; then
 
   convert_deps
   modify_dependencies
+else
+  new_depends=${depends[@]}
+  new_optdepends=${optdepends[@]}
+  new_conflicts=${conflicts[@]}
 fi
 
 add_dependency_commas
