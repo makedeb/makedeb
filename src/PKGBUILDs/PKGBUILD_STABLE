@@ -4,7 +4,7 @@
 pkgname=makedeb
 pkgver=2.2.3
 pkgrel=1
-pkgdesc="Make PKGBUILDs work on Debian-based distros (stable release)"
+pkgdesc="Create Debian archives from PKGBUILDs (stable release)"
 arch=('any')
 depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
 optdepends=('makedeb-db')
