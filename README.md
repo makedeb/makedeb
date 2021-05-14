@@ -3,13 +3,22 @@
 <img alt="Drone CI - Stable" src="https://img.shields.io/drone/build/hwittenborn/makedeb/stable?label=stable&server=https%3A%2F%2Fdrone.hunterwittenborn.com">
 <img alt="Drone CI - Alpha" src="https://img.shields.io/drone/build/hwittenborn/makedeb/alpha?label=alpha&server=https%3A%2F%2Fdrone.hunterwittenborn.com">
 </div>
+<div align="center">
+<a href="https://aur.archlinux.org/packages/makedeb/"><img alt="AUR - Stable" src="https://img.shields.io/badge/AUR-stable-informational"></a>
+<a href="https://aur.archlinux.org/packages/makedeb-alpha/"><img alt="AUR - Alpha" src="https://img.shields.io/badge/AUR-alpha-informational"></a>
+</div>
+
 
 ## Overview ##
-makedeb takes PKGBUILD files and creates Debian archives installable with APT.
+makedeb takes PKGBUILD files and creates Debian packages installable with APT.
 
 *Automated installation and updates of AUR and Arch Linux packages are available with [mpm](https://github.com/hwittenborn/mpm).*
 
 ## Installation ##
+Arch Linux users can install makedeb from the AUR from the [stable](https://aur.archlinux.org/packages/makedeb/) or [alpha](https://aur.archlinux.org/packages/makedeb-alpha/) release.
+
+Users on Debian or Debian-based systems (i.e. Ubuntu) should follow the below instructions.
+
 First, set up the repository with the following commands:
 ```sh
 sudo wget 'https://hunterwittenborn.com/keys/apt.asc' -O /etc/apt/trusted.gpg.d/hwittenborn.asc
