@@ -26,7 +26,13 @@ sudo apt install makedeb
 sudo apt install makedeb-alpha
 ```
 
-As expected, don't run the alpha release if you're expecting stability. Things could break occasionally, and you'll need to know how to get around your system when it happens.
+*As expected, don't run the alpha release if you're expecting stability. Things could break occasionally, and you'll need to know how to get around your system when it happens.*
+
+For support of converting PKGBUILD details from Arch Linux (i.e. dependencies and architectures), install the `makedeb-db` package as well:
+```sh
+sudo apt install makedeb-db
+```
+
 
 ## Usage ##
 Instructions can be found after installation with `makedeb --help`
