@@ -63,7 +63,7 @@ local makeGitHubRelease() = {
   name: "Publish GitHub Release",
   kind: "pipeline",
   type: "docker",
-  depends_on: [ "Build and Publish (Stable Release)" ],
+  depends_on: [ "Build and Publish to APT Repository (Stable Release)" ],
   trigger: {
     branch: "stable"
   },
