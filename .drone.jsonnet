@@ -92,8 +92,8 @@ local makeGitHubRelease() = {
 
 // Run Functions
 [
+  configurePKGBUILD(),
   buildAndPublish("Stable", "stable"),
   buildAndPublish("Alpha", "alpha"),
   makeGitHubRelease(),
-  configurePKGBUILD(),
 ]
