@@ -3,7 +3,7 @@ local githubClone() = {
   name: "Clone",
   image: "ubuntu",
   environment: { DEBIAN_FRONTEND: "noninteractive" },
-  commands: [ "scripts/github_pull.sh" ]
+  commands: [ "scripts/github_clone.sh" ]
 };
 
 // Function - Set PKGBUILD functions for PKGBUILDs in src/PKGBUILDs
@@ -11,9 +11,9 @@ local configurePKGBUILD() = {
   name: "Configure PKGBUILDs",
   kind: "pipeline",
   type: "docker",
-  clone: { disable: true },
+//  clone: { disable: true },
   steps: [
-    githubClone(),
+//    githubClone(),
     {
       name: "Set Variables in PKGBUILDs",
       image: "ubuntu",
@@ -27,13 +27,13 @@ local buildAndPublish(nameCap, name) = {
   name: "Build and Publish to APT Repository (" + nameCap + " Release)",
   kind: "pipeline",
   type: "docker",
-  clone: { disable: true },
+//  clone: { disable: true },
   depends_on: [ "Configure PKGBUILDs" ],
   trigger: {
     branch: name
   },
   steps: [
-    githubClone(),
+//    githubClone(),
     {
       name: "Build",
       image: "ubuntu",
