@@ -57,7 +57,6 @@ if [[ "${package_convert}" == "true" ]]; then
 
   convert_deps
   modify_dependencies
-  convert_arch
 fi
 
 add_dependency_commas
@@ -84,7 +83,10 @@ export_control "Description:" "${pkgdesc}"
 export_control "Source:" "${source}"
 export_control "Version:" "${controlver}"
 
-arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
+result_arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
+# Convert arch if $package_convert = "true", or set makedeb_arch to $result_arch
+{ [[ "${package_convert}" == "true" ]] && convert_arch; } || makedeb_arch=${result_arch}
+
 export_control "Architecture:" "${makedeb_arch}"
 export_control "Maintainer:" "$(cat ${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
 export_control "Depends:" "${new_depends[@]}"
