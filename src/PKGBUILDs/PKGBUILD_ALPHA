@@ -6,7 +6,8 @@ pkgver=2.2.3
 pkgrel=1
 pkgdesc="Make PKGBUILDs work on Debian-based distros (alpha release)"
 arch=('any')
-depends=('pacman' 'dpkg')
+depends=('makepkg' 'dpkg-dev' 'binutils' 'file')
+optdepends=('makedeb-db')
 license=('GPL3')
 url="https://github.com/hwittenborn/makedeb"
 
