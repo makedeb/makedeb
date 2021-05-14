@@ -84,8 +84,7 @@ export_control "Source:" "${source}"
 export_control "Version:" "${controlver}"
 
 result_arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
-# Convert arch if $package_convert = "true", or set makedeb_arch to $result_arch
-{ [[ "${package_convert}" == "true" ]] && convert_arch; } || makedeb_arch=${result_arch}
+convert_arch
 
 export_control "Architecture:" "${makedeb_arch}"
 export_control "Maintainer:" "$(cat ${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
