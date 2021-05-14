@@ -1,14 +1,41 @@
-// Function - Build and Publish 
-local buildAndPublish(nameCap, name) = {
-  name: "Build and Publish (" + nameCap + " Release)",
+// Function - Git Clone
+local githubClone() = {
+  name: "Clone",
+  image: "ubuntu",
+  environment: { DEBIAN_FRONTEND: "noninteractive" },
+  commands: [ "scripts/github_pull.sh" ]
+};
+
+// Function - Set PKGBUILD functions for PKGBUILDs in src/PKGBUILDs
+local configurePKGBUILD() = {
+  name: "Configure PKGBUILDs",
   kind: "pipeline",
   type: "docker",
+  clone: { disable: true },
+  steps: [
+    githubClone(),
+    {
+      name: "Set Variables in PKGBUILDs",
+      image: "ubuntu",
+      commands: [ "scripts/pkgbuild_gen.sh" ]
+    }
+  ]
+};
+
+// Function - Build and Publish
+local buildAndPublish(nameCap, name) = {
+  name: "Build and Publish to APT Repository (" + nameCap + " Release)",
+  kind: "pipeline",
+  type: "docker",
+  clone: { disable: true },
+  depends_on: [ "Configure PKGBUILDs" ],
   trigger: {
     branch: name
   },
   steps: [
+    githubClone(),
     {
-      name: "build",
+      name: "Build",
       image: "ubuntu",
       environment: {
         release_type: name,
@@ -18,7 +45,7 @@ local buildAndPublish(nameCap, name) = {
     },
 
     {
-      name: "publish",
+      name: "Publish",
       image: "ubuntu",
       environment: {
         nexus_repository_password: {
@@ -68,4 +95,5 @@ local makeGitHubRelease() = {
   buildAndPublish("Stable", "stable"),
   buildAndPublish("Alpha", "alpha"),
   makeGitHubRelease(),
+  configurePKGBUILD(),
 ]

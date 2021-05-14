@@ -8,7 +8,12 @@ apt install sudo wget gettext-base -y
 
 # Set up PKGBUILD
 echo "+ Setting up PKGBUILD"
-scripts/package_gen.sh "${release_type}"
+scripts/pkgbuild_gen.sh
+if [[ "${release_type}" == "stable" ]]; then
+  cp src/PKGBUILDs/PKGBUILD_STABLE src/PKGBUILD
+elif [[ "${release_type}" == "alpha" ]]; then
+  cp src/PKGBUILDs/PKGBUILD_ALPHA src/PKGBUILD
+fi
 
 # Set up repository and install current copy of makedeb
 echo "+ Setting up repository"

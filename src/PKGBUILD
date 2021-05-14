@@ -1,30 +1,4 @@
-# Author: Hunter Wittenborn <hunter@hunterwittenborn.com>
-# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-
-pkgname=makedeb
+# This is a template file that injects variables into the PKGBUILDs
+# inside the PKGBUILDs folder.
 pkgver=2.2.3
 pkgrel=1
-pkgdesc="Make PKGBUILDs work on Debian-based distros (custom release)"
-arch=('any')
-depends=('pacman' 'dpkg')
-conflicts=()
-license=('GPL3')
-url="https://github.com/hwittenborn/makedeb"
-
-source=("makedeb.sh"
-        "packages.db")
-sha256sums=('SKIP'
-	          'SKIP')
-
-prepare() {
-  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb/|" makedeb.sh
-  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/etc/makedeb/|" makedeb.sh
-}
-package() {
-  mkdir -p "${pkgdir}/usr/bin/"
-    cp "${srcdir}/makedeb.sh" "${pkgdir}/usr/bin/makedeb"
-  mkdir -p "${pkgdir}/etc/makedeb"
-    cp "${srcdir}/packages.db" "${pkgdir}/etc/makedeb/"
-  mkdir -p "${pkgdir}/usr/lib/makedeb/functions/"
-    cp -R "${srcdir}"/../functions/* "${pkgdir}"/usr/lib/makedeb/functions/
-}

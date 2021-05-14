@@ -1,0 +1,25 @@
+# Author: Hunter Wittenborn <hunter@hunterwittenborn.com>
+# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+
+pkgname=makedeb-alpha
+pkgver=2.2.3
+pkgrel=1
+pkgdesc="Make PKGBUILDs work on Debian-based distros (alpha release)"
+arch=('any')
+depends=('pacman' 'dpkg')
+license=('GPL3')
+url="https://github.com/hwittenborn/makedeb"
+
+source=("makedeb.sh")
+sha256sums=('SKIP')
+
+prepare() {
+  sed -i "s|FUNCTIONS_DIR=.*|FUNCTIONS_DIR=/usr/lib/makedeb-db/|" makedeb.sh
+  sed -i "s|DATABASE_DIR=.*|DATABASE_DIR=/etc/makedeb/|" makedeb.sh
+}
+package() {
+  mkdir -p "${pkgdir}/usr/bin/"
+    cp "${srcdir}/makedeb.sh" "${pkgdir}/usr/bin/makedeb"
+  mkdir -p "${pkgdir}/usr/lib/makedeb/functions/"
+    cp -R "${srcdir}"/../functions/* "${pkgdir}"/usr/lib/makedeb/functions/
+}
