@@ -12,7 +12,7 @@ help() {
   echo "  -F, --file, -p - specify a build file other than 'PKGBUILD'"
   echo "  -B, --prebuilt - make a Debian package from a prebuilt Arch package; Requires a build file to be present"
   echo
-  echo "  -C, --skip-conversion - skip conversion of dependencies and architectures"
+  echo "  -C, --convert - convert dependencies and architectures"
   echo
   echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }

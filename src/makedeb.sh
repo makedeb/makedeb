@@ -22,7 +22,7 @@
 INSTALL='FALSE'
 FILE='PKGBUILD'
 PREBUILT='FALSE'
-package_convert="true"
+package_convert="false"
 
 FUNCTIONS_DIR="./"
 DATABASE_DIR="./"
@@ -50,6 +50,11 @@ source "${FILE}"
 pkgbuild_check
 
 if [[ "${package_convert}" == "true" ]]; then
+  if ! find "${DATABASE_DIR}"/packages.db &> /dev/null; then
+    echo "Couldn't find the database file. Is 'makedeb-db' installed?"
+    exit 1
+  fi
+
   convert_deps
   modify_dependencies
   convert_arch
