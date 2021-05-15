@@ -110,33 +110,73 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: Publish GitHub Release
+name: Publish to AUR (Stable Release)
 
 platform:
   os: linux
   arch: amd64
 
 steps:
-- name: build
-  image: ubuntu
-  commands:
-  - scripts/build.sh
-  environment:
-    DEBIAN_FRONTEND: noninteractive
+- name: Pull Git repository from AUR
+  image: docker.hunterwittenborn.com/hwittenborn/drone-aur
+  settings:
+    action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
 
-- name: publish
+- name: Replace AUR PKGBUILD with PKGBUILD from GitHub
   image: ubuntu
-  commands:
-  - scripts/github_release.sh
   environment:
-    kavplex_github_pat:
-      from_secret: kavplex_github_pat
+    release_type: stable
 
-trigger:
-  branch:
-  - stable
+- name: Push Release to AUR
+  image: docker.hunterwittenborn.com/hwittenborn/drone-aur
+  settings:
+    action: push
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
 
 depends_on:
 - Build and Publish to APT Repository (Stable Release)
+
+---
+kind: pipeline
+type: docker
+name: Publish to AUR (Alpha Release)
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: Pull Git repository from AUR
+  image: docker.hunterwittenborn.com/hwittenborn/drone-aur
+  settings:
+    action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
+
+- name: Replace AUR PKGBUILD with PKGBUILD from GitHub
+  image: ubuntu
+  environment:
+    release_type: alpha
+
+- name: Push Release to AUR
+  image: docker.hunterwittenborn.com/hwittenborn/drone-aur
+  settings:
+    action: push
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
+
+depends_on:
+- Build and Publish to APT Repository (Alpha Release)
 
 ...

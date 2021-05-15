@@ -71,34 +71,38 @@ local buildAndPublish(nameCap, name) = {
   ]
 };
 
-// Function - Make GitHub Release
-local makeGitHubRelease() = {
-  name: "Publish GitHub Release",
+local publishAUR(nameCap, name) = {
+  name: "Publish to AUR (" + nameCap + " Release)",
   kind: "pipeline",
   type: "docker",
-  depends_on: [ "Build and Publish to APT Repository (Stable Release)" ],
-  trigger: {
-    branch: "stable"
-  },
+  depends_on: [ "Build and Publish to APT Repository (" + nameCap + " Release)" ],
   steps: [
     {
-      name: "build",
-      image: "ubuntu",
-      environment: {
-        DEBIAN_FRONTEND: "noninteractive"
-      },
-      commands: [ "scripts/build.sh" ]
+      name: "Pull Git repository from AUR",
+      image: "docker.hunterwittenborn.com/hwittenborn/drone-aur",
+      settings: {
+        action: "clone",
+        ssh_known_hosts: { from_secret: "ssh_known_hosts" },
+        ssh_key: { from_secret: "kavplex_github_ssh_key" }
+      }
     },
 
     {
-      name: "publish",
+      name: "Replace AUR PKGBUILD with PKGBUILD from GitHub",
       image: "ubuntu",
-      environment: {
-        kavplex_github_pat: {
-          from_secret: "kavplex_github_pat"
-        }
-      },
-      commands: [ "scripts/github_release.sh" ]
+      environment: { "release_type": name },
+      steps: [ "scripts/aur_pkgbuild_select.sh" ]
+    },
+
+    {
+      name: "Push Release to AUR",
+      image: "docker.hunterwittenborn.com/hwittenborn/drone-aur",
+      settings: {
+        action: "push",
+        ssh_known_hosts: { from_secret: "ssh_known_hosts" },
+        ssh_key: { from_secret: "kavplex_github_ssh_key" }
+      }
+
     }
   ]
 };
@@ -108,5 +112,6 @@ local makeGitHubRelease() = {
   configurePKGBUILD(),
   buildAndPublish("Stable", "stable"),
   buildAndPublish("Alpha", "alpha"),
-  makeGitHubRelease(),
+  publishAUR("Stable", "stable"),
+  publishAUR("Alpha", "alpha"),
 ]
