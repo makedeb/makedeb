@@ -4,7 +4,7 @@ set -e
 # Install needed packages
 echo "+ Installing needed packages"
 apt update
-apt install sudo wget gettext-base -y
+apt install sudo wget -y
 
 # Set up PKGBUILD
 echo "+ Setting up PKGBUILD"
