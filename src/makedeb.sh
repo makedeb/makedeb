@@ -33,7 +33,7 @@ DATABASE_DIR="./"
 files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src"
-pkgdir="${DIR}/pkg"
+pkgdir="${DIR}/pkg/"
 
 
 ####################
@@ -87,7 +87,7 @@ export_control "Description:" "${pkgdesc}"
 export_control "Source:" "${source}"
 export_control "Version:" "${controlver}"
 
-result_arch=$(cat "${pkgdir}"/.PKGINFO | grep "arch" | awk -F" = " '{print $2}')
+result_arch=$(cat "${pkgdir}"/.PKGINFO | grep 'arch =' | awk -F" = " '{print $2}')
 convert_arch
 
 export_control "Architecture:" "${makedeb_arch}"
