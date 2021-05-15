@@ -25,7 +25,7 @@ local configurePKGBUILD() = {
         action: "push",
         username: "kavplex",
         password: { from_secret: "kavplex_github_pat"},
-        message: "Updated version in PKGBUILDs"
+        message: "Updated version in PKGBUILDs [CI SKIP]"
       }
     }
   ]
