@@ -106,6 +106,8 @@ local publishAUR(nameCap, name, pkgtitle) = {
       image: "ubuntu",
       environment: { "release_type": name },
       commands: [
+        "export DEBIAN_FRONTEND=noninteractive",
+        "apt update && apt install wget -y",
         "cd *",
         "bash -c \"wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O */src/PKGBUILD\"",
         "bash -c \"{ [[ $${release_type} == alpha ]] || exit 0; } && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O */src/PKGBUILD\""
