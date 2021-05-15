@@ -1,23 +1,32 @@
-// Function - Git Clone
-local githubClone() = {
-  name: "Clone",
-  image: "ubuntu",
-  environment: { DEBIAN_FRONTEND: "noninteractive" },
-  commands: [ "scripts/github_clone.sh" ]
-};
-
 // Function - Set PKGBUILD functions for PKGBUILDs in src/PKGBUILDs
 local configurePKGBUILD() = {
   name: "Configure PKGBUILDs",
   kind: "pipeline",
   type: "docker",
-//  clone: { disable: true },
+  clone: { disable: true },
+  image_pull_secrets: [ "nexus_repository_docker_login" ],
   steps: [
-//    githubClone(),
+    {
+      name: "Clone",
+      image: "docker.hunterwittenborn.com/hwittenborn/drone-git",
+      settings: { action: "clone" }
+    },
+
     {
       name: "Set Variables in PKGBUILDs",
       image: "ubuntu",
       commands: [ "scripts/pkgbuild_gen.sh" ]
+    },
+
+    {
+      name: "Push Modified PKGBUILDs Back to GitHub",
+      image: "docker.hunterwittenborn.com/hwittenborn/drone-git",
+      settings: {
+        action: "push",
+        username: "kavplex",
+        password: { from_secret: "kavplex_github_pat"},
+        message: "Updated version in PKGBUILDs"
+      }
     }
   ]
 };

@@ -1,0 +1,136 @@
+---
+kind: pipeline
+type: docker
+name: Configure PKGBUILDs
+
+platform:
+  os: linux
+  arch: amd64
+
+clone:
+  disable: true
+
+steps:
+- name: Clone
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: clone
+
+- name: Set Variables in PKGBUILDs
+  image: ubuntu
+  commands:
+  - scripts/pkgbuild_gen.sh
+
+- name: Push Modified PKGBUILDs Back to GitHub
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: push
+    message: Updated version in PKGBUILDs
+    password:
+      from_secret: kavplex_github_pat
+    username: kavplex
+
+image_pull_secrets:
+- nexus_repository_docker_login
+
+---
+kind: pipeline
+type: docker
+name: Build and Publish to APT Repository (Stable Release)
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: Build
+  image: ubuntu
+  commands:
+  - scripts/build.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    release_type: stable
+
+- name: Publish
+  image: ubuntu
+  commands:
+  - scripts/publish.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    nexus_repository_password:
+      from_secret: nexus_repository_password
+
+trigger:
+  branch:
+  - stable
+
+depends_on:
+- Configure PKGBUILDs
+
+---
+kind: pipeline
+type: docker
+name: Build and Publish to APT Repository (Alpha Release)
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: Build
+  image: ubuntu
+  commands:
+  - scripts/build.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    release_type: alpha
+
+- name: Publish
+  image: ubuntu
+  commands:
+  - scripts/publish.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+    nexus_repository_password:
+      from_secret: nexus_repository_password
+
+trigger:
+  branch:
+  - alpha
+
+depends_on:
+- Configure PKGBUILDs
+
+---
+kind: pipeline
+type: docker
+name: Publish GitHub Release
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: ubuntu
+  commands:
+  - scripts/build.sh
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: publish
+  image: ubuntu
+  commands:
+  - scripts/github_release.sh
+  environment:
+    kavplex_github_pat:
+      from_secret: kavplex_github_pat
+
+trigger:
+  branch:
+  - stable
+
+depends_on:
+- Build and Publish to APT Repository (Stable Release)
+
+...
