@@ -106,7 +106,7 @@ local publishAUR(nameCap, name, pkgtitle) = {
       image: "ubuntu",
       environment: { "release_type": name },
       commands: [
-        "cd ${DRONE_REPO_NAME}",
+        "cd *",
         "bash -c \"[[ ${release_type} == stable ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O */src/PKGBUILD\"",
         "bash -c \"[[ ${release_type} == alpha ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O */src/PKGBUILD\""
       ]
