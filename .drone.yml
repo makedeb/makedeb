@@ -48,7 +48,19 @@ platform:
   os: linux
   arch: amd64
 
+clone:
+  disable: true
+
 steps:
+- name: Clone
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
+
 - name: Build
   image: ubuntu
   commands:
@@ -66,6 +78,9 @@ steps:
     nexus_repository_password:
       from_secret: nexus_repository_password
 
+image_pull_secrets:
+- nexus_repository_docker_login
+
 trigger:
   branch:
   - stable
@@ -82,7 +97,19 @@ platform:
   os: linux
   arch: amd64
 
+clone:
+  disable: true
+
 steps:
+- name: Clone
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
+
 - name: Build
   image: ubuntu
   commands:
@@ -99,6 +126,9 @@ steps:
     DEBIAN_FRONTEND: noninteractive
     nexus_repository_password:
       from_secret: nexus_repository_password
+
+image_pull_secrets:
+- nexus_repository_docker_login
 
 trigger:
   branch:
@@ -140,6 +170,10 @@ steps:
     ssh_known_hosts:
       from_secret: ssh_known_hosts
 
+trigger:
+  branch:
+  - stable
+
 depends_on:
 - Build and Publish to APT Repository (Stable Release)
 
@@ -175,6 +209,10 @@ steps:
       from_secret: kavplex_github_ssh_key
     ssh_known_hosts:
       from_secret: ssh_known_hosts
+
+trigger:
+  branch:
+  - alpha
 
 depends_on:
 - Build and Publish to APT Repository (Alpha Release)

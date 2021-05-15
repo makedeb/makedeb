@@ -40,13 +40,23 @@ local buildAndPublish(nameCap, name) = {
   name: "Build and Publish to APT Repository (" + nameCap + " Release)",
   kind: "pipeline",
   type: "docker",
-//  clone: { disable: true },
+  clone: { disable: true },
+  image_pull_secrets: [ "nexus_repository_docker_login" ],
   depends_on: [ "Configure PKGBUILDs" ],
   trigger: {
     branch: name
   },
   steps: [
-//    githubClone(),
+    {
+      name: "Clone",
+      image: "docker.hunterwittenborn.com/hwittenborn/drone-git",
+      settings: {
+        action: "clone",
+        ssh_known_hosts: { from_secret: "ssh_known_hosts" },
+        ssh_key: { from_secret: "kavplex_github_ssh_key" }
+      }
+    },
+
     {
       name: "Build",
       image: "ubuntu",
@@ -75,6 +85,7 @@ local publishAUR(nameCap, name) = {
   name: "Publish to AUR (" + nameCap + " Release)",
   kind: "pipeline",
   type: "docker",
+  trigger: { branch: name },
   depends_on: [ "Build and Publish to APT Repository (" + nameCap + " Release)" ],
   steps: [
     {
