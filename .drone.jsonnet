@@ -88,6 +88,7 @@ local publishAUR(nameCap, name) = {
   trigger: { branch: name },
   depends_on: [ "Build and Publish to APT Repository (" + nameCap + " Release)" ],
   clone: { disable: true },
+  image_pull_secrets: [ "nexus_repository_docker_login" ],
   steps: [
     {
       name: "Pull Git repository from AUR",

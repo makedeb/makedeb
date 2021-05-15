@@ -179,6 +179,9 @@ steps:
     ssh_known_hosts:
       from_secret: ssh_known_hosts
 
+image_pull_secrets:
+- nexus_repository_docker_login
+
 trigger:
   branch:
   - stable
@@ -223,6 +226,9 @@ steps:
       from_secret: kavplex_github_ssh_key
     ssh_known_hosts:
       from_secret: ssh_known_hosts
+
+image_pull_secrets:
+- nexus_repository_docker_login
 
 trigger:
   branch:
