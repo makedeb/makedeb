@@ -105,7 +105,11 @@ local publishAUR(nameCap, name, pkgtitle) = {
       name: "Replace AUR PKGBUILD with PKGBUILD from GitHub",
       image: "ubuntu",
       environment: { "release_type": name },
-      commands: [ "cd ${DRONE_REPO_NAME}", "scripts/aur_pkgbuild_select.sh" ]
+      commands: [
+        "cd ${DRONE_REPO_NAME}",
+        "bash -c \"[[ ${release_type} == stable ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O */src/PKGBUILD\"",
+        "bash -c \"[[ ${release_type} == alpha ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O */src/PKGBUILD\""
+      ]
     },
 
     {
