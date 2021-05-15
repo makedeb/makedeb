@@ -94,6 +94,7 @@ local publishAUR(nameCap, name) = {
       image: "docker.hunterwittenborn.com/hwittenborn/drone-aur",
       settings: {
         action: "clone",
+        pkgname: "makedeb",
         ssh_known_hosts: { from_secret: "ssh_known_hosts" },
         ssh_key: { from_secret: "kavplex_github_ssh_key" }
       }
@@ -111,6 +112,7 @@ local publishAUR(nameCap, name) = {
       image: "docker.hunterwittenborn.com/hwittenborn/drone-aur",
       settings: {
         action: "push",
+        pkgname: "makedeb",
         ssh_known_hosts: { from_secret: "ssh_known_hosts" },
         ssh_key: { from_secret: "kavplex_github_ssh_key" }
       }
