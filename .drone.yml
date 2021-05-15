@@ -150,6 +150,9 @@ platform:
   os: linux
   arch: amd64
 
+clone:
+  disable: true
+
 steps:
 - name: Pull Git repository from AUR
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
@@ -189,6 +192,9 @@ name: Publish to AUR (Alpha Release)
 platform:
   os: linux
   arch: amd64
+
+clone:
+  disable: true
 
 steps:
 - name: Pull Git repository from AUR
