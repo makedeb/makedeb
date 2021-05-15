@@ -15,7 +15,7 @@ local configurePKGBUILD() = {
     {
       name: "Set Variables in PKGBUILDs",
       image: "ubuntu",
-      commands: [ "scripts/pkgbuild_gen.sh" ]
+      commands: [ "cd ${DRONE_REPO_NAME}", "scripts/pkgbuild_gen.sh" ]
     },
 
     {
