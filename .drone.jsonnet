@@ -64,7 +64,7 @@ local buildAndPublish(nameCap, name) = {
         release_type: name,
         DEBIAN_FRONTEND: "noninteractive"
       },
-      commands: [ "scripts/build.sh" ]
+      commands: [ "cd ${DRONE_REPO_NAME}", "scripts/build.sh" ]
     },
 
     {
@@ -76,7 +76,7 @@ local buildAndPublish(nameCap, name) = {
         },
         DEBIAN_FRONTEND: "noninteractive"
       },
-      commands: [ "scripts/publish.sh" ]
+      commands: [ "cd ${DRONE_REPO_NAME}", "scripts/publish.sh" ]
     }
   ]
 };
@@ -102,7 +102,7 @@ local publishAUR(nameCap, name) = {
       name: "Replace AUR PKGBUILD with PKGBUILD from GitHub",
       image: "ubuntu",
       environment: { "release_type": name },
-      steps: [ "scripts/aur_pkgbuild_select.sh" ]
+      steps: [ "cd ${DRONE_REPO_NAME}", "scripts/aur_pkgbuild_select.sh" ]
     },
 
     {

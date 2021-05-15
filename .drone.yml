@@ -64,6 +64,7 @@ steps:
 - name: Build
   image: ubuntu
   commands:
+  - cd ${DRONE_REPO_NAME}
   - scripts/build.sh
   environment:
     DEBIAN_FRONTEND: noninteractive
@@ -72,6 +73,7 @@ steps:
 - name: Publish
   image: ubuntu
   commands:
+  - cd ${DRONE_REPO_NAME}
   - scripts/publish.sh
   environment:
     DEBIAN_FRONTEND: noninteractive
@@ -113,6 +115,7 @@ steps:
 - name: Build
   image: ubuntu
   commands:
+  - cd ${DRONE_REPO_NAME}
   - scripts/build.sh
   environment:
     DEBIAN_FRONTEND: noninteractive
@@ -121,6 +124,7 @@ steps:
 - name: Publish
   image: ubuntu
   commands:
+  - cd ${DRONE_REPO_NAME}
   - scripts/publish.sh
   environment:
     DEBIAN_FRONTEND: noninteractive
