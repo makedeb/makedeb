@@ -107,8 +107,8 @@ local publishAUR(nameCap, name, pkgtitle) = {
       environment: { "release_type": name },
       commands: [
         "cd *",
-        "bash -c \"[[ ${release_type} == stable ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O */src/PKGBUILD\"",
-        "bash -c \"[[ ${release_type} == alpha ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O */src/PKGBUILD\""
+        "bash -c \"[[ $${release_type} == stable ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O */src/PKGBUILD\"",
+        "bash -c \"[[ $${release_type} == alpha ]] && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O */src/PKGBUILD\""
       ]
     },
 
