@@ -206,7 +206,7 @@ steps:
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
   settings:
     action: clone
-    pkgname: makedeb
+    pkgname: makedeb-alpha
     ssh_key:
       from_secret: kavplex_github_ssh_key
     ssh_known_hosts:
@@ -221,7 +221,7 @@ steps:
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
   settings:
     action: push
-    pkgname: makedeb
+    pkgname: makedeb-alpha
     ssh_key:
       from_secret: kavplex_aur_ssh_key
     ssh_known_hosts:

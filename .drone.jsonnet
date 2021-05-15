@@ -81,7 +81,7 @@ local buildAndPublish(nameCap, name) = {
   ]
 };
 
-local publishAUR(nameCap, name) = {
+local publishAUR(nameCap, name, pkgtitle) = {
   name: "Publish to AUR (" + nameCap + " Release)",
   kind: "pipeline",
   type: "docker",
@@ -95,7 +95,7 @@ local publishAUR(nameCap, name) = {
       image: "docker.hunterwittenborn.com/hwittenborn/drone-aur",
       settings: {
         action: "clone",
-        pkgname: "makedeb",
+        pkgname: pkgtitle,
         ssh_known_hosts: { from_secret: "ssh_known_hosts" },
         ssh_key: { from_secret: "kavplex_github_ssh_key" }
       }
@@ -113,7 +113,7 @@ local publishAUR(nameCap, name) = {
       image: "docker.hunterwittenborn.com/hwittenborn/drone-aur",
       settings: {
         action: "push",
-        pkgname: "makedeb",
+        pkgname: pkgtitle,
         ssh_known_hosts: { from_secret: "ssh_known_hosts" },
         ssh_key: { from_secret: "kavplex_aur_ssh_key" }
       }
@@ -127,6 +127,6 @@ local publishAUR(nameCap, name) = {
   configurePKGBUILD(),
   buildAndPublish("Stable", "stable"),
   buildAndPublish("Alpha", "alpha"),
-  publishAUR("Stable", "stable"),
-  publishAUR("Alpha", "alpha"),
+  publishAUR("Stable", "stable", "makedeb"),
+  publishAUR("Alpha", "alpha", "makedeb-alpha"),
 ]
