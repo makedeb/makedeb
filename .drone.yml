@@ -166,6 +166,9 @@ steps:
 
 - name: Replace AUR PKGBUILD with PKGBUILD from GitHub
   image: ubuntu
+  commands:
+  - cd ${DRONE_REPO_NAME}
+  - scripts/aur_pkgbuild_select.sh
   environment:
     release_type: stable
 
@@ -214,6 +217,9 @@ steps:
 
 - name: Replace AUR PKGBUILD with PKGBUILD from GitHub
   image: ubuntu
+  commands:
+  - cd ${DRONE_REPO_NAME}
+  - scripts/aur_pkgbuild_select.sh
   environment:
     release_type: alpha
 

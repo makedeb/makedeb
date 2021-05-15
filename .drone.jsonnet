@@ -105,7 +105,7 @@ local publishAUR(nameCap, name, pkgtitle) = {
       name: "Replace AUR PKGBUILD with PKGBUILD from GitHub",
       image: "ubuntu",
       environment: { "release_type": name },
-      steps: [ "cd ${DRONE_REPO_NAME}", "scripts/aur_pkgbuild_select.sh" ]
+      commands: [ "cd ${DRONE_REPO_NAME}", "scripts/aur_pkgbuild_select.sh" ]
     },
 
     {
