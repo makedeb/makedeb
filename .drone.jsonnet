@@ -97,7 +97,7 @@ local publishAUR(nameCap, name, pkgtitle) = {
         action: "clone",
         pkgname: pkgtitle,
         ssh_known_hosts: { from_secret: "ssh_known_hosts" },
-        ssh_key: { from_secret: "kavplex_github_ssh_key" }
+        ssh_key: { from_secret: "kavplex_aur_ssh_key" }
       }
     },
 

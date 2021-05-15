@@ -160,7 +160,7 @@ steps:
     action: clone
     pkgname: makedeb
     ssh_key:
-      from_secret: kavplex_github_ssh_key
+      from_secret: kavplex_aur_ssh_key
     ssh_known_hosts:
       from_secret: ssh_known_hosts
 
@@ -208,7 +208,7 @@ steps:
     action: clone
     pkgname: makedeb-alpha
     ssh_key:
-      from_secret: kavplex_github_ssh_key
+      from_secret: kavplex_aur_ssh_key
     ssh_known_hosts:
       from_secret: ssh_known_hosts
 
