@@ -15,6 +15,10 @@ steps:
   image: docker.hunterwittenborn.com/hwittenborn/drone-git
   settings:
     action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
 
 - name: Set Variables in PKGBUILDs
   image: ubuntu
@@ -27,9 +31,10 @@ steps:
   settings:
     action: push
     message: Updated version in PKGBUILDs [CI SKIP]
-    password:
-      from_secret: kavplex_github_pat
-    username: kavplex
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
 
 image_pull_secrets:
 - nexus_repository_docker_login

@@ -9,7 +9,11 @@ local configurePKGBUILD() = {
     {
       name: "Clone",
       image: "docker.hunterwittenborn.com/hwittenborn/drone-git",
-      settings: { action: "clone" }
+      settings: {
+        action: "clone",
+        ssh_known_hosts: { from_secret: "ssh_known_hosts" },
+        ssh_key: { from_secret: "kavplex_github_ssh_key" }
+      }
     },
 
     {
@@ -23,8 +27,8 @@ local configurePKGBUILD() = {
       image: "docker.hunterwittenborn.com/hwittenborn/drone-git",
       settings: {
         action: "push",
-        username: "kavplex",
-        password: { from_secret: "kavplex_github_pat"},
+        ssh_known_hosts: { from_secret: "ssh_known_hosts" },
+        ssh_key: { from_secret: "kavplex_github_ssh_key" },
         message: "Updated version in PKGBUILDs [CI SKIP]"
       }
     }
