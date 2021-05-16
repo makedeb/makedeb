@@ -115,7 +115,7 @@ local publishAUR(nameCap, name, pkgtitle) = {
       name: "Replace AUR PKGBUILD with PKGBUILD from GitHub",
       image: "ubuntu",
       environment: { "release_type": name },
-      commands: [ "scripts/aur_pkgbuild_select.sh" ]
+      commands: [ "makedeb/scripts/aur_pkgbuild_select.sh" ]
     },
 
     {
