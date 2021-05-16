@@ -2,12 +2,12 @@
 set -e
 
 if [[ "${release_type}" == "stable" ]]; then
-  rm AUR/makedeb/PKGBUILD
-  cp src/PKGBUILDs/PKGBUILD_AUR_STABLE AUR/makedeb/PKGBUILD
+  rm aur_makedeb/PKGBUILD
+  cp makedeb/src/PKGBUILDs/PKGBUILD_AUR_STABLE aur_makedeb/PKGBUILD
 
 elif [[ "${release_type}" == "alpha" ]]; then
-  rm AUR/makedeb-alpha/PKGBUILD
-  cp src/PKGBUILDs/PKGBUILD_AUR_ALPHA AUR/makedeb-alpha/PKGBUILD
+  rm aur_makedeb-alpha/PKGBUILD
+  cp makedeb/src/PKGBUILDs/PKGBUILD_AUR_ALPHA aur_makedeb-alpha/PKGBUILD
 
 else
   echo "Invalid option was set for 'release_type'"
