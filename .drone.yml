@@ -154,6 +154,11 @@ clone:
   disable: true
 
 steps:
+- name: Clone
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: clone
+
 - name: Pull Git repository from AUR
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
   settings:
@@ -204,6 +209,11 @@ clone:
   disable: true
 
 steps:
+- name: Clone
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: clone
+
 - name: Pull Git repository from AUR
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
   settings:

@@ -94,7 +94,7 @@ local publishAUR(nameCap, name, pkgtitle) = {
       name: "Clone",
       image: "docker.hunterwittenborn.com/hwittenborn/drone-git",
       settings: { action: "clone" }
-    }
+    },
 
     {
       name: "Pull Git repository from AUR",
