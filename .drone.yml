@@ -167,11 +167,8 @@ steps:
 - name: Replace AUR PKGBUILD with PKGBUILD from GitHub
   image: ubuntu
   commands:
-  - export DEBIAN_FRONTEND=noninteractive
-  - apt update && apt install wget -y
-  - cd *
-  - bash -c "wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O PKGBUILD"
-  - bash -c "{ [[ $${release_type} == alpha ]] || exit 0; } && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O PKGBUILD"
+  - cd ${DRONE_REPO_NAME}
+  - scripts/aur_pkgbuild_select.sh
   environment:
     release_type: stable
 
@@ -182,6 +179,16 @@ steps:
     pkgname: makedeb
     ssh_key:
       from_secret: kavplex_aur_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
+
+- name: Push AUR Repository to GitHub
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: push
+    message: Updated AUR Repository [CI SKIP]
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
     ssh_known_hosts:
       from_secret: ssh_known_hosts
 
@@ -221,11 +228,8 @@ steps:
 - name: Replace AUR PKGBUILD with PKGBUILD from GitHub
   image: ubuntu
   commands:
-  - export DEBIAN_FRONTEND=noninteractive
-  - apt update && apt install wget -y
-  - cd *
-  - bash -c "wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_STABLE -O PKGBUILD"
-  - bash -c "{ [[ $${release_type} == alpha ]] || exit 0; } && wget https://github.com/hwittenborn/makedeb/raw/alpha/src/PKGBUILDs/PKGBUILD_AUR_ALPHA -O PKGBUILD"
+  - cd ${DRONE_REPO_NAME}
+  - scripts/aur_pkgbuild_select.sh
   environment:
     release_type: alpha
 
@@ -236,6 +240,16 @@ steps:
     pkgname: makedeb-alpha
     ssh_key:
       from_secret: kavplex_aur_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
+
+- name: Push AUR Repository to GitHub
+  image: docker.hunterwittenborn.com/hwittenborn/drone-git
+  settings:
+    action: push
+    message: Updated AUR Repository [CI SKIP]
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
     ssh_known_hosts:
       from_secret: ssh_known_hosts
 
