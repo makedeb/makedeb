@@ -158,6 +158,10 @@ steps:
   image: docker.hunterwittenborn.com/hwittenborn/drone-git
   settings:
     action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
 
 - name: Pull Git repository from AUR
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
@@ -213,6 +217,10 @@ steps:
   image: docker.hunterwittenborn.com/hwittenborn/drone-git
   settings:
     action: clone
+    ssh_key:
+      from_secret: kavplex_github_ssh_key
+    ssh_known_hosts:
+      from_secret: ssh_known_hosts
 
 - name: Pull Git repository from AUR
   image: docker.hunterwittenborn.com/hwittenborn/drone-aur
