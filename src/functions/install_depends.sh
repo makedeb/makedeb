@@ -1,7 +1,7 @@
 install_depends() {
   if [[ "$(eval echo \${$1})" != "" ]]; then
     echo "Checking ${2} dependencies. One second..."
-    for package in "$(eval echo \${${1}[@]})"; do
+    for package in $(eval echo \${${1}[@]}); do
       if [[ "$(apt list ${package} 2> /dev/null | sed 's/Listing...//g')" == "" ]]; then
         unknown_pkg+=" ${package}"
       fi

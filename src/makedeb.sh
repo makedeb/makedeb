@@ -25,7 +25,7 @@ PREBUILT='FALSE'
 package_convert="false"
 
 FUNCTIONS_DIR="./"
-DATABASE_DIR="./"
+DATABASE_DIR="/usr/lib/makedeb-db/"
 
 #################
 ## OTHER STUFF ##
@@ -49,6 +49,7 @@ find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 
+## START DEPENDENCY CONVERSION STUFF ##
 if [[ "${package_convert}" == "true" ]]; then
   if ! find "${DATABASE_DIR}"/packages.db &> /dev/null; then
     echo "Couldn't find the database file. Is 'makedeb-db' installed?"
@@ -61,9 +62,19 @@ else
   new_depends=${depends[@]}
   new_optdepends=${optdepends[@]}
   new_conflicts=${conflicts[@]}
+  new_makedepends=${makedepends[@]}
+  new_checkdepends=${checkdepends[@]}
 fi
 
+check_relationships new_depends      ${new_depends}
+check_relationships new_optdepends   ${new_optdepends}
+check_relationships new_conflicts    ${new_conflicts}
+check_relationships new_makedepends  ${new_makedepends}
+check_relationships new_checkdepends ${new_checkdepends}
+
 add_dependency_commas
+convert_relationships_parentheses
+## END DEPENDENCY CONVERSION STUFF
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
   install_depends new_makedepends make
