@@ -16,6 +16,7 @@
 ##
 # makepkg and it's related assets are properties of their respective owners.
 
+set -e
 ####################
 ## DEFAULT VALUES ##
 ####################
@@ -32,7 +33,7 @@ DATABASE_DIR="/usr/lib/makedeb-db/"
 #################
 files="$(ls)"
 DIR="$(echo $PWD)"
-srcdir="${DIR}/src"
+srcdir="${DIR}/src/"
 pkgdir="${DIR}/pkg/"
 
 
@@ -49,6 +50,8 @@ find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 
+find "${pkgdir}" &> /dev/null || rm "${pkgdir}" -rf
+
 remove_dependency_description
 run_dependency_conversion
 
@@ -58,34 +61,58 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
   echo "Running makepkg..."
   makepkg -p "${FILE}" ${OPTIONS} || exit 1
-  rm *.pkg.tar.zst
+  find *.pkg.tar.zst &> /dev/null || rm *.pkg.tar.zst
 
   remove_depends make
   remove_depends check
-fi
 
-pkgsetup
-for package in ${pkgname[@]}; do
-  cd "${pkgdir}"/"${package}"
+  pkgsetup
+  for package in ${pkgname[@]}; do
+    cd "${pkgdir}"/"${package}"
+
+    get_variables
+    run_dependency_conversion
+    convert_version
+    generate_control
+
+    echo "Cleaning up..."
+    rm -f ".BUILDINFO"
+    rm -f ".MTREE"
+    rm -f ".PKGINFO"
+
+    field() {
+      cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
+    }
+
+    debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
+    debname_install+=" ${debname}"
+
+    cd ..
+    if find ../"${debname}.deb" &> /dev/null; then
+      echo "Built package detected. Removing..."
+      rm ../"${debname}.deb"
+    fi
+
+    echo "Building ${pkgname}..."
+    dpkg -b "${pkgdir}"/"${package}" >> /dev/null
+    mv "${package}".deb ../
+    dpkg-name ../"${package}".deb >> /dev/null
+    echo "Built ${pkgname}"
+
+    cd ..
+  done
+else
+  [[ "${pkgname[1]}" != "" ]] && echo "Multiple values for \$pkgname found. Assuming '${pkgname}'."
+  package="${pkgname}"
+  mkdir -p "${pkgdir}"/"${pkgname}"/DEBIAN/
+
+  convert_version
+  tar -xf "${pkgname}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${pkgname}"
+  cd "${pkgdir}"/"${pkgname}"
 
   get_variables
-  convert_version
-
-  echo "Generating control file..."
-  export_control "Package:" "${pkgname}"
-  export_control "Description:" "${pkgdesc}"
-  export_control "Source:" "${source}"
-  export_control "Version:" "${controlver}"
-
-  convert_arch
-  export_control "Architecture:" "${makedeb_arch}"
-
-  export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
-  export_control "Depends:" "${new_depends[@]}"
-  export_control "Suggests:" "${new_optdepends[@]}"
-  export_control "Conflicts:" "${new_conflicts[@]}"
-
-  echo "" >> DEBIAN/control
+  run_dependency_conversion
+  generate_control
 
   echo "Cleaning up..."
   rm -f ".BUILDINFO"
@@ -100,8 +127,7 @@ for package in ${pkgname[@]}; do
   debname_install+=" ${debname}"
 
   cd ..
-  find ../"${debname}.deb" &> /dev/null
-  if [[ ${?} == "0" ]]; then
+  if find ../"${debname}.deb" &> /dev/null; then
     echo "Built package detected. Removing..."
     rm ../"${debname}.deb"
   fi
@@ -111,10 +137,7 @@ for package in ${pkgname[@]}; do
   mv "${package}".deb ../
   dpkg-name ../"${package}".deb >> /dev/null
   echo "Built ${pkgname}"
-
-  cd ..
-done
-
+fi
 
 if [[ ${INSTALL} == "TRUE" ]]; then
   for i in ${debname_install}; do
