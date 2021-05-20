@@ -1,4 +1,4 @@
-rm_dep_description() {
+remove_dependency_description() {
   NUM=0
   while [[ "${optdepends[$NUM]}" != "" ]]; do
     new_optdepends+=" $(echo ${optdepends[$NUM]} | awk -F: '{print $1}')"

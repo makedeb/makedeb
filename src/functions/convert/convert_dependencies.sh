@@ -1,14 +1,13 @@
 convert_deps() {
   if [[ "${depends}" == "" ]] && \
-     [[ "${depends}" == "" ]] && \
-     [[ "${depends}" == "" ]] && \
-     [[ "${depends}" == "" ]] && \
-     [[ "${depends}" == "" ]]; then
+     [[ "${optdepends}" == "" ]] && \
+     [[ "${conflicts}" == "" ]] && \
+     [[ "${makedepends}" == "" ]] && \
+     [[ "${optdepends}" == "" ]]; then
     printf ""
   else
     echo "Converting dependencies..."
 
-    remove_dependency_description
     new_depends=${depends[@]}
     new_optdepends=${new_optdepends[@]}
     new_conflicts=${conflicts[@]}

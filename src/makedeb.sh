@@ -49,6 +49,8 @@ find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 
+
+remove_dependency_description
 ## START DEPENDENCY CONVERSION STUFF ##
 if [[ "${package_convert}" == "true" ]]; then
   if ! find "${DATABASE_DIR}"/packages.db &> /dev/null; then
