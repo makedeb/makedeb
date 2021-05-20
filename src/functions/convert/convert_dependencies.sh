@@ -8,7 +8,7 @@ convert_deps() {
   else
     echo "Converting dependencies..."
 
-    rm_dep_description
+    remove_dependency_description
     new_depends=${depends[@]}
     new_optdepends=${new_optdepends[@]}
     new_conflicts=${conflicts[@]}
