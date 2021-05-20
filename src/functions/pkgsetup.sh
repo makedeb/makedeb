@@ -1,5 +1,6 @@
 pkgsetup() {
-  rm -r "${pkgdir}" &> /dev/null
-  mkdir -p "${pkgdir}"/DEBIAN/
-  touch "${pkgdir}"/DEBIAN/control
+  for i in ${pkgname[@]}; do
+    mkdir -p "${pkgdir}"/"${i}"/DEBIAN/
+    touch "${pkgdir}"/"${i}"/DEBIAN/control
+  done
 }

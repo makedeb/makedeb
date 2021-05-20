@@ -49,34 +49,8 @@ find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 
-
 remove_dependency_description
-## START DEPENDENCY CONVERSION STUFF ##
-if [[ "${package_convert}" == "true" ]]; then
-  if ! find "${DATABASE_DIR}"/packages.db &> /dev/null; then
-    echo "Couldn't find the database file. Is 'makedeb-db' installed?"
-    exit 1
-  fi
-
-  convert_deps
-  modify_dependencies
-else
-  new_depends=${depends[@]}
-  new_optdepends=${optdepends[@]}
-  new_conflicts=${conflicts[@]}
-  new_makedepends=${makedepends[@]}
-  new_checkdepends=${checkdepends[@]}
-fi
-
-check_relationships new_depends      ${new_depends}
-check_relationships new_optdepends   ${new_optdepends}
-check_relationships new_conflicts    ${new_conflicts}
-check_relationships new_makedepends  ${new_makedepends}
-check_relationships new_checkdepends ${new_checkdepends}
-
-add_dependency_commas
-convert_relationships_parentheses
-## END DEPENDENCY CONVERSION STUFF
+run_dependency_conversion
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
   install_depends new_makedepends make
@@ -84,55 +58,68 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
   echo "Running makepkg..."
   makepkg -p "${FILE}" ${OPTIONS} || exit 1
+  rm *.pkg.tar.zst
 
   remove_depends make
   remove_depends check
 fi
 
 pkgsetup
-convert_version
+for package in ${pkgname[@]}; do
+  cd "${pkgdir}"/"${package}"
 
-extract_pkg
+  get_variables
+  convert_version
 
-echo "Generating control file..."
-export_control "Package:" "${pkgname}"
-export_control "Description:" "${pkgdesc}"
-export_control "Source:" "${source}"
-export_control "Version:" "${controlver}"
+  echo "Generating control file..."
+  export_control "Package:" "${pkgname}"
+  export_control "Description:" "${pkgdesc}"
+  export_control "Source:" "${source}"
+  export_control "Version:" "${controlver}"
 
-result_arch=$(cat "${pkgdir}"/.PKGINFO | grep 'arch =' | awk -F" = " '{print $2}')
-convert_arch
+  convert_arch
+  export_control "Architecture:" "${makedeb_arch}"
 
-export_control "Architecture:" "${makedeb_arch}"
-export_control "Maintainer:" "$(cat ${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
-export_control "Depends:" "${new_depends[@]}"
-export_control "Suggests:" "${new_optdepends[@]}"
-export_control "Conflicts:" "${new_conflicts[@]}"
+  export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
+  export_control "Depends:" "${new_depends[@]}"
+  export_control "Suggests:" "${new_optdepends[@]}"
+  export_control "Conflicts:" "${new_conflicts[@]}"
 
-echo "" >> "${pkgdir}"/DEBIAN/control
+  echo "" >> DEBIAN/control
 
-echo "Cleaning up..."
-rm -f "${pkgdir}/.BUILDINFO"
-rm -f "${pkgdir}/.MTREE"
-rm -f "${pkgdir}/.PKGINFO"
+  echo "Cleaning up..."
+  rm -f ".BUILDINFO"
+  rm -f ".MTREE"
+  rm -f ".PKGINFO"
 
-field() {
-  cat "${pkgdir}/DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
-}
+  field() {
+    cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
+  }
 
-debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
+  debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
+  debname_install+=" ${debname}"
 
-find "${DIR}/${debname}.deb" &> /dev/null
-if [[ ${?} == "0" ]]; then
-  echo "Built package detected. Removing..."
-  rm "${DIR}/${debname}.deb"
-fi
+  cd ..
+  find ../"${debname}.deb" &> /dev/null
+  if [[ ${?} == "0" ]]; then
+    echo "Built package detected. Removing..."
+    rm ../"${debname}.deb"
+  fi
 
-echo "Building ${pkgname}..."
-dpkg -b "${pkgdir}" >> /dev/null
-dpkg-name $(basename "${pkgdir}").deb >> /dev/null
-echo "Built ${pkgname}"
+  echo "Building ${pkgname}..."
+  dpkg -b "${pkgdir}"/"${package}" >> /dev/null
+  mv "${package}".deb ../
+  dpkg-name ../"${package}".deb >> /dev/null
+  echo "Built ${pkgname}"
+
+  cd ..
+done
+
 
 if [[ ${INSTALL} == "TRUE" ]]; then
-  sudo apt install "${DIR}/${debname}.deb"
+  for i in ${debname_install}; do
+    apt_install+="./${i}.deb "
+  done
+
+  sudo apt install ${apt_install}
 fi
