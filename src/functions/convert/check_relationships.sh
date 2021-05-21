@@ -25,5 +25,5 @@ check_relationships() {
 
   done
 
-  export ${1}="$(eval echo \${temp_${1}} | xargs)"
+  export ${1}="$(eval echo \${temp_${1}})"
 }
