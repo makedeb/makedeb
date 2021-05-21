@@ -3,7 +3,7 @@ generate_control() {
   export_control "Package:" "${pkgname}"
   export_control "Description:" "${pkgdesc}"
   export_control "Source:" "${source}"
-  export_control "Version:" "${controlver}"
+  export_control "Version:" "${pkgver}"
 
   convert_arch
   export_control "Architecture:" "${makedeb_arch}"
