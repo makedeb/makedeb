@@ -9,15 +9,17 @@ check_relationships() {
           export symbol_type="${j}"
           # If symbol is one character, double it with same character
           if [[ $(printf "${j}" | wc -c) == "1" ]]; then
+            export old_symbol_type="${j}"
             export symbol_type+="${j}"
-          fi
+          else
+            export old_symbol_type="${symbol_type}"
           continue
         fi
       done
 
       # Get values from left and right of symbol (package name and package version)
-      export local package_name=$(echo "${i}" | awk -F "${symbol_type}" '{print $1}')
-      export local package_version=$(echo "${i}" | awk -F "${symbol_type}" '{print $2}')
+      export local package_name=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $1}')
+      export local package_version=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $2}')
 
       local dependency_name=$(echo " ${package_name}" \("${symbol_type}" "${package_version}"\) | sed 's| ||g')
       export temp_${1}+=" ${dependency_name}"
