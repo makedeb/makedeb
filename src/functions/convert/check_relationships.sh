@@ -13,7 +13,8 @@ check_relationships() {
             export symbol_type+="${j}"
           else
             export old_symbol_type="${symbol_type}"
-          continue
+            continue
+          fi
         fi
       done
 
