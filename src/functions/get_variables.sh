@@ -7,6 +7,6 @@ get_variables() {
 
   for i in depends optdepends conflicts; do
     local string=$(echo "${i}" | sed 's|.$||')
-    export ${i}="$(echo "${pkginfo}" | grep -w "${string} =" | awk -F ' = ' '{print $2}' | xargs)"
+    export ${i}="$(echo "${pkginfo}" | grep -w "${string} =" | awk -F ' = ' '{print $2}' | awk -F ':' '{print $1}' | xargs)"
   done
 }
