@@ -50,7 +50,7 @@ find "${FILE}" &> /dev/null || { echo "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 
-find "${pkgdir}" &> /dev/null || rm "${pkgdir}" -rf
+find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
 remove_dependency_description
 run_dependency_conversion
@@ -68,6 +68,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
   pkgsetup
   for package in ${pkgname[@]}; do
+    unset depends optdepends conflicts 
     cd "${pkgdir}"/"${package}"
 
     get_variables
@@ -103,13 +104,22 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
     cd ..
   done
 else
-  [[ "${pkgname[1]}" != "" ]] && echo "Multiple values for \$pkgname found. Assuming '${pkgname}'."
-  package="${pkgname}"
-  mkdir -p "${pkgdir}"/"${pkgname}"/DEBIAN/
+  unset depends optdepends conflicts 
+  package="${pkgname[0]}"
+    
+  if [[ "${pkgname[1]}" != "" ]]; then
+    if [[ "${prebuilt_pkgname}" == "" ]]; then
+      echo "--pkgname wasn't supplied, assuming '${pkgname[0]}'"
+    else
+      package="${prebuilt_pkgname}"
+    fi
+  fi
+  
+  mkdir -p "${pkgdir}"/"${package}"/DEBIAN/
 
   convert_version
-  tar -xf "${pkgname}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${pkgname}"
-  cd "${pkgdir}"/"${pkgname}"
+  tar -xf "${package}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${package}"
+  cd "${pkgdir}"/"${package}"
 
   get_variables
   remove_dependency_description
@@ -134,11 +144,11 @@ else
     rm ../"${debname}.deb"
   fi
 
-  echo "Building ${pkgname}..."
+  echo "Building ${package}..."
   dpkg -b "${pkgdir}"/"${package}" >> /dev/null
   mv "${package}".deb ../
   dpkg-name ../"${package}".deb >> /dev/null
-  echo "Built ${pkgname}"
+  echo "Built ${package}"
 fi
 
 if [[ ${INSTALL} == "TRUE" ]]; then
