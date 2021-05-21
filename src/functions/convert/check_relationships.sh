@@ -1,4 +1,5 @@
 check_relationships() {
+  export temp_${1}=""
   for i in ${@: 2}; do
     if echo "${i}" | grep -E '<<|<=|==|>=|>>' &> /dev/null; then
 
