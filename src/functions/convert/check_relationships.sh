@@ -1,12 +1,16 @@
 check_relationships() {
   export temp_${1}=""
   for i in ${@: 2}; do
-    if echo "${i}" | grep -E '<<|<=|==|>=|>>' &> /dev/null; then
+    if echo "${i}" | grep -E '<|<=|=|>=|>' &> /dev/null; then
 
       # Check what kind of dependency relationship symbol is used
-      for j in '<<' '<=' "==" ">=" ">>"; do
+      for j in '<' '<=' "=" ">=" ">"; do
         if echo "${i}" | grep "${j}" &> /dev/null; then
           export symbol_type="${j}"
+          # If symbol is one character, double it with same character
+          if [[ $(printf "${j}" | wc -c) == "1" ]]; then
+            export symbol_type+="${j}"
+          fi
           continue
         fi
       done
