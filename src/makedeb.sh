@@ -71,6 +71,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
     cd "${pkgdir}"/"${package}"
 
     get_variables
+    remove_dependency_description
     run_dependency_conversion
     convert_version
     generate_control
@@ -111,6 +112,7 @@ else
   cd "${pkgdir}"/"${pkgname}"
 
   get_variables
+  remove_dependency_description
   run_dependency_conversion
   generate_control
 
