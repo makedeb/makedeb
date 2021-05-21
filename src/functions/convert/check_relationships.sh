@@ -8,7 +8,7 @@ check_relationships() {
         if echo "${i}" | grep "${j}" &> /dev/null; then
           export symbol_type="${j}"
           # If symbol is one character, double it with same character
-          if [[ $(printf "${j}" | wc -c) == "1" ]]; then
+          if echo "${symbol_type}" | grep -Ew '<|>' &> /dev/null; then
             export old_symbol_type="${j}"
             export symbol_type+="${j}"
           else
