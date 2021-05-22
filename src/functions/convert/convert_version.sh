@@ -1,7 +1,7 @@
 convert_version() {
-  if [[ ${epoch} == "" ]]; then
+  if [[ "${epoch}" == "" ]]; then
     export controlver="${pkgver}-${pkgrel}"
-  else
+  elif [[ "${epoch}" -gt "1" ]]; then
     export controlver="${epoch}:${pkgver}-${pkgrel}"
   fi
 }
