@@ -7,8 +7,8 @@ check_relationships() {
       for j in '<' '<=' "=" ">=" ">"; do
         if echo "${i}" | grep "${j}" &> /dev/null; then
           export symbol_type="${j}"
-          # If symbol is one character, double it with same character
-          if echo "${symbol_type}" | grep -Ew '<|>' &> /dev/null; then
+          # Check if $symbol_type is '<' or '>'
+          if [[ $(echo "${symbol_type}" | sed 's|[<>]||g') == "" ]]; then
             export old_symbol_type="${j}"
             export symbol_type+="${j}"
           else
