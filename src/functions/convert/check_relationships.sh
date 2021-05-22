@@ -4,7 +4,7 @@ check_relationships() {
     if echo "${i}" | grep -E '<|<=|=|>=|>' &> /dev/null; then
 
       # Check what kind of dependency relationship symbol is used
-      for j in '<' '<=' "=" ">=" ">"; do
+      for j in '<=' '>=' '<' '>' '='; do
         if echo "${i}" | grep "${j}" &> /dev/null; then
           export symbol_type="${j}"
           # Check if $symbol_type is '<' or '>'
@@ -13,8 +13,9 @@ check_relationships() {
             export symbol_type+="${j}"
           else
             export old_symbol_type="${symbol_type}"
-            continue
           fi
+
+        break
         fi
       done
 
