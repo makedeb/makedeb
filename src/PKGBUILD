@@ -1,4 +1,4 @@
 # This is a template file that injects variables into the PKGBUILDs
 # inside the PKGBUILDs folder.
-pkgver=2.5.3
+pkgver=2.5.4
 pkgrel=1
