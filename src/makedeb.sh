@@ -118,7 +118,7 @@ else
   mkdir -p "${pkgdir}"/"${package}"/DEBIAN/
 
   convert_version
-  tar -xf "${package}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${package}"
+  tar -xf "${package}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${package}" --force-local
   cd "${pkgdir}"/"${package}"
 
   get_variables
