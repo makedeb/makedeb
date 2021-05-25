@@ -16,5 +16,5 @@ arg_check() {
     shift 1
     done
 
-    [[ "${makepkg_printsrcinfo}" == "true" ]] && { makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; }
+    if [[ "${makepkg_printsrcinfo}" == "true" ]]; then makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
 }

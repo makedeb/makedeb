@@ -43,6 +43,7 @@ pkgdir="${DIR}/pkg/"
 source <(cat "${FUNCTIONS_DIR}"/functions/*.sh)
 source <(cat "${FUNCTIONS_DIR}"/functions/*/*.sh)
 
+trap_codes
 arg_check "${@}"
 root_check
 
@@ -68,7 +69,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
   pkgsetup
   for package in ${pkgname[@]}; do
-    unset depends optdepends conflicts 
+    unset depends optdepends conflicts
     cd "${pkgdir}"/"${package}"
 
     get_variables
@@ -104,9 +105,9 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
     cd ..
   done
 else
-  unset depends optdepends conflicts 
+  unset depends optdepends conflicts
   package="${pkgname[0]}"
-    
+
   if [[ "${pkgname[1]}" != "" ]]; then
     if [[ "${prebuilt_pkgname}" == "" ]]; then
       echo "--pkgname wasn't supplied, assuming '${pkgname[0]}'"
@@ -114,7 +115,7 @@ else
       package="${prebuilt_pkgname}"
     fi
   fi
-  
+
   mkdir -p "${pkgdir}"/"${package}"/DEBIAN/
 
   convert_version
