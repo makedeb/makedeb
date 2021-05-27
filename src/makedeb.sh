@@ -62,7 +62,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
   echo "Running makepkg..."
   makepkg -p "${FILE}" ${OPTIONS} || exit 1
-  find *.pkg.tar.zst &> /dev/null || rm *.pkg.tar.zst
+  rm *.pkg.tar.zst &> /dev/null
 
   remove_depends make
   remove_depends check
