@@ -1,7 +1,7 @@
 get_variables() {
   pkginfo="$(cat .PKGINFO)"
 
-  for i in pkgname pkgver pkgdesc url arch license; do
+  for i in pkgname pkgver pkgdesc url arch license provides; do
     export ${i}="$(echo "${pkginfo}" | grep "${i} =" | awk -F ' = ' '{print $2}' | xargs)"
   done
 

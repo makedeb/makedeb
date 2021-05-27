@@ -1,5 +1,5 @@
 convert_relationships_parentheses() {
-  for i in new_depends new_optdepends new_conflicts; do
+  for i in new_depends new_optdepends new_conflicts new_provides; do
     export ${i}="$(eval echo \${$i} | sed 's|[<>=][<>=]|& |g')"
   done
 

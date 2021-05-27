@@ -2,6 +2,7 @@ convert_deps() {
   if [[ "${depends}" == "" ]] && \
      [[ "${optdepends}" == "" ]] && \
      [[ "${conflicts}" == "" ]] && \
+     [[ "${provides}" == "" ]] && \
      [[ "${makedepends}" == "" ]] && \
      [[ "${optdepends}" == "" ]]; then
     printf ""
@@ -11,6 +12,7 @@ convert_deps() {
     new_depends=${depends[@]}
     new_optdepends=${new_optdepends[@]}
     new_conflicts=${conflicts[@]}
+    new_provides=${provides[@]}
     new_makedepends=${makedepends[@]}
     new_checkdepends=${checkdepends[@]}
 
@@ -27,6 +29,7 @@ convert_deps() {
       new_depends=$(echo ${new_depends[@]} | sed "s/${string1}/${string2}/g")
       new_optdepends=$(echo ${new_optdepends[@]} | sed "s/${string1}/${string2}/g")
       new_conflicts=$(echo ${new_conflicts[@]} | sed "s/${string1}/${string2}/g")
+      new_provides=$(echo ${new_provides[@]} | sed "s/${string1}/${string2}/g")
       new_makedepends=$(echo ${new_makedepends[@]} | sed "s/${string1}/${string2}/g")
       new_checkdepends=$(echo ${new_checkdepends[@]} | sed "s/${string1}/${string2}/g")
     done

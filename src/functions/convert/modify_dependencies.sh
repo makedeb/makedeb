@@ -11,7 +11,7 @@ modify_dependencies() {
   if [[ $(type -t ${temp_pkgname}) == "function" ]]; then
     echo "Setting package-specific dependencies..."
     "${temp_pkgname}"
-    for i in depends optdepends conflicts makedepends checkdepends; do
+    for i in depends optdepends conflicts provides makedepends checkdepends; do
       "${temp_pkgname}"
 
       # Remove dependencies
