@@ -69,7 +69,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
   pkgsetup
   for package in ${pkgname[@]}; do
-    unset depends optdepends conflicts
+    unset depends optdepends conflicts provides
     cd "${pkgdir}"/"${package}"
 
     get_variables
@@ -105,7 +105,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
     cd ..
   done
 else
-  unset depends optdepends conflicts
+  unset depends optdepends conflicts provides
   package="${pkgname[0]}"
 
   if [[ "${pkgname[1]}" != "" ]]; then
