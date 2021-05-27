@@ -16,5 +16,6 @@ help() {
   echo
   echo "The following options can be passed to makepkg:"
   echo "  --printsrcinfo - print a generated .SRCINFO file and exit"
+  echo
   echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
