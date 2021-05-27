@@ -154,7 +154,8 @@ fi
 
 if [[ ${INSTALL} == "TRUE" ]]; then
   for i in ${debname_install}; do
-    apt_install+="./${i}.deb "
+    # Run 'cd' in case someone nasty decides to manually change the value of the $PWD variable
+    apt_install+="$(cd; echo ${PWD})/${i}.deb "
   done
 
   sudo apt install ${apt_install}
