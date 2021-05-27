@@ -23,6 +23,7 @@ run_dependency_conversion() {
   check_relationships new_makedepends  ${new_makedepends}
   check_relationships new_checkdepends ${new_checkdepends}
 
-  add_dependency_commas
+  # Used to skip adding commas when installing dependencies during building
+  [[ "${1}" != "--nocommas" ]] && add_dependency_commas
   convert_relationships_parentheses
 }

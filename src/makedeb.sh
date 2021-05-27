@@ -54,9 +54,10 @@ pkgbuild_check
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
 remove_dependency_description
-run_dependency_conversion
+run_dependency_conversion --nocommas
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
+  install_depends new_depends ""
   install_depends new_makedepends make
   install_depends new_checkdepends check
 
