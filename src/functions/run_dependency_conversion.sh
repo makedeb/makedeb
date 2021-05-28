@@ -25,5 +25,5 @@ run_dependency_conversion() {
 
   # Used to skip adding commas when installing dependencies during building
   [[ "${1}" != "--nocommas" ]] && add_dependency_commas
-  convert_relationships_parentheses
+  convert_relationships_parentheses $([[ "${1}" == "--nocommas" ]] && echo "--global")
 }
