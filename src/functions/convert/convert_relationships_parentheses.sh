@@ -8,6 +8,6 @@ convert_relationships_parentheses() {
   # removes specified dependency versions, as packages are passed to APT for build dependencies
   # Adds new_depends for dependency check (only runs when --nocommas *is* set for run_dependency_conversion())
   for i in $([[ "${1}" == "--global" ]] && echo new_depends) new_makedepends new_checkdepends; do
-    export ${i}="$(eval echo \${$i} | sed -E 's/[<>=][<>=][0-9.\-]*|[<>=][0-9.\-]*//g')"
+    export ${i}="$(eval echo \${$i} | sed -E 's/[<>=][<>=][0-9.\-]*|[<>=][0-9.\-]*//g' | sed 's|[()]||g')"
   done
 }
