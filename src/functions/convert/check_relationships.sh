@@ -23,7 +23,8 @@ check_relationships() {
       export local package_name=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $1}')
       export local package_version=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $2}')
 
-      local dependency_name=$(echo " ${package_name}" \("${symbol_type}" "${package_version}"\) | sed 's| ||g')
+      # Add parenthesis if dependency has a relationship
+      local dependency_name=$(echo " ${package_name}(${symbol_type}${package_version})")
       export temp_${1}+=" ${dependency_name}"
 
     else
