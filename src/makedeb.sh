@@ -54,7 +54,7 @@ pkgbuild_check
 
 if [[ "${prebuilt_pkgname}" != "" ]]; then
     echo "Replacing value of \$pkgname with ${prebuilt_pkgname} in build file..."
-    sed -i "s|pkgname=.*|# &\npkgname=${prebuilt_pkgname}" "${FILE}"
+    sed -i "s|pkgname=.*|# &\npkgname=${prebuilt_pkgname}|" "${FILE}"
     source "${FILE}"
 fi
 
