@@ -22,7 +22,7 @@ convert_deps() {
                 # 3. Remove '{', '}', '"', and ',' from the output
                 # 4. Replace ': ' with '='
                 # 5. Run 'xargs' to format with single spacing
-    for pkg in $(makedeb-db --general ${depends} ${optdepends} ${conflicts} ${makedepends} ${checkdepends} | jq | sed 's|[{}",]||g' | sed 's|: |=|g' | xargs); do
+    for pkg in $(makedeb-db --general ${new_depends} ${new_optdepends} ${new_conflicts} ${new_makedepends} ${new_checkdepends} | jq | sed 's|[{}",]||g' | sed 's|: |=|g' | xargs); do
       string1=$(echo "${pkg}" | awk -F= '{print $1}')
       string2="$(echo "${pkg}" | awk -F= '{print $2}')"
 
