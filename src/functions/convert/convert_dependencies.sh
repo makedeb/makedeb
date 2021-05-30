@@ -7,7 +7,7 @@ convert_deps() {
      [[ "${checkdepends}" == "" ]]; then
     printf ""
   else
-    echo "Converting dependencies..."
+    echo "Attempting to convert dependencies..."
 
     new_depends=${depends[@]}
     new_optdepends=${new_optdepends[@]}
