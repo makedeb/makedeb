@@ -4,7 +4,7 @@ convert_deps() {
      [[ "${conflicts}" == "" ]] && \
      [[ "${provides}" == "" ]] && \
      [[ "${makedepends}" == "" ]] && \
-     [[ "${optdepends}" == "" ]]; then
+     [[ "${checkdepends}" == "" ]]; then
     printf ""
   else
     echo "Converting dependencies..."
@@ -17,12 +17,12 @@ convert_deps() {
     new_checkdepends=${checkdepends[@]}
 
                 # Pipe explanation:
-                # 1. Read package database with 'cat'
-                # 2. Append a semicolon(;) to the end of each line
-                # 3. Put everything onto one line with 'xargs'
-                # 4. Delete everything until the first occurance of "# General dependencies"
-                # 5. Correct formatting by replacing semicolons(;) with newlines(\n)
-    for pkg in $(cat "${DATABASE_DIR}"/packages.db | sed 's|$|;|g' | xargs | sed 's|[^:]*\# General dependencies||' | sed 's|;|\n|g'); do
+                # 1. Run 'makedeb-db' with dependencies specified in PKGBUILD
+                # 2. Run 'jq' to format with newlines
+                # 3. Remove '{', '}', '"', and ',' from the output
+                # 4. Replace ': ' with '='
+                # 5. Run 'xargs' to format with single spacing
+    for pkg in $(makedeb-db --general ${depends} ${optdepends} ${conflicts} ${makedepends} ${checkdepends} | jq | sed 's|[{}",]||g' | sed 's|: |=|g' | xargs); do
       string1=$(echo "${pkg}" | awk -F= '{print $1}')
       string2="$(echo "${pkg}" | awk -F= '{print $2}')"
 
