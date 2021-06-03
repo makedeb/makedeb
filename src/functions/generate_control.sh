@@ -8,7 +8,7 @@ generate_control() {
   convert_arch
   export_control "Architecture:" "${makedeb_arch}"
 
-  export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>, |g')"
+  export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
   export_control "Depends:" "${new_depends[@]}"
   export_control "Suggests:" "${new_optdepends[@]}"
   export_control "Conflicts:" "${new_conflicts[@]}"
