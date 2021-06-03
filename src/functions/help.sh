@@ -16,6 +16,7 @@ help() {
   echo
   echo "The following options can be passed to makepkg:"
   echo "  --printsrcinfo - print a generated .SRCINFO file and exit"
+  echo "  --skippgpcheck   Do not verify source files against PGP signatures"
   echo
   echo "Report bugs at https://github.com/hwittenborn/makedeb"
 }
