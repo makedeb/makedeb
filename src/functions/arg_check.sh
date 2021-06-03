@@ -9,7 +9,7 @@ arg_check() {
       -P | --pkgname)      prebuilt_pkgname="${2}"; shift 1 ;;
 
       --printsrcinfo)      export makepkg_printsrcinfo="true" ;;
-      --skippgpcheck)      export OPTIONS+=" --skippgpcheck"
+      --skippgpcheck)      export OPTIONS+=" --skippgpcheck" ;;
 
       -*)                  echo "Unknown option '${1}'"; exit 1 ;;
       "")                  break ;;
