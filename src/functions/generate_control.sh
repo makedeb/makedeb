@@ -2,7 +2,7 @@ generate_control() {
   echo "Generating control file..."
   export_control "Package:" "${pkgname}"
   export_control "Description:" "${pkgdesc}"
-  export_control "Source:" "${source}"
+  export_control "Source:" "${url}"
   export_control "Version:" "${pkgver}"
 
   convert_arch
