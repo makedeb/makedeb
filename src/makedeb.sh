@@ -71,7 +71,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
   install_depends new_checkdepends check
 
   echo "Running makepkg..."
-  { makepkg -p "${FILE}" ${OPTIONS}; } | grep -v '==> ERROR: Aborted by user! Exiting...'
+  ( makepkg -p "${FILE}" ${OPTIONS} ) | grep -v '==> ERROR: Aborted by user! Exiting...'
   rm *.pkg.tar.zst &> /dev/null
 
   remove_depends make
