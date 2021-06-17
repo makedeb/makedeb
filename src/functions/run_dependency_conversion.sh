@@ -1,12 +1,14 @@
 run_dependency_conversion() {
   if [[ "${package_convert}" == "true" ]]; then
-    if ! find "${DATABASE_DIR}"/packages.db &> /dev/null; then
-      echo "Couldn't find the database file. Is 'makedeb-db' installed?"
+
+    if ! command -v makedeb-db &> /dev/null; then
+      echo "Couldn't find the makedeb-db package. Is it installed?"
       exit 1
     fi
 
     convert_deps
     modify_dependencies
+    
   else
     new_depends=${depends[@]}
     new_optdepends=${optdepends[@]}

@@ -33,6 +33,12 @@ DATABASE_DIR="/usr/lib/makedeb-db/"
 #################
 ## OTHER STUFF ##
 #################
+package_version="git"
+target_os="debian"
+
+# Run 'cd' in case someone reset $PWD
+cd
+
 files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src/"
@@ -42,8 +48,8 @@ pkgdir="${DIR}/pkg/"
 ####################
 ##  BEGIN SCRIPT  ##
 ####################
-source <(cat "${FUNCTIONS_DIR}"/functions/*.sh)
-source <(cat "${FUNCTIONS_DIR}"/functions/*/*.sh)
+source <(cat "${FUNCTIONS_DIR}"/functions/*.sh)      # REMOVE AT PACKAGING
+source <(cat "${FUNCTIONS_DIR}"/functions/*/*.sh)    # REMOVE AT PACKAGING
 
 trap_codes
 arg_check "${@}"
@@ -66,26 +72,82 @@ remove_dependency_description
 run_dependency_conversion --nocommas
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
-  install_depends new_depends ""
-  install_depends new_makedepends make
-  install_depends new_checkdepends check
 
-  echo "Running makepkg..."
-  ( makepkg -p "${FILE}" ${OPTIONS} ) | grep -v '==> ERROR: Aborted by user! Exiting...'
-  rm *.pkg.tar.zst &> /dev/null
+    # Only run these if on Debian, as distros like Arch don't have APT
+    if [[ "${target_os}" == "debian" ]]; then
+        install_depends new_depends ""
+        install_depends new_makedepends make
+        install_depends new_checkdepends check
+    fi
 
-  remove_depends make
-  remove_depends check
+    echo "Running makepkg..."
+    ( makepkg -p "${FILE}" ${OPTIONS} ) | grep -v '==> ERROR: Aborted by user! Exiting...'
+    rm *.pkg.tar.zst &> /dev/null
 
-  pkgsetup
-  for package in ${pkgname[@]}; do
+    # Once again, don't run on the Arch build
+    if [[ "${target_os}" == "debian" ]]; then
+        remove_depends make
+        remove_depends check
+    fi
+
+    pkgsetup
+    for package in ${pkgname[@]}; do
+        unset depends optdepends conflicts provides
+        cd "${pkgdir}"/"${package}"
+
+        get_variables
+        remove_dependency_description
+        run_dependency_conversion
+        convert_version
+        generate_control
+
+        echo "Cleaning up..."
+        rm -f ".BUILDINFO"
+        rm -f ".MTREE"
+        rm -f ".PKGINFO"
+
+        field() {
+            cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
+        }
+
+        debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
+        debname_install+=" ${debname}"
+
+        cd ..
+        if find ../"${debname}.deb" &> /dev/null; then
+            echo "Built package detected. Removing..."
+            rm ../"${debname}.deb"
+        fi
+
+        echo "Building ${pkgname}..."
+        dpkg -b "${pkgdir}"/"${package}" >> /dev/null
+        mv "${package}".deb ../
+        dpkg-name ../"${package}".deb >> /dev/null
+        echo "Built ${pkgname}"
+
+        cd ..
+    done
+else
     unset depends optdepends conflicts provides
+    package="${pkgname[0]}"
+
+    if [[ "${pkgname[1]}" != "" ]]; then
+        if [[ "${prebuilt_pkgname}" == "" ]]; then
+            echo "--pkgname wasn't supplied, assuming '${pkgname[0]}'"
+        else
+            package="${prebuilt_pkgname}"
+        fi
+    fi
+
+    mkdir -p "${pkgdir}"/"${package}"/DEBIAN/
+
+    convert_version
+    tar -xf "${package}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${package}" --force-local
     cd "${pkgdir}"/"${package}"
 
     get_variables
     remove_dependency_description
     run_dependency_conversion
-    convert_version
     generate_control
 
     echo "Cleaning up..."
@@ -94,7 +156,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
     rm -f ".PKGINFO"
 
     field() {
-      cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
+        cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
     }
 
     debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
@@ -102,71 +164,21 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
 
     cd ..
     if find ../"${debname}.deb" &> /dev/null; then
-      echo "Built package detected. Removing..."
-      rm ../"${debname}.deb"
+        echo "Built package detected. Removing..."
+        rm ../"${debname}.deb"
     fi
 
-    echo "Building ${pkgname}..."
+    echo "Building ${package}..."
     dpkg -b "${pkgdir}"/"${package}" >> /dev/null
     mv "${package}".deb ../
     dpkg-name ../"${package}".deb >> /dev/null
-    echo "Built ${pkgname}"
-
-    cd ..
-  done
-else
-  unset depends optdepends conflicts provides
-  package="${pkgname[0]}"
-
-  if [[ "${pkgname[1]}" != "" ]]; then
-    if [[ "${prebuilt_pkgname}" == "" ]]; then
-      echo "--pkgname wasn't supplied, assuming '${pkgname[0]}'"
-    else
-      package="${prebuilt_pkgname}"
-    fi
-  fi
-
-  mkdir -p "${pkgdir}"/"${package}"/DEBIAN/
-
-  convert_version
-  tar -xf "${package}"-"${controlver}"-"${arch}".pkg.tar.zst -C "${pkgdir}"/"${package}" --force-local
-  cd "${pkgdir}"/"${package}"
-
-  get_variables
-  remove_dependency_description
-  run_dependency_conversion
-  generate_control
-
-  echo "Cleaning up..."
-  rm -f ".BUILDINFO"
-  rm -f ".MTREE"
-  rm -f ".PKGINFO"
-
-  field() {
-    cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
-  }
-
-  debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
-  debname_install+=" ${debname}"
-
-  cd ..
-  if find ../"${debname}.deb" &> /dev/null; then
-    echo "Built package detected. Removing..."
-    rm ../"${debname}.deb"
-  fi
-
-  echo "Building ${package}..."
-  dpkg -b "${pkgdir}"/"${package}" >> /dev/null
-  mv "${package}".deb ../
-  dpkg-name ../"${package}".deb >> /dev/null
-  echo "Built ${package}"
+    echo "Built ${package}"
 fi
 
-if [[ ${INSTALL} == "TRUE" ]]; then
-  for i in ${debname_install}; do
-    # Run 'cd' in case someone nasty decides to manually change the value of the $PWD variable
-    apt_install+="$(cd; echo ${PWD})/${i}.deb "
-  done
+[[ "${target_os}" == "debian" ]] && if [[ ${INSTALL} == "TRUE" ]]; then
+    for i in ${debname_install}; do
+        apt_install+="${PWD}/${i}.deb "
+    done
 
-  sudo apt install ${apt_install}
+    sudo apt install ${apt_install}
 fi
