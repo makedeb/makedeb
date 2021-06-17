@@ -1,6 +1,6 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 
-pkgname=makedeb
+pkgname=${package_name:-makedeb}
 pkgver=2.12.0
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (${release_type:-git} release)"

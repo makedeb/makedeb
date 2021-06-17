@@ -28,7 +28,7 @@ PREBUILT='FALSE'
 package_convert="false"
 
 FUNCTIONS_DIR="./"
-DATABASE_DIR="/usr/lib/makedeb-db/"
+DATABASE_DIR="/usr/share/makedeb-db/"
 
 #################
 ## OTHER STUFF ##
