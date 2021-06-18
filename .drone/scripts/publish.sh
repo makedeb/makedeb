@@ -3,7 +3,7 @@
 # Set up makedeb repo
 echo "Installing needed packages..."
 apt update
-apt install wget curl -y
+apt install wget curl gpg -y
 
 wget -qO - "https://${proget_server}/debian-feeds/makedeb.pub" | gpg --dearmor | tee /usr/share/keyrings/makedeb-archive-keyring.gpg &> /dev/null
 echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://${proget_server} makedeb main" | tee /etc/apt/sources.list.d/makedeb.list
@@ -30,6 +30,6 @@ fi
 echo "Uploading ${deb_packages} to ${proget_server}..."
 
 set -x
-curl "https://${proget_server}/debian-packages/upload/makedeb/${component_name}/${deb_packages}" \
-    --user "api:${proget_api_key}" \
-    --upload-file "${deb_packages}"
+curl_output=$(curl "https://${proget_server}/debian-packages/upload/makedeb/${component_name}/${deb_packages}" \
+            --user "api:${proget_api_key}" \
+            --upload-file "${deb_packages}")
