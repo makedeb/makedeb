@@ -61,18 +61,27 @@ local publishDocker(a) = {
     type: "docker",
     trigger: {branch: [a]},
     depends_on: ["aur-publish-" + a],
-    steps: [{
-        name: "publish-image",
-        image: "plugins/docker",
-        settings: {
-            username: "api",
-            password: {from_secret: "proget_api_key"},
-            repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
-            tags: a,
-            dockerfile: "docker/Dockerfile",
-            no_cache: "true"
+    steps: [
+        {
+            name: "configure-dockerfile",
+            image: "ubuntu",
+            environment: {release_type: a},
+            commands: [".drone/scripts/dockerfile-config.sh"]
+        },
+        
+        {
+            name: "publish-image",
+            image: "plugins/docker",
+            settings: {
+                username: "api",
+                password: {from_secret: "proget_api_key"},
+                repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
+                tags: a,
+                dockerfile: "docker/Dockerfile",
+                no_cache: "true"
+            }
         }
-    }]
+    ]
 };
 
 [
