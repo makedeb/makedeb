@@ -1,6 +1,8 @@
 local customClone() = {
-    name: "Clone",
-    image: "drone/git"
+    {
+        name: "Clone",
+        image: "drone/git"
+    },
 };
 
 local buildAndPublish(a, b, c) = {
