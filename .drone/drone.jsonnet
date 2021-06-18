@@ -1,4 +1,4 @@
-local buildAndPublish(a, b, c) = {
+local buildAndPublish(a, b) = {
     name: "build-and-publish",
     kind: "pipeline",
     type: "docker",
