@@ -38,7 +38,7 @@ aur_push() {
 echo "${known_hosts}" > /root/.ssh/known_hosts
 echo "${aur_ssh_key}" > /root/.ssh/AUR
 
-case "${1}" in;
+case "${1}" in
     clone)        aur_clone ;;
     configure)    aur_configure ;;
     push)         aur_push ;;
