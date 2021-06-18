@@ -19,4 +19,4 @@ chmod 777 src/* -R
 
 # Build makedeb
 cd src
-./makedeb.sh
+sudo -u user './makedeb.sh'
