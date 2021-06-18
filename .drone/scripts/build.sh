@@ -5,7 +5,7 @@ echo "Installing needed packages..."
 apt update
 apt install wget sudo gpg -y
 
-wget -qO "https://${proget_server}/debian-feeds/makedeb.pub" | gpg --dearmor | tee /usr/share/keyrings/makedeb-archive-keyring.gpg &> /dev/null
+wget -qO - "https://${proget_server}/debian-feeds/makedeb.pub" | gpg --dearmor | tee /usr/share/keyrings/makedeb-archive-keyring.gpg &> /dev/null
 echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] ${proget_server} makedeb main" > /etc/apt/sources.list.d/makedeb.list
 
 apt update
