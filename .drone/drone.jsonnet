@@ -61,7 +61,7 @@ local publishDocker(a, b) = {
     name: "Publish Docker Image (" + b + " Release)",
     kind: "pipeline",
     type: "docker",
-    trigger: {branch: [a]}
+    trigger: {branch: [a]},
     depends_on: ["Publish to AUR (" + b + " Release)"],
     steps: [{
         name: "Publish Image",
