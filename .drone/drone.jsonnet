@@ -8,11 +8,7 @@ local buildAndPublish(a, b, c) = {
             name: "Build Debian Package",
             image: "ubuntu",
             environment: {release_type: a, package_name: c},
-            commands: [
-                "useradd user",
-                "cd src",
-                "sudo -u user './makedeb.sh'"
-            ]
+            commands: [".drone/scripts/build.sh"]
         },
 
         {
