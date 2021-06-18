@@ -6,6 +6,12 @@ echo "Installing needed packages..."
 apt update
 apt install ssh git -y
 
+wget -qO - "https://${proget_server}/debian-feeds/makedeb.pub" | gpg --dearmor | tee /usr/share/keyrings/makedeb-archive-keyring.gpg &> /dev/null
+echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://${proget_server} makedeb main"
+
+apt update
+apt install makepkg -y
+
 # Define functions
 aur_clone() {
     cd ..

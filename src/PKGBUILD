@@ -1,9 +1,9 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 
-pkgname=${package_name:-makedeb}
+pkgname=makedeb
 pkgver=2.12.0
 pkgrel=1
-pkgdesc="Create Debian archives from PKGBUILDs (${release_type:-git} release)"
+pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
 license=('GPL3')
 depends=('bash' 'binutils' 'file' 'dpkg-dev' 'makepkg')
