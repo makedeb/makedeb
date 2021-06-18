@@ -11,7 +11,7 @@ local buildAndPublish(a, b, c) = {
     clone: {disable: true},
     steps: [
         {
-            custom_clone(),
+            custom_clone()
         },
 
         {
