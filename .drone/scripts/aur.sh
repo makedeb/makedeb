@@ -40,7 +40,7 @@ aur_push() {
 
     git commit -m "Updated version in ${pkgbuild_pkgver}-${pkgbuild_pkgrel}"
 
-    git push
+    git push "ssh://aur@${aur_url}/${package_name}"
 }
 
 # Begin script
