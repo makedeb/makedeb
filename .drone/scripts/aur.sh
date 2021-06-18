@@ -53,7 +53,7 @@ echo "${known_hosts}" > /root/.ssh/known_hosts
 echo "${aur_ssh_key}" > /root/.ssh/AUR
 printf "Host ${aur_url}\n  Hostname ${aur_url}\n  IdentityFile /root/.ssh/AUR"
 
-ssh "aur@${aur_url}"
+ssh "aur@${aur_url}:"
 
 useradd user
 
