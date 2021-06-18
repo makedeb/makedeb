@@ -10,9 +10,7 @@ local buildAndPublish(a, b, c) = {
     trigger: {branch: [a]},
     clone: {disable: true},
     steps: [
-        {
-            custom_clone()
-        },
+        customClone()
 
         {
             name: "Build Debian Package",
