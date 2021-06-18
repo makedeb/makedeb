@@ -21,7 +21,7 @@ local buildAndPublish(a, b, c) = {
 };
 
 local aurPublish(a, b, c) = {
-    name: "Publish to AUR (" + b + " Release)",
+    name: "Publish to AUR (" + c + " Release)",
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [b]},
