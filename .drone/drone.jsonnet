@@ -1,7 +1,7 @@
 local customClone() = {
     name: "Clone",
     image: "drone/git"
-}
+};
 
 local buildAndPublish(a, b, c) = {
     name: "Build and Publish (" + b + " Release)",
@@ -11,7 +11,7 @@ local buildAndPublish(a, b, c) = {
     clone: {disable: true},
     steps: [
         custom_clone(),
-        
+
         {
             name: "Build Debian Package",
             image: "ubuntu",
