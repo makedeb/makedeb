@@ -52,7 +52,7 @@ mkdir -p /root/.ssh/
 echo "${known_hosts}" > /root/.ssh/known_hosts
 echo "${aur_ssh_key}" > /root/.ssh/AUR
 
-ssh-add /root/.ssh/AUR
+chmod 400 /root/.ssh/AUR
 
 useradd user
 
