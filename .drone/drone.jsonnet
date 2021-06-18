@@ -1,18 +1,17 @@
 local customClone() = {
-    clone: {disable: true},
-    steps: [{
-        name: "Clone",
-        image: "drone/git"
-    }]
-};
+    name: "Clone",
+    image: "drone/git"
+}
 
 local buildAndPublish(a, b, c) = {
     name: "Build and Publish (" + b + " Release)",
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [a]},
-    customClone(),
+    clone: {disable: true},
     steps: [
+        custom_clone(),
+        
         {
             name: "Build Debian Package",
             image: "ubuntu",
