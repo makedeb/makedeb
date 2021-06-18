@@ -54,6 +54,8 @@ echo "${aur_ssh_key}" > /root/.ssh/AUR
 
 chmod 400 /root/.ssh/AUR
 
+ssh "aur@${aur_url}"
+
 useradd user
 
 case "${1}" in
