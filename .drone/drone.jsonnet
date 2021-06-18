@@ -1,8 +1,6 @@
 local customClone() = {
-    {
         name: "Clone",
         image: "drone/git"
-    },
 };
 
 local buildAndPublish(a, b, c) = {
@@ -12,7 +10,9 @@ local buildAndPublish(a, b, c) = {
     trigger: {branch: [a]},
     clone: {disable: true},
     steps: [
-        custom_clone(),
+        {
+            custom_clone(),
+        },
 
         {
             name: "Build Debian Package",
