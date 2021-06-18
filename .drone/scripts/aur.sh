@@ -20,17 +20,21 @@ aur_clone() {
 
 aur_configure() {
     pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
-    pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel||')
+    pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')
 
-    ls -A
     cd ..
-    ls -A
 
     sed -i "s|pkgver=.*|pkgver=${pkgbuild_pkgver}|" "${package_name}/PKGBUILD"
     sed -i "s|pkgrel=.*|pkgrel=${pkgbuild_pkgrel}|" "${package_name}/PKGBUILD"
+
+    cd "${package_name}"
+    sudo -u user 'makepkg --printsrcinfo' | tee .SRCINFO
 }
 
 aur_push() {
+    pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
+    pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')
+
     cd ../"${package_name}"
 
     git config user.name "Kavplex Bot"
@@ -38,7 +42,7 @@ aur_push() {
 
     git add PKGBUILD .SRCINFO
 
-    git commit -m "Updated version in ${pkgbuild_pkgver}-${pkgbuild_pkgrel}"
+    git commit -m "Updated version to ${pkgbuild_pkgver}-${pkgbuild_pkgrel}"
 
     git push "ssh://aur@${aur_url}/${package_name}"
 }
@@ -47,6 +51,10 @@ aur_push() {
 mkdir -p /root/.ssh/
 echo "${known_hosts}" > /root/.ssh/known_hosts
 echo "${aur_ssh_key}" > /root/.ssh/AUR
+
+ssh-add /root/.ssh/AUR
+
+useradd user
 
 case "${1}" in
     clone)        aur_clone ;;
