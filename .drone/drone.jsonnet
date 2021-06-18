@@ -11,7 +11,7 @@ local buildAndPublish(a, b, c) = {
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [a]},
-    customClone,
+    customClone(),
     steps: [
         {
             name: "Build Debian Package",
