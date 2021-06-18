@@ -63,6 +63,7 @@ local publishDocker(a) = {
     name: "docker-publish-" + a,
     kind: "pipeline",
     type: "docker",
+    volumes: [{name: "docker", host: {path: "/var/run/docker.sock"}}],
     trigger: {branch: [a]},
     depends_on: ["aur-publish-" + a],
     steps: [
@@ -76,6 +77,7 @@ local publishDocker(a) = {
         {
             name: "publish-image",
             image: "plugins/docker",
+            volumes: [{name: "docker", path: "/var/run/docker.sock"}],
             settings: {
                 username: "api",
                 password: {from_secret: "proget_api_key"},
