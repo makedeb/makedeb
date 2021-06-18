@@ -24,6 +24,7 @@ local aurPublish(a, b) = {
     name: "aur-publish-" + b,
     kind: "pipeline",
     type: "docker",
+    volumes: [{name: "aur", temp: {}}],
     trigger: {branch: [b]},
     depends_on: ["build-and-publish-" + b],
 
