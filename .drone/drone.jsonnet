@@ -14,7 +14,7 @@ local buildAndPublish(a, b) = {
         {
             name: "publish-proget",
             image: "ubuntu",
-            environment: {proget_api_key: "not_today"},
+            environment: {proget_api_key: {from_secret: "proget_api_key"}},
             commands: [".drone/scripts/publish.sh"]
         }
     ]
@@ -31,18 +31,14 @@ local aurPublish(a, b) = {
         {
             name: "clone-aur",
             image: "ubuntu",
-            environment: {
-                package_name: a
-            },
+            environment: {package_name: a},
             commands: [".drone/scripts/aur.sh clone"]
         },
 
         {
             name: "configure-pkgbuild",
             image: "ubuntu",
-            environment: {
-                package_name: a
-            },
+            environment: {package_name: a},
             commands: [".drone/scripts/aur.sh configure"]
         },
 
@@ -50,7 +46,9 @@ local aurPublish(a, b) = {
             name: "push-pkgbuild",
             image: "ubuntu",
             environment: {
-                package_name: a
+                package_name: a,
+                aur_ssh_key: {from_secret: "aur_ssh_key"},
+                known_hosts: {from_secret: "known_hosts"}
             },
             commands: [".drone/scripts/aur.sh push"]
         }
@@ -65,12 +63,14 @@ local publishDocker(a) = {
     depends_on: ["aur-publish-" + a],
     steps: [{
         name: "publish-image",
-        image: "",
+        image: "plugins/docker",
         settings: {
             username: "api",
-            password: "big_old_lie",
-            repo:"",
-            tags: a
+            password: {from_secret: "proget_api_key"},
+            repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
+            tags: a,
+            dockerfile: "docker/Dockerfile",
+            no_cache: "true"
         }
     }]
 };
