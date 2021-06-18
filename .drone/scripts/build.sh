@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-echo "${PWD}"
-exit 1
-
 # Install needed packages
 echo "Installing needed packages..."
 apt update

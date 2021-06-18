@@ -32,12 +32,14 @@ local aurPublish(a, b) = {
             name: "clone-aur",
             image: "ubuntu",
             environment: {package_name: a},
+            volumes: [{name: "aur", path: "/drone"}],
             commands: [".drone/scripts/aur.sh clone"]
         },
 
         {
             name: "configure-pkgbuild",
             image: "ubuntu",
+            volumes: [{name: "aur", path: "/drone"}],
             environment: {package_name: a},
             commands: [".drone/scripts/aur.sh configure"]
         },
@@ -45,6 +47,7 @@ local aurPublish(a, b) = {
         {
             name: "push-pkgbuild",
             image: "ubuntu",
+            volumes: [{name: "aur", path: "/drone"}],
             environment: {
                 package_name: a,
                 aur_ssh_key: {from_secret: "aur_ssh_key"},
@@ -68,7 +71,7 @@ local publishDocker(a) = {
             environment: {release_type: a},
             commands: [".drone/scripts/dockerfile-config.sh"]
         },
-        
+
         {
             name: "publish-image",
             image: "plugins/docker",
