@@ -9,8 +9,9 @@ local buildAndPublish(a, b, c) = {
             image: "ubuntu",
             environment: {release_type: a, package_name: c},
             commands: [
+                "useradd user"
                 "cd src",
-                "./makedeb.sh"
+                "sudo -u user './makedeb.sh'"
             ]
         },
 
