@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Install packages
 echo "Installing needed packages..."
@@ -35,6 +36,7 @@ aur_push() {
 }
 
 # Begin script
+mkdir -p /root/.ssh/
 echo "${known_hosts}" > /root/.ssh/known_hosts
 echo "${aur_ssh_key}" > /root/.ssh/AUR
 
