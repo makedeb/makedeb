@@ -1,5 +1,5 @@
 local buildAndPublish(a, b) = {
-    name: "build-and-publish",
+    name: "build-and-publish-" + a,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [a]},
@@ -21,11 +21,11 @@ local buildAndPublish(a, b) = {
 };
 
 local aurPublish(a, b) = {
-    name: "aur-publish",
+    name: "aur-publish-" + b,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [b]},
-    depends_on: ["build-and-publish"],
+    depends_on: ["build-and-publish-" + b],
 
     steps: [
         {
@@ -58,11 +58,11 @@ local aurPublish(a, b) = {
 };
 
 local publishDocker(a) = {
-    name: "docker-publish",
+    name: "docker-publish-" + a,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [a]},
-    depends_on: ["aur-publish"],
+    depends_on: ["aur-publish-" + a],
     steps: [{
         name: "publish-image",
         image: "",
