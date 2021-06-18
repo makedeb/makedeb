@@ -1,29 +1,18 @@
-local customClone() = {
-        name: "Clone",
-        image: "drone/git"
-};
-
 local buildAndPublish(a, b, c) = {
-    name: "Build and Publish (" + b + " Release)",
+    name: "build-and-publish",
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [a]},
-    clone: {disable: true},
     steps: [
         {
-            name: "Clone",
-            image: "drone/git"
-        },
-        
-        {
-            name: "Build Debian Package",
+            name: "build-debian-package",
             image: "ubuntu",
-            environment: {release_type: a, package_name: c},
+            environment: {release_type: a, package_name: b},
             commands: [".drone/scripts/build.sh"]
         },
 
         {
-            name: "Publish to ProGet Repository",
+            name: "publish-proget",
             image: "ubuntu",
             environment: {proget_api_key: "not_today"},
             commands: [".drone/scripts/publish.sh"]
@@ -31,16 +20,16 @@ local buildAndPublish(a, b, c) = {
     ]
 };
 
-local aurPublish(a, b, c) = {
-    name: "Publish to AUR (" + c + " Release)",
+local aurPublish(a, b) = {
+    name: "aur-publish",
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [b]},
-    depends_on: ["Build and Publish (" + c + " Release)"],
+    depends_on: ["build-and-publish"],
 
     steps: [
         {
-            name: "Clone Package",
+            name: "clone-aur",
             image: "ubuntu",
             environment: {
                 package_name: a
@@ -49,7 +38,7 @@ local aurPublish(a, b, c) = {
         },
 
         {
-            name: "Configure PKGBUILD",
+            name: "configure-pkgbuild",
             image: "ubuntu",
             environment: {
                 package_name: a
@@ -58,7 +47,7 @@ local aurPublish(a, b, c) = {
         },
 
         {
-            name: "Push PKGBUILD Changes",
+            name: "push-pkgbuild",
             image: "ubuntu",
             environment: {
                 package_name: a
@@ -68,14 +57,14 @@ local aurPublish(a, b, c) = {
     ]
 };
 
-local publishDocker(a, b) = {
-    name: "Publish Docker Image (" + b + " Release)",
+local publishDocker(a) = {
+    name: "docker-publish",
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [a]},
-    depends_on: ["Publish to AUR (" + b + " Release)"],
+    depends_on: ["aur-publish"],
     steps: [{
-        name: "Publish Image",
+        name: "publish-image",
         image: "",
         settings: {
             username: "api",
@@ -87,10 +76,10 @@ local publishDocker(a, b) = {
 };
 
 [
-    buildAndPublish("stable", "Stable", "makedeb"),
-    buildAndPublish("alpha", "Alpha", "makedeb-alpha"),
-    aurPublish("makedeb", "stable", "Stable"),
-    aurPublish("makedeb-alpha", "alpha", "Alpha"),
-    publishDocker("stable", "Stable"),
-    publishDocker("alpha", "Alpha"),
+    buildAndPublish("stable", "makedeb"),
+    buildAndPublish("alpha", "makedeb-alpha"),
+    aurPublish("makedeb", "stable"),
+    aurPublish("makedeb-alpha", "alpha"),
+    publishDocker("stable"),
+    publishDocker("alpha"),
 ]
