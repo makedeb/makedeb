@@ -1,4 +1,5 @@
 <h1 align="center">makedeb</h1>
+<p align="center"><img src="assets/logo.png" width="150"></p>
 <div align="center">
 <img alt="Drone CI - Stable" src="https://img.shields.io/drone/build/hwittenborn/makedeb/stable?label=stable&server=https%3A%2F%2Fdrone.hunterwittenborn.com">
 <img alt="Drone CI - Alpha" src="https://img.shields.io/drone/build/hwittenborn/makedeb/alpha?label=alpha&server=https%3A%2F%2Fdrone.hunterwittenborn.com">
