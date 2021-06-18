@@ -15,7 +15,7 @@ apt install makedeb -y
 useradd user
 
 # Set perms
-chmod 777 src/* -R
+chmod 777 * -R
 
 # Build makedeb
 cd src

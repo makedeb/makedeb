@@ -20,11 +20,12 @@ local buildAndPublish(a, b, c) = {
     ]
 };
 
-local aurPublish(a, b) = {
+local aurPublish(a, b, c) = {
     name: "Publish to AUR (" + b + " Release)",
     kind: "pipeline",
     type: "docker",
-    depends_on: ["Build and Publish (" + b + " Release)"],
+    trigger: {branch: [b]},
+    depends_on: ["Build and Publish (" + c + " Release)"],
 
     steps: [
         {
@@ -60,6 +61,7 @@ local publishDocker(a, b) = {
     name: "Publish Docker Image (" + b + " Release)",
     kind: "pipeline",
     type: "docker",
+    trigger: {branch: [a]}
     depends_on: ["Publish to AUR (" + b + " Release)"],
     steps: [{
         name: "Publish Image",
@@ -76,8 +78,8 @@ local publishDocker(a, b) = {
 [
     buildAndPublish("stable", "Stable", "makedeb"),
     buildAndPublish("alpha", "Alpha", "makedeb-alpha"),
-    aurPublish("makedeb", "Stable"),
-    aurPublish("makedeb-alpha", "Alpha"),
+    aurPublish("makedeb", "stable", "Stable"),
+    aurPublish("makedeb-alpha", "alpha", "Alpha"),
     publishDocker("stable", "Stable"),
     publishDocker("alpha", "Alpha"),
 ]
