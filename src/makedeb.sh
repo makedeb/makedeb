@@ -36,9 +36,6 @@ DATABASE_DIR="/usr/share/makedeb-db/"
 package_version="git"
 target_os="debian"
 
-# Run 'cd' in case someone reset $PWD
-cd
-
 files="$(ls)"
 DIR="$(echo $PWD)"
 srcdir="${DIR}/src/"
@@ -48,8 +45,8 @@ pkgdir="${DIR}/pkg/"
 ####################
 ##  BEGIN SCRIPT  ##
 ####################
-source <(cat "${FUNCTIONS_DIR}"/functions/*.sh)      # REMOVE AT PACKAGING
-source <(cat "${FUNCTIONS_DIR}"/functions/*/*.sh)    # REMOVE AT PACKAGING
+source <(cat functions/*.sh)      # REMOVE AT PACKAGING
+source <(cat functions/*/*.sh)    # REMOVE AT PACKAGING
 
 trap_codes
 arg_check "${@}"
