@@ -7,6 +7,7 @@ pkgdesc="Create Debian archives from PKGBUILDs (${release_type:-git} release)"
 arch=('any')
 license=('GPL3')
 depends=('bash' 'binutils' 'file' 'dpkg-dev' 'makepkg')
+optdepends=('git')
 
 # Used to obtain folder names for local repository
 _gitdir=$(git rev-parse --show-toplevel)
