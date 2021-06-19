@@ -2,6 +2,7 @@
 set -e
 set -x
 
+[[ "${1}" != "push" ]] && exit 0 # Remove later plz and thx
 # Install packages
 echo "Installing needed packages..."
 apt update
@@ -15,13 +16,11 @@ apt install makepkg -y
 
 # Define functions
 aur_clone() {
-    exit 0 # Remove later plz and thx
     cd ..
     git clone "https://${aur_url}/${package_name}.git"
 }
 
 aur_configure() {
-    exit 0 # Remove later plz and thx
     pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
     pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')
 
@@ -35,13 +34,16 @@ aur_configure() {
 }
 
 aur_push() {
-    # Set up known_hosts, keys, and config for SSH
+    # Set up SSH keys and known_hosts
     mkdir -p /root/.ssh/
+
     echo "${known_hosts}" > /root/.ssh/known_hosts
+
     echo "${aur_ssh_key}" > /root/.ssh/AUR
-    printf "Host ${aur_url}\n  Hostname ${aur_url}\n  IdentityFile /root/.ssh/AUR" > /root/.ssh/config
+    chmod 400 /root/.ssh/AUR
 
     ssh "aur@${aur_url}" # Remove later plz and thx
+    exit 1 # Remove later plz and thx
 
     pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
     pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')
