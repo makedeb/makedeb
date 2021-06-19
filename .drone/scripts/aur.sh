@@ -28,7 +28,7 @@ aur_configure() {
     sed -i "s|pkgrel=.*|pkgrel=${pkgbuild_pkgrel}|" "${package_name}/PKGBUILD"
 
     cd "${package_name}"
-    sudo -u user 'makepkg --printsrcinfo' | tee .SRCINFO
+    sudo -u user makepkg --printsrcinfo | tee .SRCINFO
 }
 
 aur_push() {
