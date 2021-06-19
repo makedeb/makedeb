@@ -15,11 +15,13 @@ apt install makepkg -y
 
 # Define functions
 aur_clone() {
+    exit 0 # Remove later plz and thx
     cd ..
     git clone "https://${aur_url}/${package_name}.git"
 }
 
 aur_configure() {
+    exit 0 # Remove later plz and thx
     pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
     pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')
 
