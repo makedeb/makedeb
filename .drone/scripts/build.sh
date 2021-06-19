@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-exit 0
 # Install needed packages
 echo "Installing needed packages..."
 apt update

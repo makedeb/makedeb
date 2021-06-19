@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -e
-set -x
 
-[[ "${1}" != "push" ]] && exit 0 # Remove later plz and thx
 # Install packages
 echo "Installing needed packages..."
 apt update
@@ -34,7 +32,7 @@ aur_configure() {
 }
 
 aur_push() {
-    # Set up SSH keys and known_hosts
+    # Set up SSH keys, known_hosts, and config file
     mkdir -p /root/.ssh/
 
     echo "${known_hosts}" > /root/.ssh/known_hosts
@@ -43,9 +41,6 @@ aur_push() {
     chmod 400 /root/.ssh/AUR
 
     printf "Host ${aur_url}\n  Hostname ${aur_url}\n  IdentityFile /root/.ssh/AUR\n" > /root/.ssh/config
-
-    ssh "aur@${aur_url}" # Remove later plz and thx
-    exit 1 # Remove later plz and thx
 
     pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
     pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-exit 0
-# Set up makedeb repo
+# Install needed packages
 echo "Installing needed packages..."
 apt update
 apt install wget curl gpg -y
