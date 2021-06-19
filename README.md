@@ -10,44 +10,13 @@
 </div>
 
 
-## Overview ##
+## Overview
 makedeb takes PKGBUILD files and creates Debian packages installable with APT.
 
-*Automated installation and updates of AUR and Arch Linux packages are available with [mpm](https://github.com/hwittenborn/mpm).*
+## Installation and usage
+Documentation and installation instructions can be found in the [makedeb docs](https://docs.hunterwittenborn.com/makedeb).
 
-## Installation ##
-Arch Linux users can install makedeb from the AUR from the [stable](https://aur.archlinux.org/packages/makedeb/) or [alpha](https://aur.archlinux.org/packages/makedeb-alpha/) release.
+Help with available commands can also be found after installation with `makedeb --help`.
 
-Users on Debian or Debian-based systems (i.e. Ubuntu) should follow the below instructions.
-
-First, set up the repository with the following commands:
-```sh
-sudo wget 'https://hunterwittenborn.com/keys/apt.asc' -O /etc/apt/trusted.gpg.d/hwittenborn.asc
-echo 'deb [arch=all] https://repo.hunterwittenborn.com/debian/makedeb any main' | sudo tee /etc/apt/sources.list.d/makedeb.list
-sudo apt update
-```
-Then, install makedeb with one of the following commands:
-- makedeb (stable release):
-```sh
-sudo apt install makedeb
-```
-- makedeb (alpha release):
-```sh
-sudo apt install makedeb-alpha
-```
-
-*As expected, don't run the alpha release if you're expecting stability. Things could break occasionally, and you'll need to know how to get around your system when it happens.*
-
-For support of converting PKGBUILD details from Arch Linux (i.e. dependencies and architectures), install the `makedeb-db` package as well:
-```sh
-sudo apt install makedeb-db
-```
-
-
-## Usage ##
-Instructions can be found after installation with `makedeb --help`
-
-Documentation on the inner working of makedeb, as well as guides to contributing, are available in the [makedeb wiki](https://github.com/hwittenborn/makedeb/wiki).
-
-## Get in touch ##
+## Get in touch
 A Matrix room is available at [#git:hunterwittenborn.com](https://matrix.to/#/#git:hunterwittenborn.com) for discussion of any of my projects. Feel free to hop in if you need any help.
