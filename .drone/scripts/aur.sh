@@ -33,6 +33,14 @@ aur_configure() {
 }
 
 aur_push() {
+    # Set up known_hosts, keys, and config for SSH
+    mkdir -p /root/.ssh/
+    echo "${known_hosts}" > /root/.ssh/known_hosts
+    echo "${aur_ssh_key}" > /root/.ssh/AUR
+    printf "Host ${aur_url}\n  Hostname ${aur_url}\n  IdentityFile /root/.ssh/AUR" > /root/.ssh/config
+
+    ssh "aur@${aur_url}" # Remove later plz and thx
+
     pkgbuild_pkgver=$(cat src/PKGBUILD | grep 'pkgver=' | sed 's|pkgver=||')
     pkgbuild_pkgrel=$(cat src/PKGBUILD | grep 'pkgrel=' | sed 's|pkgrel=||')
 
@@ -49,13 +57,6 @@ aur_push() {
 }
 
 # Begin script
-mkdir -p /root/.ssh/
-echo "${known_hosts}" > /root/.ssh/known_hosts
-echo "${aur_ssh_key}" > /root/.ssh/AUR
-printf "Host ${aur_url}\n  Hostname ${aur_url}\n  IdentityFile /root/.ssh/AUR" > /root/.ssh/config
-
-ssh "aur@${aur_url}"
-
 useradd user
 
 case "${1}" in
