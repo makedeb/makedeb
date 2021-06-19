@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+exit 0
 # Set up makedeb repo
 echo "Installing needed packages..."
 apt update
