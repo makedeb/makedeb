@@ -42,6 +42,8 @@ aur_push() {
     echo "${aur_ssh_key}" > /root/.ssh/AUR
     chmod 400 /root/.ssh/AUR
 
+    printf "Host ${aur_url}\n  Hostname ${aur_url}\n  IdentityFile /root/.ssh/AUR\n" > /root/.ssh/config
+
     ssh "aur@${aur_url}" # Remove later plz and thx
     exit 1 # Remove later plz and thx
 
