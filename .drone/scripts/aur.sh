@@ -27,6 +27,7 @@ aur_configure() {
     sed -i "s|pkgver=.*|pkgver=${pkgbuild_pkgver}|" "${package_name}/PKGBUILD"
     sed -i "s|pkgrel=.*|pkgrel=${pkgbuild_pkgrel}|" "${package_name}/PKGBUILD"
 
+    chmod 666 "${package_name}" -R
     cd "${package_name}"
     sudo -u user makepkg --printsrcinfo | tee .SRCINFO
 }
