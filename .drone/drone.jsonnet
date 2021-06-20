@@ -6,14 +6,14 @@ local buildAndPublish(a, b) = {
     steps: [
         {
             name: "build-debian-package",
-            image: "ubuntu",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
             environment: {release_type: a, package_name: b},
             commands: [".drone/scripts/build.sh"]
         },
 
         {
             name: "publish-proget",
-            image: "ubuntu",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
             environment: {proget_api_key: {from_secret: "proget_api_key"}},
             commands: [".drone/scripts/publish.sh"]
         }
@@ -31,7 +31,7 @@ local aurPublish(a, b) = {
     steps: [
         {
             name: "clone-aur",
-            image: "ubuntu",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
             environment: {package_name: a},
             volumes: [{name: "aur", path: "/drone"}],
             commands: [".drone/scripts/aur.sh clone"]
@@ -39,7 +39,7 @@ local aurPublish(a, b) = {
 
         {
             name: "configure-pkgbuild",
-            image: "ubuntu",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
             volumes: [{name: "aur", path: "/drone"}],
             environment: {package_name: a},
             commands: [".drone/scripts/aur.sh configure"]
@@ -47,7 +47,7 @@ local aurPublish(a, b) = {
 
         {
             name: "push-pkgbuild",
-            image: "ubuntu",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
             volumes: [{name: "aur", path: "/drone"}],
             environment: {
                 package_name: a,
