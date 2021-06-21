@@ -70,19 +70,22 @@ run_dependency_conversion --nocommas
 
 if [[ "${PREBUILT}" == "FALSE" ]]; then
 
-    # Only run these if on Debian, as distros like Arch don't have APT
-    if [[ "${target_os}" == "debian" ]]; then
+    # 1. Only run if on Debian, as distros like Arch don't have APT, and when
+    # '-s' option is passed.
+    # 2. Same as 1, but only run when '-d' is passed.
+    if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
         install_depends new_depends ""
         install_depends new_makedepends make
         install_depends new_checkdepends check
+    elif [[ "${target_os}" == "debian" && "${skip_dependency_checks}" != "true" ]]; then
+      verify_dependencies
     fi
 
     echo "Running makepkg..."
-    makepkg -p "${FILE}" ${OPTIONS}
+    makepkg -p "${FILE}" ${makepkg_options}
     rm *.pkg.tar.zst &> /dev/null
 
-    # Once again, don't run on the Arch build
-    if [[ "${target_os}" == "debian" ]]; then
+    if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
         remove_depends make
         remove_depends check
     fi

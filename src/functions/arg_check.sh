@@ -1,15 +1,17 @@
 arg_check() {
   while true; do
     case "${1}" in
-      -B | --prebuilt)     PREBUILT="TRUE" ;;
-      -C | --convert)      package_convert="true" ;;
-      -F | --file | -p)    FILE="${2}"; shift;;
+      -B | --prebuilt)     export PREBUILT="TRUE" ;;
+      -C | --convert)      export package_convert="true" ;;
+      -d | --nodeps)       export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
+      -F | --file | -p)    export FILE="${2}"; shift;;
       -h | --help)         help; exit 0 ;;
-      -i | --install)      INSTALL="TRUE" ;;
-      -P | --pkgname)      prebuilt_pkgname="${2}"; shift 1 ;;
+      -i | --install)      export INSTALL="TRUE" ;;
+      -P | --pkgname)      export prebuilt_pkgname="${2}"; shift 1 ;;
+      -s | --syncdeps)     export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
 
       --printsrcinfo)      export makepkg_printsrcinfo="true" ;;
-      --skippgpcheck)      export OPTIONS+=" --skippgpcheck" ;;
+      --skippgpcheck)      export makepkg_options+=" --skippgpcheck" ;;
 
       -*)                  echo "Unknown option '${1}'"; exit 1 ;;
       "")                  break ;;
@@ -18,4 +20,11 @@ arg_check() {
     done
 
     if [[ "${makepkg_printsrcinfo}" == "true" ]]; then makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
+
+    # Argument checks to make sure we didn't request something impossible
+    if [[ "${skip_dependency_checks}" == "true" && "${install_dependencies}" == "true" ]]; then
+      echo "Option '--nodeps' cannot be used with '--syncdeps'."
+      echo "Aborting..."
+      exit 1
+    fi
 }

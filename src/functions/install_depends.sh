@@ -10,11 +10,11 @@ install_depends() {
 
     for i in ${depends_value}; do
       # Check if package can be found
-      if ! echo "${apt_output}" | grep "${i}/" | grep -E "$(dpkg --print-architecture)|all" &> /dev/null; then
+      if ! echo "${apt_output}" | grep "^${i}/" | grep -E "$(dpkg --print-architecture)|all" &> /dev/null; then
         export unknown_pkg+="${i} "
 
         # If not installed, add to list of packages to install
-      elif ! echo "${apt_output}" | grep "${i}/" | grep -E "$(dpkg --print-architecture)|all" | grep '\[installed' &> /dev/null; then
+      elif ! echo "${apt_output}" | grep "^${i}/" | grep -E "$(dpkg --print-architecture)|all" | grep '\[installed' &> /dev/null; then
         export "apt_${2}depends"+="${i} "
 
       fi
