@@ -1,7 +1,7 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 
 pkgname=makedeb
-pkgver=2.12.5
+pkgver=2.12.6
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
@@ -21,6 +21,10 @@ package() {
     mkdir -p "${pkgdir}/usr/bin"
     cd "${srcdir}/${_foldername}"
 
+    # Add bash shebang
+    echo '#!/bin/bash' > "${pkgdir}/usr/bin/makedeb"
+
+    # Copy functions
     for i in $(find "src/functions/"); do
         if ! [[ -d "${i}" ]]; then
             cat "${i}" >> "${pkgdir}/usr/bin/makedeb"
