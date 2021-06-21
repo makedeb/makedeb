@@ -78,7 +78,7 @@ if [[ "${PREBUILT}" == "FALSE" ]]; then
     fi
 
     echo "Running makepkg..."
-    ( makepkg -p "${FILE}" ${OPTIONS} ) | grep -v '==> ERROR: Aborted by user! Exiting...'
+    makepkg -p "${FILE}" ${OPTIONS}
     rm *.pkg.tar.zst &> /dev/null
 
     # Once again, don't run on the Arch build
