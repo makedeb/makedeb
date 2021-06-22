@@ -102,7 +102,7 @@ remove_depends make
 remove_depends check
 fi
 
-[[ "${target_os}" == "debian" ]] && if [[ ${INSTALL} == "TRUE" ]]; then
+if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
     for i in ${debname_install}; do
         apt_install+="${PWD}/${i}.deb "
     done
