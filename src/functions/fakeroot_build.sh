@@ -80,4 +80,7 @@ fakeroot_build() {
         dpkg-name ../"${package}".deb >> /dev/null
         msg2 "Built ${package}"
     fi
+
+    msg "Leaving fakeroot environment..."
+    msg "Finished making: ${pkgbase-$pkgname} ${globalver} ($(date))..."
 }

@@ -36,6 +36,7 @@ export DATABASE_DIR="/usr/share/makedeb-db/"
 export package_version="git"
 export target_os="debian"
 
+cd ./
 export files="$(ls)"
 export DIR="$(echo $PWD)"
 export srcdir="${DIR}/src/"
@@ -67,6 +68,9 @@ find "${FILE}" &> /dev/null || { error "Couldn't find ${FILE}"; exit 1; }
 
 source "${FILE}"
 pkgbuild_check
+
+convert_version
+msg "Making package: ${pkgbase-$pkgname} ${globalver} ($(date))..."
 
 if [[ "${prebuilt_pkgname}" != "" ]]; then
     msg "Replacing value of \$pkgname with ${prebuilt_pkgname} in build file..."
@@ -121,7 +125,6 @@ fi
         apt_install+="${PWD}/${i}.deb "
     done
 
+    msg "Installing $(echo "${apt_install}" | sed "s|${PWD}/||g" | sed 's| | ,|g')..."
     sudo apt install ${apt_install}
 fi
-
-msg "Done."
