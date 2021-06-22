@@ -6,7 +6,7 @@ fakeroot_build() {
     for package in ${pkgname[@]}; do
         unset depends optdepends conflicts provides
 
-        tar -xf "${package}-${built_package_version}-${makepkg_arch}.pkg.tar.zst" -C "${pkgdir}/${package}"
+        tar -xf "${package}-${built_archive_version}-${makepkg_arch}.pkg.tar.zst" -C "${pkgdir}/${package}"
         cd "${pkgdir}/${package}"
         get_variables
         remove_dependency_description
@@ -18,8 +18,8 @@ fakeroot_build() {
         for i in '.BUILDINFO' '.MTREE' '.PKGINFO' '.INSTALL' '.Changelog'; do
             rm -f "${i}" || true
         done
-        
-        # Using $pkgver instead of $built_package_version as $pkgver is pulled from .PKGINFO in the built package
+
+        # Using $pkgver instead of $built_archive_version as $pkgver is pulled from .PKGINFO in the built package
         rm "../../${package}-${pkgver}-${makepkg_arch}.pkg.tar.zst"
 
         field() {
