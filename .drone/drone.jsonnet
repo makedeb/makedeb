@@ -83,7 +83,7 @@ local publishDocker(a) = {
                 password: {from_secret: "proget_api_key"},
                 repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
                 registry: "proget.hunterwittenborn.com",
-                tags: a,
+                tags: "testing",
                 dockerfile: "docker/Dockerfile",
                 no_cache: "true"
             }
