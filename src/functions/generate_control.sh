@@ -5,7 +5,6 @@ generate_control() {
   export_control "Source:" "${url}"
   export_control "Version:" "${pkgver}"
 
-  convert_arch
   export_control "Architecture:" "${makedeb_arch}"
 
   export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"

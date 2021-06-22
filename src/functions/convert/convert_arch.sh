@@ -1,12 +1,17 @@
 convert_arch() {
-  if [[ ${arch} == "x86_64" ]]; then
-    msg2 "Converting architecure..."
-    export makedeb_arch="amd64"
-  elif [[ ${arch} == "armv7l" ]]; then
-    msg2 "Converting architecure..."
-    export makedeb_arch="armhf"
-  elif [[ ${arch} == "any" ]]; then
-    msg2 "Converting architecure..."
-    export makedeb_arch="all"
-  fi
+    msg "Converting architecure..."
+
+    if [[ "${arch}" == "any" ]]; then
+        export makedeb_arch="all"
+        export makepkg_arch="any"
+
+    else
+        export makepkg_arch="$(uname -p)"
+
+        if [[ "${makepkg_arch}" == "x86_64" ]]; then
+            export makedeb_arch="amd64"
+        elif [[ "${makepkg_arch}" == "armv7l" ]]; then
+            export makedeb_arch="armhf"
+        fi
+    fi
 }

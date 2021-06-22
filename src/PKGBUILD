@@ -1,12 +1,12 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 
 pkgname=makedeb
-pkgver=4.1.0
+pkgver=4.2.0
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
 license=('GPL3')
-depends=('bash' 'binutils' 'file' 'dpkg-dev' 'makedeb-makepkg')
+depends=('bash' 'binutils' 'file' 'dpkg-dev' 'makepkg')
 optdepends=('git')
 
 # Used to obtain folder names for local repository

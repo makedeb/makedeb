@@ -1,9 +1,12 @@
 convert_version() {
-    if [[ "${epoch}" == "" ]]; then
-        [[ "${in_fakeroot}" != "true" ]] && export globalver="${pkgver}-${pkgrel}"
-        export controlver="${pkgver}-${pkgrel}"
+    [[ "${epoch}" != "" ]] && epoch_status="${epoch}:"
+
+    if [[ "$(type -t pkgver)" == "function" ]]; then
+        export built_package_version="${epoch_status}$(pkgver)-${pkgrel}"
+        export pkgbuild_version="${epoch_status}${pkgver}-${pkgrel}"
     else
-        [[ "${in_fakeroot}" != "true" ]] && export globalver="${epoch}:${pkgver}-${pkgrel}"
-        export controlver="${epoch}:${pkgver}-${pkgrel}"
+        export built_package_version="${epoch_status}${pkgver}-${pkgrel}"
+        export pkgbuild_version="${epoch_status}${pkgver}-${pkgrel}"
     fi
+
 }
