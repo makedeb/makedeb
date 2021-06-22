@@ -6,7 +6,7 @@ convert_arch() {
         export makepkg_arch="any"
 
     else
-        export makepkg_arch="$(uname -p)"
+        export makepkg_arch="$(uname -m)"
 
         if [[ "${makepkg_arch}" == "x86_64" ]]; then
             export makedeb_arch="amd64"
