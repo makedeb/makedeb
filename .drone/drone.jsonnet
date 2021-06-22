@@ -6,7 +6,7 @@ local buildAndPublish(a, b) = {
     steps: [
         {
             name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:testing",
             environment: {release_type: a, package_name: b},
             commands: [".drone/scripts/build.sh"]
         },
@@ -83,7 +83,7 @@ local publishDocker(a) = {
                 password: {from_secret: "proget_api_key"},
                 repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
                 registry: "proget.hunterwittenborn.com",
-                tags: "testing",
+                tags: a,
                 dockerfile: "docker/Dockerfile",
                 no_cache: "true"
             }
