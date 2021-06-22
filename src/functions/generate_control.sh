@@ -1,5 +1,5 @@
 generate_control() {
-  echo "Generating control file..."
+  msg2 "Generating control file..."
   export_control "Package:" "${pkgname}"
   export_control "Description:" "${pkgdesc}"
   export_control "Source:" "${url}"

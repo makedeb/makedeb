@@ -13,7 +13,7 @@ arg_check() {
       --printsrcinfo)      export makepkg_printsrcinfo="true" ;;
       --skippgpcheck)      export makepkg_options+=" --skippgpcheck" ;;
 
-      -*)                  echo "Unknown option '${1}'"; exit 1 ;;
+      -*)                  error "Unknown option '${1}'"; exit 1 ;;
       "")                  break ;;
     esac
     shift 1
@@ -23,8 +23,8 @@ arg_check() {
 
     # Argument checks to make sure we didn't request something impossible
     if [[ "${skip_dependency_checks}" == "true" && "${install_dependencies}" == "true" ]]; then
-      echo "Option '--nodeps' cannot be used with '--syncdeps'."
-      echo "Aborting..."
+      error "Option '--nodeps' cannot be used with '--syncdeps'."
+      error "Aborting..."
       exit 1
     fi
 }

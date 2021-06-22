@@ -4,7 +4,7 @@ install_depends() {
 
   if [[ "${depends_value}" != "" ]]; then
     # Run xargs so $new_depends doesn't print a double space
-    echo "Checking ${2} dependencies..." | xargs
+    msg "Checking ${2} dependencies..." | xargs
 
     local apt_output=$(apt list ${depends_value} 2> /dev/null | sed 's|Listing...||')
 
@@ -22,16 +22,16 @@ install_depends() {
 
     # Exit if a package couldn't be found
     [[ "${unknown_pkg}" != "" ]] && {
-      echo "Couldn't find the following packages: $(echo ${unknown_pkg} | xargs | sed 's| |, |g')"
+      error "Couldn't find the following packages: $(echo ${unknown_pkg} | xargs | sed 's| |, |g')"
       exit 1
     }
 
     # If dependency list isn't empty, install packages
     if [[ $(eval echo \${apt_${2}depends}) != "" ]]; then
-      echo "Installing ${2} dependencies. One second..." | xargs
+      msg "Installing ${2} dependencies. One second..." | xargs
       eval sudo apt install \${apt_${2}depends} -y || {
-        echo "Couldn't install packages."
-        echo "Cleaning up..."
+        error "Couldn't install packages."
+        msg "Cleaning up..."
         eval sudo apt remove \${apt_${2}depends} -y
         exit 1
       }

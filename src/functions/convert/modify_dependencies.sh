@@ -9,7 +9,7 @@ modify_dependencies() {
 
   temp_pkgname=$(echo ${pkgname} | sed 's|-|_|g')
   if [[ $(type -t ${temp_pkgname}) == "function" ]]; then
-    echo "Setting package-specific dependencies..."
+    msg "Setting package-specific dependencies..."
     "${temp_pkgname}"
     for i in depends optdepends conflicts provides makedepends checkdepends; do
       "${temp_pkgname}"
