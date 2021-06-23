@@ -4,6 +4,7 @@ convert_arch() {
     if [[ "${arch}" == "any" ]]; then
         export makedeb_arch="all"
         export makepkg_arch="any"
+        export package_extension="pkg.tar.zst"
 
     else
         export makepkg_arch="$(uname -m)"
