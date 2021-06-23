@@ -21,3 +21,8 @@ Help with available commands can also be found after installation with `makedeb 
 
 ## Get in touch
 A Matrix room is available at [#git:hunterwittenborn.com](https://matrix.to/#/#git:hunterwittenborn.com) for discussion of any of my projects. Feel free to hop in if you need any help.
+
+## Sponsors
+Thank you to the following companies who have generously given resources to help the makedeb project:
+
+- [GitBook](https://www.gitbook.com/): For documentation hosting
