@@ -20,7 +20,7 @@ convert_arch() {
             [[ "${target_os}" == "debian" ]] && export package_extension="pkg.tar.zst"
             [[ "${target_os}" == "arch" ]] && export package_extension="pkg.tar.xz"
 
-        elif [[ "${makepkg_arch}" == "arm64" ]]; then
+        elif [[ "${makepkg_arch}" == "aarch64" ]]; then
             export CARCH="aarch64"
             export makepkg_arch="aarch64"
             export makedeb_arch="arm64"
