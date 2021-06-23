@@ -11,6 +11,8 @@ convert_arch() {
         if [[ "${makepkg_arch}" == "x86_64" ]]; then
             export makedeb_arch="amd64"
         elif [[ "${makepkg_arch}" == "armv7l" ]]; then
+            export CARCH="armv7h"
+            export makepkg_arch="armv7h"
             export makedeb_arch="armhf"
         fi
     fi
