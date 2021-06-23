@@ -25,4 +25,4 @@ A Matrix room is available at [#git:hunterwittenborn.com](https://matrix.to/#/#g
 ## Sponsors
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
-- [GitBook](https://www.gitbook.com/): For documentation hosting
+- [GitBook](https://www.gitbook.com/): For documentation hosting. GitBook lets you create your own documentation in multiple formats, including Markdown and a WYSIWYG editor. GitBook also natively integrates with other services such as GitHub and Google Analytics.
