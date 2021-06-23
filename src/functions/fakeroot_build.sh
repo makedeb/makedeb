@@ -6,7 +6,7 @@ fakeroot_build() {
     for package in ${pkgname[@]}; do
         unset depends optdepends conflicts provides
 
-        tar -xf "${package}-${built_archive_version}-${makepkg_arch}.pkg.tar.zst" -C "${pkgdir}/${package}"
+        tar -xf "${package}-${built_archive_version}-${makepkg_arch}.${package_extension}" -C "${pkgdir}/${package}"
         cd "${pkgdir}/${package}"
         get_variables
         remove_dependency_description
@@ -20,7 +20,7 @@ fakeroot_build() {
         done
 
         # Using $pkgver instead of $built_archive_version as $pkgver is pulled from .PKGINFO in the built package
-        rm "../../${package}-${pkgver}-${makepkg_arch}.pkg.tar.zst"
+        rm "../../${package}-${pkgver}-${makepkg_arch}.${package_extension}"
 
         field() {
             cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
