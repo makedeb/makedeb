@@ -3,6 +3,7 @@ fakeroot_build() {
 
     mkdir "${pkgdir}"
     pkgsetup
+    convert_version
     for package in ${pkgname[@]}; do
         unset depends optdepends conflicts provides
 
