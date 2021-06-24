@@ -28,11 +28,14 @@ install_depends() {
 
     # If dependency list isn't empty, install packages
     if [[ $(eval echo \${apt_${2}depends}) != "" ]]; then
-      msg "Installing ${2} dependencies. One second..." | xargs
-      eval sudo apt install \${apt_${2}depends} -y || {
+      msg "Installing ${2} dependencies..." | xargs
+      if eval sudo apt install \${apt_${2}depends}; then
+          eval sudo apt-mark auto \${apt_${2}depends}
+          
+      else
         error "Couldn't install packages."
         msg "Cleaning up..."
-        eval sudo apt remove \${apt_${2}depends} -y
+        eval sudo apt remove \${apt_${2}depends} || true
         exit 1
       }
     fi
