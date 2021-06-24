@@ -12,7 +12,7 @@ verify_dependencies() {
         unset apt_not_installed_temp
 
         if [[ "${apt_not_installed}" != "" ]]; then
-            error "The following packages are marked as dependencies, but aren't installed: ${apt_not_installed}."
+            error "The following packages are marked as build dependencies, but aren't installed: ${apt_not_installed}."
             exit 1
         fi
     fi

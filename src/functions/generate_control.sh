@@ -12,6 +12,7 @@ generate_control() {
   export_control "Suggests:" "${new_optdepends[@]}"
   export_control "Conflicts:" "${new_conflicts[@]}"
   export_control "Provides:" "${new_provides[@]}"
+  export_control "Replaces:" "${new_replaces[@]}"
 
   echo "" >> DEBIAN/control
 }

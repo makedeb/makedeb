@@ -14,6 +14,7 @@ run_dependency_conversion() {
     new_optdepends=${optdepends[@]}
     new_conflicts=${conflicts[@]}
     new_provides=${provides[@]}
+    new_replaces=${replaces[@]}
     new_makedepends=${makedepends[@]}
     new_checkdepends=${checkdepends[@]}
   fi
@@ -22,6 +23,7 @@ run_dependency_conversion() {
   check_relationships new_optdepends   ${new_optdepends}
   check_relationships new_conflicts    ${new_conflicts}
   check_relationships new_provides     ${new_provides}
+  check_relationships new_replaces     ${new_replaces}
   check_relationships new_makedepends  ${new_makedepends}
   check_relationships new_checkdepends ${new_checkdepends}
 

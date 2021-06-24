@@ -3,6 +3,7 @@ convert_deps() {
         [[ "${optdepends}" == "" ]] && \
         [[ "${conflicts}" == "" ]] && \
         [[ "${provides}" == "" ]] && \
+        [[ "${replaces}" == "" ]] && \
         [[ "${makedepends}" == "" ]] && \
         [[ "${checkdepends}" == "" ]]; then
         true
