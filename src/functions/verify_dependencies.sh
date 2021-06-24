@@ -1,8 +1,8 @@
 verify_dependencies() {
-    if [[ "${depends}" != "" || "${makedepends}" != "" || "${checkdepends}" != "" ]]; then
-        export apt_output="$(apt list ${depends[@]} ${makedepends[@]} ${checkdepends[@]} 2> /dev/null)"
+    if [[ "${new_depends}" != "" || "${new_makedepends}" != "" || "${new_checkdepends}" != "" ]]; then
+        export apt_output="$(apt list ${new_depends[@]} ${new_makedepends[@]} ${new_checkdepends[@]} 2> /dev/null)"
 
-        for i in ${depends[@]} ${makedepends[@]} ${checkdepends[@]}; do
+        for i in ${new_depends[@]} ${new_makedepends[@]} ${new_checkdepends[@]}; do
             if [[ "$(echo "${apt_output}" | grep "^${i}/" | grep -E "$(dpkg --print-architecture)|all" | grep '\[installed')" == "" ]]; then
                 export apt_not_installed_temp+=" ${i}"
             fi

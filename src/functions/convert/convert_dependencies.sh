@@ -1,4 +1,4 @@
-convert_deps() {
+convert_dependencies() {
     if [[ "${depends}" == "" ]] && \
         [[ "${optdepends}" == "" ]] && \
         [[ "${conflicts}" == "" ]] && \

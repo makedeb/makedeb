@@ -8,7 +8,7 @@ check_relationships() {
         if echo "${i}" | grep "${j}" &> /dev/null; then
           export symbol_type="${j}"
           # Check if $symbol_type is '<' or '>'
-          if [[ $(echo "${symbol_type}" | wc -c) == "2" ]]; then
+          if [[ "$(echo "${symbol_type}" | wc -c)" == "2" && "$(echo "${symbol_type}" | grep -Evw '<|>')" == "" ]]; then
             export old_symbol_type="${j}"
             export symbol_type+="${j}"
           else

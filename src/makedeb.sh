@@ -46,13 +46,22 @@ export pkgdir="${DIR}/pkg/"
 ####################
 ##  BEGIN SCRIPT  ##
 ####################
-source <(cat functions/*.sh)      # REMOVE AT PACKAGING
-source <(cat functions/*/*.sh)    # REMOVE AT PACKAGING
-
 # Get makepkg message syntax
 source "/usr/share/makepkg/util/message.sh"
 colorize
 
+# Debug logs in case a function is                       # REMOVE AT PACKAGING
+# stopping something from working during testing         # REMOVE AT PACKAGING
+for i in $(find functions/); do                          # REMOVE AT PACKAGING
+    if ! [[ -d "${i}" ]]; then                           # REMOVE AT PACKAGING
+        if [[ "${in_fakeroot}" != "true" ]]; then        # REMOVE AT PACKAGING
+            msg "Sourcing functions from ${i}..."        # REMOVE AT PACKAGING
+        fi                                               # REMOVE AT PACKAGING
+        source <(cat "${i}")                             # REMOVE AT PACKAGING
+    fi                                                   # REMOVE AT PACKAGING
+done                                                     # REMOVE AT PACKAGING
+[[ "${in_fakeroot}" != "true" ]] && echo                 # REMOVE AT PACKAGING
+                                                         # REMOVE AT PACKAGING
 trap_codes
 arg_check "${@}"
 

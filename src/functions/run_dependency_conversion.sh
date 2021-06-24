@@ -6,7 +6,7 @@ run_dependency_conversion() {
       exit 1
     fi
 
-    convert_deps
+    convert_dependencies
     modify_dependencies
 
   else
