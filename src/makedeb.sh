@@ -112,10 +112,11 @@ remove_depends check
 fi
 
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
-    for i in ${debname_install}; do
-        apt_install+="${PWD}/${i}.deb "
+
+for i in ${pkgname[@]}; do
+        apt_install+="./${i}_${built_archive_version}_${makedeb_arch}.deb "
     done
 
-    msg "Installing $(echo "${apt_install}" | sed "s|${PWD}/||g" | sed 's| | ,|g')..."
+    msg "Installing $(echo "${apt_install}" | sed 's|\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
     sudo apt install ${apt_install}
 fi
