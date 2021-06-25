@@ -7,17 +7,19 @@ arg_check() {
             -h | --help)           help; exit 0 ;;
             -i | --install)        export INSTALL="TRUE" ;;
             -s | --syncdeps)       export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
+            --dur-check)            export dur_check="true" ;;
 
-            --printsrcinfo)   export makepkg_printsrcinfo="true" ;;
-            --skippgpcheck)   export makepkg_options+=" --skippgpcheck" ;;
+            --printsrcinfo)        export makepkg_printsrcinfo="true" ;;
+            --skippgpcheck)        export makepkg_options+=" --skippgpcheck" ;;
 
-            -*)               error "Unknown option '${1}'"; exit 1 ;;
-            "")               break ;;
+            -*)                    error "Unknown option '${1}'"; exit 1 ;;
+            "")                    break ;;
         esac
         shift 1
     done
 
     if [[ "${makepkg_printsrcinfo}" == "true" ]]; then makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
+    if [[ "${dur_check}" == "true" ]]; then dur_check; exit 0; fi
 
     # Argument checks to make sure we didn't request something impossible
     if [[ "${skip_dependency_checks}" == "true" && "${install_dependencies}" == "true" ]]; then
