@@ -14,6 +14,7 @@ fakeroot_build() {
         run_dependency_conversion
         convert_version
         generate_control
+        add_install_scripts
 
         msg2 "Cleaning up..."
         for i in '.BUILDINFO' '.MTREE' '.PKGINFO' '.INSTALL' '.Changelog'; do
