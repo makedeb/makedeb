@@ -22,6 +22,7 @@ set -o pipefail
 ####################
 ## DEFAULT VALUES ##
 ####################
+export LC_ALL="C"
 export INSTALL='FALSE'
 export FILE='PKGBUILD'
 export PREBUILT='false'
