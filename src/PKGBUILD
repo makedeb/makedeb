@@ -1,7 +1,7 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 
 pkgname=makedeb
-pkgver=4.4.3
+pkgver=4.4.4
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
@@ -36,7 +36,7 @@ package() {
     chmod 555 "${pkgdir}/usr/bin/makedeb"
 
     # Set package version and build type
-    sed -i "s|package_version=.*|package_version=${pkgver}|" "${pkgdir}/usr/bin/makedeb"
+    sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}|" "${pkgdir}/usr/bin/makedeb"
 
     # Remove testing commands
     sed -i 's|.*# REMOVE AT PACKAGING||g' "${pkgdir}/usr/bin/makedeb"

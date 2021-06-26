@@ -1,6 +1,6 @@
 help() {
     # makedeb section
-    echo "makedeb (${package_version}) - Create Debian archives from PKGBUILDs"
+    echo "makedeb (${makedeb_package_version}) - Create Debian archives from PKGBUILDs"
     echo "Usage: makedeb [options]"
     echo
     echo "makedeb takes PKGBUILD files and builds archives installable with APT."
