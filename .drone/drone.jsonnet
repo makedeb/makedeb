@@ -93,9 +93,14 @@ local publishDocker(a) = {
 
 [
     buildAndPublish("stable", "makedeb"),
+    buildAndPublish("beta", "makedeb-beta"),
     buildAndPublish("alpha", "makedeb-alpha"),
+
     aurPublish("makedeb", "stable"),
+    aurPublish("makedeb-beta" "beta"),
     aurPublish("makedeb-alpha", "alpha"),
+
     publishDocker("stable"),
+    publishDocker("beta"),
     publishDocker("alpha"),
 ]

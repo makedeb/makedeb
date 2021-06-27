@@ -11,9 +11,11 @@ sed -i "s|(git release)|(${release_type} release)|" src/PKGBUILD
 sed -i "s|pkgname=.*|pkgname=${package_name}|" src/PKGBUILD
 
 if [[ "${release_type}" == "stable" ]]; then
-  echo 'conflicts=("makedeb-alpha")' | tee -a src/PKGBUILD
+  echo "conflicts=('makedeb-beta' 'makedeb-alpha')" | tee -a src/PKGBUILD
+elif [[ "${release_type}" == "beta" ]]; then
+    echo "conflicts=('makedeb' 'makedeb-alpha')" | tee -a src/PKGBUILD
 elif [[ "${release_type}" == "alpha" ]]; then
-  echo 'conflicts=("makedeb")' | tee -a src/PKGBUILD
+  echo "conflicts=('makedeb' 'makedeb-beta')" | tee -a src/PKGBUILD
 fi
 
 # Build makedeb
