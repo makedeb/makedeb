@@ -7,7 +7,7 @@
 [![Drone CI Status - Alpha](https://img.shields.io/drone/build/hwittenborn/makedeb/alpha?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=alpha&logo=drone)](https://drone.hunterwittenborn.com/hwittenborn/makedeb)
 
 [![AUR - makedeb](https://img.shields.io/aur/version/makedeb?label=stable&logo=archlinux)](https://aur.archlinux.org/packages/makedeb/)
-[![AUR - makedeb-beta](https://img.shields.io/aur/version/makedeb?label=beta&logo=archlinux)](https://aur.archlinux.org/packages/makedeb-beta/)
+[![AUR - makedeb-beta](https://img.shields.io/aur/version/makedeb-beta?label=beta&logo=archlinux)](https://aur.archlinux.org/packages/makedeb-beta/)
 [![AUR - makedeb-alpha](https://img.shields.io/aur/version/makedeb-alpha?label=alpha&logo=archlinux)](https://aur.archlinux.org/packages/makedeb-alpha/)
 
 [![Docker Repository](https://img.shields.io/badge/-docker-0db7ed?logo=docker&color=grey)](https://proget.hunterwittenborn.com/containers/repositories/tags?feedId=8&repositoryName=hunter%2Fmakedeb)
