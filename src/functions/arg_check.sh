@@ -1,6 +1,24 @@
 arg_check() {
-    while true; do
-        case "${1}" in
+    for i in ${@}; do
+        if [[ "$(echo "${i}" | grep -E '^\-[^-][a-z]')" != "" ]]; then
+            number="2"
+            letter="$(echo "${i}" | awk -F '' "{print \$$number}")"
+
+            while [[ "${letter}" != "" ]]; do
+                argument_list+="-${letter} "
+
+                number="$((${number} + 1 ))"
+                letter="$(echo "${i}" | awk -F '' "{print \$$number}")"
+            done
+
+        else
+            argument_list+="${i} "
+        fi
+    done
+
+
+    for i in ${argument_list}; do
+        case "${i}" in
             -C | --convert)            export package_convert="true" ;;
             -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
             -F | -p | --file)          export FILE="${2}"; shift;;
@@ -16,7 +34,7 @@ arg_check() {
             -*)                        error "Unknown option '${1}'"; exit 1 ;;
             "")                        break ;;
         esac
-        shift 1
+        shift 1 || true
     done
 
     if [[ "${makepkg_printsrcinfo}" == "true" ]]; then makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
