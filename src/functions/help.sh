@@ -16,6 +16,9 @@ help() {
     echo "  -i, --install - automatically install after building"
     fi
     if [[ "${target_os}" == "debian" ]]; then
+        echo "  -v, --distro-packages - source package relationships from distro-specific variables when they exist"
+    fi
+    if [[ "${target_os}" == "debian" ]]; then
     echo "  -s, --syncdeps - install missing dependencies with APT"
     fi
     echo

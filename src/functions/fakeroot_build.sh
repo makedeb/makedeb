@@ -10,6 +10,11 @@ fakeroot_build() {
         tar -xf "${package}-${built_archive_version}-${makepkg_arch}.${package_extension}" -C "${pkgdir}/${package}"
         cd "${pkgdir}/${package}"
         get_variables
+
+        if [[ "${distro_packages}" == "true" ]]; then
+            check_distro_dependencies &> /dev/null
+        fi
+
         remove_dependency_description
         run_dependency_conversion
         convert_version

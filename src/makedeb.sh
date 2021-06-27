@@ -83,6 +83,10 @@ convert_version
 msg "Making package: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date))..."
 convert_arch
 
+if [[ "${distro_packages}" == "true" ]]; then
+    check_distro_dependencies
+fi
+
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
 remove_dependency_description
@@ -100,8 +104,10 @@ elif [[ "${target_os}" == "debian" && "${skip_dependency_checks}" != "true" ]]; 
 fi
 
 msg "Entering fakeroot environment..."
+
 msg "Running makepkg..."
 { makepkg -p "${FILE}" ${makepkg_options}; } | grep -Ev 'Making package|Checking.*dependencies|fakeroot environment|Finished making|\.PKGINFO|\.BUILDINFO|\.MTREE'
+
 rm "${pkgdir}" -r
 
 export in_fakeroot="true"
