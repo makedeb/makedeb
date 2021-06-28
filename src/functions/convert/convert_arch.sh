@@ -34,6 +34,17 @@ convert_arch() {
             elif [[ "${target_os}" == "arch" ]]; then
                 export package_extension="pkg.tar.xz"
             fi
+
+        elif [[ "${makepkg_arch}" == "armv6l" ]]; then
+            export CARCH="armv6l"
+            export makepkg_arch="armv6l"
+            export makedeb_arch="armhf"
+
+            if [[ "${target_os}" == "debian" ]]; then
+                export package_extension="pkg.tar.zst"
+            elif [[ "${target_os}" == "arch" ]]; then
+                export package_extension="pkg.tar.xz"
+            fi
         fi
     fi
 }
