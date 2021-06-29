@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Copyright 2020-2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
 ##
 # This program is free software: you can redistribute it and/or modify
