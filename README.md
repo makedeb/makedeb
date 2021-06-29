@@ -17,6 +17,8 @@
 makedeb takes PKGBUILD files and creates Debian packages installable with APT.
 
 ## Installation and usage
+makedeb is available on both Debian and Arch based distributions.
+
 Documentation and installation instructions can be found in the [makedeb docs](https://docs.hunterwittenborn.com/makedeb).
 
 Help with available commands can also be found after installation with `makedeb --help`.
