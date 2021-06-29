@@ -51,7 +51,7 @@ local aurPublish(a, b) = {
             volumes: [{name: "aur", path: "/drone"}],
             environment: {
                 package_name: a,
-                aur_ssh_key: {from_secret: "aur_ssh_key"},
+                aur_ssh_key: {from_secret: "ssh_key"},
                 known_hosts: {from_secret: "known_hosts"}
             },
             commands: [".drone/scripts/aur.sh push"]
