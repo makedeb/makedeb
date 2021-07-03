@@ -65,6 +65,10 @@ done                                                     # REMOVE AT PACKAGING
                                                          # REMOVE AT PACKAGING
 trap_codes
 
+if [[ "${in_fakeroot}" ]]; then
+    eval set -- ${@}
+fi
+
 # Argument Check
 arg_number="$#"
 number=1
@@ -74,7 +78,6 @@ while [[ "${number}" -le "${arg_number}" ]]; do
 done
 
 arg_check
-
 
 # Jump into fakeroot_build() if we're triggering the script from inside a fakeroot in the build stage
 if [[ "${in_fakeroot}" == "true" ]]; then
@@ -121,7 +124,7 @@ msg "Running makepkg..."
 rm "${pkgdir}" -r
 
 export in_fakeroot="true"
-fakeroot -- bash ${BASH_SOURCE[0]} ${@}
+fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
 remove_depends make
