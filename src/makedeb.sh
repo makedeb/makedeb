@@ -64,7 +64,17 @@ done                                                     # REMOVE AT PACKAGING
 [[ "${in_fakeroot}" != "true" ]] && echo                 # REMOVE AT PACKAGING
                                                          # REMOVE AT PACKAGING
 trap_codes
-arg_check "${@}"
+
+# Argument Check
+arg_number="$#"
+number=1
+while [[ "${number}" -le "${arg_number}" ]]; do
+    split_args "$(eval echo \${$number})"
+    number="$(( "${number}" + 1 ))"
+done
+
+arg_check
+
 
 # Jump into fakeroot_build() if we're triggering the script from inside a fakeroot in the build stage
 if [[ "${in_fakeroot}" == "true" ]]; then

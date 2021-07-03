@@ -1,27 +1,10 @@
 arg_check() {
-    # Convert grouped short options into single-character short options
-    # (i.e. -ae ==> -a -e)
-    for i in ${@}; do
-        if [[ "$(echo "${i}" | grep -E '^\-[^-][a-z]')" != "" ]]; then
-            number="2"
-            letter="$(echo "${i}" | awk -F '' "{print \$$number}")"
-
-            while [[ "${letter}" != "" ]]; do
-                argument_list+="-${letter} "
-
-                number="$((${number} + 1 ))"
-                letter="$(echo "${i}" | awk -F '' "{print \$$number}")"
-            done
-
-        else
-            argument_list+="${i} "
-        fi
-    done
+    eval set -- ${argument_list[@]@Q}
 
     # Actual argument check
-    for i in ${argument_list}; do
-        if [[ "${target_os}" == "debian" ]]; then
-            case "${i}" in
+    if [[ "${target_os}" == "debian" ]]; then
+        while [[ "${1}" != "" ]]; do
+            case "${1}" in
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
                 -F | -p | --file)          export FILE="${2}"; shift;;
                 -h | --help)               help; exit 0 ;;
@@ -37,9 +20,11 @@ arg_check() {
                 "")                        break ;;
             esac
             shift 1 || true
+        done
 
-        elif [[ "${target_os}" == "arch" ]]; then
-            case "${i}" in
+    elif [[ "${target_os}" == "arch" ]]; then
+        while [[ "${1}" != "" ]]; do
+            case "${1}" in
                 -F | -p | --file)          export FILE="${2}"; shift;;
                 -h | --help)               help; exit 0 ;;
                 --dur-check)               export dur_check="true" ;;
@@ -53,8 +38,8 @@ arg_check() {
                 "")                        break ;;
             esac
             shift 1 || true
-        fi
-    done
+        done
+    fi
 
     if [[ "${makepkg_printsrcinfo}" == "true" ]]; then makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
     if [[ "${dur_check}" == "true" ]]; then dur_check; exit 0; fi
