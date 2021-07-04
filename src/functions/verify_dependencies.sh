@@ -1,19 +1,30 @@
 verify_dependencies() {
-    if [[ "${new_depends}" != "" || "${new_makedepends}" != "" || "${new_checkdepends}" != "" ]]; then
-        export apt_output="$(apt list ${new_depends[@]} ${new_makedepends[@]} ${new_checkdepends[@]} 2> /dev/null)"
+    if [[ "${1}" != "" ]]; then
+        msg "Checking build dependencies..."
 
-        for i in ${new_depends[@]} ${new_makedepends[@]} ${new_checkdepends[@]}; do
-            if [[ "$(echo "${apt_output}" | grep "^${i}/" | grep -E "$(dpkg --print-architecture)|all" | grep '\[installed')" == "" ]]; then
-                export apt_not_installed_temp+=" ${i}"
-            fi
-        done
+        local apt_output=$(apt-get satisfy -sq ${@} 2>&1)
+        local apt_uninstallable_packages="$(echo "${apt_output}" | grep -o '[^ ]* but it is not installable' | sed 's| but it is not installable||g' | xargs)"
 
-        export apt_not_installed="$(echo "${apt_not_installed_temp}" | xargs | sed 's| |, |g')"
-        unset apt_not_installed_temp
+        if [[ "${apt_uninstallable_packages}" != "" ]]; then
+            local uninstallable_package_list=$(echo "${apt_uninstallable_packages}" | xargs | sed 's| |, |g')
 
-        if [[ "${apt_not_installed}" != "" ]]; then
-            error "The following packages are marked as build dependencies, but aren't installed: ${apt_not_installed}."
+            error "The following build dependencies are missing: ${uninstallable_package_list}"
             exit 1
         fi
+
+        apt_packages_to_install="$( echo "${apt_output}" |
+                                    grep -Ev 'Conf |Inst ' |
+                                    tr -d '\n' |
+                                    grep -o 'packages will be install.*not upgraded\.' |
+                                    sed 's|packages will be installed:||' |
+                                    sed 's|[[:digit:]] upgraded.*||' |
+                                    xargs |
+                                    sed 's| |, |g' )" || true
+
+        if [[ "${apt_packages_to_install}" != "" ]]; then
+            error "The following build dependencies are missing: ${apt_packages_to_install}"
+            exit 1
+        fi
+
     fi
 }

@@ -108,12 +108,14 @@ run_dependency_conversion --nocommas
 # 1. Only run if on Debian, as distros like Arch don't have APT, and when
 # '-s' option is passed.
 # 2. Same as 1, but only run when '-d' is passed.
+build_dependency_list="$(echo "${new_depends}" "${new_makedepends}" "${new_checkdepends}" | xargs | sed 's| |\n|g' | sort -u | xargs)" || true
+
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
-    install_depends new_depends ""
-    install_depends new_makedepends make
-    install_depends new_checkdepends check
+    install_depends ${build_dependency_list}
+
 elif [[ "${target_os}" == "debian" && "${skip_dependency_checks}" != "true" ]]; then
-  verify_dependencies
+  verify_dependencies ${build_dependency_list}
+
 fi
 
 msg "Entering fakeroot environment..."

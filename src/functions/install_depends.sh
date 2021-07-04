@@ -1,44 +1,34 @@
 install_depends() {
-    # Get value of make_depends / check_depends
-    local depends_value=$(eval echo \${$1})
+    if [[ "${1}" != "" ]]; then
+        msg "Checking build dependencies..."
 
-    if [[ "${depends_value}" != "" ]]; then
-        # Run xargs so $new_depends doesn't print a double space
-        msg "Checking ${2} dependencies..." | xargs
+        local apt_output=$(apt-get satisfy -sq ${@} 2>&1)
+        local apt_uninstallable_packages="$(echo "${apt_output}" | grep -o '[^ ]* but it is not installable' | sed 's| but it is not installable||g' | xargs)"
 
-        local apt_output=$(apt list ${depends_value} 2> /dev/null | sed 's|Listing...||')
+        if [[ "${apt_uninstallable_packages}" != "" ]]; then
+            local uninstallable_package_list=$(echo "${apt_uninstallable_packages}" | xargs | sed 's| |, |g')
 
-        for i in ${depends_value}; do
-            # Check if package can be found
-            if ! echo "${apt_output}" | grep "^${i}/" | grep -E "$(dpkg --print-architecture)|all" &> /dev/null; then
-                export unknown_pkg+="${i} "
-
-                # If not installed, add to list of packages to install
-            elif ! echo "${apt_output}" | grep "^${i}/" | grep -E "$(dpkg --print-architecture)|all" | grep '\[installed' &> /dev/null; then
-                export "apt_${2}depends"+="${i} "
-
-            fi
-        done
-
-        # Exit if a package couldn't be found
-        [[ "${unknown_pkg}" != "" ]] && {
-            error "Couldn't find the following packages: $(echo ${unknown_pkg} | xargs | sed 's| |, |g')"
+            error "The following build dependencies are unable to be installed: ${uninstallable_package_list}"
             exit 1
-        }
-
-        # If dependency list isn't empty, install packages
-        if [[ $(eval echo \${apt_${2}depends}) != "" ]]; then
-            msg "Installing ${2} dependencies..." | xargs
-
-            if eval sudo apt install \${apt_${2}depends}; then
-                eval sudo apt-mark auto \${apt_${2}depends}
-
-            else
-                error "Couldn't install packages."
-                msg "Cleaning up..."
-                eval sudo apt remove \${apt_${2}depends} || true
-                exit 1
-            fi
         fi
+
+        apt_packages_to_install="$( echo "${apt_output}" |
+                                    grep -Ev 'Conf |Inst ' |
+                                    tr -d '\n' |
+                                    grep -o 'packages will be install.*not upgraded\.' |
+                                    sed 's|packages will be installed:||' |
+                                    sed 's|[[:digit:]] upgraded.*||' |
+                                    xargs )" || true
+
+        if [[ "${apt_packages_to_install}" != "" ]]; then
+            msg "Installing build dependencies..."
+            sudo apt install ${apt_packages_to_install} || \
+
+            {
+                error "Couldn't install build dependencies. Aborting..."
+                exit 1
+            }
+        fi
+
     fi
 }
