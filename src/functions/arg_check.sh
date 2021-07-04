@@ -13,6 +13,7 @@ arg_check() {
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 -v | --distro-packages)    export distro_packages="true" ;;
                 --dur-check)               export dur_check="true" ;;
+                --verbose)                 set -x ;;
 
                 --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
                 --skippgpcheck)            export makepkg_options+=" --skippgpcheck" ;;
@@ -29,6 +30,7 @@ arg_check() {
                 -F | -p | --file)          export FILE="${2}"; shift ;;
                 -h | --help)               help; exit 0 ;;
                 --dur-check)               export dur_check="true" ;;
+                --verbose)                 set -x ;;
 
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
