@@ -10,6 +10,7 @@ arg_check() {
                 -h | --help)               help; exit 0 ;;
                 -H | --field)              export extra_control_fields+=("${2}"); shift ;;
                 -i | --install)            export INSTALL="TRUE" ;;
+                -Q | --no-fields)          export skip_pkgbuild_fields="true" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 -v | --distro-packages)    export distro_packages="true" ;;
                 -V | --version)            version_info; exit 0 ;;
@@ -30,6 +31,7 @@ arg_check() {
             case "${1}" in
                 -F | -p | --file)          export FILE="${2}"; shift ;;
                 -h | --help)               help; exit 0 ;;
+                -Q | --no-fields)          export skip_pkgbuild_fields="true" ;;
                 -V | --version)            version_info; exit 0 ;;
                 --dur-check)               export dur_check="true" ;;
                 --verbose)                 set -x ;;
