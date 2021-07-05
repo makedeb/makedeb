@@ -26,7 +26,7 @@ Help with available commands can also be found after installation with `makedeb 
 ## Get in touch
 A [Matrix space](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au) is available for assistance with makedeb, the DUR, and contribution help.
 
-## Sponsors
+## Supporters
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
 [GitBook](https://www.gitbook.com/): For documentation hosting. GitBook lets you create your own documentation in multiple formats, including Markdown and a WYSIWYG editor. GitBook also natively integrates with other services such as GitHub and Google Analytics.
