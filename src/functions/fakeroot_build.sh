@@ -17,7 +17,6 @@ fakeroot_build() {
 
         remove_dependency_description
         run_dependency_conversion
-        convert_version
         generate_control
         add_install_scripts
 
