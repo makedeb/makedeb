@@ -16,10 +16,16 @@ verify_dependencies() {
             exit 1
         fi
 
-        apt_packages_to_install="$( echo "${apt_output}" | grep '^  [[:alnum:]]' | xargs)" || true
+        apt_package_dependencies="$(echo "${apt_output}" |
+                                    sed 's|$| |g' |
+                                    tr -d '\n' |
+                                    grep -o 'The following NEW packages will be installed:.*[[:digit:]] upgraded' |
+                                    sed 's|The following NEW packages will be installed:||' |
+                                    sed 's|[[:digit:]] upgraded||' |
+                                    xargs)"
 
-        if [[ "${apt_packages_to_install}" != "" ]]; then
-            error "The following build dependencies are missing: ${apt_packages_to_install}"
+        if [[ "${apt_package_dependencies}" != "" ]]; then
+            error "The following build dependencies are missing: ${apt_package_dependencies}"
             exit 1
         fi
 

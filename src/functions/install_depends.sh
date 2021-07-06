@@ -16,7 +16,13 @@ install_depends() {
             exit 1
         fi
 
-        apt_package_dependencies="$( echo "${apt_output}" | grep '^  [[:alnum:]]' | xargs)" || true
+        apt_package_dependencies="$(echo "${apt_output}" |
+                                    sed 's|$| |g' |
+                                    tr -d '\n' |
+                                    grep -o 'The following NEW packages will be installed:.*[[:digit:]] upgraded' |
+                                    sed 's|The following NEW packages will be installed:||' |
+                                    sed 's|[[:digit:]] upgraded||' |
+                                    xargs)"
 
         if [[ "${apt_package_dependencies}" != "" ]]; then
             msg "Installing build dependencies..."
