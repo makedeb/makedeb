@@ -4,14 +4,13 @@ check_distro_dependencies() {
 
     for i in depends optdepends conflicts provides replaces makedepends optdepends; do
         package_data="$(eval echo \${${distro_version}_${i}[@]})"
-        package_data_commas="$(echo "${package_data}" | sed 's| |, |g')"
 
         if [[ "${package_data}" != "" ]]; then
-            msg2 "Setting \$${i} to ${package_data_commas}..."
-            unset depends
+            msg2 "Setting \$${i} to ${package_data}..."
+            unset "${i}"
             export "${i}"="${package_data}"
 
-            unset package_data package_data_commas
+            unset package_data
         fi
     done
 }
