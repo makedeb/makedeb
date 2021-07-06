@@ -9,7 +9,7 @@ install_depends() {
                                             sed 's| but [^ ]* is to be installed||g' | \
                                             sed 's|$|,|g' | \
                                             xargs |
-                                            head -c -2)"
+                                            head -c -2)" || true
 
         if [[ "${apt_uninstallable_packages}" != "" ]]; then
             error "The following build dependencies are unable to be installed: ${apt_uninstallable_packages}"
@@ -22,7 +22,7 @@ install_depends() {
                                     grep -o 'The following NEW packages will be installed:.*[[:digit:]] upgraded' |
                                     sed 's|The following NEW packages will be installed:||' |
                                     sed 's|[[:digit:]] upgraded||' |
-                                    xargs)"
+                                    xargs)" || true
 
         if [[ "${apt_package_dependencies}" != "" ]]; then
             msg "Installing build dependencies..."
