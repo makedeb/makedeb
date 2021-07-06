@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+
 # Copyright 2020-2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
-##
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -13,8 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-##
-# makepkg and it's related assets are properties of their respective owners.
 
 set -e
 set -o pipefail
@@ -108,7 +107,7 @@ run_dependency_conversion --nocommas
 # 1. Only run if on Debian, as distros like Arch don't have APT, and when
 # '-s' option is passed.
 # 2. Same as 1, but only run when '-d' is passed.
-build_dependency_list="$(echo "${new_depends}" "${new_makedepends}" "${new_checkdepends}" | xargs | sed 's| |\n|g' | sort -u | xargs)" || true
+build_dependency_list="$(echo ${new_depends} ${new_makedepends} ${new_checkdepends} | sed "s|' |'\n|g" | sort -u | sed 's|$| |g' | tr -d '\n')" || true
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
     install_depends ${build_dependency_list}
@@ -129,13 +128,12 @@ export in_fakeroot="true"
 fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
-remove_depends make
-remove_depends check
+    remove_depends
 fi
 
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 
-for i in ${pkgname[@]}; do
+    for i in ${pkgname[@]}; do
         apt_install+="./${i}_${built_archive_version}_${makedeb_arch}.deb "
     done
 

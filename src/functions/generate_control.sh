@@ -9,12 +9,13 @@ generate_control() {
     export_control "License:" "${license[@]}"
 
     export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
-    export_control "Depends:" "${new_depends[@]}"
-    export_control "Suggests:" "${new_optdepends[@]}"
-    export_control "Conflicts:" "${new_conflicts[@]}"
-    export_control "Provides:" "${new_provides[@]}"
-    export_control "Replaces:" "${new_replaces[@]}"
-    export_control "Breaks:" "${new_replaces[@]}"
+    
+    eval export_control "Depends:" "${new_depends[@]}"
+    eval export_control "Suggests:" "${new_optdepends[@]}"
+    eval export_control "Conflicts:" "${new_conflicts[@]}"
+    eval export_control "Provides:" "${new_provides[@]}"
+    eval export_control "Replaces:" "${new_replaces[@]}"
+    eval export_control "Breaks:" "${new_replaces[@]}"
 
     add_extra_control_fields
 
