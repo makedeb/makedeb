@@ -24,7 +24,7 @@ Documentation and installation instructions can be found in the [makedeb docs](h
 Help with available commands can also be found after installation with `makedeb --help`.
 
 ## Get in touch
-A [Matrix space](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au) is available for assistance with makedeb, the DUR, and contribution help.
+A [Matrix space](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au) is available for assistance with makedeb, the MPR, and contribution help.
 
 ## Supporters
 Thank you to the following companies who have generously given resources to help the makedeb project:
