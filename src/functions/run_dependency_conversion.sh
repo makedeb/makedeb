@@ -7,6 +7,8 @@ run_dependency_conversion() {
     new_makedepends=${makedepends[@]}
     new_checkdepends=${checkdepends[@]}
 
+	new_license=${license[@]}
+
     check_relationships new_depends      ${new_depends}
     check_relationships new_optdepends   ${new_optdepends}
     check_relationships new_conflicts    ${new_conflicts}

@@ -6,10 +6,10 @@ generate_control() {
     export_control "Version:" "${pkgver}"
 
     export_control "Architecture:" "${makedeb_arch}"
-    export_control "License:" "${license[@]}"
+    export_control "License:" "${new_license}"
 
     export_control "Maintainer:" "$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
-    
+
     eval export_control "Depends:" "${new_depends[@]}"
     eval export_control "Suggests:" "${new_optdepends[@]}"
     eval export_control "Conflicts:" "${new_conflicts[@]}"

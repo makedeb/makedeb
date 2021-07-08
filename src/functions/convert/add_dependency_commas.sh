@@ -5,5 +5,5 @@ add_dependency_commas() {
   new_provides=$(echo ${new_provides[@]} | sed 's| |, |g')
   new_replaces=$(echo ${new_replaces[@]} | sed 's| |, |g')
 
-  new_license="$(echo ${license[@]} | sed 's| |, |g')"
+  new_license="$(echo ${new_license[@]} | sed 's| |, |g')"
 }

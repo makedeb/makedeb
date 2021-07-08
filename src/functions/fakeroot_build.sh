@@ -5,7 +5,7 @@ fakeroot_build() {
     pkgsetup
     convert_version
     for package in ${pkgname[@]}; do
-        unset depends optdepends conflicts provides replaces
+        unset depends optdepends conflicts provides replaces license
 
         tar -xf "${package}-${built_archive_version}-${makepkg_arch}.${package_extension}" -C "${pkgdir}/${package}"
         cd "${pkgdir}/${package}"
