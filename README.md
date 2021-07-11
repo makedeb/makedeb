@@ -2,9 +2,9 @@
     <h1>makedeb</h1>
     <img height="150" src="/assets/final-transparent-bg.png">
 
-[![Drone CI Status - Stable](https://img.shields.io/drone/build/hwittenborn/makedeb/stable?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=stable&logo=drone)](https://drone.hunterwittenborn.com/hwittenborn/makedeb)
-[![Drone CI Status - Beta](https://img.shields.io/drone/build/hwittenborn/makedeb/beta?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=beta&logo=drone)](https://drone.hunterwittenborn.com/hwittenborn/makedeb)
-[![Drone CI Status - Alpha](https://img.shields.io/drone/build/hwittenborn/makedeb/alpha?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=alpha&logo=drone)](https://drone.hunterwittenborn.com/hwittenborn/makedeb)
+[![Drone CI Status - Stable](https://img.shields.io/drone/build/makedeb/makedeb/stable?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=stable&logo=drone)](https://drone.hunterwittenborn.com/makedeb/makedeb)
+[![Drone CI Status - Beta](https://img.shields.io/drone/build/makedeb/makedeb/beta?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=beta&logo=drone)](https://drone.hunterwittenborn.com/makedeb/makedeb)
+[![Drone CI Status - Alpha](https://img.shields.io/drone/build/makedeb/makedeb/alpha?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=alpha&logo=drone)](https://drone.hunterwittenborn.com/makedeb/makedeb)
 
 [![AUR - makedeb](https://img.shields.io/aur/version/makedeb?label=stable&logo=archlinux)](https://aur.archlinux.org/packages/makedeb/)
 [![AUR - makedeb-beta](https://img.shields.io/aur/version/makedeb-beta?label=beta&logo=archlinux)](https://aur.archlinux.org/packages/makedeb-beta/)
@@ -27,6 +27,8 @@ Help with available commands can also be found after installation with `makedeb 
 A [Matrix space](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au) is available for assistance with makedeb, the MPR, and contribution help.
 
 ## Supporters
+**We're currently looking for support in paying for server resources to run the MPR. If you'd like to help, message Hunter Wittenborn either via email or on Matrix.**
+
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
 [GitBook](https://www.gitbook.com/): For documentation hosting. GitBook lets you create your own documentation in multiple formats, including Markdown and a WYSIWYG editor. GitBook also natively integrates with other services such as GitHub and Google Analytics.
