@@ -14,7 +14,8 @@ help() {
         echo "  -Q, --no-fields          Skip adding values from 'control_fields' variable in PKGBUILD to control file"
         echo "  -v, --distro-packages    Source package relationships from distro-specific variables when they exist"
         echo "  -V, --version            Print version information and exit"
-        echo "  -s, --syncdeps           Install missing dependencies with APT"
+		echo "  -r, --rmdeps             Remove installed dependencies after building"
+        echo "  -s, --syncdeps           Install missing dependencies"
         echo "  --verbose                Print (very) detailed logging"
         echo
         echo "The following options can be passed to makepkg:"
@@ -39,7 +40,8 @@ help() {
         echo
         echo "The following options can be passed to makepkg:"
         echo "  -d, --nodeps       Skip all dependency checks"
-        echo "  -s, --syncdeps     Install missing dependencies with pacman"
+		echo "  -r, --rmdeps       Remove installed dependencies after building"
+        echo "  -s, --syncdeps     Install missing dependencies"
         echo "  --printsrcinfo     Print a generated .SRCINFO file and exit"
         echo "  --skippgpcheck     Do not verify source files against PGP signatures"
         echo

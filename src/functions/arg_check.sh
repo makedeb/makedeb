@@ -11,6 +11,7 @@ arg_check() {
                 -H | --field)              export extra_control_fields+=("${2}"); shift ;;
                 -i | --install)            export INSTALL="TRUE" ;;
                 -Q | --no-fields)          export skip_pkgbuild_fields="true" ;;
+				-r, --rmdeps)              export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 -v | --distro-packages)    export distro_packages="true" ;;
                 -V | --version)            version_info; exit 0 ;;
@@ -37,6 +38,7 @@ arg_check() {
                 --verbose)                 set -x ;;
 
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
+				-r, --rmdeps)              export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
                 --skippgpcheck)            export makepkg_options+=" --skippgpcheck" ;;

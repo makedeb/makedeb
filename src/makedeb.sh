@@ -127,7 +127,7 @@ rm "${pkgdir}" -r
 export in_fakeroot="true"
 fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
-if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
+if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" && "${remove_dependencies}" == "true" ]]; then
     remove_depends
 fi
 
