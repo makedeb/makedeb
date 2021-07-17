@@ -5,13 +5,14 @@ arg_check() {
     if [[ "${target_os}" == "debian" ]]; then
         while [[ "${1}" != "" ]]; do
             case "${1}" in
+				-A | --ignore-arch)        export makepkg_options+=" --ignorearch" ;;
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
                 -F | -p | --file)          export FILE="${2}"; shift ;;
                 -h | --help)               help; exit 0 ;;
                 -H | --field)              export extra_control_fields+=("${2}"); shift ;;
                 -i | --install)            export INSTALL="TRUE" ;;
                 -Q | --no-fields)          export skip_pkgbuild_fields="true" ;;
-				-r, --rmdeps)              export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
+				-r | --rmdeps)             export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 -v | --distro-packages)    export distro_packages="true" ;;
                 -V | --version)            version_info; exit 0 ;;
@@ -30,6 +31,7 @@ arg_check() {
     elif [[ "${target_os}" == "arch" ]]; then
         while [[ "${1}" != "" ]]; do
             case "${1}" in
+				-A | --ignore-arch)        export makepkg_options+=" --ignorearch" ;;
                 -F | -p | --file)          export FILE="${2}"; shift ;;
                 -h | --help)               help; exit 0 ;;
                 -Q | --no-fields)          export skip_pkgbuild_fields="true" ;;
@@ -38,7 +40,7 @@ arg_check() {
                 --verbose)                 set -x ;;
 
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
-				-r, --rmdeps)              export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
+				-r | --rmdeps)             export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
                 --skippgpcheck)            export makepkg_options+=" --skippgpcheck" ;;
