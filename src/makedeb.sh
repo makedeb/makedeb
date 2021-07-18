@@ -136,7 +136,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 	convert_version &> /dev/null
 
     for i in ${pkgname[@]}; do
-        apt_install+="./${i}_${built_archive_version}_${makedeb_arch}.deb "
+        apt_install+="./${i}_${built_deb_version}_${makedeb_arch}.deb "
     done
 
     msg "Installing $(echo "${apt_install}" | sed 's|\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
