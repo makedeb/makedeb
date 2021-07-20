@@ -24,6 +24,7 @@ local userRepoPublish(a, b, c) = {
 	name: c + "-publish-" + b,
 	kind: "pipeline",
 	type: "docker",
+	trigger: {branch: [b]},
 	depends_on: ["build-and-publish-" + b],
 
 	steps: [{
