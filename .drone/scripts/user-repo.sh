@@ -39,7 +39,7 @@ rm "${package_name}_${target_repo}/PKGBUILD"
 cp "PKGBUILDs/${target_repo^^}.PKGBUILD" "${package_name}_${target_repo}/PKGBUILD"
 
 # Create build user for creating .SRCINFO file
-useradd -u user
+useradd user
 
 # Create .SRCINFO file
 chown "user:user" "${package_name}_${target_repo}" -R
