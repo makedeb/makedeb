@@ -2,7 +2,7 @@
 set -exuo pipefail
 
 # Set up SSH
-rm -r /root/.ssh
+rm -rf /root/.ssh
 mkdir -p /root/.ssh
 
 echo "${ssh_key}" | tee /root/.ssh/ssh_key
