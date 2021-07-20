@@ -38,7 +38,7 @@ local userRepoPublish(a, b, c) = {
 
 		commands: [".drone/scripts/user-repo.sh"]
 	}]
-}
+};
 
 local publishDocker(a) = {
     name: "docker-publish-" + a,
