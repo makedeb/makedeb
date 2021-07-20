@@ -1,63 +1,44 @@
 local buildAndPublish(a, b) = {
-    name: "build-and-publish-" + a,
+    name: "build-and-publish-" + b,
     kind: "pipeline",
     type: "docker",
-    trigger: {branch: [a]},
+    trigger: {branch: [b]},
     steps: [
         {
             name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
-            environment: {release_type: a, package_name: b},
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+            environment: {release_type: b, package_name: a},
             commands: [".drone/scripts/build.sh"]
         },
 
         {
             name: "publish-proget",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
             environment: {proget_api_key: {from_secret: "proget_api_key"}},
             commands: [".drone/scripts/publish.sh"]
         }
     ]
 };
 
-local aurPublish(a, b) = {
-    name: "aur-publish-" + b,
-    kind: "pipeline",
-    type: "docker",
-    volumes: [{name: "aur", temp: {}}],
-    trigger: {branch: [b]},
-    depends_on: ["build-and-publish-" + b],
+local userRepoPublish(a, b, c) = {
+	name: c + "-publish-" + b,
+	kind: "pipeline",
+	type: "docker",
 
-    steps: [
-        {
-            name: "clone-aur",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
-            environment: {package_name: a},
-            volumes: [{name: "aur", path: "/drone"}],
-            commands: [".drone/scripts/aur.sh clone"]
-        },
+	steps: [{
+		name: a,
+		image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+		environment: {
+			ssh_key: {from_secret: "ssh_key"},
+			known_hosts: {from_secret: "known_hosts"},
+			package_name: a,
+			release_type: b,
+			target_repo: c
+		},
 
-        {
-            name: "configure-pkgbuild",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
-            volumes: [{name: "aur", path: "/drone"}],
-            environment: {package_name: a},
-            commands: [".drone/scripts/aur.sh configure"]
-        },
-
-        {
-            name: "push-pkgbuild",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
-            volumes: [{name: "aur", path: "/drone"}],
-            environment: {
-                package_name: a,
-                aur_ssh_key: {from_secret: "ssh_key"},
-                known_hosts: {from_secret: "known_hosts"}
-            },
-            commands: [".drone/scripts/aur.sh push"]
-        }
-    ]
-};
+		commands: [".drone/scripts/user-repo.sh"]
+	}]
+}
 
 local publishDocker(a) = {
     name: "docker-publish-" + a,
@@ -92,13 +73,17 @@ local publishDocker(a) = {
 };
 
 [
-    buildAndPublish("stable", "makedeb"),
-    buildAndPublish("beta", "makedeb-beta"),
-    buildAndPublish("alpha", "makedeb-alpha"),
+    buildAndPublish("makedeb", "stable"),
+    buildAndPublish("makedeb-beta", "beta"),
+    buildAndPublish("makedeb-alpha", "alpha"),
 
-    aurPublish("makedeb", "stable"),
-    aurPublish("makedeb-beta", "beta"),
-    aurPublish("makedeb-alpha", "alpha"),
+	userRepoPublish("makedeb", "stable", "mpr"),
+	userRepoPublish("makedeb-beta", "beta", "mpr"),
+	userRepoPublish("makedeb-alpha", "alpha", "mpr"),
+
+	userRepoPublish("makedeb", "stable", "aur"),
+	userRepoPublish("makedeb-beta", "beta", "aur"),
+	userRepoPublish("makedeb-alpha", "alpha", "aur"),
 
     publishDocker("stable"),
     publishDocker("beta"),
