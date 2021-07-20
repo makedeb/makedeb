@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)/PKGBUILDs"
 
 # Functions
 get_definitions() {
