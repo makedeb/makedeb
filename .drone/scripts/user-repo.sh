@@ -34,6 +34,10 @@ fi
 # Set up PKGBUILD
 ./PKGBUILDs/configure.sh "${release_type}"
 
+echo "${PWD}"
+
+find ./
+
 # Copy PKGBUILD to user repo
 rm "${package_name}_${target_repo}/PKGBUILD"
 cp "PKGBUILDS/${target_repo^^}.PKGBUILD" "${package_name}_${target_repo}/PKGBUILD"
