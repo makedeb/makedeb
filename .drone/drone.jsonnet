@@ -24,6 +24,7 @@ local userRepoPublish(a, b, c) = {
 	name: c + "-publish-" + b,
 	kind: "pipeline",
 	type: "docker",
+	depends: ["build-and-publish-" + b],
 
 	steps: [{
 		name: a,
@@ -46,7 +47,10 @@ local publishDocker(a) = {
     type: "docker",
     volumes: [{name: "docker", host: {path: "/var/run/docker.sock"}}],
     trigger: {branch: [a]},
-    depends_on: ["aur-publish-" + a],
+    depends_on: [
+		"mpr-publish-" + a,
+		"aur-publish-" + a
+	],
     steps: [
         {
             name: "configure-dockerfile",
