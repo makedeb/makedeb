@@ -15,8 +15,8 @@ pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
 license=('GPL3')
-depends=(${alpha_debian_depends[@]@Q})
-optdepends=(${alpha_debian_optdepends[@]@Q})
+eval depends=(${alpha_debian_depends[@]@Q})
+eval optdepends=(${alpha_debian_optdepends[@]@Q})
 url="https://github.com/makedeb/makedeb"
 
 source=("git+file://${_gitdir}")
