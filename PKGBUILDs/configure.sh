@@ -4,7 +4,7 @@ cd "$(git rev-parse --show-toplevel)/PKGBUILDs"
 
 # Functions
 get_definitions() {
-	source PKGBUILDs/definitions.sh
+	source definitions.sh
 
 	debian_depends="$(eval echo "\${${1}_debian_depends[@]@Q}")"
 	arch_depends="$(eval echo "\${${1}_arch_depends[@]@Q}")"
@@ -26,9 +26,7 @@ fi
 get_definitions "${1}"
 
 # Source local PKGBUILD
-source src/PKGBUILD
-
-cd PKGBUILDs
+source ../src/PKGBUILD
 
 # Set up AUR and MPR PKGBUILDs
 rm -f MPR.PKGBUILD
