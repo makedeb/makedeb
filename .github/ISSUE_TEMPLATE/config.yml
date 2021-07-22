@@ -1,4 +1,4 @@
 contact_links:
-  - name: Testing
-    url: https://www.google.com
-    about: just a test
+  - name: Infrastructure
+    url: https://github.com/makedeb/infrastucture/issues
+    about: Issues for the infrastructure that powers makedeb
