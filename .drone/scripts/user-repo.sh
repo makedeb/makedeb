@@ -40,7 +40,7 @@ pkgver="$(cat src/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}')"
 pkgrel="$(cat src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
 
 # Set package version in PKGBUILD
-sed "s|^pkgver={pkgver}|pkgver=${pkgver}|" "${package_name}_${target_repo}/PKGBUILD"
+sed -i "s|^pkgver={pkgver}|pkgver=${pkgver}|" "${package_name}_${target_repo}/PKGBUILD"
 
 # Create build user for creating .SRCINFO file
 useradd user
