@@ -22,6 +22,7 @@ local buildAndPublish(a, b) = {
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [b]},
+	depends_on: ["create-tag-" + b]
     steps: [
         {
             name: "build-debian-package",
