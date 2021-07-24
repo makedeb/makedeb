@@ -1,6 +1,6 @@
 <div align="center">
     <h1>makedeb</h1>
-    <img height="150" src="/assets/final-transparent-bg.png">
+    <img height="150" src="https://raw.githubusercontent.com/makedeb/brand/main/final-transparent-bg.png">
 
 [![Drone CI Status - Stable](https://img.shields.io/drone/build/makedeb/makedeb/stable?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=stable&logo=drone)](https://drone.hunterwittenborn.com/makedeb/makedeb)
 [![Drone CI Status - Beta](https://img.shields.io/drone/build/makedeb/makedeb/beta?server=https%3A%2F%2Fdrone.hunterwittenborn.com&label=beta&logo=drone)](https://drone.hunterwittenborn.com/makedeb/makedeb)
