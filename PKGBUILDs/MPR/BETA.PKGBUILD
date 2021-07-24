@@ -1,7 +1,7 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 _release_type=beta
 
-pkgname=makedeb
+pkgname=makedeb-beta
 pkgver=5.9.2
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (${_release_type} release)"
