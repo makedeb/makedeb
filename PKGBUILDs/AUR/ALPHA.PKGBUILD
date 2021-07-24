@@ -2,7 +2,7 @@
 _release_type=alpha
 
 pkgname=makedeb
-pkgver=5.9.2
+pkgver=5.9.3
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (${_release_type} release)"
 arch=('any')
