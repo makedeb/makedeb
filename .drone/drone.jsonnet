@@ -1,3 +1,22 @@
+local createTag(a) = {
+	name: "create-tag-" + a,
+	kind: "pipeline",
+	type: "docker",
+	trigger: {branch: [a]},
+
+	steps: [{
+		name: a,
+		image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+		environment: {
+			ssh_key: {from_secret: "ssh_key"},
+			known_hosts: {from_secret: "known_hosts"},
+			release_type: a
+		},
+
+		commands: [".drone/scripts/create_tag.sh"]
+	}]
+};
+
 local buildAndPublish(a, b) = {
     name: "build-and-publish-" + b,
     kind: "pipeline",
@@ -25,7 +44,10 @@ local userRepoPublish(a, b, c) = {
 	kind: "pipeline",
 	type: "docker",
 	trigger: {branch: [b]},
-	depends_on: ["build-and-publish-" + b],
+	depends_on: [
+		"build-and-publish-" + b,
+		"create-tag-" + b
+	],
 
 	steps: [{
 		name: a,
@@ -78,6 +100,10 @@ local publishDocker(a) = {
 };
 
 [
+	createTag("stable"),
+	createTag("beta"),
+	createTag("alpha"),
+
     buildAndPublish("makedeb", "stable"),
     buildAndPublish("makedeb-beta", "beta"),
     buildAndPublish("makedeb-alpha", "alpha"),

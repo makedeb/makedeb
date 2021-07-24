@@ -34,6 +34,7 @@ export DATABASE_DIR="/usr/share/makedeb-db/"
 ## OTHER STUFF ##
 #################
 export makedeb_package_version="git"
+export makedeb_release_type="git"
 export target_os="debian"
 
 cd ./

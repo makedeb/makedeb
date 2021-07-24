@@ -31,12 +31,9 @@ else
 
 fi
 
-# Set up PKGBUILD
-./PKGBUILDs/configure.sh "${release_type}"
-
 # Copy PKGBUILD to user repo
 rm "${package_name}_${target_repo}/PKGBUILD"
-cp "PKGBUILDs/${target_repo^^}.PKGBUILD" "${package_name}_${target_repo}/PKGBUILD"
+cp "PKGBUILDs/${target_repo^^}/${release_type^^}.PKGBUILD" "${package_name}_${target_repo}/PKGBUILD"
 
 # Create build user for creating .SRCINFO file
 useradd user

@@ -1,29 +1,23 @@
-# This PKGBUILD is used for local testing. Refer to the PKGBUILDs in 'PKGBUILDs'
-# for the sources of MPR and AUR PKGBUILDs.
-
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
-
-# Used to obtain folder names for local repository
-_gitdir=$(git rev-parse --show-toplevel)
-_foldername=$(basename "${_gitdir}")
+_release_type=beta
 
 pkgname=makedeb
-pkgver=5.9.3
+pkgver=5.9.2
 pkgrel=1
-pkgdesc="Create Debian archives from PKGBUILDs (git release)"
+pkgdesc="Create Debian archives from PKGBUILDs (${_release_type} release)"
 arch=('any')
 license=('GPL3')
 depends=('bash' 'binutils' 'file' 'dpkg-dev' 'makepkg')
 optdepends=('apt' 'git')
 url="https://github.com/makedeb/makedeb"
 
-source=("git+file://${_gitdir}")
+source=("${url}/archive/refs/tags/v${pkgver}-${_release_type}.tar.gz")
 sha256sums=('SKIP')
 
 package() {
     # Create single file for makedeb
     mkdir -p "${pkgdir}/usr/bin"
-    cd "${srcdir}/${_foldername}"
+    cd "makedeb-${_release_type}-v${pkgver}"
 
     # Add bash shebang
     echo '#!/usr/bin/env bash' > "${pkgdir}/usr/bin/makedeb"
@@ -38,8 +32,9 @@ package() {
 
     chmod 555 "${pkgdir}/usr/bin/makedeb"
 
-    # Set package version and build type
+    # Set package version, release type, and target OS
     sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}|" "${pkgdir}/usr/bin/makedeb"
+	sed -i "s|makedeb_release_type=.*|makedeb_release_type=${_release_type}"
 
     # Remove testing commands
     sed -i 's|.*# REMOVE AT PACKAGING||g' "${pkgdir}/usr/bin/makedeb"
