@@ -18,7 +18,7 @@ chmod 400 /root/.ssh/ -R
 package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F '=' '{print $2}')"
 
 # DEBUG
-ssh "git@${github_url}"
+ssh -T "git@${github_url}"
 
 # Create and push release
 git tag "v${package_version}-${release_type}"
