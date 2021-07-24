@@ -49,8 +49,8 @@ git config user.name "Kavplex Bot"
 git config user.email "kavplex@hunterwittenborn.com"
 
 # Get current pkgver and pkgrel
-pkgver="$(cat src/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}')"
-pkgrel="$(cat src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
+pkgver="$(cat ../src/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}')"
+pkgrel="$(cat ../src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO
