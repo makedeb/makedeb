@@ -17,9 +17,6 @@ chmod 400 /root/.ssh/ -R
 # Get current package version
 package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F '=' '{print $2}')"
 
-# DEBUG
-ssh -T "git@${github_url}"
-
 # Create and push release
 git tag "v${package_version}-${release_type}"
 git push "ssh://git@${github_url}/makedeb/makedeb" "v${package_version}-${release_type}"
