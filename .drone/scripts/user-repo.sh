@@ -35,6 +35,13 @@ fi
 rm "${package_name}_${target_repo}/PKGBUILD"
 cp "PKGBUILDs/${target_repo^^}/${release_type^^}.PKGBUILD" "${package_name}_${target_repo}/PKGBUILD"
 
+# Get current pkgver and pkgrel
+pkgver="$(cat src/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}')"
+pkgrel="$(cat src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
+
+# Set package version in PKGBUILD
+sed "s|^pkgver={pkgver}|pkgver=${pkgver}|" "${package_name}_${target_repo}/PKGBUILD"
+
 # Create build user for creating .SRCINFO file
 useradd user
 
@@ -47,10 +54,6 @@ sudo -u user -- makepkg --printsrcinfo | tee .SRCINFO
 # Set up Git identity information
 git config user.name "Kavplex Bot"
 git config user.email "kavplex@hunterwittenborn.com"
-
-# Get current pkgver and pkgrel
-pkgver="$(cat ../src/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}')"
-pkgrel="$(cat ../src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO
