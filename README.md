@@ -9,8 +9,6 @@
 [![AUR - makedeb](https://img.shields.io/aur/version/makedeb?label=stable&logo=archlinux)](https://aur.archlinux.org/packages/makedeb/)
 [![AUR - makedeb-beta](https://img.shields.io/aur/version/makedeb-beta?label=beta&logo=archlinux)](https://aur.archlinux.org/packages/makedeb-beta/)
 [![AUR - makedeb-alpha](https://img.shields.io/aur/version/makedeb-alpha?label=alpha&logo=archlinux)](https://aur.archlinux.org/packages/makedeb-alpha/)
-
-[![Docker Repository](https://img.shields.io/badge/-docker-0db7ed?logo=docker&color=grey)](https://proget.hunterwittenborn.com/containers/repositories/tags?feedId=8&repositoryName=hunter%2Fmakedeb)
 </div>
 
 ## Overview
@@ -23,8 +21,18 @@ Documentation and installation instructions can be found in the [makedeb docs](h
 
 Help with available commands can also be found after installation with `makedeb --help`.
 
-## Get in touch
-A [Matrix space](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au) is available for assistance with makedeb, the MPR, and contribution help.
+## Support
+makedeb has a variety of platforms for obtaining support with makedeb itself, the MPR, and contributing assistance.
+
+The main platform used for support is Matrix. We also provide bridges to other platforms to help accommodate for users who don't wish to use Matrix.
+
+Currently, users can obtain support through the following platforms:
+
+- Matrix: [link](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au)
+
+- Discord: [link](https://discord.gg/3q3Wra9e)
+
+- Telegram (bridge is community-maintained): [makedeb](https://t.me/joinchat/bigonOj_ZehkM2E1) | [MPR](https://t.me/joinchat/P9VjPp2TvPc4M2Zl) | [Contributing](https://t.me/joinchat/CcGduMayHy0xZDQ9)
 
 ## Supporters
 **We're currently looking for support in paying for server resources to run the MPR. If you'd like to help, message Hunter Wittenborn either via email or on Matrix.**
