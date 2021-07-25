@@ -19,6 +19,7 @@ arg_check() {
                 --dur-check)               export dur_check="true" ;;
                 --verbose)                 set -x ;;
 
+				-g | --geninteg)           export makepkg_geninteg="true" ;;
                 --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
                 --skippgpcheck)            export makepkg_options+=" --skippgpcheck" ;;
 
@@ -40,6 +41,7 @@ arg_check() {
                 --verbose)                 set -x ;;
 
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=" --nodeps" ;;
+				-g | --geninteg)           export makepkg_geninteg="true" ;;
 				-r | --rmdeps)             export remove_dependencies="true"; export makepkg_options+=" --rmdeps" ;;
                 -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=" --syncdeps" ;;
                 --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
@@ -52,13 +54,22 @@ arg_check() {
         done
     fi
 
+	# Argument checks to make sure we didn't request something impossible
+	if [[ "${skip_dependency_checks}" == "true" && "${install_dependencies}" == "true" ]]; then
+		error "Option '--nodeps' cannot be used with '--syncdeps'."
+		error "Aborting..."
+		exit 1
+	fi
+
+	if [[ "${makepkg_printsrcinfo}" == "true" && "${makepkg_geninteg}" == "true" ]]; then
+		error "Option '--printsrcinfo' cannot be used with '--geninteg'."
+		error "Aborting..."
+		exit 1
+	fi
+
+	# Check for "one-liner" options
     if [[ "${makepkg_printsrcinfo}" == "true" ]]; then makepkg --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
+	if [[ "${makepkg_geninteg}" == "true" ]]; then makepkg --geninteg -p "${FILE:-PKGBUILD}"; exit "${?}"; fi
     if [[ "${dur_check}" == "true" ]]; then dur_check; exit 0; fi
 
-    # Argument checks to make sure we didn't request something impossible
-    if [[ "${skip_dependency_checks}" == "true" && "${install_dependencies}" == "true" ]]; then
-      error "Option '--nodeps' cannot be used with '--syncdeps'."
-      error "Aborting..."
-      exit 1
-    fi
 }

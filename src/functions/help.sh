@@ -20,6 +20,7 @@ help() {
         echo "  --verbose                Print (very) detailed logging"
         echo
         echo "The following options can be passed to makepkg:"
+		echo "  -g, --geninteg           Generate hashes for source files"
         echo "  --printsrcinfo           Print a generated .SRCINFO file and exit"
         echo "  --skippgpcheck           Do not verify source files against PGP signatures"
         echo
@@ -42,6 +43,7 @@ help() {
         echo
         echo "The following options can be passed to makepkg:"
         echo "  -d, --nodeps         Skip all dependency checks"
+		echo "  -g, --geninteg       Generate hashes for source files"
 		echo "  -r, --rmdeps         Remove installed dependencies after building"
         echo "  -s, --syncdeps       Install missing dependencies"
         echo "  --printsrcinfo       Print a generated .SRCINFO file and exit"
