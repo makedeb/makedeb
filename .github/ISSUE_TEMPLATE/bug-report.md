@@ -1,7 +1,7 @@
 ---
 name: Bug Report
-about: Report a bug
-title: "[BUG] "
+about: Issues with makedeb itself, packaging, etc.
+title: ''
 labels: bug
 assignees: ''
 

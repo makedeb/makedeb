@@ -1,8 +1,8 @@
 ---
 name: Feature Request
-about: Request a feature
-title: "[FEATURE] "
-labels: ''
+about: Feature requests for makedeb
+title: ''
+labels: feature
 assignees: ''
 
 ---

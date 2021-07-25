@@ -1,7 +1,7 @@
 ---
 name: Aur Issue / Support
-about: Issues and Support with the AUR package
-title: "[AUR]"
+about: Issues and support related to packaging of AUR packages
+title: ''
 labels: AUR
 assignees: ''
 
