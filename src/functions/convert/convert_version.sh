@@ -6,7 +6,7 @@ convert_version() {
 		# We use 'dpkg-name' to generate the filename for the built .deb package.
 		# Currently, 'dpkg-name' excludes the epoch from the version, so we
 		# exclude it here.
-		export build_deb_version="$(pkgver)-${pkgrel}"
+		export built_deb_version="$(pkgver)-${pkgrel}"
         export pkgbuild_version="${epoch_status}${pkgver}-${pkgrel}"
     else
         export built_archive_version="${epoch_status}${pkgver}-${pkgrel}"

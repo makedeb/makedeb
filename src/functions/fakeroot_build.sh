@@ -41,10 +41,19 @@ fakeroot_build() {
             rm ../"${debname}.deb"
         fi
 
+		cd "${package}"
         msg2 "Building ${pkgname}..."
-        dpkg -b "${pkgdir}"/"${package}" >> /dev/null
-        mv "${package}".deb ../
-        dpkg-name ../"${package}".deb >> /dev/null
+
+		cd DEBIAN
+		tar -cf ../control.tar.gz $(find ./ -type f)
+		cd ..
+
+		tar -cf data.tar.xz $(find ./ -type f | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz')
+		echo "2.0" > debian-binary
+
+		ar r "${package}_${built_deb_version}_${makedeb_arch}.deb" control.tar.gz data.tar.xz debian-binary 1> /dev/null
+
+        mv "${package}_${built_deb_version}_${makedeb_arch}.deb" ../../
         msg2 "Built ${pkgname}."
 
         cd ..
