@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (${_release_type} release)"
 arch=('any')
 license=('GPL3')
-depends=('dpkg')
+depends=('tar' 'binutils')
 url="https://github.com/makedeb/makedeb"
 
 source=("${url}/archive/refs/tags/v${pkgver}-${_release_type}.tar.gz")
