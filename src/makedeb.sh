@@ -127,7 +127,7 @@ msg "Running makepkg..."
 # packages later with APT
 for i in ${pkgname[@]}; do
 	cd "pkg/${i}"
-	declare "${i}_pkgver=$(get_variables pkgver)"
+	pkginfo_package_versions+=("$(get_variables pkgver)")
 	cd ../..
 done
 
@@ -145,8 +145,14 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 
 	convert_version &> /dev/null
 
-    for i in ${pkgname[@]}; do
-        eval declare apt_install+=("./${i}_\${${i}_pkgver}_${makedeb_arch}.deb")
+	eval set -- ${pkginfo_package_versions[@]@Q}
+	number_of_packages="${#}"
+	number=0
+
+    while [[ "${number}" -lt "${number_of_packages}" ]]; do
+        eval declare apt_install+=("./${i}_\${pkginfo_package_versions[$number]}_${makedeb_arch}.deb")
+
+		number="$(( ${number} + 1 ))"
     done
 
     msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
