@@ -123,6 +123,15 @@ msg "Entering fakeroot environment..."
 msg "Running makepkg..."
 { makepkg -p "${FILE}" ${makepkg_options}; } | grep -Ev 'Making package|Checking.*dependencies|fakeroot environment|Finished making|\.PKGINFO|\.BUILDINFO|\.MTREE'
 
+# Get package version for each package in ${pkgname[@]} in case we install
+# packages later with APT
+for i in ${pkgname[@]}; do
+	cd "pkg/${i}"
+	declare "${i}_pkgver=$(get_variables pkgver)"
+	cd ../..
+done
+
+# Purge $pkgdir
 rm "${pkgdir}" -r
 
 export in_fakeroot="true"
@@ -137,9 +146,9 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 	convert_version &> /dev/null
 
     for i in ${pkgname[@]}; do
-        apt_install+="./${i}_${built_deb_version}_${makedeb_arch}.deb "
+        eval declare apt_install+=("./${i}_\${${i}_pkgver}_${makedeb_arch}.deb")
     done
 
-    msg "Installing $(echo "${apt_install}" | sed 's|\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
-    sudo apt install ${apt_install}
+    msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
+    sudo apt-get install ${apt_install[@]}
 fi

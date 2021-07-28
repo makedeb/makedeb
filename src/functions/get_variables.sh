@@ -1,6 +1,11 @@
 get_variables() {
   pkginfo="$(cat .PKGINFO)"
 
+	if [[ "${1}" != "" ]]; then
+		echo "${pkginfo}" | grep "${1} =" | awk -F ' = ' '{print $2}' | xargs
+		return
+	fi
+
   for i in pkgname pkgver pkgdesc url arch license provides replaces; do
     export ${i}="$(echo "${pkginfo}" | grep "${i} =" | awk -F ' = ' '{print $2}' | xargs)"
   done
