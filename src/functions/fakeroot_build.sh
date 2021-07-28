@@ -45,7 +45,7 @@ fakeroot_build() {
         msg2 "Building ${pkgname}..."
 
 		cd DEBIAN
-		tar -cf ../control.tar.gz $(find ./ -type f)
+		tar -czf ../control.tar.gz $(find ./ -type f)
 		cd ..
 
 		tar -cf data.tar.xz $(find ./ -type f | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz')
