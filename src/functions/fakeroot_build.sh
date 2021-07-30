@@ -51,7 +51,7 @@ fakeroot_build() {
 		tar -czf data.tar.gz $(find ./ -type f | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz')
 		echo "2.0" > debian-binary
 
-		ar r "${package}_${built_deb_version}_${makedeb_arch}.deb" control.tar.gz data.tar.gz debian-binary &> /dev/null
+		ar r "${package}_${built_deb_version}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
 
         mv "${package}_${built_deb_version}_${makedeb_arch}.deb" ../../
         msg2 "Built ${pkgname}."
