@@ -44,10 +44,10 @@ fakeroot_build() {
 		cd DEBIAN/
 		# Run 'eval' with literal quotes around directories in find command so
 		# directories containing spaces are still passed as a single argument.
-		eval tar -czf ../control.tar.gz $(find ./ -type f | sed "s|.*|'&'|")
+		eval tar -czf ../control.tar.gz $(find ./ | sed "s|.*|'&'|")
 		cd ..
 
-		eval tar -czf data.tar.gz $(find ./ -type f | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz' | sed "s|.*|'&'|")
+		eval tar -czf data.tar.gz $(find ./ | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz' | sed "s|.*|'&'|")
 		echo "2.0" > debian-binary
 
 		ar r "${package}_${built_deb_version}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
