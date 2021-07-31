@@ -8,6 +8,9 @@ pkgbuild_check() {
         fi
     done
 
+	# Check version variables (pkgver, pkgrel, and epoch)
+	version_check
+
 	# Check that 'control_fields' is an array (only check when '-Q' wasn't specified)
 	if [[ "${skip_pkgbuild_control_fields}" != "true" && "${control_fields}" != "" ]]; then
 

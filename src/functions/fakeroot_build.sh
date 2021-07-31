@@ -1,14 +1,14 @@
 fakeroot_build() {
     source "${FILE}"
 
-    mkdir "${pkgdir}"
     pkgsetup
     convert_version
+
+	# Used to get pkgver from 'pkginfo_package_versions' string in makedeb.sh
     for package in ${pkgname[@]}; do
         unset depends optdepends conflicts provides replaces license
 
-        tar --force-local -xf "${package}-${built_archive_version}-${makepkg_arch}.${package_extension}" -C "${pkgdir}/${package}"
-        cd "${pkgdir}/${package}"
+        cd "pkg/${package}"
         get_variables
 
         if [[ "${distro_packages}" == "true" ]]; then
@@ -24,9 +24,6 @@ fakeroot_build() {
         for i in '.BUILDINFO' '.MTREE' '.PKGINFO' '.INSTALL' '.Changelog'; do
             rm -f "${i}" || true
         done
-
-        # Using $pkgver instead of $built_archive_version as $pkgver is pulled from .PKGINFO in the built package
-        rm "../../${package}-${pkgver}-${makepkg_arch}.${package_extension}"
 
         field() {
             cat "DEBIAN/control" | grep "${1}:" | awk -F": " '{print $2}'
@@ -44,11 +41,13 @@ fakeroot_build() {
 		cd "${package}"
         msg2 "Building ${pkgname}..."
 
-		cd DEBIAN
-		tar -czf ../control.tar.gz $(find ./ -type f)
+		cd DEBIAN/
+		# Run 'eval' with literal quotes around directories in find command so
+		# directories containing spaces are still passed as a single argument.
+		eval tar -czf ../control.tar.gz $(find ./ -type f | sed "s|.*|'&'|")
 		cd ..
 
-		tar -czf data.tar.gz $(find ./ -type f | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz')
+		eval tar -czf data.tar.gz $(find ./ -type f | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz' | sed "s|.*|'&'|")
 		echo "2.0" > debian-binary
 
 		ar r "${package}_${built_deb_version}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
@@ -56,6 +55,6 @@ fakeroot_build() {
         mv "${package}_${built_deb_version}_${makedeb_arch}.deb" ../../
         msg2 "Built ${pkgname}."
 
-        cd ..
+        cd ../..
     done
 }

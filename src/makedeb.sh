@@ -123,17 +123,21 @@ msg "Entering fakeroot environment..."
 msg "Running makepkg..."
 { makepkg -p "${FILE}" ${makepkg_options}; } | grep -Ev 'Making package|Checking.*dependencies|fakeroot environment|Finished making|\.PKGINFO|\.BUILDINFO|\.MTREE'
 
-# Get package version for each package in ${pkgname[@]} in case we install
-# packages later with APT
+# Get package version from one of the built packages (doesn't matter which, so
+# we just use the first one specified under $pkgname)
+cd "pkg/${pkgname}"
+
+# We keep tihs as a normal string (instead of an array) so that we can access
+# the variable inside of subshells. <https://stackoverflow.com/a/5564589>
+export pkginfo_package_version="$(get_variables pkgver)"
+cd ../..
+
+# Remove archives built by makepkg
 for i in ${pkgname[@]}; do
-	cd "pkg/${i}"
-	pkginfo_package_versions+=("$(get_variables pkgver)")
-	cd ../..
+	rm "${i}-${pkginfo_package_version}-${makepkg_arch}.${package_extension}"
 done
 
-# Purge $pkgdir
-rm "${pkgdir}" -r
-
+# Create .deb files
 export in_fakeroot="true"
 fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
@@ -145,16 +149,10 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 
 	convert_version &> /dev/null
 
-	eval set -- ${pkginfo_package_versions[@]@Q}
-	number_of_packages="${#}"
-	number=0
-
-    while [[ "${number}" -lt "${number_of_packages}" ]]; do
-        eval declare apt_install+=("./${i}_\${pkginfo_package_versions[$number]}_${makedeb_arch}.deb")
-
-		number="$(( ${number} + 1 ))"
+	for i in ${pkgname[@]}; do
+        declare apt_install+=("./${i}_${pkginfo_package_version}_${makedeb_arch}.deb")
     done
 
     msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
-    sudo apt-get install ${apt_install[@]}
+    sudo apt-get install -- ${apt_install[@]}
 fi
