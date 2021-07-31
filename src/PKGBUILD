@@ -8,7 +8,7 @@ _gitdir=$(git rev-parse --show-toplevel)
 _foldername=$(basename "${_gitdir}")
 
 pkgname=makedeb
-pkgver=5.12.0
+pkgver=5.13.0
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
