@@ -154,5 +154,5 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
     done
 
     msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
-    sudo apt-get install -- ${apt_install[@]}
+    sudo apt-get reinstall -- ${apt_install[@]}
 fi
