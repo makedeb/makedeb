@@ -9,6 +9,7 @@ arch=('any')
 license=('GPL3')
 depends=('bash' 'binutils' 'tar' 'file' 'makepkg')
 optdepends=('apt' 'git')
+conflicts=('makedeb' 'makedeb-alpha')
 url="https://github.com/makedeb/makedeb"
 
 source=("${url}/archive/refs/tags/v${pkgver}-${_release_type}.tar.gz")
