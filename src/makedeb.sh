@@ -130,6 +130,7 @@ cd "pkg/${pkgname}"
 # We keep tihs as a normal string (instead of an array) so that we can access
 # the variable inside of subshells. <https://stackoverflow.com/a/5564589>
 export pkginfo_package_version="$(get_variables pkgver)"
+export apt_package_version="$(echo "${pkginfo_package_version}" | sed 's|^[^:].*:||g')"
 cd ../..
 
 # Remove archives built by makepkg
@@ -150,7 +151,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 	convert_version &> /dev/null
 
 	for i in ${pkgname[@]}; do
-        declare apt_install+=("./${i}_${pkginfo_package_version}_${makedeb_arch}.deb")
+        declare apt_install+=("./${i}_${apt_package_version}_${makedeb_arch}.deb")
     done
 
     msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
