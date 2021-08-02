@@ -38,8 +38,8 @@ body:
         - Stable
         - Beta
         - Alpha
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: input
     attributes:
