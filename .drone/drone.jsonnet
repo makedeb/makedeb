@@ -26,7 +26,7 @@ local buildAndPublish(a, b) = {
     steps: [
         {
             name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
             environment: {release_type: b, package_name: a},
             commands: [".drone/scripts/build.sh"]
         },
