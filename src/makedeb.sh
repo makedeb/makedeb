@@ -36,6 +36,7 @@ export DATABASE_DIR="/usr/share/makedeb-db/"
 export makedeb_package_version="git"
 export makedeb_release_type="git"
 export target_os="debian"
+export makepkg_package_name="makedeb-makepkg"
 
 cd ./
 export files="$(ls)"
@@ -48,7 +49,7 @@ export pkgdir="${DIR}/pkg/"
 ##  BEGIN SCRIPT  ##
 ####################
 # Get makepkg message syntax
-source "/usr/share/makepkg/util/message.sh"
+source "/usr/share/${makepkg_package_name}/util/message.sh"
 colorize
 
 # Debug logs in case a function is                       # REMOVE AT PACKAGING
@@ -121,7 +122,7 @@ fi
 msg "Entering fakeroot environment..."
 
 msg "Running makepkg..."
-{ makepkg -p "${FILE}" ${makepkg_options}; } | grep -Ev 'Making package|Checking.*dependencies|fakeroot environment|Finished making|\.PKGINFO|\.BUILDINFO|\.MTREE'
+{ "${makepkg_package_name}" --format-makedeb -p "${FILE}" ${makepkg_options}; } | grep -Ev 'Making package|Checking.*dependencies|fakeroot environment|Finished making|\.PKGINFO|\.BUILDINFO|\.MTREE'
 
 # Get package version from one of the built packages (doesn't matter which, so
 # we just use the first one specified under $pkgname)
