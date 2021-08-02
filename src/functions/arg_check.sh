@@ -68,8 +68,8 @@ arg_check() {
 	fi
 
 	# Check for "one-liner" options
-    if [[ "${makepkg_printsrcinfo}" == "true" ]]; then "${makepkg_package_name}" --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
-	if [[ "${makepkg_geninteg}" == "true" ]]; then "${makepkg_package_name}" --geninteg -p "${FILE:-PKGBUILD}"; exit "${?}"; fi
+    if [[ "${makepkg_printsrcinfo}" == "true" ]]; then "${makepkg_package_name}" --format-makedeb --printsrcinfo -p "${FILE:-PKGBUILD}"; exit ${?}; fi
+	if [[ "${makepkg_geninteg}" == "true" ]]; then "${makepkg_package_name}" --format-makedeb --geninteg -p "${FILE:-PKGBUILD}"; exit "${?}"; fi
     if [[ "${dur_check}" == "true" ]]; then dur_check; exit 0; fi
 
 }
