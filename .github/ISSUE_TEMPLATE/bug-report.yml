@@ -5,14 +5,14 @@ title: "[Bug] "
 labels: [bug]
 
 body:
-    - type: markdown
-      attributes:
-        value: |
-          ### Prenote
-          Some of the fields in this form will ask for some information from your installation of makedeb. You can obtain the needed info with the following command:
-            ```sh
-            makedeb --version
-            ```
+  - type: markdown
+    attributes:
+      value: |
+        ### Prenote
+        Some of the fields in this form will ask for some information from your installation of makedeb. You can obtain the needed info with the following command:
+        ```sh
+        makedeb --version
+        ```
 
   - type: textarea
     attributes:
