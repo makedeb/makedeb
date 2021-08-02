@@ -4,42 +4,42 @@ title: "[Bug] "
 labels: [bug]
 
 body:
-  - type: textarea
-    attributes:
-      label: Issue
-      validations:
-        required: true
-
-  - type: dropdown
+- type: textarea
   attributes:
-    label: Installation Source
+    label: Issue
+    validations:
+      required: true
+
+- type: dropdown
+attributes:
+  label: Installation Source
+  options:
+    - APT Repository
+    - Arch User Repository (AUR)
+    - makedeb Package Repository (MPR)
+
+- type: markdown
+  attributes:
+    value: "The leading fields ask for some information from your installation of makedeb. You can obtain the needed info with the `makedeb --version` command."
+
+- type: input
+  attributes:
+    label: makedeb Version
+    validations:
+      required: true
+
+- type: dropdown
+  attribute:
+    label: makedeb Release
     options:
-      - APT Repository
-      - Arch User Repository (AUR)
-      - makedeb Package Repository (MPR)
+      - Stable
+      - Beta
+      - Alpha
+    validations:
+      required: true
 
-  - type: markdown
-    attributes:
-      value: "The leading fields ask for some information from your installation of makedeb. You can obtain the needed info with the `makedeb --version` command."
-
-  - type: input
-    attributes:
-      label: makedeb Version
-      validations:
-        required: true
-
-  - type: dropdown
-    attribute:
-      label: makedeb Release
-      options:
-        - Stable
-        - Beta
-        - Alpha
-      validations:
-        required: true
-
-  - type: input:
-    attributes:
-      label: makepkg Version
-      validations:
-        required: true
+- type: input:
+  attributes:
+    label: makepkg Version
+    validations:
+      required: true
