@@ -31,12 +31,6 @@ body:
     validations:
       required: true
 
-  - type: input
-    attributes:
-      label: makedeb Version
-    validations:
-      required: true
-
   - type: dropdown
     attributes:
       label: makedeb Release
@@ -44,6 +38,12 @@ body:
         - Stable
         - Beta
         - Alpha
+      validations:
+        required: true
+
+  - type: input
+    attributes:
+      label: makedeb Version
     validations:
       required: true
 
