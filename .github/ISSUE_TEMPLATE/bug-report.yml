@@ -8,8 +8,8 @@ body:
   - type: textarea
     attributes:
       label: Issue
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: dropdown
     attributes:
@@ -18,6 +18,8 @@ body:
         - APT Repository
         - Arch User Repository (AUR)
         - makedeb Package Repository (MPR)
+    validations:
+      required: true
 
   - type: markdown
     attributes:
@@ -26,8 +28,8 @@ body:
   - type: input
     attributes:
       label: makedeb Version
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: dropdown
     attribute:
@@ -36,11 +38,11 @@ body:
         - Stable
         - Beta
         - Alpha
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: input
     attributes:
       label: makepkg Version
-      validations:
-        required: true
+    validations:
+      required: true
