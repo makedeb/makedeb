@@ -1,45 +1,46 @@
+---
 name: Bug Report
 description: Issues with makedeb, packaging, etc.
 title: "[Bug] "
 labels: [bug]
 
 body:
-- type: textarea
-  attributes:
-    label: Issue
-    validations:
-      required: true
+  - type: textarea
+    attributes:
+      label: Issue
+      validations:
+        required: true
 
-- type: dropdown
-attributes:
-  label: Installation Source
-  options:
-    - APT Repository
-    - Arch User Repository (AUR)
-    - makedeb Package Repository (MPR)
+  - type: dropdown
+    attributes:
+      label: Installation Source
+      options:
+        - APT Repository
+        - Arch User Repository (AUR)
+        - makedeb Package Repository (MPR)
 
-- type: markdown
-  attributes:
-    value: "The leading fields ask for some information from your installation of makedeb. You can obtain the needed info with the `makedeb --version` command."
+  - type: markdown
+    attributes:
+      value: "The leading fields ask for some information from your installation of makedeb. You can obtain the needed info with the `makedeb --version` command."
 
-- type: input
-  attributes:
-    label: makedeb Version
-    validations:
-      required: true
+  - type: input
+    attributes:
+      label: makedeb Version
+      validations:
+        required: true
 
-- type: dropdown
-  attribute:
-    label: makedeb Release
-    options:
-      - Stable
-      - Beta
-      - Alpha
-    validations:
-      required: true
+  - type: dropdown
+    attribute:
+      label: makedeb Release
+      options:
+        - Stable
+        - Beta
+        - Alpha
+      validations:
+        required: true
 
-- type: input:
-  attributes:
-    label: makepkg Version
-    validations:
-      required: true
+  - type: input
+    attributes:
+      label: makepkg Version
+      validations:
+        required: true
