@@ -1,4 +1,5 @@
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
+_release_type=stable
 
 # Used to obtain folder names for local repository
 _gitdir=$(git rev-parse --show-toplevel)
@@ -38,6 +39,7 @@ package() {
 
     # Set package version and build type
     sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}|" "${pkgdir}/usr/bin/makedeb"
+    sed -i "s|makedeb_release_type=.*|makedeb_release_type=${_release_type}"
 
     # Remove testing commands
     sed -i 's|.*# REMOVE AT PACKAGING||g' "${pkgdir}/usr/bin/makedeb"
