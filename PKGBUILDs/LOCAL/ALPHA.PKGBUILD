@@ -4,7 +4,7 @@
 _gitdir=$(git rev-parse --show-toplevel)
 _foldername=$(basename "${_gitdir}")
 
-pkgname=makedeb
+pkgname=makedeb-alpha
 pkgver={pkgver}
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (alpha release)"
