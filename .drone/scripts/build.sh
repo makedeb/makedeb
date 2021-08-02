@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -exuo pipefail
 
+# Temporary commands so we can pass the build
+apt update
+apt remove makedeb makepkg -y
+apt install makedeb-makepkg-alpha -y
+
 # Create user
 useradd user
 
