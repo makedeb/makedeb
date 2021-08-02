@@ -32,7 +32,7 @@ body:
       required: true
 
   - type: dropdown
-    attribute:
+    attributes:
       label: makedeb Release
       options:
         - Stable
