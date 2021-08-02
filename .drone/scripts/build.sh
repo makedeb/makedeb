@@ -6,21 +6,15 @@ useradd user
 # Set perms
 chmod 777 * -R
 
+# Get variables
+pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | awk -F '=' '{print $2}')"
+
+# Copy PKGBUILD
+rm 'src/PKGBUILD'
+cp "PKGBUILDs/LOCAL/${release_type^^}.PKGBUILD" "src/PKGBUILD"
+
 # Configure PKGBUILD
-sed -i "s|(git release)|(${release_type} release)|" src/PKGBUILD
-sed -i "s|pkgname=.*|pkgname=${package_name}|" src/PKGBUILD
-
-if [[ "${release_type}" == "stable" ]]; then
-    echo "conflicts=('makedeb-beta' 'makedeb-alpha')" | tee -a src/PKGBUILD
-
-elif [[ "${release_type}" == "beta" ]]; then
-    echo "conflicts=('makedeb' 'makedeb-alpha')" | tee -a src/PKGBUILD
-    echo "provides=('makedeb')" | tee -a src/PKGBUILD
-    
-elif [[ "${release_type}" == "alpha" ]]; then
-    echo "conflicts=('makedeb' 'makedeb-beta')" | tee -a src/PKGBUILD
-    echo "provides=('makedeb')" | tee -a src/PKGBUILD
-fi
+sed -i "s|pkgver={pkgver}|pkgver=${pkgver}" 'src/PKGBUILD'
 
 # Build makedeb
 cd src

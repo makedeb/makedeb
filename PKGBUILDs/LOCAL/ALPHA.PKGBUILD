@@ -1,6 +1,3 @@
-# This PKGBUILD is used for local testing. Refer to the PKGBUILDs in
-# PKGBUILDs for the sources of MPR, AUR, and APT PKGBUILDs.
-
 # Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 
 # Used to obtain folder names for local repository
@@ -8,13 +5,15 @@ _gitdir=$(git rev-parse --show-toplevel)
 _foldername=$(basename "${_gitdir}")
 
 pkgname=makedeb
-pkgver=5.14.0
+pkgver={pkgver}
 pkgrel=1
-pkgdesc="Create Debian archives from PKGBUILDs (git release)"
+pkgdesc="Create Debian archives from PKGBUILDs (alpha release)"
 arch=('any')
 license=('GPL3')
-depends=('bash')
-optdepends=('git')
+depends=('bash' 'binutils' 'tar' 'file' 'makedeb-makepkg')
+optdepends=('apt' 'git')
+conflicts=('makedeb' 'makedeb-beta')
+provides=('makedeb')
 url="https://github.com/makedeb/makedeb"
 
 source=("git+file://${_gitdir}")
