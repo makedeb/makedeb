@@ -29,8 +29,8 @@ convert_dependencies() {
         # 4. Replace ': ' with '='
         # 5. Run 'xargs' to format with single spacing
         for pkg in $(makedeb-db --general ${new_depends} ${new_optdepends} ${new_conflicts} ${new_makedepends} ${new_checkdepends} | jq | sed 's|[{}",]||g' | sed 's|: |=|g' | xargs); do
-            string1=$(echo "${pkg}" | awk -F= '{print $1}')
-            string2="$(echo "${pkg}" | awk -F= '{print $2}')"
+            string1="$(echo "${pkg}" | cut -d '=' -f 1)"
+            string2="$(echo "${pkg}" | cut -d '=' -f 2)"
 
             new_depends=$(echo ${new_depends[@]} | sed "s/${string1}/${string2}/g")
             new_optdepends=$(echo ${new_optdepends[@]} | sed "s/${string1}/${string2}/g")

@@ -20,8 +20,8 @@ check_relationships() {
             done
 
             # Get values from left and right of symbol (package name and package version)
-            export local package_name=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $1}')
-            export local package_version=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $2}')
+            export local package_name=$(echo "${i}" | cut -d "${old_symbol_type}" -f 1)
+            export local package_version=$(echo "${i}" | cut -d "${old_symbol_type}" -f 2)
 
             # Add parenthesis if dependency has a relationship
             local dependency_name=$(echo "${package_name}(${symbol_type}${package_version})")

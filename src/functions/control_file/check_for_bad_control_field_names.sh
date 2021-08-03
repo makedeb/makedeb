@@ -18,7 +18,7 @@ check_for_bad_control_field_names() {
 	done
 
 	# Make make sure control field name doesn't contain spaces
-	if [[ "$(echo "${control_string_name}" | awk -F ' ' '{print $2}')" != "" ]]; then
+	if [[ "$(echo "${control_string_name}" | cut -d ' ' -f 2)" != "" ]]; then
 		error "${2} Control field '${control_field_string}' is invalid, as the name of the control field contains spaces."
 		bad_control_fields="true"
 	fi
