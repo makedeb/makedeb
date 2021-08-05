@@ -8,7 +8,7 @@ useradd user
 chmod 777 * -R
 
 # Get variables
-pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | cut -d '=' -f 2)"
+pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | awk -F'=' '{print $2}')"
 
 # Copy PKGBUILD
 rm 'src/PKGBUILD'
