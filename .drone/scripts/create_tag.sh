@@ -15,7 +15,7 @@ echo "  IdentityFile /root/.ssh/ssh_key" | tee -a /root/.ssh/config
 chmod 400 /root/.ssh/ -R
 
 # Get current package version
-package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F'=' '{print $2}')"
+package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F '=' '{print $2}')"
 
 # Create and push release
 git tag "v${package_version}-${release_type}" -am ""
