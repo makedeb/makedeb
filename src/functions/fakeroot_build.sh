@@ -26,7 +26,8 @@ fakeroot_build() {
         done
 
         field() {
-            cat "DEBIAN/control" | grep "${1}:" | cut -d":" -f 2
+            # Equivalent to awk -F ": " 
+            cat "DEBIAN/control" | grep "${1}:" | cut -d ":" -f 2 | cut -d " " -f 2
         }
 
         debname=$( echo "$(field Package)_$(field Version)_$(field Architecture)" )
