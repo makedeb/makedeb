@@ -4,7 +4,7 @@ remove_dependency_description() {
     # it didn't have a purpose.
     NUM=0
     while [[ "${optdepends[$NUM]}" != "" ]]; do
-        local temp_new_optdepends+=" $(echo ${optdepends[$NUM]} | cut -d':' -f 1)"
+        local temp_new_optdepends+=" $(echo ${optdepends[$NUM]} | cut -d ':' -f 1)"
         NUM=$(( ${NUM} + 1 ))
     done
     new_optdepends=$(echo ${temp_new_optdepends[@]} | xargs)
