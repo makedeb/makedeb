@@ -36,8 +36,8 @@ rm "${package_name}_${target_repo}/PKGBUILD"
 cp "PKGBUILDs/${target_repo^^}/${release_type^^}.PKGBUILD" "${package_name}_${target_repo}/PKGBUILD"
 
 # Get current pkgver and pkgrel
-pkgver="$(cat src/PKGBUILD | grep '^pkgver=' |awk -F '=' '{print $2}')"
-pkgrel="$(cat src/PKGBUILD | grep '^pkgrel=' |awk -F '=' '{print $2}')"
+pkgver="$(cat src/PKGBUILD | grep '^pkgver=' | awk -F '=' '{print $2}')"
+pkgrel="$(cat src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
 
 # Set package version in PKGBUILD
 sed -i "s|^pkgver={pkgver}|pkgver=${pkgver}|" "${package_name}_${target_repo}/PKGBUILD"
