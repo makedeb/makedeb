@@ -6,6 +6,7 @@ fakeroot_build() {
 
 	# Used to get pkgver from 'pkginfo_package_versions' string in makedeb.sh
     for package in ${pkgname[@]}; do
+			msg "Creating package \"${package}\"..."
         unset depends optdepends conflicts provides replaces license
 
         cd "pkg/${package}"
@@ -39,7 +40,7 @@ fakeroot_build() {
         fi
 
 		cd "${package}"
-        msg2 "Building ${pkgname}..."
+        msg2 "Compressing package..."
 
 		cd DEBIAN/
 		# Run 'eval' with literal quotes around directories in find command so
@@ -47,7 +48,16 @@ fakeroot_build() {
 		eval tar -czf ../control.tar.gz $(find ./ | grep -v '^\./$' | grep -o '^\./[^/]*' | sort -u | sed "s|.*|'&'|")
 		cd ..
 
-		eval tar -czf data.tar.gz $(find ./ | grep -v '^\./$' | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz' | grep -o '^\./[^/]*' | sort -u | sed "s|.*|'&'|")
+		local control_data_dirs="$(find ./ | grep -v '^\./$' | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz' | grep -o '^\./[^/]*' | sort -u | sed "s|.*|'&'|")"
+
+		if [[ "${control_data_dirs}" != "" ]]; then
+			eval tar -czf data.tar.gz ${control_data_dirs}
+		else
+			printf '' | tar -czf data.tar.gz --files-from -
+		fi
+
+		unset control_data_dirs
+
 		echo "2.0" > debian-binary
 
 		ar r "${package}_${built_deb_version}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
@@ -55,8 +65,9 @@ fakeroot_build() {
 		rm debian-binary control.tar.gz data.tar.gz
 
 		mv "${package}_${built_deb_version}_${makedeb_arch}.deb" ../../
-		msg2 "Built ${pkgname}."
 
         cd ../..
     done
+
+	msg "Leaving fakeroot environment..."
 }

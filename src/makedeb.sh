@@ -94,7 +94,7 @@ source "${FILE}"
 pkgbuild_check
 convert_version
 
-msg "Making package: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date))..."
+msg "Making package: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 convert_arch
 
 if [[ "${distro_packages}" == "true" ]]; then
@@ -121,8 +121,7 @@ fi
 
 msg "Entering fakeroot environment..."
 
-msg "Running makepkg..."
-{ "${makepkg_package_name}" --format-makedeb -p "${FILE}" ${makepkg_options}; } | grep -Ev 'Making package|Checking.*dependencies|fakeroot environment|Finished making|\.PKGINFO|\.BUILDINFO|\.MTREE'
+"${makepkg_package_name}" --format-makedeb --noarchive -p "${FILE}" ${makepkg_options}
 
 # Get package version from one of the built packages (doesn't matter which, so
 # we just use the first one specified under $pkgname)
@@ -134,18 +133,15 @@ export pkginfo_package_version="$(get_variables pkgver)"
 export apt_package_version="$(echo "${pkginfo_package_version}" | sed 's|^[^:].*:||g')"
 cd ../..
 
-# Remove archives built by makepkg
-for i in ${pkgname[@]}; do
-	rm "${i}-${pkginfo_package_version}-${makepkg_arch}.${package_extension}"
-done
-
 # Create .deb files
 export in_fakeroot="true"
-fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
+pkginfo_package_version="${pkginfo_package_version}" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" && "${remove_dependencies}" == "true" ]]; then
     remove_depends
 fi
+
+msg "Finished making: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))."
 
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 
