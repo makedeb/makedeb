@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set -e
-set -o pipefail
+set -Ee
 
 ####################
 ## DEFAULT VALUES ##
@@ -109,7 +108,7 @@ run_dependency_conversion --nocommas
 # 1. Only run if on Debian, as distros like Arch don't have APT, and when
 # '-s' option is passed.
 # 2. Same as 1, but only run when '-d' is passed.
-build_dependency_list="$(echo ${new_depends} ${new_makedepends} ${new_checkdepends} | sed "s|' |'\n|g" | sort -u | sed 's|$| |g' | tr -d '\n')" || true
+declare build_dependency_list="$(echo ${depends[@]@Q} ${makedepends[@]@Q} ${checkdepends[@]@Q} | sed "s|' |'\n|g" | sort -u | sed 's|$| |g' | tr -d '\n')"
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
     install_depends ${build_dependency_list}

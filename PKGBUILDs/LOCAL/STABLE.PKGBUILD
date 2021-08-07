@@ -12,7 +12,7 @@ pkgdesc="Create Debian archives from PKGBUILDs (stable release)"
 arch=('any')
 license=('GPL3')
 depends=('bash' 'binutils' 'tar' 'file' 'makedeb-makepkg')
-optdepends=('apt' 'git')
+optdepends=('r!apt')
 conflicts=('makedeb-beta' 'makedeb-alpha')
 url="https://github.com/makedeb/makedeb"
 

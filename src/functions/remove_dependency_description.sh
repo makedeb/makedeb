@@ -2,10 +2,11 @@ remove_dependency_description() {
     # This removes comments from optdepends(i.e. 'google-chrome: for shill users')
     # These comments are placed as I almost deleted this a bit ago thinking
     # it didn't have a purpose.
-    NUM=0
-    while [[ "${optdepends[$NUM]}" != "" ]]; do
-        local temp_new_optdepends+=" $(echo ${optdepends[$NUM]} | awk -F: '{print $1}')"
-        NUM=$(( ${NUM} + 1 ))
+	local temp_optdepends=()
+
+    for i in "${optdepends[@]}"; do
+        local temp_optdepends+=("$(echo "${i}" | awk -F ':' '{print $1}')")
     done
-    new_optdepends=$(echo ${temp_new_optdepends[@]} | xargs)
+
+    eval optdepends=($(echo "${temp_optdepends[@]@Q}"))
 }

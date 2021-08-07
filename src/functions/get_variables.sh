@@ -6,12 +6,39 @@ get_variables() {
 		return
 	fi
 
-  for i in pkgname pkgver pkgdesc url arch license provides replaces; do
-    export ${i}="$(echo "${pkginfo}" | grep "${i} =" | awk -F ' = ' '{print $2}' | xargs)"
-  done
+	for i in pkgname pkgver pkgdesc url arch license provides replaces; do
+		returned_array=()
 
-  for i in depends optdepends conflicts; do
-    local string=$(echo "${i}" | sed 's|.$||')
-    export ${i}="$(echo "${pkginfo}" | grep -w "${string} =" | awk -F ' = ' '{print $2}' | awk -F ':' '{print $1}' | xargs)"
-  done
+		# Get field values
+		while IFS= read -r line; do
+			string_value="$(echo "${line}" | grep "^${i} =" | awk -F ' = ' '{print $2}')" || true
+
+			if [[ "${string_value}" != "" ]]; then
+				returned_array+=("${string_value}")
+			fi
+
+		done < <(echo "${pkginfo}")
+
+		eval export "${i}=(${returned_array[@]@Q})"
+	done
+
+	for i in depends optdepends conflicts; do
+		# Remove the 's' from the end of each string
+    	local string=$(echo "${i}" | sed 's|.$||')
+
+		local returned_array=()
+
+		# Get field values
+		while IFS= read -r line; do
+
+			string_value="$(echo "${line}" | grep "^${string} =" | awk -F ' = ' '{print $2}')" || true
+
+			if [[ "${string_value}" != "" ]]; then
+				returned_array+=("${string_value}")
+			fi
+			
+		done < <(echo "${pkginfo}")
+
+		eval export "${i}=(${returned_array[@]@Q})"
+	done
 }

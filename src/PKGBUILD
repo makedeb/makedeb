@@ -8,13 +8,13 @@ _gitdir=$(git rev-parse --show-toplevel)
 _foldername=$(basename "${_gitdir}")
 
 pkgname=makedeb
-pkgver=5.15.7
+pkgver=5.16.0
 pkgrel=1
 pkgdesc="Create Debian archives from PKGBUILDs (git release)"
 arch=('any')
 license=('GPL3')
-depends=('bash')
-optdepends=('git')
+depends=('bash' 'binutils' 'tar' 'file' 'makedeb-makepkg-alpha')
+optdepends=('r!apt')
 url="https://github.com/makedeb/makedeb"
 
 source=("git+file://${_gitdir}")
