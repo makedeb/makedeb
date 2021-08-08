@@ -1,5 +1,6 @@
 ---
 name: Feature Request
+description: Request a feature
 labels: [feature-request]
 
 body:
