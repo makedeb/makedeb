@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: Bug report
 description: Issues with makedeb, makepkg, packaging, etc.
 labels: [bug]
 
@@ -23,7 +23,7 @@ body:
 
   - type: dropdown
     attributes:
-      label: Installation Source
+      label: Installation source
       options:
         - APT Repository
         - Arch User Repository (AUR)
@@ -33,7 +33,7 @@ body:
 
   - type: dropdown
     attributes:
-      label: makedeb Release
+      label: Installed release type
       options:
         - Stable
         - Beta
@@ -43,12 +43,12 @@ body:
 
   - type: input
     attributes:
-      label: makedeb Version
+      label: Installed makedeb version
     validations:
       required: true
 
   - type: input
     attributes:
-      label: makepkg Version
+      label: Installed makepkg version
     validations:
       required: true

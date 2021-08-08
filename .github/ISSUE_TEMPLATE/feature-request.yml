@@ -1,5 +1,5 @@
 ---
-name: Feature Request
+name: Feature request
 description: Request a feature
 labels: [feature-request]
 
@@ -12,7 +12,7 @@ body:
 
   - type: input
     attributes:
-      label: makedeb Version
+      label: Installed makedeb version
       description: |
         You can obtain your current version with the following command:
         ```sh
