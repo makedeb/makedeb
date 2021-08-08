@@ -1,0 +1,22 @@
+---
+name: Bug Report
+description: Issues with makedeb, packaging, etc.
+labels: [feature-request]
+
+body:
+  - type: textarea
+    attributes:
+      label: Description of feature
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: makedeb Version
+      description: |
+        You can obtain your current version with the following command:
+        ```sh
+        makedeb --version
+        ```
+    validations:
+      required: true
