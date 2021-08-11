@@ -17,6 +17,7 @@ help() {
         echo "  -V, --version            Print version information and exit"
 		echo "  -r, --rmdeps             Remove installed dependencies after building"
         echo "  -s, --syncdeps           Install missing dependencies"
+		echo "  --print-control          Print a generated control file and exit"
         echo "  --verbose                Print (very) detailed logging"
         echo
         echo "The following options can be passed to makepkg:"
@@ -39,6 +40,7 @@ help() {
         echo "  -H, --field          Append the resulting control file with custom fields"
         echo "  -Q, --no-fields      Skip adding values from 'control_fields' variable in PKGBUILD to control file"
         echo "  -V, --version        Print version info and exit"
+		echo "  --print-control      Print a generated control file and exit"
         echo "  --verbose            Print (very) detailed logging"
         echo
         echo "The following options can be passed to makepkg:"

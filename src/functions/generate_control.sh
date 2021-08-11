@@ -1,9 +1,7 @@
 generate_control() {
-    msg2 "Generating control file..."
+	local file="${1}"
 
-	generate_optdepends_fields
-
-	local maintainer="$(cat ../../${FILE} | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
+	local maintainer="$(cat "${file}" | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
 
     export_control "Package:" "${pkgname}"
 	export_control "Version:" "${built_archive_version}"
@@ -23,5 +21,5 @@ generate_control() {
 
     add_extra_control_fields
 
-    echo "" >> DEBIAN/control
+    echo
 }

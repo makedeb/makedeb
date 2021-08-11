@@ -1,6 +1,7 @@
 run_dependency_conversion() {
     check_relationships depends      ${depends[@]@Q}
-    check_relationships optdepends   ${optdepends[@]@Q}
+    check_relationships recommends   ${recommends[@]@Q}
+	check_relationships suggests     ${suggests[@]@Q}
     check_relationships conflicts    ${conflicts[@]@Q}
     check_relationships provides     ${provides[@]@Q}
     check_relationships replaces     ${replaces[@]@Q}

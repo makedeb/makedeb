@@ -93,6 +93,23 @@ source "${FILE}"
 pkgbuild_check
 convert_version
 
+# Check if we're printing a generated control file
+if (( "${print_control}" )); then
+	# We want to put all values from 'pkgname' under a single 'Package' field.
+	# This isn't syntactically correct by Debian's policy for binary control
+	# fields, but it prevents us from having to repeat everything twice for
+	# multiple packages.
+	pkgname="$(echo "${pkgname[@]}" | sed 's| |, |g')"
+	
+	check_distro_dependencies
+	remove_dependency_description
+	generate_optdepends_fields
+	run_dependency_conversion
+
+	generate_control "./${FILE}"
+	exit "${?}"
+fi
+
 msg "Making package: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 convert_arch
 

@@ -1,10 +1,10 @@
 generate_optdepends_fields() {
-	recommends=()
-	suggests=()
+	local recommends=()
+	local suggests=()
 
 	for i in "${optdepends[@]}"; do
 		string_value="${i/:*/}"
-		
+
 		declare string_prefix="$(echo "${string_value}" | grep -Eo 'r!|s!')"
 
 		if [[ "${string_prefix}" == "" ]]; then
@@ -19,4 +19,7 @@ generate_optdepends_fields() {
 			fi
 		fi
 	done
+
+	eval declare -g recommends=(${recommends[@]@Q})
+	eval declare -g suggests=(${suggests[@]@Q})
 }

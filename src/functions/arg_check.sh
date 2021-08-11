@@ -17,6 +17,7 @@ arg_check() {
                 -v | --distro-packages)    export distro_packages="true"; export makepkg_options+=("--distrovars") ;;
                 -V | --version)            version_info; exit 0 ;;
                 --dur-check)               export dur_check="true" ;;
+				--print-control)           export print_control=1 ;;
                 --verbose)                 set -x ;;
 
 				-g | --geninteg)           export makepkg_geninteg="true" ;;
@@ -38,6 +39,7 @@ arg_check() {
                 -Q | --no-fields)          export skip_pkgbuild_control_fields="true" ;;
                 -V | --version)            version_info; exit 0 ;;
                 --dur-check)               export dur_check="true" ;;
+				--print-control)           export print_control=1 ;;
                 --verbose)                 set -x ;;
 
                 -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=("--nodeps") ;;

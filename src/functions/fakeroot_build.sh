@@ -13,12 +13,16 @@ fakeroot_build() {
         get_variables
 
         if [[ "${distro_packages}" == "true" ]]; then
-            check_distro_dependencies &> /dev/null
+            check_distro_dependencies
         fi
 
-        remove_dependency_description
+		remove_dependency_description
+		generate_optdepends_fields
         run_dependency_conversion
-        generate_control
+
+		msg2 "Generating control file..."
+        generate_control "../../${FILE}" > DEBIAN/control
+
         add_install_scripts
 
         msg2 "Cleaning up..."

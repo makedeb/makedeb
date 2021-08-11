@@ -1,5 +1,4 @@
 check_distro_dependencies() {
-    msg "Setting distro-specific relationships..."
     export distro_version="$(lsb_release -cs)"
 
     for i in depends optdepends conflicts provides replaces makedepends optdepends; do
