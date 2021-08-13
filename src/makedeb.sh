@@ -54,35 +54,38 @@ colorize
 # Debug logs in case a function is                       # REMOVE AT PACKAGING
 # stopping something from working during testing         # REMOVE AT PACKAGING
 for i in $(find functions/); do                          # REMOVE AT PACKAGING
-    if ! [[ -d "${i}" ]]; then                           # REMOVE AT PACKAGING
-        if [[ "${in_fakeroot}" != "true" ]]; then        # REMOVE AT PACKAGING
-            msg "Sourcing functions from ${i}..."        # REMOVE AT PACKAGING
-        fi                                               # REMOVE AT PACKAGING
-        source <(cat "${i}")                             # REMOVE AT PACKAGING
+                                                         # REMOVE AT PACKAGING
+  if ! [[ -d "${i}" ]]; then                             # REMOVE AT PACKAGING
+    if [[ "${in_fakeroot}" != "true" ]]; then            # REMOVE AT PACKAGING
+      msg "Sourcing functions from ${i}..."              # REMOVE AT PACKAGING
     fi                                                   # REMOVE AT PACKAGING
+                                                         # REMOVE AT PACKAGING
+    source <(cat "${i}")                                 # REMOVE AT PACKAGING
+  fi                                                     # REMOVE AT PACKAGING
 done                                                     # REMOVE AT PACKAGING
 [[ "${in_fakeroot}" != "true" ]] && echo                 # REMOVE AT PACKAGING
-                                                         # REMOVE AT PACKAGING
+
 trap_codes
 
 if [[ "${in_fakeroot}" ]]; then
-    eval set -- ${@}
+  eval set -- ${@}
 fi
 
 # Argument Check
 arg_number="$#"
 number=1
+
 while [[ "${number}" -le "${arg_number}" ]]; do
-    split_args "$(eval echo \${$number})"
-    number="$(( "${number}" + 1 ))"
+  split_args "$(eval echo \${$number})"
+  number="$(( "${number}" + 1 ))"
 done
 
 arg_check
 
 # Jump into fakeroot_build() if we're triggering the script from inside a fakeroot in the build stage
 if [[ "${in_fakeroot}" == "true" ]]; then
-    fakeroot_build
-    exit ${?}
+  fakeroot_build
+  exit ${?}
 fi
 
 root_check
@@ -95,26 +98,26 @@ convert_version
 
 # Check if we're printing a generated control file
 if (( "${print_control}" )); then
-	# We want to put all values from 'pkgname' under a single 'Package' field.
-	# This isn't syntactically correct by Debian's policy for binary control
-	# fields, but it prevents us from having to repeat everything twice for
-	# multiple packages.
-	pkgname="$(echo "${pkgname[@]}" | sed 's| |, |g')"
-	
-	check_distro_dependencies
-	remove_dependency_description
-	generate_optdepends_fields
-	run_dependency_conversion
+  # We want to put all values from 'pkgname' under a single 'Package' field.
+  # This isn't syntactically correct by Debian's policy for binary control
+  # fields, but it prevents us from having to repeat everything twice for
+  # multiple packages.
+  pkgname="$(echo "${pkgname[@]}" | sed 's| |, |g')"
 
-	generate_control "./${FILE}"
-	exit "${?}"
+  check_distro_dependencies
+  remove_dependency_description
+  generate_optdepends_fields
+  run_dependency_conversion
+
+  generate_control "./${FILE}"
+  exit "${?}"
 fi
 
 msg "Making package: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 convert_arch
 
 if [[ "${distro_packages}" == "true" ]]; then
-    check_distro_dependencies
+  check_distro_dependencies
 fi
 
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
@@ -128,11 +131,9 @@ run_dependency_conversion --nocommas
 declare build_dependency_list="$(echo ${depends[@]@Q} ${makedepends[@]@Q} ${checkdepends[@]@Q} | sed "s|' |'\n|g" | sort -u | sed 's|$| |g' | tr -d '\n')"
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
-    install_depends ${build_dependency_list}
-
+  install_depends ${build_dependency_list}
 elif [[ "${target_os}" == "debian" && "${skip_dependency_checks}" != "true" ]]; then
   verify_dependencies ${build_dependency_list}
-
 fi
 
 msg "Entering fakeroot environment..."
@@ -154,19 +155,18 @@ export in_fakeroot="true"
 pkginfo_package_version="${pkginfo_package_version}" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" && "${remove_dependencies}" == "true" ]]; then
-    remove_depends
+  remove_depends
 fi
 
 msg "Finished making: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))."
 
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
+  convert_version &> /dev/null
 
-	convert_version &> /dev/null
+  for i in ${pkgname[@]}; do
+    declare apt_install+=("./${i}_${apt_package_version}_${makedeb_arch}.deb")
+  done
 
-	for i in ${pkgname[@]}; do
-        declare apt_install+=("./${i}_${apt_package_version}_${makedeb_arch}.deb")
-    done
-
-    msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
-    sudo apt-get reinstall -- ${apt_install[@]}
+  msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
+  sudo apt-get reinstall -- ${apt_install[@]}
 fi
