@@ -6,10 +6,20 @@ build_deb() {
 
   # Run 'eval' with literal quotes around directories in find command so
   # directories containing spaces are still passed as a single argument.
-  eval tar -czf ../control.tar.gz $(find ./ | grep -v '^\./$' | grep -o '^\./[^/]*' | sort -u | sed "s|.*|'&'|")
-  cd ..
+  eval tar -czf ../control.tar.gz $(find ./ | \
+                                    grep -v '^\./$' | \
+                                    grep -o '^\./[^/]*' | \
+                                    sort -u | \
+                                    sed "s|.*|'&'|")
 
-  local control_data_dirs="$(find ./ | grep -v '^\./$' | grep -v '^\./DEBIAN' | grep -v 'control\.tar\.gz' | grep -o '^\./[^/]*' | sort -u | sed "s|.*|'&'|")"
+  cd ..
+  local control_data_dirs="$(find ./ | \
+                             grep -v '^\./$' | \
+                             grep -v '^\./DEBIAN' | \
+                             grep -v 'control\.tar\.gz' | \
+                             grep -o '^\./[^/]*' | \
+                             sort -u | \
+                             sed "s|.*|'&'|")"
 
   if [[ "${control_data_dirs}" != "" ]]; then
     eval tar -czf data.tar.gz ${control_data_dirs}
