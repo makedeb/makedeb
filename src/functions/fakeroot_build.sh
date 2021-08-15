@@ -18,10 +18,7 @@ fakeroot_build() {
     fi
 
     # Convert dependencies, then export data to control file.
-    if [[ "${distro_packages}" == "true" ]]; then
-      check_distro_dependencies
-    fi
-
+    check_distro_dependencies
     remove_dependency_description
     generate_optdepends_fields
     run_dependency_conversion

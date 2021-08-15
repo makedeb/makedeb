@@ -121,9 +121,7 @@ find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 if [[ "${target_os}" == "debian" ]]; then
   msg "Checking build dependencies..."
 
-  if [[ "${distro_packages}" == "true" ]]; then
-    check_distro_dependencies
-  fi
+  check_distro_dependencies
 
   # Combine depends, makedepends and checkdepends all into depends.
   eval dependency_packages=("$(echo -n ${depends[@]@Q} ${makedepends[@]@Q} ${checkdepends[@]@Q} | \
