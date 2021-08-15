@@ -13,7 +13,7 @@ fakeroot_build() {
 
     # Delete built package if it exists.
     if find ../../"${package}_${pkgver}_${makedeb_arch}.deb" &> /dev/null; then
-      warning "Built package detected. Removing..."
+      warning2 "Built package detected. Removing..."
       rm ../../"${package}_${pkgver}_${makedeb_arch}.deb"
     fi
 
