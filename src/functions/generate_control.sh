@@ -4,7 +4,7 @@ generate_control() {
   local maintainer="$(cat "${file}" | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
 
   export_control "Package:" "${pkgname}"
-  export_control "Version:" "${built_archive_version}"
+  export_control "Version:" "${makedeb_package_version}"
   export_control "Description:" "${pkgdesc}"
   export_control "Architecture:" "${makedeb_arch}"
   export_control "License:" "${license}"

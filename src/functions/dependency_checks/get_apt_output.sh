@@ -23,8 +23,7 @@ get_apt_output() {
     fi
   done < <(echo "${apt_output}")
 
-  returned_packages=("$(echo "${returned_packages}" | tr -s ' ' | sed -e 's|^ ||' -e 's| $||')")
+  returned_packages=($(echo "${returned_packages}" | tr -s ' ' | sed -e 's|^ ||' -e 's| $||'))
 
-  declare -gn "variable_ref=${returned_variable}"
-  declare -g variable_ref=(${returned_packages[@]})
+  eval declare -g "${returned_variable}=(\"\${returned_packages[@]}\")"
 }

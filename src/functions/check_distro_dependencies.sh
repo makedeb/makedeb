@@ -1,11 +1,13 @@
 check_distro_dependencies() {
-  export distro_version="$(lsb_release -cs)"
+  local distro_version="$(lsb_release -cs)" \
+        variable_ref="" \
+        package_data=""
 
   for i in depends optdepends conflicts provides replaces makedepends optdepends; do
-    local package_data="$(eval echo "\${${distro_version}_${i}[@]@Q}")"
+    eval package_data=("\"\${${distro_version}_${i}[@]}\"")
 
     if [[ "${package_data}" != "" ]]; then
-      eval declare "${i}=(${package_data})"
+      eval declare -g "${i}=(\"\${package_data[@]}\")"
     fi
   done
 }
