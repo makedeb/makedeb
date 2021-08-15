@@ -96,13 +96,15 @@ source "${FILE}"
 pkgbuild_check
 convert_version
 
+# Set pkgbase
+pkgbase="${pkgbase:-${pkgname[0]}}"
+
 # Check if we're printing a generated control file
 if (( "${print_control}" )); then
   # We want to put all values from 'pkgname' under a single 'Package' field.
   # This isn't syntactically correct by Debian's policy for binary control
   # fields, but it prevents us from having to repeat everything twice for
   # multiple packages.
-  pkgname="$(echo "${pkgname[@]}" | sed 's| |, |g')"
 
   check_distro_dependencies
   remove_dependency_description
@@ -113,27 +115,37 @@ if (( "${print_control}" )); then
   exit "${?}"
 fi
 
-msg "Making package: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
+msg "Making package: ${pkgbase} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 convert_arch
-
-if [[ "${distro_packages}" == "true" ]]; then
-  check_distro_dependencies
-fi
 
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
-remove_dependency_description
-run_dependency_conversion --nocommas
+# Check build dependencies
+if [[ "${target_os}" == "debian" ]]; then
+  msg "Checking build dependencies..."
 
-# 1. Only run if on Debian, as distros like Arch don't have APT, and when
-# '-s' option is passed.
-# 2. Same as 1, but only run when '-d' is passed.
-declare build_dependency_list="$(echo ${depends[@]@Q} ${makedepends[@]@Q} ${checkdepends[@]@Q} | sed "s|' |'\n|g" | sort -u | sed 's|$| |g' | tr -d '\n')"
+  if [[ "${distro_packages}" == "true" ]]; then
+    check_distro_dependencies
+  fi
 
-if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" ]]; then
-  install_depends ${build_dependency_list}
-elif [[ "${target_os}" == "debian" && "${skip_dependency_checks}" != "true" ]]; then
-  verify_dependencies ${build_dependency_list}
+  # Combine depends, makedepends and checkdepends all into depends.
+  eval dependency_packages=("$(echo -n ${depends[@]@Q} ${makedepends[@]@Q} ${checkdepends[@]@Q} | \
+                         sed 's| |\n|g' | \
+                         sort -u | \
+                         tr -t '\n' ' ')")
+
+  eval depends=(${dependency_packages[@]@Q})
+
+  remove_dependency_description
+  run_dependency_conversion
+
+  if [[ "${install_dependencies}" == "true" ]]; then
+    check_dependencies
+    install_depends
+  elif [[ "${skip_dependency_checks}" != "true" ]]; then
+    check_dependencies
+    verify_dependencies
+  fi
 fi
 
 msg "Entering fakeroot environment..."
@@ -154,12 +166,15 @@ cd ../..
 export in_fakeroot="true"
 pkginfo_package_version="${pkginfo_package_version}" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
+# Print finished build message.
+msg "Finished making: ${pkgbase} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))."
+
+# Remove build dependencies
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" && "${remove_dependencies}" == "true" ]]; then
-  remove_depends
+  remove_dependencies
 fi
 
-msg "Finished making: ${pkgbase:-$pkgname} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))."
-
+# Install built package
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
   convert_version &> /dev/null
 
