@@ -2,8 +2,6 @@ remove_dependencies() {
   local build_dependencies=() \
         build_dependency_list=()
 
-  msg "Removing build dependencies..."
-
   # Generate list of dependencies from 'depends' and 'makedepends'
   build_dependencies=("$(echo -n ${makedepends[@]} ${checkdepends[@]} | \
                         sed 's| |\n|g' | \
@@ -24,10 +22,11 @@ remove_dependencies() {
   done
 
   # Return if new dependency list is equal to 0, as we have nothing to
-  # install then.
+  # remove then.
   if [[ "${#build_dependency_list}" == "0" ]]; then
     return
   fi
 
+  msg "Removing build dependencies..."
   eval sudo apt-get purge ${build_dependency_list[@]@Q}
 }
