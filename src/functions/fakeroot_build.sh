@@ -28,6 +28,13 @@ fakeroot_build() {
 
     add_install_scripts
 
+    # Remove leftover build files from makepkg.
+    # We don't print a message for this, as there's some spots in makepkg that
+    # might make it look redundant.
+    for i in '.BUILDINFO' '.MTREE' '.PKGINFO' '.INSTALL' '.Changelog'; do
+      rm -f "${i}"
+    done
+
     cd ..
 
     # Compress into Debian archive

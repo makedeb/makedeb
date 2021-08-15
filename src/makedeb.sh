@@ -156,7 +156,7 @@ in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
 
 # Run cleanup tasks
 msg "Cleaning up..."
-run_cleanup
+rm -rf dependency_deb
 
 # Print finished build message.
 msg "Finished making: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
@@ -168,8 +168,6 @@ fi
 
 # Install built package
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
-  convert_version &> /dev/null
-
   for i in ${pkgname[@]}; do
     declare apt_install+=("./${i}_${makedeb_apt_package_version}_${makedeb_arch}.deb")
   done
