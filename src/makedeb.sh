@@ -20,22 +20,19 @@ set -Ee
 ####################
 ## DEFAULT VALUES ##
 ####################
-export LC_ALL="C"
-export INSTALL='FALSE'
-export FILE='PKGBUILD'
-export PREBUILT='false'
-export package_convert="false"
-
-export FUNCTIONS_DIR="./"
-export DATABASE_DIR="/usr/share/makedeb-db/"
+declare LC_ALL="C"
+declare INSTALL='FALSE'
+declare FILE='PKGBUILD'
+declare PREBUILT='false'
+declare package_convert="false"
 
 #################
 ## OTHER STUFF ##
 #################
-export makedeb_package_version="git"
-export makedeb_release_type="git"
-export target_os="debian"
-export makepkg_package_name="makedeb-makepkg"
+declare makedeb_package_version="git"
+declare makedeb_release_type="git"
+declare target_os="debian"
+declare makepkg_package_name="makedeb-makepkg"
 
 cd ./
 export files="$(ls)"
@@ -115,7 +112,7 @@ if (( "${print_control}" )); then
   exit "${?}"
 fi
 
-msg "Making package: ${pkgbase} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
+msg "Making package: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 convert_arch
 
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
@@ -152,22 +149,19 @@ msg "Entering fakeroot environment..."
 
 "${makepkg_package_name}" --format-makedeb --noarchive -p "${FILE}" ${makepkg_options}
 
-# Get package version from one of the built packages (doesn't matter which, so
-# we just use the first one specified under $pkgname)
-cd "pkg/${pkgname}"
-
 # We keep tihs as a normal string (instead of an array) so that we can access
 # the variable inside of subshells. <https://stackoverflow.com/a/5564589>
-export pkginfo_package_version="$(get_variables pkgver)"
-export apt_package_version="$(echo "${pkginfo_package_version}" | sed 's|^[^:].*:||g')"
-cd ../..
+declare makedeb_apt_package_version="$(echo "${makedeb_package_version}" | sed 's|^[^:].*:||g')"
 
 # Create .deb files
-export in_fakeroot="true"
-pkginfo_package_version="${pkginfo_package_version}" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
+in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
+
+# Run cleanup tasks
+msg "Cleaning up..."
+run_cleanup
 
 # Print finished build message.
-msg "Finished making: ${pkgbase} ${pkgbuild_version} ($(date '+%a %d %b %Y %T %p %Z'))."
+msg "Finished making: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
 
 # Remove build dependencies
 if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" && "${remove_dependencies}" == "true" ]]; then
@@ -179,7 +173,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
   convert_version &> /dev/null
 
   for i in ${pkgname[@]}; do
-    declare apt_install+=("./${i}_${apt_package_version}_${makedeb_arch}.deb")
+    declare apt_install+=("./${i}_${makedeb_apt_package_version}_${makedeb_arch}.deb")
   done
 
   msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."

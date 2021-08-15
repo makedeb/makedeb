@@ -5,24 +5,24 @@ arg_check() {
   if [[ "${target_os}" == "debian" ]]; then
     while [[ "${1}" != "" ]]; do
       case "${1}" in
-        -A | --ignore-arch)        export makepkg_options+=("--ignorearch") ;;
-        -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=("--nodeps") ;;
-        -F | -p | --file)          export FILE="${2}"; shift ;;
+        -A | --ignore-arch)        declare makepkg_options+=("--ignorearch") ;;
+        -d | --nodeps)             declare skip_dependency_checks="true"; declare makepkg_options+=("--nodeps") ;;
+        -F | -p | --file)          declare FILE="${2}"; shift ;;
         -h | --help)               help; exit 0 ;;
-        -H | --field)              export extra_control_fields+=("${2}"); shift ;;
-        -i | --install)            export INSTALL="TRUE" ;;
-        -Q | --no-fields)          export skip_pkgbuild_control_fields="true" ;;
-        -r | --rmdeps)             export remove_dependencies="true"; export makepkg_options+=("--rmdeps") ;;
-        -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=("--syncdeps") ;;
-        -v | --distro-packages)    export distro_packages="true"; export makepkg_options+=("--distrovars") ;;
+        -H | --field)              export  extra_control_fields+=("${2}"); shift ;;
+        -i | --install)            declare INSTALL="TRUE" ;;
+        -Q | --no-fields)          export  skip_pkgbuild_control_fields="true" ;;
+        -r | --rmdeps)             declare remove_dependencies="true"; declare makepkg_options+=("--rmdeps") ;;
+        -s | --syncdeps)           declare install_dependencies="true"; declare makepkg_options+=("--syncdeps") ;;
+        -v | --distro-packages)    export  distro_packages="true"; declare makepkg_options+=("--distrovars") ;;
         -V | --version)            version_info; exit 0 ;;
-        --dur-check)               export dur_check="true" ;;
-        --print-control)           export print_control=1 ;;
+        --dur-check)               declare dur_check="true" ;;
+        --print-control)           declare print_control=1 ;;
         --verbose)                 set -x ;;
 
-        -g | --geninteg)           export makepkg_geninteg="true" ;;
-        --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
-        --skippgpcheck)            export makepkg_options+=("--skippgpcheck") ;;
+        -g | --geninteg)           declare makepkg_geninteg="true" ;;
+        --printsrcinfo)            declare makepkg_printsrcinfo="true" ;;
+        --skippgpcheck)            declare makepkg_options+=("--skippgpcheck") ;;
 
         -*)                        error "Unknown option '${1}'"; exit 1 ;;
         "")                        break ;;
@@ -33,21 +33,22 @@ arg_check() {
   elif [[ "${target_os}" == "arch" ]]; then
     while [[ "${1}" != "" ]]; do
       case "${1}" in
-        -A | --ignore-arch)        export makepkg_options+=("--ignorearch") ;;
-        -F | -p | --file)          export FILE="${2}"; shift ;;
+        -A | --ignore-arch)        declare makepkg_options+=("--ignorearch") ;;
+        -F | -p | --file)          declare FILE="${2}"; shift ;;
         -h | --help)               help; exit 0 ;;
-        -Q | --no-fields)          export skip_pkgbuild_control_fields="true" ;;
+        -H | --field)              export  extra_control_fields+=("${2}"); shift ;;
+        -Q | --no-fields)          export  skip_pkgbuild_control_fields="true" ;;
         -V | --version)            version_info; exit 0 ;;
-        --dur-check)               export dur_check="true" ;;
-        --print-control)           export print_control=1 ;;
+        --dur-check)               declare dur_check="true" ;;
+        --print-control)           declare print_control=1 ;;
         --verbose)                 set -x ;;
 
-        -d | --nodeps)             export skip_dependency_checks="true"; export makepkg_options+=("--nodeps") ;;
-        -g | --geninteg)           export makepkg_geninteg="true" ;;
-        -r | --rmdeps)             export remove_dependencies="true"; export makepkg_options+=("--rmdeps") ;;
-        -s | --syncdeps)           export install_dependencies="true"; export makepkg_options+=("--syncdeps") ;;
-        --printsrcinfo)            export makepkg_printsrcinfo="true" ;;
-        --skippgpcheck)            export makepkg_options+=("--skippgpcheck") ;;
+        -d | --nodeps)             declare skip_dependency_checks="true"; declare makepkg_options+=("--nodeps") ;;
+        -g | --geninteg)           declare makepkg_geninteg="true" ;;
+        -r | --rmdeps)             declare remove_dependencies="true"; declare makepkg_options+=("--rmdeps") ;;
+        -s | --syncdeps)           declare install_dependencies="true"; declare makepkg_options+=("--syncdeps") ;;
+        --printsrcinfo)            declare makepkg_printsrcinfo="true" ;;
+        --skippgpcheck)            declare makepkg_options+=("--skippgpcheck") ;;
 
         -*)                        error "Unknown option '${1}'"; exit 1 ;;
         "")                        break ;;
