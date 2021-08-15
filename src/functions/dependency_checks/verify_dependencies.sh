@@ -25,7 +25,7 @@ verify_dependencies() {
       return
     fi
 
-    needed_dependencies_output="$(echo "${needed_dependencies}" | sed 's| |, |g')"
+    needed_dependencies_output="$(echo "${needed_dependencies[@]}" | sed 's| |, |g')"
 
     error "The following build dependencies are missing: ${needed_dependencies_output}"
     exit 1
