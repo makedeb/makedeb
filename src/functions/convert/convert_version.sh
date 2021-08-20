@@ -3,5 +3,12 @@ convert_version() {
   if [[ "${epoch}" != "" ]]; then
     epoch_status="${epoch}:"
   fi
-  declare -grx makedeb_package_version="${epoch_status}${pkgver}-${pkgrel}"
+
+  # When in the fakeroot, we source information such as 'pkgver' from the
+  # PKGINFO file, which puts epoch, pkgver, and pkgrel under one variable.
+  if [[ "${in_fakeroot}" != "true" ]]; then
+    declare -grx makedeb_package_version="${epoch_status}${pkgver}-${pkgrel}"
+  else
+    declare -grx makedeb_package_version="${pkgver}"
+  fi
 }
