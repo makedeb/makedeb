@@ -2,8 +2,6 @@ install_depends() {
   local failed_dependency_installation=0
 
   if [[ "${#needed_dependencies_temp}" != "0" ]]; then
-    msg2 "Installing build dependencies..."
-
     # Remove all packages in 'needed_dependencies' that match package names
     # in 'pkgname'.
     for i in "${needed_dependencies_temp[@]}"; do
@@ -25,6 +23,8 @@ install_depends() {
     fi
 
     # Install build dependencies, and mark them as automatically installed.
+    msg2 "Installing build dependencies..."
+
     eval sudo apt-get install -- ${needed_dependencies[@]@Q} || failed_dependency_installation=1
     eval sudo apt-mark auto -- ${needed_dependencies[@]@Q} 1> /dev/null || failed_dependency_installation=1
 
