@@ -26,12 +26,12 @@ check_dependencies() {
                                         # packages after the last colon, so we
                                         # remove everything before it.
                                         sed 's|.*: ||g' | \
-                                        # Only get the first string in the
-                                        # remaining output. This removes version
-                                        # identifiers (i.e. 'pkg (>= 2)') as
-                                        # well as strings such as
-                                        # 'but it is not able to be installed.'.
-                                        grep -o '^[^ ]*' | \
+                                        # Next, find everything up to the last
+                                        # ')', or up to the first space when
+                                        # that doesn't work.
+                                        grep -Eo '^[^)]*)|^[^ ]*' | \
+                                        sed 's|[()]||g' | \
+                                        sed 's| ||g' | \
                                         tr -t '\n' ' ' | \
                                         sed 's| $||')")
 
