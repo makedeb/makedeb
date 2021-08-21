@@ -146,7 +146,7 @@ fi
 
 msg "Entering fakeroot environment..."
 
-"${makepkg_package_name}" --format-makedeb --noarchive -p "${FILE}" ${makepkg_options}
+"${makepkg_package_name}" --format-makedeb -p "${FILE}" ${makepkg_options}
 
 # We keep tihs as a normal string (instead of an array) so that we can access
 # the variable inside of subshells. <https://stackoverflow.com/a/5564589>

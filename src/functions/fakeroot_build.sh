@@ -1,6 +1,5 @@
 fakeroot_build() {
   source "${FILE}"
-  pkgsetup
 
   for package in ${pkgname[@]}; do
     msg "Creating package \"${package}\"..."
@@ -9,6 +8,24 @@ fakeroot_build() {
     cd "pkg/${package}/"
     get_variables
 
+    # Purge the existing directory, and extract the archive built by makepkg
+    # so that we have correct permissions.
+    cd ../
+    rm "${package}" -rf
+    mkdir "${package}"
+
+    package_filename="${package}-${pkgver}-${makepkg_arch}.${package_extension}"
+    tar -xf "../${package_filename}" -C "${package}/"
+    rm "../${package_filename}"
+
+    # Set up Debian package directory structure
+    mkdir -p "${package}/DEBIAN/"
+    touch "${package}/DEBIAN/control"
+
+    # Enter package directory
+    cd "${package}/"
+
+    # Set package version
     convert_version
 
     # Delete built package if it exists.
