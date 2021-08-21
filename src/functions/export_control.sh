@@ -1,5 +1,9 @@
 export_control() {
-  if [[ ${@: 2} != "" ]]; then
-    echo "${1} ${@: 2}"
+  local field_name="${1}" \
+        output_file="${2}" \
+        output_text=("${@:3}")
+
+  if [[ ${output_text} != "" ]]; then
+    echo "${1} ${output_text[@]}" 1>> "${output_file}"
   fi
 }

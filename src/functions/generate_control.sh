@@ -1,25 +1,27 @@
 generate_control() {
-  local file="${1}"
+  local pkgbuild_location="${1}" \
+        output_file="${2}"
 
-  local maintainer="$(cat "${file}" | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
+  local maintainer="$(cat "${pkgbuild_location}" | grep '\# Maintainer\:' | sed 's/# Maintainer: //' | xargs | sed 's|>|>,|g' | rev | sed 's|,||' | rev)"
 
-  export_control "Package:" "${pkgname}"
-  export_control "Version:" "${makedeb_package_version}"
-  export_control "Description:" "${pkgdesc}"
-  export_control "Architecture:" "${makedeb_arch}"
-  export_control "License:" "${license}"
-  export_control "Maintainer:" "${maintainer}"
-  export_control "Homepage:" "${url}"
+  # All field values MUST be passed via '[@]' variable parameters, as
+  # export_control() doesn't add the resulting field when '${3}' isn't set
+  # (which will happen when the field values aren't equal to anything).
+  export_control "Package:"       "${output_file}"  "${pkgname[@]}"
+  export_control "Version:"       "${output_file}"  "${makedeb_package_version[@]}"
+  export_control "Description:"   "${output_file}"  "${pkgdesc[@]}"
+  export_control "Architecture:"  "${output_file}"  "${makedeb_arch[@]}"
+  export_control "License:"       "${output_file}"  "${license[@]}"
+  export_control "Maintainer:"    "${output_file}"  "${maintainer[@]}"
+  export_control "Homepage:"      "${output_file}"  "${url[@]}"
 
-  eval export_control "Depends:" "${depends[@]@Q}"
-  eval export_control "Recommends:" "${recommends[@]@Q}"
-  eval export_control "Suggests:" "${suggests[@]@Q}"
-  eval export_control "Conflicts:" "${conflicts[@]@Q}"
-  eval export_control "Provides:" "${provides[@]@Q}"
-  eval export_control "Replaces:" "${replaces[@]@Q}"
-  eval export_control "Breaks:" "${replaces[@]@Q}"
+  export_control "Depends:"       "${output_file}"  "${depends[@]}"
+  export_control "Recommends:"    "${output_file}"  "${recommends[@]}"
+  export_control "Suggests:"      "${output_file}"  "${suggests[@]}"
+  export_control "Conflicts:"     "${output_file}"  "${conflicts[@]}"
+  export_control "Provides:"      "${output_file}"  "${provides[@]}"
+  export_control "Replaces:"      "${output_file}"  "${replaces[@]}"
+  export_control "Breaks:"        "${output_file}"  "${replaces[@]}"
 
-  add_extra_control_fields
-
-  echo
+  add_extra_control_fields "${output_file}"
 }

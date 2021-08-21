@@ -24,7 +24,7 @@ fakeroot_build() {
     run_dependency_conversion
 
     msg2 "Generating control file..."
-    generate_control "../../${FILE}" > DEBIAN/control
+    generate_control "../../${FILE}" ./DEBIAN/control
 
     add_install_scripts
 

@@ -4,7 +4,7 @@ check_dependencies() {
 
   # Generate temporary deb file so we can see what dependencies are missing
   mkdir -p "dependency_deb/${pkgbase}/DEBIAN/"
-  pkgname="${pkgbase}" generate_control "./PKGBUILD" > "dependency_deb/${pkgbase}/DEBIAN/control"
+  pkgname="${pkgbase}" generate_control "./PKGBUILD" "dependency_deb/${pkgbase}/DEBIAN/control"
 
   cd "dependency_deb/${pkgbase}/"
   build_deb "${pkgbase}"

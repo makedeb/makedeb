@@ -108,7 +108,7 @@ if (( "${print_control}" )); then
   generate_optdepends_fields
   run_dependency_conversion
 
-  generate_control "./${FILE}"
+  generate_control "./${FILE}" "/dev/stdout"
   exit "${?}"
 fi
 
