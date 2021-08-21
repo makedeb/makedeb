@@ -25,6 +25,7 @@ declare INSTALL='FALSE'
 declare FILE='PKGBUILD'
 declare PREBUILT='false'
 declare package_convert="false"
+declare hide_control_output=0
 
 #################
 ## OTHER STUFF ##

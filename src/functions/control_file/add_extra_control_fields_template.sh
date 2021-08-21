@@ -1,6 +1,7 @@
 add_extra_control_fields_template() {
-  local number=0 \
-        control_string="$(eval echo \${${1}[$number]})" \
+  # We set 'number' by itself as it otherwise won't have been set for 'control_string'.
+  local number=0
+  local control_string="$(eval echo \${${1}[$number]})" \
         output_file="${2}"
 
   while [[ "${control_string}" != "" ]]; do
@@ -10,7 +11,7 @@ add_extra_control_fields_template() {
     control_string_name="$(echo "${control_string}" | grep -o '^[^:]*')"
     control_string_value="$(echo "${control_string}" | sed 's|^[^:]*: ||')"
 
-    (( "${print_control}" )) ||  msg2 "Adding field '${control_string_name}' to control file..."
+    (( "${hide_control_output}" )) ||  msg2 "Adding field '${control_string_name}' to control file..."
     export_control "${control_string_name}:" "${output_file}" "${control_string_value}"
 
     control_string="$(eval echo \${${1}[$number]})"

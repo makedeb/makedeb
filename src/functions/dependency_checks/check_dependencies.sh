@@ -2,9 +2,12 @@ check_dependencies() {
   declare -g needed_dependencies=() \
              bad_apt_dependencies=()
 
-  # Generate temporary deb file so we can see what dependencies are missing
+  # Generate temporary deb file so we can see what dependencies are missing.
   mkdir -p "dependency_deb/${pkgbase}/DEBIAN/"
-  pkgname="${pkgbase}" generate_control "./PKGBUILD" "dependency_deb/${pkgbase}/DEBIAN/control"
+
+  pkgname="${pkgbase}" \
+    hide_control_output=1 \
+    generate_control "./PKGBUILD" "dependency_deb/${pkgbase}/DEBIAN/control"
 
   cd "dependency_deb/${pkgbase}/"
   build_deb "${pkgbase}"
