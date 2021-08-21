@@ -6,7 +6,9 @@ verify_dependencies() {
                     grep '^Depends: ' | \
                     sed 's|Depends: ||' |
                     sed 's|, |\n|g' | \
-                    grep -o '^[^( ]*'))
+                    # This grep command will fail if it can't find a match, so
+                    # we add '|| true' to the end to avoid a premature exit.
+                    grep -o '^[^( ]*')) || true
 
     # Remove all packages in 'needed_dependencies' that aren't in the list of
     # build dependencies.
