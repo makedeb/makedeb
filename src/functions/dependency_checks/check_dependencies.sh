@@ -20,12 +20,20 @@ check_dependencies() {
 
   # Abort if unmet dependencies were found
   if [[ "${#bad_apt_dependencies}" != "0" ]]; then
-    bad_apt_dependencies="$(echo "${bad_apt_dependencies}" | \
-                                sed 's|\\n|\n|g' | \
-                                sed 's|.*: ||g' | \
-                                grep -o '^[^ ]*' | \
-                                tr -t '\n' ' ' | \
-                                sed 's| $||')"
+    declare -g bad_apt_dependencies=("$(echo "${bad_apt_dependencies[@]}" | \
+                                        sed 's|\\n|\n|g' | \
+                                        # APT seems to list the name of bad
+                                        # packages after the last colon, so we
+                                        # remove everything before it.
+                                        sed 's|.*: ||g' | \
+                                        # Only get the first string in the
+                                        # remaining output. This removes version
+                                        # identifiers (i.e. 'pkg (>= 2)') as
+                                        # well as strings such as
+                                        # 'but it is not able to be installed.'.
+                                        grep -o '^[^ ]*' | \
+                                        tr -t '\n' ' ' | \
+                                        sed 's| $||')")
 
     bad_apt_dependencies_output="$(echo "${bad_apt_dependencies[@]}" | sed 's| |, |g')"
 
