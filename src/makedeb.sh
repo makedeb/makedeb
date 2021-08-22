@@ -78,7 +78,13 @@ while [[ "${number}" -le "${arg_number}" ]]; do
   number="$(( "${number}" + 1 ))"
 done
 
-arg_check
+# Hide errors and warning from the argument check when in the fakeroot
+# environment, as they'll already have been processed.
+if [[ "${in_fakeroot}" == "true" ]]; then
+  arg_check 2> /dev/null
+else
+  arg_check
+fi
 
 # Jump into fakeroot_build() if we're triggering the script from inside a fakeroot in the build stage
 if [[ "${in_fakeroot}" == "true" ]]; then
