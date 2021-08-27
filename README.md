@@ -30,8 +30,6 @@ Currently, users can obtain support through the following platforms:
 
 - Matrix: [link](https://matrix.to/#/!KOdBeHhHDQPQNLgioI:hunterwittenborn.com?via=hunterwittenborn.com&via=matrix.org&via=nerv.com.au)
 
-- Discord: [link](https://discord.gg/3q3Wra9e)
-
 - Telegram (bridge is community-maintained): [makedeb](https://t.me/joinchat/bigonOj_ZehkM2E1) | [MPR](https://t.me/joinchat/P9VjPp2TvPc4M2Zl) | [Contributing](https://t.me/joinchat/CcGduMayHy0xZDQ9)
 
 ## Supporters
