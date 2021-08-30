@@ -49,7 +49,7 @@ useradd user
 chown "user:user" "${package_name}_${target_repo}" -R
 cd "${package_name}_${target_repo}"
 
-sudo -u user -- makepkg --printsrcinfo | tee .SRCINFO
+sudo -u user -- makedeb --printsrcinfo | tee .SRCINFO
 
 # Set up Git identity information
 git config user.name "Kavplex Bot"
