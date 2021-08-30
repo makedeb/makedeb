@@ -1,4 +1,7 @@
 fakeroot_build() {
+  local debian_pkgver \
+        package_filename \
+
   source "${FILE}"
 
   for package in ${pkgname[@]}; do
@@ -7,6 +10,10 @@ fakeroot_build() {
 
     cd "pkg/${package}/"
     get_variables
+
+    # Remove epoch from package version for built package, as packages built
+    # with standard Debian build tools also do such.
+    debian_pkgver="$(echo "${pkgver}" | sed 's|^[^:]*:||')"
 
     # Purge the existing directory, and extract the archive built by makepkg
     # so that we have correct permissions.
@@ -29,9 +36,9 @@ fakeroot_build() {
     convert_version
 
     # Delete built package if it exists.
-    if find ../../"${package}_${pkgver}_${makedeb_arch}.deb" &> /dev/null; then
+    if find ../../"${package}_${debian_pkgver}_${makedeb_arch}.deb" &> /dev/null; then
       warning2 "Built package detected. Removing..."
-      rm ../../"${package}_${pkgver}_${makedeb_arch}.deb"
+      rm ../../"${package}_${debian_pkgver}_${makedeb_arch}.deb"
     fi
 
     # Convert dependencies, then export data to control file.
@@ -54,12 +61,13 @@ fakeroot_build() {
 
     cd ..
 
-    # Compress into Debian archive
+    # Compress into Debian archive.
     cd "${package}"
     msg2 "Compressing package..."
-    build_deb "${package}"
+    pkgver="${debian_pkgver}" \
+      build_deb "${package}"
 
-    mv "${package}_${pkgver}_${makedeb_arch}.deb" ../../
+    mv "${package}_${debian_pkgver}_${makedeb_arch}.deb" ../../
 
     cd ../..
   done
