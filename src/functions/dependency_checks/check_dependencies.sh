@@ -7,7 +7,7 @@ check_dependencies() {
 
   pkgname="${pkgbase}" \
     hide_control_output=1 \
-    generate_control "./PKGBUILD" "dependency_deb/${pkgbase}/DEBIAN/control"
+    generate_control "./${FILE-PKGBUILD}" "dependency_deb/${pkgbase}/DEBIAN/control"
 
   cd "dependency_deb/${pkgbase}/"
   build_deb "${pkgbase}"
