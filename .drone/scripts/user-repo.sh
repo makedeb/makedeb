@@ -51,6 +51,11 @@ cd "${package_name}_${target_repo}"
 
 sudo -u user -- makedeb --printsrcinfo | tee .SRCINFO
 
+# Remove 'generated-by' line when using AUR deployments.
+if [[ "${target_repo}" == "aur" ]]; then
+	cat .SRCINFO | sed '1s|generated-by = makedeb-makepkg||' | tee .SRCINFO
+fi
+
 # Set up Git identity information
 git config user.name "Kavplex Bot"
 git config user.email "kavplex@hunterwittenborn.com"
