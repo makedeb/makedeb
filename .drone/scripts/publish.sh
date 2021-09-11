@@ -29,7 +29,7 @@ curl_output="$(curl "https://${proget_server}/debian-packages/upload/makedeb/mai
             --upload-file "${deb_packages}")"
 
 # Verify that package was uploaded successfully.
-expected_curl_output="Package is now available at </_feeds/makedeb/main/makedeb:all/${component_pkgver}-${component_pkgrel}>."
+expected_curl_output="Package is now available at </_feeds/makedeb/main/${component_name}:all/${component_pkgver}-${component_pkgrel}>."
 
 if [[ "${curl_output}" != "${expected_curl_output}" ]]; then
   echo "${curl_output}"
