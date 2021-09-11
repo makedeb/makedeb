@@ -53,7 +53,7 @@ sudo -u user -- makedeb --printsrcinfo | tee .SRCINFO
 
 # Remove 'generated-by' line when using AUR deployments.
 if [[ "${target_repo}" == "aur" ]]; then
-	sed '1,2d' .SRCINFO
+	sed -i '1,2d' .SRCINFO
 	cat .SRCINFO
 fi
 
