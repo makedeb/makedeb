@@ -20,7 +20,6 @@ set -Ee
 ####################
 ## DEFAULT VALUES ##
 ####################
-declare LC_ALL="C"
 declare INSTALL='FALSE'
 declare FILE='PKGBUILD'
 declare PREBUILT='false'
