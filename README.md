@@ -37,6 +37,4 @@ Currently, users can obtain support through the following platforms:
 
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
-[GitBook](https://www.gitbook.com/): For documentation hosting. GitBook lets you create your own documentation in multiple formats, including Markdown and a WYSIWYG editor. GitBook also natively integrates with other services such as GitHub and Google Analytics.
-
 [Inedo](https://inedo.com/): For their universal package manager and Docker registry tool, [ProGet](https://inedo.com/proget). ProGet is used in the makedeb project to manage both Debian packages and Docker images. In addition, ProGet also supports private repositories and registries, as well as numerous package formats, including RPM, NuGet, and npm.
