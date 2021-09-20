@@ -65,30 +65,6 @@ local userRepoPublish(package_name, tag, user_repo) = {
 	}]
 };
 
-local publishDocker(tag) = {
-    name: "docker-publish-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {branch: [tag]},
-    depends_on: [
-		"mpr-publish-" + tag,
-		"aur-publish-" + tag
-	],
-    steps: [{
-			name: "publish-" + tag,
-			image: "plugins/downstream",
-			settings: {
-				server: "https://${DRONE_SYSTEM_HOSTNAME}",
-				token: {from_secret: "drone_api_key"},
-				repositories: ["makedeb/makedeb-docker"],
-				params: ["TAG=" + tag],
-				fork: true,
-				wait: true,
-				timeout: "1800s"
-			}
-		}]
-};
-
 [
 	createTag("stable"),
 	createTag("beta"),
@@ -105,8 +81,4 @@ local publishDocker(tag) = {
 	userRepoPublish("makedeb", "stable", "aur"),
 	userRepoPublish("makedeb-beta", "beta", "aur"),
 	userRepoPublish("makedeb-alpha", "alpha", "aur"),
-
-    publishDocker("stable"),
-    publishDocker("beta"),
-    publishDocker("alpha"),
 ]
