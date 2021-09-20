@@ -69,35 +69,24 @@ local publishDocker(tag) = {
     name: "docker-publish-" + tag,
     kind: "pipeline",
     type: "docker",
-    volumes: [{name: "docker", host: {path: "/var/run/docker.sock"}}],
     trigger: {branch: [tag]},
     depends_on: [
 		"mpr-publish-" + tag,
 		"aur-publish-" + tag
 	],
-    steps: [
-        {
-            name: "configure-dockerfile",
-            image: "ubuntu",
-            environment: {release_type: tag},
-            commands: [".drone/scripts/dockerfile-config.sh"]
-        },
-
-        {
-            name: "publish-image",
-            image: "plugins/docker",
-            volumes: [{name: "docker", path: "/var/run/docker.sock"}],
-            settings: {
-                username: "api",
-                password: {from_secret: "proget_api_key"},
-                repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
-                registry: "proget.hunterwittenborn.com",
-                tags: tag,
-                dockerfile: "docker/Dockerfile",
-                no_cache: "true"
-            }
-        }
-    ]
+    steps: [{
+			name: "publish-" + tag,
+			image: "plugins/downstream",
+			settings: {
+				server: "https://${DRONE_SYSTEM_HOSTNAME}",
+				token: {from_secret: "drone_api_key"},
+				repositories: ["makedeb/makedeb-docker"],
+				params: ["TAG=" + tag],
+				fork: true,
+				wait: true,
+				timeout: "1800s"
+			}
+		}]
 };
 
 [
