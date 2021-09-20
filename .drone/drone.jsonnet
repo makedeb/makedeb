@@ -1,33 +1,33 @@
-local createTag(a) = {
-	name: "create-tag-" + a,
+local createTag(tag) = {
+	name: "create-tag-" + tag,
 	kind: "pipeline",
 	type: "docker",
-	trigger: {branch: [a]},
+	trigger: {branch: [tag]},
 
 	steps: [{
-		name: a,
+		name: tag,
 		image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
 		environment: {
 			ssh_key: {from_secret: "ssh_key"},
 			known_hosts: {from_secret: "known_hosts"},
-			release_type: a
+			release_type: tag
 		},
 
 		commands: [".drone/scripts/create_tag.sh"]
 	}]
 };
 
-local buildAndPublish(a, b) = {
-    name: "build-and-publish-" + b,
+local buildAndPublish(package_name, tag) = {
+    name: "build-and-publish-" + tag,
     kind: "pipeline",
     type: "docker",
-    trigger: {branch: [b]},
-	depends_on: ["create-tag-" + b],
+    trigger: {branch: [tag]},
+	depends_on: ["create-tag-" + tag],
     steps: [
         {
             name: "build-debian-package",
             image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
-            environment: {release_type: b, package_name: a},
+            environment: {release_type: tag, package_name: package_name},
             commands: [".drone/scripts/build.sh"]
         },
 
@@ -40,46 +40,46 @@ local buildAndPublish(a, b) = {
     ]
 };
 
-local userRepoPublish(a, b, c) = {
-	name: c + "-publish-" + b,
+local userRepoPublish(package_name, tag, user_repo) = {
+	name: user_repo + "-publish-" + tag,
 	kind: "pipeline",
 	type: "docker",
-	trigger: {branch: [b]},
+	trigger: {branch: [tag]},
 	depends_on: [
-		"build-and-publish-" + b,
-		"create-tag-" + b
+		"build-and-publish-" + tag,
+		"create-tag-" + tag
 	],
 
 	steps: [{
-		name: a,
+		name: package_name,
 		image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
 		environment: {
 			ssh_key: {from_secret: "ssh_key"},
 			known_hosts: {from_secret: "known_hosts"},
-			package_name: a,
-			release_type: b,
-			target_repo: c
+			package_name: package_name,
+			release_type: tag,
+			target_repo: user_repo
 		},
 
 		commands: [".drone/scripts/user-repo.sh"]
 	}]
 };
 
-local publishDocker(a) = {
-    name: "docker-publish-" + a,
+local publishDocker(tag) = {
+    name: "docker-publish-" + tag,
     kind: "pipeline",
     type: "docker",
     volumes: [{name: "docker", host: {path: "/var/run/docker.sock"}}],
-    trigger: {branch: [a]},
+    trigger: {branch: [tag]},
     depends_on: [
-		"mpr-publish-" + a,
-		"aur-publish-" + a
+		"mpr-publish-" + tag,
+		"aur-publish-" + tag
 	],
     steps: [
         {
             name: "configure-dockerfile",
             image: "ubuntu",
-            environment: {release_type: a},
+            environment: {release_type: tag},
             commands: [".drone/scripts/dockerfile-config.sh"]
         },
 
@@ -92,7 +92,7 @@ local publishDocker(a) = {
                 password: {from_secret: "proget_api_key"},
                 repo: "proget.hunterwittenborn.com/docker/hunter/makedeb",
                 registry: "proget.hunterwittenborn.com",
-                tags: a,
+                tags: tag,
                 dockerfile: "docker/Dockerfile",
                 no_cache: "true"
             }
