@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="The modern packaging tool for Debian archives (${_release_type} release)"
 arch=('any')
 license=('GPL3')
-depends=('tar' 'binutils' 'makedeb-makepkg-beta')
+depends=('tar' 'binutils' 'lsb-release' 'makedeb-makepkg-beta')
 conflicts=('makedeb' 'makedeb-alpha')
 url="https://github.com/makedeb/makedeb"
 
