@@ -4,7 +4,7 @@ _release_type=beta
 pkgname=makedeb-beta
 pkgver={pkgver}
 pkgrel=1
-pkgdesc="Create Debian archives from PKGBUILDs (${_release_type} release)"
+pkgdesc="The modern packaging tool for Debian archives (${_release_type} release)"
 arch=('any')
 license=('GPL3')
 depends=('bash' 'binutils' 'tar' 'file' 'makedeb-makepkg-beta')
@@ -17,7 +17,7 @@ sha256sums=('SKIP')
 
 prepare() {
   cd "makedeb-${pkgver}-${_release_type}"
-  
+
   # Set package version and release type
   sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}-${pkgrel}|"  src/makedeb.sh
   sed -i "s|makedeb_release_type=.*|makedeb_release_type=${_release_type}|" src/makedeb.sh
