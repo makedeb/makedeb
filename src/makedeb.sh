@@ -180,4 +180,8 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 
   msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
   sudo apt-get reinstall -- ${apt_install[@]}
+
+  if (( "${makedeb_args["as-deps"]}" )); then
+    sudo apt-mark auto -- "${pkgname[@]}" 1> /dev/null
+  fi
 fi

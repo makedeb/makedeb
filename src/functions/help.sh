@@ -21,6 +21,8 @@ help() {
     echo "  --skip-pgp-check     Do not verify source files against PGP signatures"
     echo "  --verbose            Print (very) detailed logging"
     echo
+    echo "The following options can modify the behavior of APT:"
+    echo "  --as-deps             Mark built packages as automatically installed (when using '-i')"
     echo
     echo "Report bugs at https://github.com/hwittenborn/makedeb"
 

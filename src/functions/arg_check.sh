@@ -1,6 +1,10 @@
 arg_check() {
   eval set -- ${argument_list[@]@Q}
 
+  # Declare array for makedeb's arguments. We'll use this variable to store all
+  # of makedeb's arguments in the future.
+  declare -Ag makedeb_args
+
   # Actual argument check
   if [[ "${target_os}" == "debian" ]]; then
     while [[ "${1}" != "" ]]; do
@@ -17,6 +21,7 @@ arg_check() {
         -s | --sync-deps | --syncdeps)     declare -g install_dependencies="true"; declare makepkg_options+=("--syncdeps") ;;
         -v | --distro-packages)            warning "'${1}' has been deprecated, and should not be used." ;;
         -V | --version)                    version_info; exit 0 ;;
+        --as-deps)                         declare -g makedeb_args["as-deps"]=1 ;;
         --dur-check)                       declare -g dur_check="true" ;;
         --print-control)                   declare -g print_control=1 ;;
         --print-srcinfo | --printsrcinfo)  declare -g makepkg_printsrcinfo="true" ;;
@@ -53,6 +58,9 @@ arg_check() {
       shift 1 || true
     done
   fi
+
+  # Make argument list read-only.
+  declare -r makedeb_args
 
   # Argument checks to make sure we didn't request something impossible
   if [[ "${skip_dependency_checks}" == "true" && "${install_dependencies}" == "true" ]]; then
