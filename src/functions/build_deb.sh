@@ -29,6 +29,6 @@ build_deb() {
   mv ./DEBIAN/control.tar.gz ./control.tar.gz
 
   # Create the .deb package, and remove extra files we created.
-  ar -r "${pkgname}_${pkgver}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
+  ar -r "${pkgname}_${pkgver}_${MAKEDEB_CARCH}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
   rm debian-binary control.tar.gz data.tar.gz
 }

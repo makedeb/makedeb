@@ -17,28 +17,26 @@
 
 set -Ee
 
-####################
-## DEFAULT VALUES ##
-####################
+# Values to expose to makepkg.
+declare -rx PKGEXT='.pkg.tar.zst'
+
+# Other variables.
 declare INSTALL='FALSE'
 declare FILE='PKGBUILD'
 declare PREBUILT='false'
 declare package_convert="false"
 declare hide_control_output=0
 
-#################
-## OTHER STUFF ##
-#################
 declare makedeb_package_version="git"
 declare makedeb_release_type="git"
 declare target_os="debian"
 declare makepkg_package_name="makedeb-makepkg"
 
 cd ./
-export files="$(ls)"
-export DIR="$(echo $PWD)"
-export srcdir="${DIR}/src/"
-export pkgdir="${DIR}/pkg/"
+declare files="$(ls)"
+declare DIR="$(echo $PWD)"
+declare srcdir="${DIR}/src/"
+declare pkgdir="${DIR}/pkg/"
 
 
 ####################
@@ -89,6 +87,7 @@ find "${FILE}" &> /dev/null || { error "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 convert_version
+check_architecture
 
 # Set pkgbase
 pkgbase="${pkgbase:-${pkgname[0]}}"
@@ -110,8 +109,6 @@ if (( "${print_control}" )); then
 fi
 
 msg "Making package: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
-convert_arch
-
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
 # Check build dependencies
@@ -168,7 +165,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
   local apt_install_list=()
 
   for i in "${pkgname[@]}"; do
-    apt_installation_list+=("./${i}_${makedeb_apt_package_version}_${makedeb_arch}.deb")
+    apt_installation_list+=("./${i}_${makedeb_apt_package_version}_${MAKEDEB_CARCH}.deb")
   done
 
   apt_installation_string="$(echo "${pkgname[@]}" | sed 's| |, |g')"

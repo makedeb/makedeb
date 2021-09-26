@@ -10,7 +10,7 @@ generate_control() {
   export_control "Package:"       "${output_file}"  "${pkgname[@]}"
   export_control "Version:"       "${output_file}"  "${makedeb_package_version[@]}"
   export_control "Description:"   "${output_file}"  "${pkgdesc[@]}"
-  export_control "Architecture:"  "${output_file}"  "${makedeb_arch[@]}"
+  export_control "Architecture:"  "${output_file}"  "${MAKEDEB_CARCH}"
   export_control "License:"       "${output_file}"  "${license[@]}"
   export_control "Maintainer:"    "${output_file}"  "${maintainer[@]}"
   export_control "Homepage:"      "${output_file}"  "${url[@]}"

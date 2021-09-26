@@ -13,7 +13,7 @@ check_dependencies() {
   build_deb "${pkgbase}"
 
   # Dry-run install the deb file so we can see what's missing.
-  apt_output="$(localized apt-get install --dry-run "./${pkgbase}_${pkgver}_${makedeb_arch}.deb" 2>&1 || true)"
+  apt_output="$(localized apt-get install --dry-run "./${pkgbase}_${pkgver}_${MAKEDEB_CARCH}.deb" 2>&1 || true)"
 
   cd ../../
 

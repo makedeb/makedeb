@@ -21,7 +21,7 @@ fakeroot_build() {
     rm "${package}" -rf
     mkdir "${package}"
 
-    package_filename="${package}-${pkgver}-${makepkg_arch}.${package_extension}"
+    package_filename="${package}-${pkgver}-${CARCH}.pkg.tar.zst"
     tar -xf "../${package_filename}" -C "${package}/"
     rm "../${package_filename}"
 
@@ -36,9 +36,9 @@ fakeroot_build() {
     convert_version
 
     # Delete built package if it exists.
-    if find ../../"${package}_${debian_pkgver}_${makedeb_arch}.deb" &> /dev/null; then
+    if find ../../"${package}_${debian_pkgver}_${MAKEDEB_CARCH}.deb" &> /dev/null; then
       warning2 "Built package detected. Removing..."
-      rm ../../"${package}_${debian_pkgver}_${makedeb_arch}.deb"
+      rm ../../"${package}_${debian_pkgver}_${MAKEDEB_CARCH}.deb"
     fi
 
     # Convert dependencies, then export data to control file.
@@ -67,7 +67,7 @@ fakeroot_build() {
     pkgver="${debian_pkgver}" \
       build_deb "${package}"
 
-    mv "${package}_${debian_pkgver}_${makedeb_arch}.deb" ../../
+    mv "${package}_${debian_pkgver}_${MAKEDEB_CARCH}.deb" ../../
 
     cd ../..
   done
