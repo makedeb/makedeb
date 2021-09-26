@@ -1,37 +1,34 @@
 # This function should be run from the directory containing the 'DEBIAN' folder.
 build_deb() {
-  local pkgname="${1}"
+  local pkgname="${1}" \
+        tar_control_arguments \
+        tar_data_arguments
 
+  # Generate control.tar.gz archive.
   cd DEBIAN/
-
-  # Run 'eval' with literal quotes around directories in find command so
-  # directories containing spaces are still passed as a single argument.
-  eval tar -czf ../control.tar.gz $(find ./ | \
-                                    grep -v '^\./$' | \
-                                    grep -o '^\./[^/]*' | \
-                                    sort -u | \
-                                    sed "s|.*|'&'|")
-
+  mapfile -t tar_control_arguments < <(find ./ | grep -v '^\./$')
+  tar -czf ./control.tar.gz "${tar_control_arguments[@]}"
   cd ..
-  local control_data_dirs="$(find ./ | \
-                             grep -v '^\./$' | \
-                             grep -v '^\./DEBIAN' | \
-                             grep -v 'control\.tar\.gz' | \
-                             grep -o '^\./[^/]*' | \
-                             sort -u | \
-                             sed "s|.*|'&'|")"
 
-  if [[ "${control_data_dirs}" != "" ]]; then
-    eval tar -czf data.tar.gz ${control_data_dirs}
+  # Generate data.tar.gz archive.
+  mapfile -t tar_data_arguments < <(find ./ -maxdepth 1 | grep -v '^\./$' | grep -v '^\./DEBIAN$')
+
+  # Tar will freak out if we don't supply any directories here (which will
+  # happen when no items were created in ${pkgdir}), so we create the file
+  # with no data when such a scenario arrises.
+  if [[ "${tar_arguments}" != "" ]]; then
+    tar -czf data.tar.gz "${tar_data_arguments[@]}"
   else
     printf '' | tar -czf data.tar.gz --files-from -
   fi
 
-  unset control_data_dirs
-
+  # Create the debian-binary file.
   echo "2.0" > debian-binary
 
-  ar r "${pkgname}_${pkgver}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
+  # Move control.tar.gz from DEBIAN/ to pkgdir.
+  mv ./DEBIAN/control.tar.gz ./control.tar.gz
 
+  # Create the .deb package, and remove extra files we created.
+  ar -r "${pkgname}_${pkgver}_${makedeb_arch}.deb" debian-binary control.tar.gz data.tar.gz &> /dev/null
   rm debian-binary control.tar.gz data.tar.gz
 }

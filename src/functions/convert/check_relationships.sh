@@ -1,5 +1,5 @@
 check_relationships() {
-  eval set -- ${@}
+  set -- "${@}"
 
   local package_array=() \
         symbol_type \
@@ -8,7 +8,7 @@ check_relationships() {
         relationship_package_version \
         dependency_name
 
-  for i in "${@: 2}"; do
+  for i in "${@:2}"; do
     if echo "${i}" | grep -E '<|<=|=|>=|>' &> /dev/null; then
 
       # Check what kind of dependency relationship symbol is used
@@ -33,7 +33,7 @@ check_relationships() {
       relationship_package_version=$(echo "${i}" | awk -F "${old_symbol_type}" '{print $2}')
 
       # Add parenthesis if dependency has a relationship
-      dependency_name=$(echo "${relationship_package_name}(${symbol_type}${relationship_package_version})")
+      dependency_name="$(echo "${relationship_package_name}(${symbol_type}${relationship_package_version})")"
       package_array+=("${dependency_name}")
 
     else
@@ -42,5 +42,5 @@ check_relationships() {
 
   done
 
-  eval declare -g "${1}=($(echo "${package_array[@]@Q}"))"
+  create_array "${1}" "${package_array[@]}"
 }

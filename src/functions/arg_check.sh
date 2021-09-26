@@ -1,6 +1,6 @@
 arg_check() {
-  eval set -- ${argument_list[@]@Q}
-
+  set -- "${@}"
+  
   # Declare array for makedeb's arguments. We'll use this variable to store all
   # of makedeb's arguments in the future.
   declare -Ag makedeb_args
@@ -30,7 +30,7 @@ arg_check() {
         -*)                                error "Unknown option '${1}'"; exit 1 ;;
         "")                                break ;;
       esac
-      shift 1 || true
+      shift 1
     done
 
   elif [[ "${target_os}" == "arch" ]]; then
@@ -55,7 +55,7 @@ arg_check() {
         -*)                                error "Unknown option '${1}'"; exit 1 ;;
         "")                                break ;;
       esac
-      shift 1 || true
+      shift 1
     done
   fi
 

@@ -28,5 +28,5 @@ remove_dependencies() {
   fi
 
   msg "Removing build dependencies..."
-  eval sudo apt-get purge ${build_dependency_list[@]@Q}
+  sudo apt-get purge "${build_dependency_list[@]}"
 }

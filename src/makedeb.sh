@@ -65,30 +65,21 @@ done                                                     # REMOVE AT PACKAGING
 trap_codes
 
 if [[ "${in_fakeroot}" ]]; then
-  eval set -- ${@}
+  set -- "${@}"
 fi
-
-# Argument Check
-arg_number="$#"
-number=1
-
-while [[ "${number}" -le "${arg_number}" ]]; do
-  split_args "$(eval echo \${$number})"
-  number="$(( "${number}" + 1 ))"
-done
 
 # Hide errors and warning from the argument check when in the fakeroot
 # environment, as they'll already have been processed.
 if [[ "${in_fakeroot}" == "true" ]]; then
-  arg_check 2> /dev/null
+  arg_check "${@}" 2> /dev/null
 else
-  arg_check
+  arg_check "${@}"
 fi
 
 # Jump into fakeroot_build() if we're triggering the script from inside a fakeroot in the build stage
 if [[ "${in_fakeroot}" == "true" ]]; then
   fakeroot_build
-  exit ${?}
+  exit "${?}"
 fi
 
 root_check
@@ -130,12 +121,12 @@ if [[ "${target_os}" == "debian" ]]; then
   check_distro_dependencies
 
   # Combine depends, makedepends and checkdepends all into depends.
-  eval dependency_packages=("$(echo -n ${depends[@]@Q} ${makedepends[@]@Q} ${checkdepends[@]@Q} | \
+  dependency_packages=($(echo "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}" | \
                          sed 's| |\n|g' | \
                          sort -u | \
-                         tr -t '\n' ' ')")
+                         tr -t '\n' ' '))
 
-  eval depends=(${dependency_packages[@]@Q})
+  depends=("${dependency_packages[@]}")
 
   remove_dependency_description
   run_dependency_conversion
@@ -158,7 +149,7 @@ msg "Entering fakeroot environment..."
 declare makedeb_apt_package_version="$(echo "${makedeb_package_version}" | sed 's|^[^:].*:||g')"
 
 # Create .deb files
-in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} ${@@Q}
+in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} "${@}"
 
 # Run cleanup tasks
 msg "Cleaning up..."
@@ -174,12 +165,15 @@ fi
 
 # Install built package
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
-  for i in ${pkgname[@]}; do
-    declare apt_install+=("./${i}_${makedeb_apt_package_version}_${makedeb_arch}.deb")
+  local apt_install_list=()
+
+  for i in "${pkgname[@]}"; do
+    apt_installation_list+=("./${i}_${makedeb_apt_package_version}_${makedeb_arch}.deb")
   done
 
-  msg "Installing $(echo "${apt_install}" | sed 's|^\./||g' | sed 's| | ,|g' | rev | sed 's|, ||' | rev)..."
-  sudo apt-get reinstall -- ${apt_install[@]}
+  apt_installation_string="$(echo "${pkgname[@]}" | sed 's| |, |g')"
+  msg "Installing ${apt_installation_string}..."
+  sudo apt-get reinstall -- "${apt_installation_list[@]}"
 
   if (( "${makedeb_args["as-deps"]}" )); then
     sudo apt-mark auto -- "${pkgname[@]}" 1> /dev/null

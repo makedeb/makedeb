@@ -1,9 +1,9 @@
 add_dependency_commas() {
-  eval declare -g depends=("$(echo ${depends[@]@Q} | sed 's| |, |g')")
-  eval declare -g recommends=("$(echo ${recommends[@]@Q} | sed 's| |, |g')")
-  eval declare -g suggests=("$(echo ${suggests[@]@Q} | sed 's| |, |g')")
-  eval declare -g conflicts=("$(echo ${conflicts[@]@Q} | sed 's| |, |g')")
-  eval declare -g provides=("$(echo ${provides[@]@Q} | sed 's| |, |g')")
-  eval declare -g replaces=("$(echo ${replaces[@]@Q} | sed 's| |, |g')")
-  eval declare -g license=("$(echo ${license[@]@Q} | sed 's| |, |g')")
+  declare -g depends=("$(echo "${depends[@]}" | sed 's| |, |g')")
+  declare -g recommends=("$(echo "${recommends[@]}" | sed 's| |, |g')")
+  declare -g suggests=("$(echo "${suggests[@]}" | sed 's| |, |g')")
+  declare -g conflicts=("$(echo "${conflicts[@]}" | sed 's| |, |g')")
+  declare -g provides=("$(echo "${provides[@]}" | sed 's| |, |g')")
+  declare -g replaces=("$(echo "${replaces[@]}" | sed 's| |, |g')")
+  declare -g license=("$(echo "${license[@]}" | sed 's| |, |g')")
 }

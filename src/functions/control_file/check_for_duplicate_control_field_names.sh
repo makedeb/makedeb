@@ -1,5 +1,5 @@
 check_for_duplicate_control_field_names() {
-  eval set -- ${@}
+  set -- ${@}
 
   number_of_control_fields="$#"
 
@@ -13,7 +13,7 @@ check_for_duplicate_control_field_names() {
   unset control_fields_list
 
   while [[ "${number}" -le "${number_of_control_fields}" ]]; do
-    local control_fields_list+=("$(eval echo "\${$number}" | grep -o '^[^:]*'):")
+    local control_fields_list+=("$(echo "${!number}" | grep -o '^[^:]*'):")
     local number="$(( "${number}" + 1 ))"
 done
 
@@ -22,7 +22,7 @@ done
   local number=1
 
   while [[ "${number}" -le "${number_of_control_fields}" ]]; do
-    local control_field_value="$(eval echo "\${$number}" | grep -o '^[^:]*')"
+    local control_field_value="$(echo "${!number}" | grep -o '^[^:]*')"
 
     if [[ "$(echo -n "${control_fields_list[@]}" | sed 's|:|\n|g' | sed 's|^ ||' | grep "^${control_field_value}\$" | wc -l)" != "1" ]]; then
 

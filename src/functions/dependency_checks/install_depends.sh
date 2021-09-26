@@ -25,8 +25,8 @@ install_depends() {
     # Install build dependencies, and mark them as automatically installed.
     msg2 "Installing build dependencies..."
 
-    eval sudo apt-get install -- ${needed_dependencies[@]@Q} || failed_dependency_installation=1
-    eval sudo apt-mark auto -- ${needed_dependencies[@]@Q} 1> /dev/null || failed_dependency_installation=1
+    sudo apt-get install -- "${needed_dependencies[@]}" || failed_dependency_installation=1
+    sudo apt-mark auto -- "${needed_dependencies[@]}" 1> /dev/null || failed_dependency_installation=1
 
     if (( "${failed_dependency_installation}" )); then
       error "There was an error installing build dependencies."

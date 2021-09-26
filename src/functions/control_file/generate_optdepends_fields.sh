@@ -20,6 +20,6 @@ generate_optdepends_fields() {
     fi
   done
 
-  eval declare -g recommends=(${recommends[@]@Q})
-  eval declare -g suggests=(${suggests[@]@Q})
+  declare -g recommends=("${recommends[@]}")
+  declare -g suggests=("${suggests[@]}")
 }
