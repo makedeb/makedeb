@@ -16,7 +16,7 @@ build_deb() {
   # Tar will freak out if we don't supply any directories here (which will
   # happen when no items were created in ${pkgdir}), so we create the file
   # with no data when such a scenario arrises.
-  if [[ "${tar_arguments}" != "" ]]; then
+  if [[ "${tar_data_arguments}" != "" ]]; then
     tar -czf data.tar.gz "${tar_data_arguments[@]}"
   else
     printf '' | tar -czf data.tar.gz --files-from -
