@@ -6,14 +6,17 @@ local createTag(tag) = {
 
 	steps: [{
 		name: tag,
-		image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+		image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 		environment: {
 			ssh_key: {from_secret: "ssh_key"},
 			known_hosts: {from_secret: "known_hosts"},
 			release_type: tag
 		},
 
-		commands: [".drone/scripts/create_tag.sh"]
+		commands: [
+			"sudo apt-get install openssh-client git -y",
+			".drone/scripts/create_tag.sh"
+		]
 	}]
 };
 
@@ -26,16 +29,22 @@ local buildAndPublish(package_name, tag) = {
     steps: [
         {
             name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:alpha",
+            image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
             environment: {release_type: tag, package_name: package_name},
-            commands: [".drone/scripts/build.sh"]
+            commands: [
+							"sudo apt-get install sed grep awk -y",
+							".drone/scripts/build.sh"
+						]
         },
 
         {
             name: "publish-proget",
-            image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+            image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
             environment: {proget_api_key: {from_secret: "proget_api_key"}},
-            commands: [".drone/scripts/publish.sh"]
+            commands: [
+							"sudo apt-get install sed grep curl findutils -y",
+							".drone/scripts/publish.sh"
+						]
         }
     ]
 };
@@ -52,7 +61,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 
 	steps: [{
 		name: package_name,
-		image: "proget.hunterwittenborn.com/docker/hunter/makedeb:stable",
+		image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 		environment: {
 			ssh_key: {from_secret: "ssh_key"},
 			known_hosts: {from_secret: "known_hosts"},
@@ -61,7 +70,10 @@ local userRepoPublish(package_name, tag, user_repo) = {
 			target_repo: user_repo
 		},
 
-		commands: [".drone/scripts/user-repo.sh"]
+		commands: [
+			"sudo apt-get install git ssh grep mawk sed -y",
+			".drone/scripts/user-repo.sh"
+		]
 	}]
 };
 

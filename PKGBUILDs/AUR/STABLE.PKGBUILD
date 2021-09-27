@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="The modern packaging tool for Debian archives (${_release_type} release)"
 arch=('any')
 license=('GPL3')
-depends=('tar' 'binutils' 'lsb-release' 'dpkg' 'makedeb-makepkg')
+depends=('tar' 'binutils' 'lsb-release' 'dpkg' 'asciidoctor' 'makedeb-makepkg')
 conflicts=('makedeb-beta' 'makedeb-alpha')
 url="https://github.com/makedeb/makedeb"
 
@@ -42,6 +42,14 @@ package() {
   done
 
   cat "src/makedeb.sh" >> "${pkgdir}/usr/bin/makedeb"
-
   chmod 555 "${pkgdir}/usr/bin/makedeb"
+
+  # Set up man pages
+  SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/makedeb.8.adoc)" \
+    asciidoctor -b manpage man/makedeb.8.adoc \
+                -o "${pkgdir}/usr/share/man/man8/makedeb.8"
+
+  SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/pkgbuild.5.adoc)" \
+    asciidoctor -b manpage man/makedeb.8.adoc \
+                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 }

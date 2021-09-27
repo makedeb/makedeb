@@ -11,7 +11,7 @@ pkgrel=1
 pkgdesc="The modern packaging tool for Debian archives (beta release)"
 arch=('any')
 license=('GPL3')
-depends=('bash' 'binutils' 'tar' 'file' 'lsb-release' 'makedeb-makepkg-beta')
+depends=('bash' 'binutils' 'tar' 'file' 'lsb-release' 'asciidoctor' 'makedeb-makepkg-beta')
 optdepends=('r!apt')
 conflicts=('makedeb' 'makedeb-alpha')
 provides=('makedeb')
@@ -30,20 +30,29 @@ prepare() {
 }
 
 package() {
-    # Create single file for makedeb
-    mkdir -p "${pkgdir}/usr/bin"
-    cd "${srcdir}/${_foldername}"
+  # Create single file for makedeb
+  mkdir -p "${pkgdir}/usr/bin"
+  cd "${srcdir}/${_foldername}"
 
-    # Add bash shebang
-    echo '#!/usr/bin/env bash' > "${pkgdir}/usr/bin/makedeb"
+  # Add bash shebang
+  echo '#!/usr/bin/env bash' > "${pkgdir}/usr/bin/makedeb"
 
-    # Copy functions
-    for i in $(find "src/functions/"); do
-        if ! [[ -d "${i}" ]]; then
-            cat "${i}" >> "${pkgdir}/usr/bin/makedeb"
-        fi
-    done
-    cat "src/makedeb.sh" >> "${pkgdir}/usr/bin/makedeb"
+  # Copy functions
+  for i in $(find "src/functions/"); do
+    if ! [[ -d "${i}" ]]; then
+      cat "${i}" >> "${pkgdir}/usr/bin/makedeb"
+    fi
+  done
 
-    chmod 555 "${pkgdir}/usr/bin/makedeb"
+  cat "src/makedeb.sh" >> "${pkgdir}/usr/bin/makedeb"
+  chmod 555 "${pkgdir}/usr/bin/makedeb"
+
+  # Set up man pages
+  SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/makedeb.8.adoc)" \
+    asciidoctor -b manpage man/makedeb.8.adoc \
+                -o "${pkgdir}/usr/share/man/man8/makedeb.8"
+
+  SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/pkgbuild.5.adoc)" \
+    asciidoctor -b manpage man/makedeb.8.adoc \
+                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 }

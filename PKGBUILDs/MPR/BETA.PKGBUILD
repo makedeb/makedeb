@@ -7,7 +7,7 @@ pkgrel=1
 pkgdesc="The modern packaging tool for Debian archives (${_release_type} release)"
 arch=('any')
 license=('GPL3')
-depends=('bash' 'binutils' 'tar' 'file' 'lsb-release' 'makedeb-makepkg-beta')
+depends=('bash' 'binutils' 'tar' 'file' 'lsb-release' 'asciidoctor' 'makedeb-makepkg-beta')
 optdepends=('apt' 'git')
 conflicts=('makedeb' 'makedeb-alpha')
 url="https://github.com/makedeb/makedeb"
@@ -23,7 +23,7 @@ prepare() {
   sed -i "s|makedeb_release_type=.*|makedeb_release_type=${_release_type}|" src/makedeb.sh
 
   # Remove testing commands
-  sed -i 's|.*# REMOVE AT PACKAGING||g'                                     src/makedeb.sh
+  sed -i 's|.*# REMOVE AT PACKAGING||g' src/makedeb.sh
 }
 
 package() {
@@ -42,6 +42,14 @@ package() {
   done
 
   cat "src/makedeb.sh" >> "${pkgdir}/usr/bin/makedeb"
-
   chmod 555 "${pkgdir}/usr/bin/makedeb"
+
+  # Set up man pages
+  SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/makedeb.8.adoc)" \
+    asciidoctor -b manpage man/makedeb.8.adoc \
+                -o "${pkgdir}/usr/share/man/man8/makedeb.8"
+
+  SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/pkgbuild.5.adoc)" \
+    asciidoctor -b manpage man/makedeb.8.adoc \
+                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 }

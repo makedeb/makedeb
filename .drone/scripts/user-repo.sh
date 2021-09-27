@@ -42,14 +42,10 @@ pkgrel="$(cat src/PKGBUILD | grep '^pkgrel=' | awk -F '=' '{print $2}')"
 # Set package version in PKGBUILD
 sed -i "s|^pkgver={pkgver}|pkgver=${pkgver}|" "${package_name}_${target_repo}/PKGBUILD"
 
-# Create build user for creating .SRCINFO file
-useradd user
-
 # Create .SRCINFO file
-chown "user:user" "${package_name}_${target_repo}" -R
 cd "${package_name}_${target_repo}"
 
-sudo -u user -- makedeb --printsrcinfo | tee .SRCINFO
+makedeb --printsrcinfo | tee .SRCINFO
 
 # Remove 'generated-by' line when using AUR deployments.
 if [[ "${target_repo}" == "aur" ]]; then
