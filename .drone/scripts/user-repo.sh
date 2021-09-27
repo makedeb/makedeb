@@ -20,7 +20,7 @@ else
 
 fi
 
-chmod 400 "/${HOME}/.ssh/" -R
+chmod 500 "/${HOME}/.ssh/"* -R
 
 # Clone AUR/MPR Package
 if [[ "${target_repo}" == "mpr" ]]; then

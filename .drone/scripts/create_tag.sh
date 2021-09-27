@@ -13,7 +13,7 @@ echo "  Hostname ${github_url}" | tee -a "/${HOME}/.ssh/config"
 echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
 ls -alF "/${HOME}/.ssh/"
-chmod 400 "/${HOME}/.ssh/" -R
+chmod 500 "/${HOME}/.ssh/"* -R
 
 # Get current package version
 package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F '=' '{print $2}')"
