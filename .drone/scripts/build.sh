@@ -14,4 +14,4 @@ sed -i "s|pkgver={pkgver}|pkgver=${pkgver}|" 'src/PKGBUILD'
 
 # Build makedeb
 cd src
-./makedeb.sh -si --no-confirm
+./makedeb.sh --sync-deps --no-confirm

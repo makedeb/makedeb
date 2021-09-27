@@ -162,7 +162,7 @@ fi
 
 # Install built package
 if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
-  local apt_install_list=()
+  declare apt_install_list=()
 
   for i in "${pkgname[@]}"; do
     apt_installation_list+=("./${i}_${makedeb_apt_package_version}_${MAKEDEB_CARCH}.deb")
