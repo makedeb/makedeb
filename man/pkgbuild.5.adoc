@@ -1,0 +1,219 @@
+= PKGBUILD(5)
+:doctype: manpage
+:hardbreaks:
+:manmanual: makedeb manual pages
+
+== NAME
+PKGBUILD - file format used by makedeb(8)
+
+== DESCRIPTION
+PKGBUILD files are simple Bash scripts that tell *makedeb*(8) how to build a package.
+
+Users just provide the needed variables and functions, then makedeb creates a package than can be installed directly via *APT*(8).
+
+== VARIABLES
+A completely basic PKGBUILD would contain the *pkgname*, *pkgver*, *pkgrel*, and *arch* variables, which *makedeb*(8) requires in order to build a package.
+
+If you need to set custom variables for your own use in a build script, it is recommended to prefix the variable name with an underscore (*_*) to prevent any possible naming collisions with internal variables used by *makedeb*(8).
+
+(I.e. instead of using *varname* as a variable name, use *_varname* instead.)
+
+=== KEY
+*required*: Needed in order to build a package.
+*optional*: May be omitted.
+*function*: Variable may be used inside of makedeb's packaging functions.
+*nofunction*: Variable is not allowed to be used inside of makedeb's packaging functions.
+*string*: Variable must be a string.
+*array*: Variable must be an array.
+*mixed*: Variable can be either a string or an array.
+
+=== PACKAGE NAME
+*pkgname (required, nofunction, mixed)*::
+  The package name set inside of the built package.
+
+=== PACKAGE VERSION
+*pkgver (required, nofunction, string)*::
+  The version number of a package. If packaging from a upstream source that is also version, this should generally be kept the same as said source's version unless required to work properly with *makedeb*(8). Allowed characters are all alphanumerics, periods (.) and plus signs (+).
+
+*pkgrel (required, nofunction, string)*::
+  The release number of a package. This variable should be set to *1* by default, and then incremented by *1* as additional changes are made to the PKGBUILD that require *pkgver* to not change. Whenever *pkgver* does change, this variable should be reset back to *1*.
+
+*epoch (optional, nofunction, string)*::
+  This forces the package to be seen as a newer version than any other with a lower version. This variable shouldn't be used in most packages, and should only be added when absolutely required to do so (such as when an upstream source changes their version numbering scheme).
+
+=== GENERIC
+*pkgdesc (mandatory, function, string)*::
+  The description of a package. This can be of any length, but should not be multiple lines. All characters are allowed except colons (*:*).
+
+*arch (mandatory, nofunction, array)*::
+  Sets what system architectures a package can be built on. Architectures in this list should be set to those found in the output of *uname -m* (*uname*(1)).
+
+*url (optional, function, string)*::
+  The URL of the software being packaged. When a website doesn't exist for the upstream project, this is commonly set to the URL of a VCS repository.
+
+*license (optional, function, array)*::
+  Sets the license(s) under which a program is distributed. This should be set to the name of a license under */usr/share/common-licenses/* or should otherwise be set to *custom*.
+  ++
+  ++
+  *NOTE*
+  When using *custom*, you can also attach a license suffix like so:
+  ++
+  ++
+  *license=('custom: name of license')*
+  ++
+  ++
+  When using *custom*, it is also recommended to install the license under **/usr/share/doc/pkgname/copyright/**, replacing *pkgname* with the name of the package.
+
+=== DEPENDENCIES
+*depends (optional, function, array)*::
+  A list of packages needed to execute a program. When listed as a variable from the root of a PKGBUILD, the dependencies get installed before a build takes place. If placed inside of a function such as *package()*, the dependencies get marked as needed by the built package, but won't be checked for while building.
+  ++
+  ++
+  Version restrictions can be specified via comparison operators (*>*, *>=*, *=*, *<=*, *<*) to require a certain version of a package.
+  ++
+  ++
+  If you need more specificity than the above allows (i.e. great than one version, while also less than another), you can repeat the package name multiple times with each operator, i.e.
+  ++
+  ++
+  *depends=('foo>=1.0.0' 'foo<2.0.0')*
+  ++
+  ++
+  *NOTE*
+  You can append this variable with architectures (such as *x86_64*) to make this variable get overwritten on certain architectures. When using such, all architecture extensions should also be present under the *arch* variable.
+  ++
+  ++
+  You can also **prepend** this variable with a distribution id such as *focal* (i.e. *focal_depends*, or *focal_depends_x86_64* if you really needed specificity) on the Debian releases of *makedeb*(8) to overwrite the variable on certain **releases** of a distribution.
+  ++
+  ++
+  Detection of the distribution name is done via the *lsb_release -cs* command (*lsb_release*(1)), which is then used to check for the relevant variable.
+  ++
+  ++
+  Support for these variable tags is also supported on *makedepends*, *checkdepends*, *optdepends*, *conflicts*, *provides*, *replaces*, *source* and all checksum variables. You can also use architecture-specific tags on build functions (*prepare()*, *pkgver()*, *build()*, *check()*, *package()*), though distribution-specific tags will currently not work.
+
+*makedepends (optional, nofunction, array)*::
+  An array of packages that are only required to build a program. This variable takes the same syntax as *depends*. Packages put here will be removed when using makedeb's *-r* option. Any packages listed under *depends* should not be duplicated here.
+
+*checkdepends (optional, nofunction, array)*::
+  An array of packages needed to run the *check()* function in a PKGBUILD. This variable behaves the same way as *makedepends*.
+  ++
+  ++
+  *BUG*
+  Packages in this list should only be checked for when the *check()* function is present and command-line arguments aren't stopping the function from running (likewise though, they aren't). Currently that means this variable is quite interchangeable with *makedepends*, though you shouldn't rely on that behavior.
+
+*optdepends (optional, function, array)*::
+  An array of packages that aren't required for a program to run, but add additional features. Packages in this list won't be checked as build dependencies, regardless of where placed. If you need said behavior, add said packages to *makedepends* or *checkdepends*.
+  ++
+  ++
+  This variable takes the same syntax as *depends* with a few additions:
+  1. Packages listed here may optionally be prefixed with *r!* or *s!*. Adding the *r!* prefix will mark said dependency as recommended in the built package, while adding *s!* or simply omitting any prefix will mark the package as suggested (*deb-control*(5)).
+  ++
+  ++
+  2. Packages listed here can be prefixed with a description of what functionality the dependency adds like so:
+  ++
+  ++
+  *optdepends=('cups: printing support')*
+
+*conflicts (optional, function, array)*::
+  A list of packages that the built package can't be installed at the same time with. This variable takes the same syntax as *depends*. Any packages listed here will be required to be uninstalled before the built package can be installed. Specifying comparison operators will cause the package to only conflict with package versions that the operator covers.
+
+*provides (optional, function, array)*::
+  A list of packages that the built package provides the dependency for. For example, if the PKGBUILD is building the *foo-new* program and another package depends on *foo*, you could put the following in a PKGBUILD to make *foo-new* satisfy the dependency:
+  ++
+  ++
+  *provides=('foo')*
+  ++
+  ++
+  Specifying comparison operators here will cause the provided package to only be provided for when other packages request a version that fits the specified operator. This variable also takes the same syntax as *depends*.
+
+=== OTHER
+*options (optional, function, array)*::
+  Allows overriding some of makedeb's default behavior. To set an option, include it in the array. To disable an option, prefix the option with a *!*. The following options may be specified:
+  ++
+  ++
+  *strip*: Strip symbols from binaries.
+  *emptydirs*: Leave empty directories in packages.
+  *zipman*: Comprezz man and info pages with gzip.
+  *lto*: Enable building packages using link time optimization. Adds *-flto* to both *CFLAGS* and *CXXFLAGS*.
+
+*install (optional, function, string)*::
+  The name of an installation script to be included in the package. *APT*(8) can use this script to perform operations after and before both installations and removals of packages. The file should be a Bash script containing any combination of the following four functions:
+  ++
+  ++
+  *pre_install()*: Ran before files of a package are unpacked (happens during installation of a package).
+  *post_install()*: Ran right after files of a package are unpacked (happens during installation of a package).
+  *pre_remove()*: Ran right before files of a packaged are removed (happens during removal of a package).
+  *pre_remove()*: Ran right before files of a packaged are removed (happens during removal of a package).
+  ++
+  ++
+  *NOTE*
+  See https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#summary-of-ways-maintainer-scripts-are-called for information on how and when maintainer scripts are called. Note that the relevant functions are listed as *preinst*, *postinst*, *prerm* and *postrm*.
+
+=== SOURCES
+*source (optional, nofunction, array)*::
+  A list of files needed to build a package. Files should be specified via a URI such as with FTP and HTTP. Previously defined variables can also be used effectively here:
+  ++
+  ++
+  *source=("https://example.com/${pkgname}-${pkgver}.tar.gz")*
+  ++
+  ++
+  Files in the source array that have a *.sig*, *.sign* or *.asc* extension are recognized by makedeb as PGP signatures and will be automatically used to verify the integrity of the source file under the same name.
+  ++
+  ++
+  You can also prefix the source with *name::*, which allows you to specify where the file is saved to after a download:
+  ++
+  ++
+  *source=("package-file::https://example.com/${pkgname}-${pkgver}.tar.gz")*
+
+*noextract (optional, nofunction, array)*::
+  A list of archive files from *source* which should not be automatically extracted by makedeb. This can be useful when you can't/don't want to use makedeb's automatic extraction features or you need to install an archive as-is onto a system. The items in this list should point to the **filename** of downloaded files, not the full URL (i.e. that being *${pkgname}-${pkgver}.tar.gz* in our previous example).
+
+=== INTEGRITY
+An array of checksums for files in the *source* array. The number of items in this array **must** match that in *source*, with each item corresponding to that in *source* in the order they appear. The checksums in this array should always be those provided by the upstream program, sometimes being bundled alongside releases.
+  ++
+  ++
+The following checksum types are supported, and should be entered in the format *{checksum}sums* (i.e. *sha256sums*):
+  ++
+  ++
+  *md5*
+  *sha1*
+  *sha224*
+  *sha256*
+  *sha384*
+  *sha512*
+  *b2*
+  ++
+  ++
+  At minimum, one of these types **must** be present. If you otherwise would prefer to avoid any hash checks, simply choose any checksum type (*sha256sums* is historically used due to it being popular when actually using checksums) and set all of its values to *SKIP*:
+  ++
+  ++
+  *sha256sums=('SKIP')*
+
+== FUNCTIONS
+When building a package, *makedeb*(8) will call the following five functions if they have been defined in the PKGBUILD. The *package()* function must always be present; omitting any of the rest will simply cause makedeb to skip running it.
+
+*prepare()*::
+  This function defines commands used to prepare sources for building, such as patching. This function runs right after package sources are extracted, and before the *pkgver()* and *build()* functions. This function is run with the *errexit* Bash option, which will cause the function to immediately exit if any of the contained commands exit with a non-zero status code.
+
+*pkgver()*::
+  *pkgver()* is executed after *prepare()* is ran. This function should output a valid version identifier, which *makedeb*(8) will automatically update the package version to. This can be particularly useful when working with VCS sources such as Git, where packages may receive updates multiple times a day (in which case it would be quite inconvenient to continuously update the *pkgver* variable).
+
+*build()*::
+  This function is called after *prepare()* and *pkgver()*, and should contain commands needed to properly build a program. *makedeb*(8) will change the current directory to *${srcdir}* (which will be *./src/* from the directory containing the PKGBUILD) before executing *build()*, which will then put you into the directory containing all sources obtained from the *source* array.
+
+*check()*::
+  This function should contain *make check* and/or other commands used to check if a program was built correctly and all needed dependencies are installed.
+
+*package()*::
+  This final step is used to actually put the files previously created into a directory where makedeb can package up your program properly. The folder to place said files in is *${pkgdir}*, which mimics the directory structure of an actual system (i.e. *${pkgdir}/etc/config.conf* points to */etc/config.conf* when the package is actually installed). Your system will still be under the *${srcdir}* directory, allowing you to easily copy files over to the package directory:
+  ++
+  ++
+  *package() {*
+  *install -Dm 755 "${pkgname}-${pkgver}/hello-world" "${pkgdir}/usr/bin/hello-world"*
+  *}*
+  ++
+  ++
+  *NOTE*
+  You should not create files under `${pkgdir}/DEBIAN/`, as *makedeb* uses that folder to create metadata for the built package.
+
+== SEE ALSO
+*makedeb*(8)

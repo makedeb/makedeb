@@ -1,0 +1,87 @@
+= MAKEDEB(8)
+:doctype: manpage
+:hardbreaks:
+:manmanual: makedeb manual pages
+
+== NAME
+makedeb - the modern packaging tool for Debian archives
+
+== SYNOPSIS
+*makedeb* [_options_] ...
+*makedeb* [-pf, --file] _buildfile_
+*makedeb* [-H, --field] _control-field_
+
+== DESCRIPTION
+*makedeb* is a packaging tool for creating Debian archives via the *PKGBUILD*(5) packaging format.
+
+*makedeb* aims to be simplistic and easy to learn, all the while still remaining just as powerful as the standard Debian build tools.
+
+On the other hand, *makedeb* is NOT meant to be a replacement for package management tools like *apt*(8) and *dpkg*(1). Rather, it is a compliment to them, by creating the packages that the said programs end up actually installing.
+
+== OPTIONS
+*-A, --ignore-arch*::
+  Skips checks to verify that a package can be built and installed for the system's architecture type.
+
+*-d, --no-deps*::
+  Skips checks to ensure needed build dependencies are installed on the system.
+
+*-F, -p, --file*::
+  Specifies a build file other than 'PKGBUILD' to source information from.
+
+*-g, --gen-enteg*::
+  Generates hashes for items in 'source' arrays and quits.
+
+*-h, --help*::
+  Brings up the help menu and quits.
+
+*-H, --field*::
+  Appends the generated control file with extra fields.
+
+*-i, --install*::
+  Automatically installs the built package(s) after a successful build. This option is not available on the Arch Linux releases.
+
+*-V, --version*::
+  Prints version information and quits.
+
+*-r, --rm-deps*::
+  Removes installed build dependencies after a successful build.
+
+*-s, --sync-deps*::
+  Checks for any missing build dependencies and installs them.
+
+*--print-control*::
+  Prints a generated control file and exits.
+
+*--print-srcinfo*::
+  Prints a generated SRCINFO file and exits.
+
+*--skip-pgp-check*::
+  Skips verification of downloaded sources against specified PGP signatures.
+
+*--verbose*::
+  Prints VERY detailed logging.
+
+*--as-deps*::
+  Marks packages installed via the *-i*/*--install* option as automatically installed. This option is not available on the Arch Linux releases.
+
+== EXIT STATUS
+  *makedeb* exits with an exit code of 0 on success, and 1 in all other events.
+
+== BUGS
+Issues, as well as feature requests, should be reported on the project's GitHub page:
+
+https://github.com/makedeb/makedeb/issues
+
+Matrix is also used as our primary method of real-time communication, being where most discussions (outside of the issue tracker) take place. All rooms are joined via a Matrix space, which can be accessed via the following:
+
+#makedeb:hunterwittenborn.com
+
+== AUTHORS
+Hunter Wittenborn <\hunter@hunterwittenborn.com>
+
+Thank you to the Pacman Development Team for their work in *makepkg*, without which *makedeb* wouldn't even be possible.
+
+A full list of contributors can be found by running *git shortlog -esn* in makedeb's Git repository (linked under *BUGS*).
+
+== SEE ALSO
+*PKGBUILD*(5), *dpkg*(1), *APT*(8)
