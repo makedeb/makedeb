@@ -32,7 +32,7 @@ local buildAndPublish(package_name, tag) = {
             image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
             environment: {release_type: tag, package_name: package_name},
             commands: [
-							"sudo apt-get install sed grep mawk -y",
+							"sudo apt-get install sed grep mawk git -y",
 							".drone/scripts/build.sh"
 						]
         },
