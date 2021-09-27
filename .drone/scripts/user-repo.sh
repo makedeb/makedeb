@@ -2,25 +2,25 @@
 set -exuo pipefail
 
 # Set up SSH
-rm -rf /root/.ssh
-mkdir -p /root/.ssh
+rm -rf "/${HOME}/.ssh"
+mkdir -p "/${HOME}/.ssh"
 
-echo "${ssh_key}" | tee /root/.ssh/ssh_key
-echo "${known_hosts}" | tee /root/.ssh/known_hosts
+echo "${ssh_key}" | tee "/${HOME}/.ssh/ssh_key"
+echo "${known_hosts}" | tee "/${HOME}/.ssh/known_hosts"
 
 if [[ "${target_repo}" == "mpr" ]]; then
-	echo "Host ${mpr_url}" | tee /root/.ssh/config
-	echo "  Hostname ${mpr_url}" | tee -a /root/.ssh/config
-	echo "  IdentityFile /root/.ssh/ssh_key" | tee -a /root/.ssh/config
+	echo "Host ${mpr_url}" | tee "/${HOME}/.ssh/config"
+	echo "  Hostname ${mpr_url}" | tee -a "/${HOME}/.ssh/config"
+	echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
 else
-	echo "Host ${aur_url}" | tee /root/.ssh/config
-	echo "  Hostname ${aur_url}" | tee -a /root/.ssh/config
-	echo "  IdentityFile /root/.ssh/ssh_key" | tee -a /root/.ssh/config
+	echo "Host ${aur_url}" | tee "/${HOME}/.ssh/config"
+	echo "  Hostname ${aur_url}" | tee -a "/${HOME}/.ssh/config"
+	echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
 fi
 
-chmod 400 /root/.ssh/ -R
+chmod 400 "/${HOME}/.ssh/" -R
 
 # Clone AUR/MPR Package
 if [[ "${target_repo}" == "mpr" ]]; then
