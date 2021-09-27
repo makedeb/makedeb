@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -exuo pipefail
+chmod 777 * -R
 
 # Set up SSH
 rm -rf "/${HOME}/.ssh"
