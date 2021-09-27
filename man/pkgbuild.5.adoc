@@ -213,7 +213,7 @@ When building a package, *makedeb*(8) will call the following five functions if 
   ++
   ++
   *NOTE*
-  You should not create files under `${pkgdir}/DEBIAN/`, as *makedeb* uses that folder to create metadata for the built package.
+  You should not create files under `${pkgdir}/DEBIAN/`, as *makedeb*(8) uses that folder to create metadata for the built package.
 
 == SEE ALSO
 *makedeb*(8)

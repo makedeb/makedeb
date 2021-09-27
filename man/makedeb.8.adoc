@@ -65,7 +65,7 @@ On the other hand, *makedeb* is NOT meant to be a replacement for package manage
   Marks packages installed via the *-i*/*--install* option as automatically installed. This option is not available on the Arch Linux releases.
 
 == EXIT STATUS
-  *makedeb* exits with an exit code of 0 on success, and 1 in all other events.
+*makedeb* exits with an exit code of 0 on success, and 1 in all other events.
 
 == BUGS
 Issues, as well as feature requests, should be reported on the project's GitHub page:
