@@ -25,7 +25,7 @@ install_depends() {
     # Install build dependencies, and mark them as automatically installed.
     msg2 "Installing build dependencies..."
 
-    sudo apt-get install -- "${needed_dependencies[@]}" || failed_dependency_installation=1
+    sudo apt-get install "${apt_args[@]}" -- "${needed_dependencies[@]}" || failed_dependency_installation=1
     sudo apt-mark auto -- "${needed_dependencies[@]}" 1> /dev/null || failed_dependency_installation=1
 
     if (( "${failed_dependency_installation}" )); then

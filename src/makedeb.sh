@@ -139,7 +139,7 @@ fi
 
 msg "Entering fakeroot environment..."
 
-"${makepkg_package_name}" --format-makedeb -p "${FILE}" ${makepkg_options}
+"${makepkg_package_name}" --format-makedeb -p "${FILE}" "${makepkg_args[@]}"
 
 # We keep tihs as a normal string (instead of an array) so that we can access
 # the variable inside of subshells. <https://stackoverflow.com/a/5564589>
@@ -170,7 +170,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
 
   apt_installation_string="$(echo "${pkgname[@]}" | sed 's| |, |g')"
   msg "Installing ${apt_installation_string}..."
-  sudo apt-get reinstall -- "${apt_installation_list[@]}"
+  sudo apt-get reinstall "${apt_args[@]}" -- "${apt_installation_list[@]}"
 
   if (( "${makedeb_args["as-deps"]}" )); then
     sudo apt-mark auto -- "${pkgname[@]}" 1> /dev/null

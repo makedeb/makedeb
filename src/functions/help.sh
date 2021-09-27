@@ -23,6 +23,7 @@ help() {
     echo
     echo "The following options can modify the behavior of APT:"
     echo "  --as-deps             Mark built packages as automatically installed (when using '-i')"
+    echo "  --no-confirm          Don't ask before installing packages"
     echo
     echo "Report bugs at https://github.com/hwittenborn/makedeb"
 
@@ -47,6 +48,8 @@ help() {
     echo "  --print-src-info     Print a generated .SRCINFO file and exit"
     echo "  --skip-pgp-check     Do not verify source files against PGP signatures"
     echo
+    echo "  The following options can modify the behavior of pacman:"
+    echo "    --no-confirm       Don't ask before install dependencies"
     echo "Report bugs at https://github.com/hwittenborn/makedeb"
   fi
 }
