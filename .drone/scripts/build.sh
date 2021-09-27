@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -exuo pipefail
-
-# Set perms
-chmod 777 * -R
+sudo chown 'makedeb:makedeb' ./ -R
 
 # Get variables
 pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | awk -F '=' '{print $2}')"

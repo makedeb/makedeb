@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -exuo pipefail
-chmod 777 * -R
+sudo chown 'makedeb:makedeb' ./ -R
 
 # Set up SSH
 rm -rf "/${HOME}/.ssh"
