@@ -12,6 +12,7 @@ echo "Host ${github_url}" | tee "/${HOME}/.ssh/config"
 echo "  Hostname ${github_url}" | tee -a "/${HOME}/.ssh/config"
 echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
+ls -alF "/${HOME}/.ssh/"
 chmod 400 "/${HOME}/.ssh/" -R
 
 # Get current package version
