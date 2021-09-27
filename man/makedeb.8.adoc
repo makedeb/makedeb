@@ -28,7 +28,7 @@ On the other hand, *makedeb* is NOT meant to be a replacement for package manage
 *-F, -p, --file*::
   Specifies a build file other than 'PKGBUILD' to source information from.
 
-*-g, --gen-enteg*::
+*-g, --gen-integ*::
   Generates hashes for items in 'source' arrays and quits.
 
 *-h, --help*::
