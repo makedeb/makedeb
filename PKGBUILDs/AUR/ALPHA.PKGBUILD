@@ -8,6 +8,7 @@ pkgdesc="The modern packaging tool for Debian archives (${_release_type} release
 arch=('any')
 license=('GPL3')
 depends=('tar' 'binutils' 'lsb-release' 'dpkg' 'asciidoctor' 'makedeb-makepkg-alpha')
+makedepends=('git')
 conflicts=('makedeb' 'makedeb-beta')
 url="https://github.com/makedeb/makedeb"
 
