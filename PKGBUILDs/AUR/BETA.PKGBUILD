@@ -11,11 +11,11 @@ depends=('tar' 'binutils' 'lsb-release' 'dpkg' 'asciidoctor' 'makedeb-makepkg-be
 conflicts=('makedeb' 'makedeb-alpha')
 url="https://github.com/makedeb/makedeb"
 
-source=("${url}/archive/refs/tags/v${pkgver}-${_release_type}.tar.gz")
+source=("git+${url}/#tag=v${pkgver}-${_release_type}")
 sha256sums=('SKIP')
 
 prepare() {
-  cd "makedeb-${pkgver}-${_release_type}"
+  cd makedeb/
 
   # Set package version, release type, and target OS
   sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}-${pkgrel}|"  src/makedeb.sh
@@ -29,7 +29,7 @@ prepare() {
 package() {
   # Create single file for makedeb
   mkdir -p "${pkgdir}/usr/bin"
-  cd "makedeb-${pkgver}-${_release_type}"
+  cd makedeb/
 
   # Add bash shebang
   echo '#!/usr/bin/env bash' > "${pkgdir}/usr/bin/makedeb"
