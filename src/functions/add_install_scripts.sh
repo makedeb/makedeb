@@ -1,7 +1,7 @@
 add_install_scripts() {
   # Print a warning if .install scripts are being used, as we've deprecated them.
   if [[ -f ".INSTALL" ]]; then
-    warning "Installation scripts have been deprecated, and will no longer work. See the PKGBUILD(5) man page for information on using the new implementation."
+    warning2 "Installation scripts have been deprecated, and will no longer work. See the PKGBUILD(5) man page for information on using the new implementation."
   fi
 
   for i in 'preinst' 'postinst' 'prerm' 'postrm'; do
