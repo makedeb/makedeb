@@ -125,6 +125,34 @@ If you need to set custom variables for your own use in a build script, it is re
   ++
   Specifying comparison operators here will cause the provided package to only be provided for when other packages request a version that fits the specified operator. This variable also takes the same syntax as *depends*.
 
+=== PACKAGING SCRIPTS
+It's possible to specify certain scripts as part of your package which will get automatically ran when your package is installed, upgraded, or removed.
+
+To specify these files in a PKGBUILD, just specify the variable name like you would for any other variable, then enter the path to the script in relation to the directory containing the PKGBUILD file.
+
+The only requirement for running the scripts is that they must be properly executable. This means that the scripts (or programs rather) may come precompiled in the form of a binary, or should start with the standard interpreter shebang (i.e. *#!/usr/bin/env bash*) on the first line of the script.
+
+All programs that are called here *MUST* return a zero exit status for success, or any other exit code for failure, as the package manager will use such to determine what action to take next.
+
+Maintainer scripts are also not guaranteed to be ran via a terminal that can interact with the user, and should be able to fall back to noninteractive behavior if no interactive terminal is available.
+
+Lastly, it is important that actions that occur in maintainer scripts can occur multiple times. As in, for example, if a maintainer script does a certain action, that action (or execution of the script anyway) should be able to happen again without causing any harm to the user's system.
+
+*WAYS SCRIPTS ARE CALLED*
+See https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#summary-of-ways-maintainer-scripts-are-called for details on the various ways that maintainer scripts can be called.
+
+*preinst (optional, function, array)*::
+  A string that specifies the path to a script to execute before a package is unpacked onto a user's system.
+
+*postinst (optional, function, array)*::
+  A string that specifies the path to a script to execute after a package is unpacked onto a user's system.
+
+*postinst (optional, function, array)*::
+  A string that specifies the path to a script to execute before a package is removed from a user's system.
+
+*postinst (optional, function, array)*::
+  A string that specifies the path to a script to execute after a package is removed from a user's system.
+
 === OTHER
 *options (optional, function, array)*::
   Allows overriding some of makedeb's default behavior. To set an option, include it in the array. To disable an option, prefix the option with a *!*. The following options may be specified:
@@ -134,19 +162,6 @@ If you need to set custom variables for your own use in a build script, it is re
   *emptydirs*: Leave empty directories in packages.
   *zipman*: Comprezz man and info pages with gzip.
   *lto*: Enable building packages using link time optimization. Adds *-flto* to both *CFLAGS* and *CXXFLAGS*.
-
-*install (optional, function, string)*::
-  The name of an installation script to be included in the package. *APT*(8) can use this script to perform operations after and before both installations and removals of packages. The file should be a Bash script containing any combination of the following four functions:
-  ++
-  ++
-  *pre_install()*: Ran before files of a package are unpacked (happens during installation of a package).
-  *post_install()*: Ran right after files of a package are unpacked (happens during installation of a package).
-  *pre_remove()*: Ran right before files of a packaged are removed (happens during removal of a package).
-  *pre_remove()*: Ran right before files of a packaged are removed (happens during removal of a package).
-  ++
-  ++
-  *NOTE*
-  See https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#summary-of-ways-maintainer-scripts-are-called for information on how and when maintainer scripts are called. Note that the relevant functions are listed as *preinst*, *postinst*, *prerm* and *postrm*.
 
 === SOURCES
 *source (optional, nofunction, array)*::

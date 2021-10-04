@@ -1,22 +1,16 @@
 add_install_scripts() {
-  if ! [[ -f ".INSTALL" ]]; then
-    return 0
+  # Print a warning if .install scripts are being used, as we've deprecated them.
+  if [[ -f ".INSTALL" ]]; then
+    warning "Installation scripts have been deprecated, and will no longer work. See the PKGBUILD(5) man page for information on using the new implementation."
   fi
 
-  msg2 "Converting installation scripts..."
-  source .INSTALL
+  for i in 'preinst' 'postinst' 'prerm' 'postrm'; do
+    filename=".${i^^}"
 
-  for i in pre_install post_install pre_remove post_remove; do
-    if [[ "$(type -t "${i}")" != "function" ]]; then
-      continue
+    if [[ -f "${filename}" ]]; then
+      msg2 "Adding ${i} file..."
+      cp "${filename}" "${pkgdir}/${package}/DEBIAN/${i}"
+      chmod 755 "${pkgdir}/${package}/DEBIAN/${i}"
     fi
-
-    function_data="$(type "${i}" | sed '1,3d' | sed '$d')"
-
-    output_filename="$(echo "${i}" | sed 's|_install|inst|' | sed 's|_remove|rm|')"
-
-    echo '#!/usr/bin/env bash' > "DEBIAN/${output_filename}"
-    echo "${function_data}" >> "DEBIAN/${output_filename}"
-    chmod 555 "DEBIAN/${output_filename}"
   done
 }
