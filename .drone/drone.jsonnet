@@ -81,8 +81,10 @@ local sendBuildNotification(tag) = {
 	name: "send-build-notification-" + tag,
 	kind: "pipeline",
 	type: "docker",
-	when: {status: ["success", "failure"]},
-	trigger: {branch: [tag]},
+	trigger: {
+		branch: [tag],
+		status: ["success", "failure"]
+	},
 	depends_on: [
 		"create-tag-" + tag,
 		"build-and-publish-" + tag,
