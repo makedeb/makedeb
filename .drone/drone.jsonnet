@@ -78,7 +78,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 };
 
 local sendBuildNotification(tag) = {
-	name: "send-build-notification",
+	name: "send-build-notification-" + tag,
 	kind: "pipeline",
 	type: "docker",
 	when: {status: ["success", "failure"]},
