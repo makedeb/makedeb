@@ -83,6 +83,12 @@ local sendBuildNotification(tag) = {
 	type: "docker",
 	when: {status: ["success", "failure"]},
 	trigger: {branch: [tag]},
+	depends_on: [
+		"create-tag-" + tag,
+		"build-and-publish-" + tag,
+		"mpr-publish-" + tag,
+		"aur-publish-" + tag
+	],
 	steps: [{
 		name: "send-notification",
 		image: "proget.hunterwittenborn.com/docker/hwittenborn/drone-matrix",
