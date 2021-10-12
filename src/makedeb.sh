@@ -86,6 +86,7 @@ find "${FILE}" &> /dev/null || { error "Couldn't find ${FILE}"; exit 1; }
 
 source "${FILE}"
 pkgbuild_check
+"${makepkg_package_name}" --format-makedeb --lint -p "${FILE}"
 convert_version
 check_architecture
 
