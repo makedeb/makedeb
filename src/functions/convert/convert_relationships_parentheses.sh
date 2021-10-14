@@ -1,5 +1,5 @@
 convert_relationships_parentheses() {
-  for i in depends recommends suggests conflicts makedepends checkdepends provides replaces; do
+  for i in depends predepends recommends suggests conflicts makedepends checkdepends provides replaces; do
     local new_values=()
     var="${i}[@]"
 

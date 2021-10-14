@@ -41,6 +41,9 @@ package() {
       cat "${i}" >> "${pkgdir}/usr/bin/makedeb"
     fi
   done
+  
+  # Copy over extra utilities.
+  find ./src/utils/ -type f -exec install -Dm 755 '{}' "${pkgdir}/usr/share/makedeb/utils/{}" \;
 
   cat "src/makedeb.sh" >> "${pkgdir}/usr/bin/makedeb"
   chmod 555 "${pkgdir}/usr/bin/makedeb"

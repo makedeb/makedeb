@@ -44,7 +44,7 @@ fakeroot_build() {
     # Convert dependencies, then export data to control file.
     check_distro_dependencies
     remove_dependency_description
-    generate_optdepends_fields
+    generate_prefix_fields
     run_dependency_conversion
 
     msg2 "Generating control file..."

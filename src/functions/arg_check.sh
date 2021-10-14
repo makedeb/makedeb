@@ -7,6 +7,7 @@ arg_check() {
   declare -Ag makedeb_args=()
   declare -ag apt_args=()
   declare -ag makepkg_args=()
+  declare -ag pacman_args=()
 
   # Actual argument check
   if [[ "${target_os}" == "debian" ]]; then
@@ -41,18 +42,18 @@ arg_check() {
     while [[ "${1}" != "" ]]; do
       case "${1}" in
         -A | --ignore-arch | --ignorearch) declare -g makepkg_args+=("--ignorearch") ;;
-        -d | --no-deps | --nodeps)         declare -g skip_dependency_checks="true"; declare makepkg_args+=("--nodeps") ;;
+        -d | --no-deps | --nodeps)         declare -g skip_dependency_checks="true";;
         -F | -p | --file)                  declare -g FILE="${2}"; shift ;;
         -g | --gen-integ | --geninteg)     declare -g makepkg_geninteg="true" ;;
         -h | --help)                       help; exit 0 ;;
         -H | --field)                      export  extra_control_fields+=("${2}"); shift ;;
         -Q | --no-fields)                  warning "'${1}' has been deprecated, and should not be used." ;;
-        -r | --rm-deps | --rmdeps)         declare -g remove_dependencies="true"; declare makepkg_args+=("--rmdeps") ;;
-        -s | --sync-deps | --syncdeps)     declare -g install_dependencies="true"; declare makepkg_args+=("--syncdeps") ;;
+        -r | --rm-deps | --rmdeps)         declare -g remove_dependencies="true" ;;
+        -s | --sync-deps | --syncdeps)     declare -g install_dependencies="true" ;;
         -v | --distro-packages)            warning "'${1}' has been deprecated, and should not be used." ;;
         -V | --version)                    version_info; exit 0 ;;
         --dur-check)                       declare -g dur_check="true" ;;
-        --no-confirm)                      declare -g apt_args+=("--yes"); declare -g makepkg_args+=("--noconfirm") ;;
+        --no-confirm)                      declare -g pacman_args+=("--noconfirm") ;;
         --print-control)                   declare -g print_control=1 ;;
         --print-srcinfo | --printsrcinfo)  declare -g makepkg_printsrcinfo="true" ;;
         --skip-pgp-check | --skippgpcheck) declare -g makepkg_args+=("--skippgpcheck") ;;

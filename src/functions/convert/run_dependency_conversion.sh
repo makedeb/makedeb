@@ -1,5 +1,6 @@
 run_dependency_conversion() {
   check_relationships depends      "${depends[@]}"
+  check_relationships predepends   "${predepends[@]}"
   check_relationships recommends   "${recommends[@]}"
   check_relationships suggests     "${suggests[@]}"
   check_relationships conflicts    "${conflicts[@]}"

@@ -31,6 +31,8 @@ declare makedeb_package_version="git"
 declare makedeb_release_type="git"
 declare target_os="debian"
 declare makepkg_package_name="makedeb-makepkg"
+declare MAKEDEB_UTILS_DIR="./utils/" # REMOVE AT PACKAGING
+declare makedeb_utils_dir="${MAKEDEB_UTILS_DIR:-/usr/share/makedeb/utils/}"
 
 cd ./
 declare files="$(ls)"
@@ -87,24 +89,18 @@ find "${FILE}" &> /dev/null || { error "Couldn't find ${FILE}"; exit 1; }
 source "${FILE}"
 pkgbuild_check
 "${makepkg_package_name}" --format-makedeb --lint -p "${FILE}"
+
 convert_version
 check_architecture
+check_distro_dependencies
+remove_dependency_description
+generate_prefix_fields
 
 # Set pkgbase
 pkgbase="${pkgbase:-${pkgname[0]}}"
 
 # Check if we're printing a generated control file
 if (( "${print_control}" )); then
-  # We want to put all values from 'pkgname' under a single 'Package' field.
-  # This isn't syntactically correct by Debian's policy for binary control
-  # fields, but it prevents us from having to repeat everything twice for
-  # multiple packages.
-
-  check_distro_dependencies
-  remove_dependency_description
-  generate_optdepends_fields
-  run_dependency_conversion
-
   generate_control "./${FILE}" "/dev/stdout"
   exit "${?}"
 fi
@@ -112,35 +108,25 @@ fi
 msg "Making package: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
-# Check build dependencies
-if [[ "${target_os}" == "debian" ]]; then
+# Check build dependencies.
+if [[ "${skip_dependency_checks}" == "true" ]]; then
+  warning "Skipping dependency checks."
+else
   msg "Checking build dependencies..."
-
-  check_distro_dependencies
-
-  # Combine depends, makedepends and checkdepends all into depends.
-  dependency_packages=($(echo "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}" | \
-                         sed 's| |\n|g' | \
-                         sort -u | \
-                         tr -t '\n' ' '))
-
-  depends=("${dependency_packages[@]}")
-
-  remove_dependency_description
-  run_dependency_conversion
+  check_missing_dependencies
 
   if [[ "${install_dependencies}" == "true" ]]; then
-    check_dependencies
-    install_depends
-  elif [[ "${skip_dependency_checks}" != "true" ]]; then
-    check_dependencies
-    verify_dependencies
+    install_missing_dependencies
+  else
+    verify_no_missing_dependencies
   fi
 fi
 
+run_dependency_conversion
+
 msg "Entering fakeroot environment..."
 
-"${makepkg_package_name}" --format-makedeb -p "${FILE}" "${makepkg_args[@]}"
+"${makepkg_package_name}" --format-makedeb -p --nodeps "${FILE}" "${makepkg_args[@]}"
 
 # We keep tihs as a normal string (instead of an array) so that we can access
 # the variable inside of subshells. <https://stackoverflow.com/a/5564589>
@@ -157,8 +143,8 @@ rm -rf dependency_deb
 msg "Finished making: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
 
 # Remove build dependencies
-if [[ "${target_os}" == "debian" && "${install_dependencies}" == "true" && "${remove_dependencies}" == "true" ]]; then
-  remove_dependencies
+if [[ "${remove_dependencies}" == "true" ]]; then
+  remove_installed_dependencies
 fi
 
 # Install built package

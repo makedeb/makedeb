@@ -15,6 +15,7 @@ generate_control() {
   export_control "Maintainer:"    "${output_file}"  "${maintainer[@]}"
   export_control "Homepage:"      "${output_file}"  "${url[@]}"
 
+  export_control "Pre-Depends:"   "${output_file}"  "${predepends[@]}"
   export_control "Depends:"       "${output_file}"  "${depends[@]}"
   export_control "Recommends:"    "${output_file}"  "${recommends[@]}"
   export_control "Suggests:"      "${output_file}"  "${suggests[@]}"
