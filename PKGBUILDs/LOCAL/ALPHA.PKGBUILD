@@ -48,7 +48,9 @@ package() {
   chmod 555 "${pkgdir}/usr/bin/makedeb"
   
   # Copy over extra utilities.
-  find ./src/utils/ -type f -exec install -Dm 755 '{}' "${pkgdir}/usr/share/makedeb/utils/{}" \;
+  cd ./src/utils/
+  find ./ -type f -exec install -Dm 755 '{}' "${pkgdir}/usr/share/makedeb/utils/{}" \;
+  cd ../../
 
   # Set up man pages
   SOURCE_DATE_EPOCH="$(git log -1 --pretty='%ct' man/makedeb.8.adoc)" \

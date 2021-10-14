@@ -2,10 +2,6 @@ remove_installed_dependencies() {
   if [[ "${#missing_build_dependencies_no_relations[@]}" == "0" ]]; then
     return 0
   fi
-
-  if [[ "${install_dependencies}" != "true" ]]; then
-    warning "Build dependencies are being attempted to be removed, but weren't installed in this build run."
-  fi
   
   msg "Removing installed build dependencies..."
   
