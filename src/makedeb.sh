@@ -126,7 +126,7 @@ run_dependency_conversion
 
 msg "Entering fakeroot environment..."
 
-"${makepkg_package_name}" --format-makedeb -p --nodeps "${FILE}" "${makepkg_args[@]}"
+"${makepkg_package_name}" --format-makedeb --nodeps -p "${FILE}" "${makepkg_args[@]}"
 
 # We keep tihs as a normal string (instead of an array) so that we can access
 # the variable inside of subshells. <https://stackoverflow.com/a/5564589>
