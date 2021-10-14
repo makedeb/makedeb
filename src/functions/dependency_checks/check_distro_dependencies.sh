@@ -16,7 +16,7 @@ check_distro_dependencies() {
     distro_variable_string="${distro_codename}_${i}[@]"
     distro_variable_data=("${!distro_variable_string}")
 
-    if [[ "${package_data}" != "" ]]; then
+    if [[ "${distro_variable_data}" != "" ]]; then
       create_array "${i}" "${distro_variable_data[@]}"
     fi
   done

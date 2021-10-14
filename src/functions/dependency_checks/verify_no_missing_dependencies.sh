@@ -8,7 +8,4 @@ verify_no_missing_dependencies() {
     
     exit 1
   fi
-  
-  echo "${missing_build_dependencies[@]}"
-  exit
 }
