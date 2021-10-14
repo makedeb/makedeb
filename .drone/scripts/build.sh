@@ -2,6 +2,9 @@
 set -exuo pipefail
 sudo chown 'makedeb:makedeb' ./ -R
 
+# Install predependencies makedeb needs to properly build itself.
+sudo apt install -qqy python3-apt
+
 # Get variables
 pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | awk -F '=' '{print $2}')"
 
