@@ -1,0 +1,71 @@
+#!/bin/bash
+_makedeb()
+{
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+
+    case "$prev" in
+    	-'?'|--help|-h)
+    		return
+    		;;
+
+    	-A|--ignore-arch)
+			  return
+    		;;
+
+    	-d|--no-deps)
+    		return
+    		;;
+
+    	-F|--file)
+      COMPREPLY=( $( compgen -W "$(\ls -1aA .)" -- $cur ) )
+			  return
+			  ;;
+
+    	-g|--gen-integ)
+			  return
+			  ;;
+
+		-H|--field)
+			  return
+			  ;;
+		-i|--install)
+			  return
+			  ;;
+		-V|--version)
+			  return
+			  ;;
+		-r|--rm-deps)
+			  return
+			  ;;
+		-s|--sync-deps)
+			  return
+			  ;;
+		--print-control)
+			  return
+			  ;;
+		--print-srcinfo)
+			  return
+			  ;;
+		--skip-pgp-check)
+			 return
+			  ;;
+		--verbose)
+			 return
+			 ;;
+		--as-deps)
+			 return
+			 ;;
+    esac
+
+    case "$cur" in
+        -*)
+            COMPREPLY=( $( compgen -W '$( _parse_help "$1" )' -- "$cur" ) )
+            ;;
+
+        *)
+            _filedir
+            ;;
+    esac
+} &&
+complete -o filenames -o bashdefault -F _makedeb makedeb
