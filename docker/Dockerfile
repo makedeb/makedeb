@@ -15,4 +15,10 @@ RUN echo 'deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=al
 RUN apt-get update
 RUN apt-get install "${package}" -y
 
+RUN adduser --disabled-password --gecos '' makedeb
+RUN adduser makedeb sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER makedeb
+WORKDIR /home/makedeb
+
 ENTRYPOINT ["/bin/bash"]
