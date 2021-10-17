@@ -1,71 +1,70 @@
 #!/bin/bash
-_makedeb()
-{
-    cur=${COMP_WORDS[COMP_CWORD]}
-    prev=${COMP_WORDS[COMP_CWORD-1]}
+_makedeb() {
+	cur=${COMP_WORDS[COMP_CWORD]}
+	prev=${COMP_WORDS[COMP_CWORD-1]}
 
-    case "$prev" in
-    	-'?'|--help|-h)
-    		return
-    		;;
+	case "$prev" in
+		-h|--help)
+			return
+			;;
 
-    	-A|--ignore-arch)
-			  return
-    		;;
+		-A|--ignore-arch)
+			return
+			;;
 
-    	-d|--no-deps)
-    		return
-    		;;
+		-d|--no-deps)
+			return
+			;;
 
-    	-F|--file)
-      COMPREPLY=( $( compgen -W "$(\ls -1aA .)" -- $cur ) )
-			  return
-			  ;;
+		-F|--file)
+			COMPREPLY=( $( compgen -W "$(\ls -1aA .)" -- $cur ) )
+			return
+			;;
 
-    	-g|--gen-integ)
-			  return
-			  ;;
+		-g|--gen-integ)
+			return
+			;;
 
 		-H|--field)
-			  return
-			  ;;
+			return
+			;;
 		-i|--install)
-			  return
-			  ;;
+			return
+			;;
 		-V|--version)
-			  return
-			  ;;
+			return
+			;;
 		-r|--rm-deps)
-			  return
-			  ;;
+			return
+			;;
 		-s|--sync-deps)
-			  return
-			  ;;
+			return
+			;;
 		--print-control)
-			  return
-			  ;;
+			return
+			;;
 		--print-srcinfo)
-			  return
-			  ;;
+			return
+			;;
 		--skip-pgp-check)
-			 return
-			  ;;
+			return
+			;;
 		--verbose)
-			 return
-			 ;;
+			return
+			;;
 		--as-deps)
-			 return
-			 ;;
-    esac
+			return
+			;;
+	esac
 
-    case "$cur" in
-        -*)
-            COMPREPLY=( $( compgen -W '$( _parse_help "$1" )' -- "$cur" ) )
-            ;;
+	case "$cur" in
+		-*)
+			COMPREPLY=( $( compgen -W '$( _parse_help "$1" )' -- "$cur" ) )
+			;;
 
-        *)
-            _filedir
-            ;;
-    esac
+		*)
+			return
+			;;
+	esac
 } &&
 complete -o filenames -o bashdefault -F _makedeb makedeb
