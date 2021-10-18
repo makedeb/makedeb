@@ -42,10 +42,7 @@ check_missing_dependencies() {
     create_array "${i}_no_relations" "${current_array[@]}"
     unset current_array
   done
-  
-  mapfile -t missing_dependencies < <(echo -n "${missing_dependencies}")
-  mapfile -t missing_build_dependencies < <(echo -n "${missing_build_dependencies}")
-    
+      
   declare -g missing_dependencies
   declare -g missing_dependencies_no_relations=("${missing_dependencies_no_relations[@]}")
   declare -g missing_build_dependencies
