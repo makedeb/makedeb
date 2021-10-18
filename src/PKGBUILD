@@ -8,7 +8,7 @@ _gitdir=$(git rev-parse --show-toplevel)
 _foldername=$(basename "${_gitdir}")
 
 pkgname=makedeb
-pkgver=8.0.7
+pkgver=8.1.0
 pkgrel=1
 pkgdesc="The modern packaging tool for Debian archives (git release)"
 arch=('any')

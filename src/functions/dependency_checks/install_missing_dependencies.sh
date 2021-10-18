@@ -6,7 +6,7 @@ install_missing_dependencies() {
   msg2 "Installing required build dependencies..."
   
   if [[ "${target_os}" == "debian" ]]; then
-    if ! sudo apt-get satisfy "${apt_args[@]}" -- "${missing_dependencies[@]}" "${missing_build_dependencies[@]}"; then
+    if ! sudo apt-get install "${apt_args[@]}" -- "${missing_dependencies[@]}" "${missing_build_dependencies[@]}"; then
       error "There was an error installing build dependencies."
       exit 1
     fi
