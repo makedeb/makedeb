@@ -2,6 +2,7 @@
 :doctype: manpage
 :hardbreaks:
 :manmanual: makedeb manual pages
+:mansource: makedeb {version}
 
 == NAME
 makedeb - the modern packaging tool for Debian archives
