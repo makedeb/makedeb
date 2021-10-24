@@ -20,4 +20,4 @@ clean:
 	echo "nothing to clean"
 
 install:
-	sudo dpkg -i ./makedeb-stable_${pkgver}-1_all.deb
+	sudo dpkg -i ./makedeb-stable_${pkgver}_all.deb

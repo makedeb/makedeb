@@ -1,4 +1,4 @@
-makedeb (7.1.2-0ubuntu1) focal; urgency=medium
+makedeb (7.1.2+bugfix1-1) focal; urgency=medium
 
   * Initial Release.
 
