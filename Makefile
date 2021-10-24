@@ -2,6 +2,7 @@ GITDIR=$(git rev-parse --show-toplevel)
 FOLDERNAME=$(basename "${GITDIR}")
 BINDIR := /usr/bin
 
+.ONESHELL:
 
 all:
 
@@ -36,7 +37,7 @@ install:
 	chmod 555 "${DESTDIR}/usr/bin/makedeb"
 
 	# Copy over extra utilities.
-	cd ./src/utils/
+	cd ./src/utils
 	find ./ -type f -exec install -Dm 755 '{}' "${DESTDIR}/usr/share/makedeb/utils/{}" \;
 	cd ../../
 
