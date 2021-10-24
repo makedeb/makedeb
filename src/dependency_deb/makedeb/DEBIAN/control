@@ -1,0 +1,16 @@
+Package: makedeb
+Version: 8.0.4-1
+Description: The modern packaging tool for Debian archives (git release)
+Architecture: all
+License: GPL3
+Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
+Homepage: https://github.com/makedeb/makedeb
+Depends: bash, binutils, file, makedeb-makepkg-alpha, python3, python3-apt, tar
+Package: makedeb
+Version: 7.1.2-1
+Description: The modern packaging tool for Debian archives (git release)
+Architecture: all
+License: GPL3
+Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
+Homepage: https://github.com/makedeb/makedeb
+Depends: bash, binutils, file, makedeb-makepkg-alpha, tar
