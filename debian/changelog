@@ -1,3 +1,39 @@
+makedeb (7.1.2+bugfix1-7) focal; urgency=medium
+
+  * typo
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:22:12 -0700
+
+makedeb (7.1.2+bugfix1-6) focal; urgency=medium
+
+  * Got a fix for the multiline-statement
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:15:08 -0700
+
+makedeb (7.1.2+bugfix1-5) focal; urgency=medium
+
+  * Fix bugs in building
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:03:11 -0700
+
+makedeb (7.1.2+bugfix1-4) focal; urgency=medium
+
+  * switch to copying pkgbuild
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 14:41:54 -0700
+
+makedeb (7.1.2+bugfix1-3) focal; urgency=medium
+
+  * Fix makefile
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 13:52:02 -0700
+
+makedeb (7.1.2+bugfix1-2) focal; urgency=medium
+
+  * Fix dependencies
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 13:49:40 -0700
+
 makedeb (7.1.2+bugfix1-1) focal; urgency=medium
 
   * Initial Release.
