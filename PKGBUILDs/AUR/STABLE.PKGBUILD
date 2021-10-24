@@ -21,6 +21,8 @@ prepare() {
   # Set package version, release type, and target OS
   sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}-${pkgrel}|"  src/makedeb.sh
   sed -i "s|makedeb_release_type=.*|makedeb_release_type=${_release_type}|" src/makedeb.sh
+  sed -i "s|{pkgver}|${pkgver}|" ./man/makedeb.8.adoc
+  sed -i "s|{pkgver}|${pkgver}|" ./man/pkgbuild.5.adoc
   sed -i 's|target_os="debian"|target_os="arch"|' src/makedeb.sh
 
   # Remove testing commands

@@ -8,7 +8,7 @@ _gitdir=$(git rev-parse --show-toplevel)
 _foldername=$(basename "${_gitdir}")
 
 pkgname=makedeb
-pkgver=8.1.1
+pkgver=8.2.0
 pkgrel=1
 pkgdesc="The modern packaging tool for Debian archives (git release)"
 arch=('any')
@@ -23,6 +23,8 @@ sha256sums=('SKIP')
 prepare() {
   # Set package version and release type
   sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}-${pkgrel}|" "${_foldername}/src/makedeb.sh"
+  sed "s|{pkgver}|${pkgver}|" ./man/makedeb.8.adoc
+  sed "s|{pkgver}|${pkgver}|" ./man/pkgbuild.5.adoc  
 
   # Remove prebuild commands
   sed -i 's|.*# REMOVE AT PACKAGING||g' "${_foldername}/src/makedeb.sh"
