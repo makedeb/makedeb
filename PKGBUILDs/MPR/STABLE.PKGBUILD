@@ -25,7 +25,6 @@ prepare() {
   sed -i "s|{pkgver}|${pkgver}|" ./man/makedeb.8.adoc
   sed -i "s|{pkgver}|${pkgver}|" ./man/pkgbuild.5.adoc
 
-
   # Remove testing commands
   sed -i 's|.*# REMOVE AT PACKAGING||g' src/makedeb.sh
 }
