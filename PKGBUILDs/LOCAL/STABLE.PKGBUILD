@@ -23,6 +23,8 @@ prepare() {
   # Set package version and release type
   sed -i "s|makedeb_package_version=.*|makedeb_package_version=${pkgver}-${pkgrel}|" "${_foldername}/src/makedeb.sh"
   sed -i "s|makedeb_release_type=.*|makedeb_release_type=${_release_type}|" "${_foldername}/src/makedeb.sh"
+  sed -i "s|{pkgver}|${pkgver}|" ./man/makedeb.8.adoc
+  sed -i "s|{pkgver}|${pkgver}|" ./man/pkgbuild.5.adoc
 
   # Remove prebuild commands
   sed -i 's|.*# REMOVE AT PACKAGING||g' "${_foldername}/src/makedeb.sh"
