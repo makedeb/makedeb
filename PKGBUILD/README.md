@@ -5,6 +5,8 @@ To use, set the following variables to any of the specified values:
 
 - `TARGET`: `local`, `mpr`, or `aur`
 - `RELEASE`: `stable`, `beta`, or `alpha`
+- `PKGVER`: Any valid `pkgver` string
+- `PKGREL`: Any valid `pkgrel` string
 
 For example:
 
