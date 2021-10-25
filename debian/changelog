@@ -1,3 +1,9 @@
+makedeb (7.1.2+bugfix1-9) focal; urgency=medium
+
+  * Upstream changes
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 19:38:48 -0700
+
 makedeb (7.1.2+bugfix1-8) focal; urgency=medium
 
   * Fix find command

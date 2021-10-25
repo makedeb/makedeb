@@ -2,7 +2,7 @@ Source: makedeb
 Section: utils
 Priority: optional
 Maintainer: Leo Puvilland <lpuvilla0001@mymail.lausd.net>
-Build-Depends: debhelper-compat (= 12), bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt
+Build-Depends: debhelper-compat (= 12), bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt, git
 Standards-Version: 4.4.1
 Homepage: https://makedeb.hunterwittenborn.com
 Vcs-Browser: https://github.com/makedeb/makedeb
