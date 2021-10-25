@@ -14,39 +14,39 @@ local createTag(tag) = {
 		},
 
 		commands: [
-			"sudo apt-get install openssh-client git -y",
+			"sudo apt-get install openssh-client git -yq",
 			".drone/scripts/create_tag.sh"
 		]
 	}]
 };
 
 local buildAndPublish(package_name, tag) = {
-    name: "build-and-publish-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {branch: [tag]},
+	name: "build-and-publish-" + tag,
+	kind: "pipeline",
+	type: "docker",
+	trigger: {branch: [tag]},
 	depends_on: ["create-tag-" + tag],
-    steps: [
-        {
-            name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
-            environment: {release_type: tag, package_name: package_name},
-            commands: [
-							"sudo apt-get install sed grep mawk git -y",
-							".drone/scripts/build.sh"
-						]
-        },
+	steps: [
+		{
+			name: "build-debian-package",
+			image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+			environment: {release_type: tag, package_name: package_name},
+			commands: [
+				"sudo apt-get install sed grep mawk git -yq",
+				".drone/scripts/build.sh"
+			]
+        	},
 
-        {
-            name: "publish-proget",
-            image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
-            environment: {proget_api_key: {from_secret: "proget_api_key"}},
-            commands: [
-							"sudo apt-get install sed grep curl findutils -y",
-							".drone/scripts/publish.sh"
-						]
-        }
-    ]
+		{
+			name: "publish-proget",
+			image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+			environment: {proget_api_key: {from_secret: "proget_api_key"}},
+			commands: [
+				"sudo apt-get install sed grep curl findutils -yq",
+				".drone/scripts/publish.sh"
+			]
+		}
+	]
 };
 
 local userRepoPublish(package_name, tag, user_repo) = {
@@ -71,7 +71,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 		},
 
 		commands: [
-			"sudo apt-get install git ssh grep mawk sed -y",
+			"sudo apt-get install git ssh grep mawk sed -yq",
 			".drone/scripts/user-repo.sh"
 		]
 	}]
@@ -108,9 +108,9 @@ local sendBuildNotification(tag) = {
 	createTag("beta"),
 	createTag("alpha"),
 
-  buildAndPublish("makedeb", "stable"),
-  buildAndPublish("makedeb-beta", "beta"),
-  buildAndPublish("makedeb-alpha", "alpha"),
+	buildAndPublish("makedeb", "stable"),
+	buildAndPublish("makedeb-beta", "beta"),
+	buildAndPublish("makedeb-alpha", "alpha"),
 
 	userRepoPublish("makedeb", "stable", "mpr"),
 	userRepoPublish("makedeb-beta", "beta", "mpr"),

@@ -1,20 +1,31 @@
 #!/usr/bin/env bash
-set -exuo pipefail
+set -e
 sudo chown 'makedeb:makedeb' ./ -R
 
-# Install predependencies makedeb needs to properly build itself.
-sudo apt install -qqy python3-apt
+# Build makedeb.
+export TARGET=local
+export RELEASE="${release_type}"
 
-# Get variables
-pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | awk -F '=' '{print $2}')"
+read PKGVER PKGREL < <(echo "${DRONE_COMMIT_MESSAGE}" | grep '^Package Version:' | awk -F ': ' '{print $2}' | sed 's|-| |g')
 
-# Copy PKGBUILD
-rm 'src/PKGBUILD'
-cp "PKGBUILDs/LOCAL/${release_type^^}.PKGBUILD" "src/PKGBUILD"
+for i in PKGVER PKGREL; do
+	if [[ "${!i}" == "" ]]; then
+		echo "ERROR: ${i} isn't set."
+		echo "Please make sure your commit message contained a 'Package Version' line."
+		bad_commit_message="x"
+	fi
+done
 
-# Configure PKGBUILD
-sed -i "s|pkgver={pkgver}|pkgver=${pkgver}|" 'src/PKGBUILD'
+if [[ "${bad_commit_meesage:+x}" == "x" ]]; then
+	echo "COMMIT MESSAGE:"
+	echo "==============="
+	echo "${DRONE_COMMIT_MESSAGE}"
+	exit 1
+fi
 
-# Build makedeb
-cd src
-./makedeb.sh --sync-deps --no-confirm
+export PKGVER PKGREL
+
+cd PKGBUILD/
+./pkgbuild.sh > PKGBUILD
+
+makedeb -s --no-confirm

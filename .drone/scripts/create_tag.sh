@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -exuo pipefail
+set -e
 sudo chown 'makedeb:makedeb' ./ -R
 
 # Set up SSH
@@ -17,8 +17,23 @@ ls -alF "/${HOME}/.ssh/"
 chmod 500 "/${HOME}/.ssh/"* -R
 
 # Get current package version
-package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F '=' '{print $2}')"
+read PKGVER PKGREL < <(echo "${DRONE_COMMIT_MESSAGE}" | grep '^Package Version:' | awk -F ': ' '{print $2}' | sed 's|-| |g')
+
+for i in PKGVER PKGREL; do
+	if [[ "${!i}" == "" ]]; then
+		echo "ERROR: ${i} isn't set."
+		echo "Please make sure your commit message contained a 'Package Version' line."
+		bad_commit_message="x"
+	fi
+done
+
+if [[ "${bad_commit_meesage:+x}" == "x" ]]; then
+	echo "COMMIT MESSAGE:"
+	echo "==============="
+	echo "${DRONE_COMMIT_MESSAGE}"
+	exit 1
+fi
 
 # Create and push release
-git tag "v${package_version}-${release_type}" -am ""
-git push "ssh://git@${github_url}/makedeb/makedeb" "v${package_version}-${release_type}"
+git tag "v${PKGVER}-${release_type}" -am ""
+git push "ssh://git@${github_url}/makedeb/makedeb" "v${PKGVER}-${release_type}"

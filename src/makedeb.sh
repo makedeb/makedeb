@@ -27,9 +27,16 @@ declare PREBUILT='false'
 declare package_convert="false"
 declare hide_control_output=0
 
-declare makedeb_package_version="git"
-declare makedeb_release_type="git"
-declare target_os="debian"
+declare makedeb_package_version="$${pkgver}"
+declare makedeb_release_type="$${release}"
+declare makedeb_release_target="$${target}"
+
+if [[ "${makedeb_release_target}" == "local" || "${makedeb_release_target}" == "mpr" ]]; then
+	declare target_os="debian"
+elif [[ "${makedeb_release_target}" == "arch" ]]; then
+	declare target_os="arch"
+fi
+
 declare makepkg_package_name="makedeb-makepkg"
 declare MAKEDEB_UTILS_DIR="./utils/" # REMOVE AT PACKAGING
 declare makedeb_utils_dir="${MAKEDEB_UTILS_DIR:-/usr/share/makedeb/utils/}"
