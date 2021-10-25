@@ -24,7 +24,7 @@ install:
 	cd ../../
 	
 	export SOURCE_DATE_EPOCH="$(MAKEDEB_MAN_EPOCH)"
-	asciidoctor -b manpage man/makedeb.8.adoc -o "${DESTDIR}/usr/share/man/man8/makedeb.8"
+	asciidoctor -b manpage man/makedeb.8.adoc -o "$(DESTDIR)/usr/share/man/man8/makedeb.8"
 	
 	export SOURCE_DATE_EPOCH="$(PKGBUILD_MAN_EPOCH)"
-	asciidoctor -b manpage man/pkgbuild.5.adoc -o "${DESTDIR}/usr/share/man/man5/pkgbuild.5"
+	asciidoctor -b manpage man/pkgbuild.5.adoc -o "$(DESTDIR)/usr/share/man/man5/pkgbuild.5"
