@@ -13,6 +13,8 @@ For example:
 ```sh
 export TARGET=mpr
 export RELEASE=stable
+export PKGVER=2.3.0
+export PKGREL=1
 ```
 
 Then run `./pkgbuild.sh`, which will output a generated PKGBUILD file.
