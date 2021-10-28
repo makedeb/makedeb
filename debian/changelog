@@ -1,3 +1,9 @@
+makedeb (7.1.2+bugfix1-10) focal; urgency=medium
+
+  * Should finally fix upstream building
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Thu, 28 Oct 2021 08:10:27 -0700
+
 makedeb (7.1.2+bugfix1-9) focal; urgency=medium
 
   * Upstream changes
