@@ -3,6 +3,10 @@ PKGBUILD_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/pkgbuild.5.adoc)"
 
 .ONESHELL:
 
+all:
+	$(MAKE) prepare
+	$(MAKE) package
+
 prepare:
 	sed -i 's|$$$${pkgver}|$(PKGVER)|' src/makedeb.sh
 	sed -i 's|$$$${release}|$(RELEASE)|' src/makedeb.sh
@@ -28,3 +32,4 @@ install:
 	
 	export SOURCE_DATE_EPOCH="$(PKGBUILD_MAN_EPOCH)"
 	asciidoctor -b manpage man/pkgbuild.5.adoc -o "$(DESTDIR)/usr/share/man/man5/pkgbuild.5"
+
