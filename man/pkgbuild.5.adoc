@@ -2,7 +2,7 @@
 :doctype: manpage
 :hardbreaks:
 :manmanual: makedeb manual pages
-:mansource: MAKEDEB {pkgver}
+:mansource: MAKEDEB $${pkgver}
 
 == NAME
 PKGBUILD - file format used by makedeb(8)
