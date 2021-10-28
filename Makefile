@@ -1,11 +1,10 @@
 MAKEDEB_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/makedeb.8.adoc)"
 PKGBUILD_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/pkgbuild.5.adoc)"
-
+LATEST_STABLE_VERSION = "$(shell git tag | grep 'stable$$' | sort -Vr | head -n 1 | sed -e 's|-stable$$||' -e 's|^v||' )"
 .ONESHELL:
 
 all:
-	$(MAKE) prepare
-	$(MAKE) package
+	true
 
 prepare:
 	sed -i 's|$$$${pkgver}|$(PKGVER)|' src/makedeb.sh
@@ -16,13 +15,13 @@ prepare:
 	sed -i 's|$$$${pkgver}|$(PKGVER)|' man/makedeb.8.adoc
 	sed -i 's|$$$${pkgver}|$(PKGVER)|' man/pkgbuild.5.adoc
 
-install:
+package:
 	mkdir -p "$(DESTDIR)/usr/bin"
 	echo '#!/usr/bin/env bash' > "$(DESTDIR)/usr/bin/makedeb"
 	find src/functions/ -type f -exec cat '{}' \; >> "$(DESTDIR)/usr/bin/makedeb"
 	cat "src/makedeb.sh" >> "$(DESTDIR)/usr/bin/makedeb"
 	chmod 755 "$(DESTDIR)/usr/bin/makedeb"
-
+	
 	cd ./src/utils
 	find ./ -type f -exec install -Dm 755 '{}' "$(DESTDIR)/usr/share/makedeb/utils/{}" \;
 	cd ../../
@@ -32,4 +31,9 @@ install:
 	
 	export SOURCE_DATE_EPOCH="$(PKGBUILD_MAN_EPOCH)"
 	asciidoctor -b manpage man/pkgbuild.5.adoc -o "$(DESTDIR)/usr/share/man/man5/pkgbuild.5"
+
+# This is for use by dpkg-buildpackage. Please use prepare and package instead.
+install:
+	$(MAKE) prepare PKGVER="$(LATEST_STABLE_VERSION)" RELEASE=stable TARGET=local
+	$(MAKE) package DESTDIR="$(DESTDIR)"
 
