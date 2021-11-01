@@ -5,9 +5,10 @@ Subject: Debian packaging added
 * Fixed PKGBUILDs
 * Makefile added
 
-diff -Nru ../makedeb-7.1.2-bugfix1-stable ../makedeb
---- ../makedeb-7.1.2-bugfix1-stable/debian/changelog	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/changelog	2021-11-01 13:08:47.780322887 -0700
+
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/changelog makedeb/debian/changelog
+--- makedeb-7.1.2-bugfix1-stable/debian/changelog	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/changelog	2021-11-01 13:08:47.780322887 -0700
 @@ -0,0 +1,59 @@
 +makedeb (7.1.2+bugfix1-10) focal; urgency=medium
 +
@@ -68,9 +69,9 @@ diff -Nru ../makedeb-7.1.2-bugfix1-stable ../makedeb
 +  * Initial Release.
 +
 + -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/control ../makedeb/debian/control
---- ../makedeb-7.1.2-bugfix1-stable/debian/control	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/control	2021-11-01 13:08:47.780322887 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/control makedeb/debian/control
+--- makedeb-7.1.2-bugfix1-stable/debian/control	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/control	2021-11-01 13:08:47.780322887 -0700
 @@ -0,0 +1,14 @@
 +Source: makedeb
 +Section: utils
@@ -86,9 +87,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/control ../makedeb/debi
 +Architecture: any
 +Depends: ${shlibs:Depends}, ${misc:Depends}, bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt
 +Description: The modern packaging tool for Debian archives.
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/copyright ../makedeb/debian/copyright
---- ../makedeb-7.1.2-bugfix1-stable/debian/copyright	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/copyright	2021-11-01 13:08:47.780322887 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/copyright makedeb/debian/copyright
+--- makedeb-7.1.2-bugfix1-stable/debian/copyright	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/copyright	2021-11-01 13:08:47.780322887 -0700
 @@ -0,0 +1,38 @@
 +Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 +Upstream-Name: makedeb
@@ -128,16 +129,21 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/copyright ../makedeb/de
 +# If you need, there are some extra license texts available in two places:
 +#   /usr/share/debhelper/dh_make/licenses/
 +#   /usr/share/common-licenses/
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/makedeb-docs.docs ../makedeb/debian/makedeb-docs.docs
---- ../makedeb-7.1.2-bugfix1-stable/debian/makedeb-docs.docs	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/makedeb-docs.docs	2021-11-01 13:08:47.780322887 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/makedeb-docs.docs makedeb/debian/makedeb-docs.docs
+--- makedeb-7.1.2-bugfix1-stable/debian/makedeb-docs.docs	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/makedeb-docs.docs	2021-11-01 13:08:47.780322887 -0700
 @@ -0,0 +1,3 @@
 +README.Debian
 +README.source
 +README
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/README ../makedeb/debian/README
---- ../makedeb-7.1.2-bugfix1-stable/debian/README	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/README	2021-11-01 13:08:47.776322866 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/patches/series makedeb/debian/patches/series
+--- makedeb-7.1.2-bugfix1-stable/debian/patches/series	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/patches/series	2021-11-01 13:22:14.708146310 -0700
+@@ -0,0 +1 @@
++0000-upstream-changes.patch
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/README makedeb/debian/README
+--- makedeb-7.1.2-bugfix1-stable/debian/README	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/README	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,6 @@
 +The Debian Package makedeb
 +----------------------------
@@ -145,9 +151,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/README ../makedeb/debia
 +The modern packaging tool for Debian archives
 +
 + -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/README.source ../makedeb/debian/README.source
---- ../makedeb-7.1.2-bugfix1-stable/debian/README.source	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/README.source	2021-11-01 13:08:47.776322866 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/README.source makedeb/debian/README.source
+--- makedeb-7.1.2-bugfix1-stable/debian/README.source	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/README.source	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,7 @@
 +makedeb for Debian
 +-----------------
@@ -156,9 +162,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/README.source ../makede
 +
 + -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700
 +
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/rules ../makedeb/debian/rules
---- ../makedeb-7.1.2-bugfix1-stable/debian/rules	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/rules	2021-11-01 13:08:47.780322887 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/rules makedeb/debian/rules
+--- makedeb-7.1.2-bugfix1-stable/debian/rules	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/rules	2021-11-01 13:08:47.780322887 -0700
 @@ -0,0 +1,6 @@
 +#!/usr/bin/make -f
 +%:
@@ -166,14 +172,14 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/rules ../makedeb/debian
 +
 +
 +
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/debian/source/format ../makedeb/debian/source/format
---- ../makedeb-7.1.2-bugfix1-stable/debian/source/format	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/debian/source/format	2021-11-01 13:08:47.780322887 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/source/format makedeb/debian/source/format
+--- makedeb-7.1.2-bugfix1-stable/debian/source/format	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/debian/source/format	2021-11-01 13:08:47.780322887 -0700
 @@ -0,0 +1 @@
 +3.0 (quilt)
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/docker/Dockerfile ../makedeb/docker/Dockerfile
---- ../makedeb-7.1.2-bugfix1-stable/docker/Dockerfile	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/docker/Dockerfile	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/docker/Dockerfile makedeb/docker/Dockerfile
+--- makedeb-7.1.2-bugfix1-stable/docker/Dockerfile	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/docker/Dockerfile	1969-12-31 16:00:00.000000000 -0800
 @@ -1,18 +0,0 @@
 -FROM ubuntu
 -
@@ -193,9 +199,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/docker/Dockerfile ../makedeb/d
 -RUN apt-get install "${package}" -y
 -
 -ENTRYPOINT ["/bin/bash"]
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet ../makedeb/.drone/drone.jsonnet
---- ../makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/.drone/drone.jsonnet	2021-11-01 13:09:52.236613618 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet makedeb/.drone/drone.jsonnet
+--- makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/.drone/drone.jsonnet	2021-11-01 13:09:52.236613618 -0700
 @@ -14,39 +14,39 @@
  		},
  
@@ -284,9 +290,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet ../makede
  
  	userRepoPublish("makedeb", "stable", "mpr"),
  	userRepoPublish("makedeb-beta", "beta", "mpr"),
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh ../makedeb/.drone/scripts/build.sh
---- ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/.drone/scripts/build.sh	2021-11-01 13:09:52.236613618 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh makedeb/.drone/scripts/build.sh
+--- makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/.drone/scripts/build.sh	2021-11-01 13:09:52.236613618 -0700
 @@ -1,17 +1,31 @@
  #!/usr/bin/env bash
 -set -exuo pipefail
@@ -332,9 +338,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh ../mak
 +./pkgbuild.sh > PKGBUILD
 +
 +makedeb -s --no-confirm
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh ../makedeb/.drone/scripts/create_tag.sh
---- ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/.drone/scripts/create_tag.sh	2021-11-01 13:09:52.236613618 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh makedeb/.drone/scripts/create_tag.sh
+--- makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/.drone/scripts/create_tag.sh	2021-11-01 13:09:52.236613618 -0700
 @@ -1,5 +1,5 @@
  #!/usr/bin/env bash
 -set -exuo pipefail
@@ -369,9 +375,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh .
 -git push "ssh://git@${github_url}/makedeb/makedeb" "v${package_version}-${release_type}"
 +git tag "v${PKGVER}-${release_type}" -am ""
 +git push "ssh://git@${github_url}/makedeb/makedeb" "v${PKGVER}-${release_type}"
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py ../makedeb/.drone/scripts/publish.py
---- ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.drone/scripts/publish.py	2021-11-01 13:08:47.776322866 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py makedeb/.drone/scripts/publish.py
+--- makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.drone/scripts/publish.py	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,40 @@
 +#!/usr/bin/env python3
 +import re
@@ -413,9 +419,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py ../m
 +
 +print("INFO: Succesfully uploaded package.")
 +exit(0)
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.sh ../makedeb/.drone/scripts/publish.sh
---- ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/.drone/scripts/publish.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.sh makedeb/.drone/scripts/publish.sh
+--- makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/.drone/scripts/publish.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,38 +0,0 @@
 -#!/usr/bin/env bash
 -set -e
@@ -455,9 +461,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.sh ../m
 -  echo "Aborting due to unexpected output from curl."
 -  exit 1
 -fi
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh ../makedeb/.drone/scripts/user-repo.sh
---- ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/.drone/scripts/user-repo.sh	2021-11-01 13:09:52.236613618 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh makedeb/.drone/scripts/user-repo.sh
+--- makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/.drone/scripts/user-repo.sh	2021-11-01 13:09:52.236613618 -0700
 @@ -1,8 +1,26 @@
  #!/usr/bin/env bash
 -set -exuo pipefail
@@ -534,14 +540,14 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh ..
 +git commit -m "Updated version to ${PKGVER}-${PKGREL}"
  
  git push
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/COMMIT_EDITMSG ../makedeb/.git/COMMIT_EDITMSG
---- ../makedeb-7.1.2-bugfix1-stable/.git/COMMIT_EDITMSG	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/COMMIT_EDITMSG	2021-11-01 13:18:02.706917839 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/COMMIT_EDITMSG makedeb/.git/COMMIT_EDITMSG
+--- makedeb-7.1.2-bugfix1-stable/.git/COMMIT_EDITMSG	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/COMMIT_EDITMSG	2021-11-01 13:25:59.265254314 -0700
 @@ -0,0 +1 @@
-+patches dont work
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/config ../makedeb/.git/config
---- ../makedeb-7.1.2-bugfix1-stable/.git/config	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/config	2021-11-01 12:50:36.494749452 -0700
++woah patches
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/config makedeb/.git/config
+--- makedeb-7.1.2-bugfix1-stable/.git/config	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/config	2021-11-01 12:50:36.494749452 -0700
 @@ -0,0 +1,11 @@
 +[core]
 +	repositoryformatversion = 0
@@ -554,19 +560,19 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/config ../makedeb/.git/co
 +[branch "launchpad"]
 +	remote = origin
 +	merge = refs/heads/launchpad
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/description ../makedeb/.git/description
---- ../makedeb-7.1.2-bugfix1-stable/.git/description	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/description	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/description makedeb/.git/description
+--- makedeb-7.1.2-bugfix1-stable/.git/description	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/description	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1 @@
 +Unnamed repository; edit this file 'description' to name the repository.
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/HEAD ../makedeb/.git/HEAD
---- ../makedeb-7.1.2-bugfix1-stable/.git/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/HEAD	2021-11-01 13:08:47.784322907 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/HEAD makedeb/.git/HEAD
+--- makedeb-7.1.2-bugfix1-stable/.git/HEAD	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/HEAD	2021-11-01 13:08:47.784322907 -0700
 @@ -0,0 +1 @@
 +ref: refs/heads/launchpad
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.sample ../makedeb/.git/hooks/applypatch-msg.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/applypatch-msg.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.sample makedeb/.git/hooks/applypatch-msg.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/applypatch-msg.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,15 @@
 +#!/bin/sh
 +#
@@ -583,9 +589,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.samp
 +commitmsg="$(git rev-parse --git-path hooks/commit-msg)"
 +test -x "$commitmsg" && exec "$commitmsg" ${1+"$@"}
 +:
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample ../makedeb/.git/hooks/commit-msg.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/commit-msg.sample	2021-11-01 12:50:34.502739272 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample makedeb/.git/hooks/commit-msg.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/commit-msg.sample	2021-11-01 12:50:34.502739272 -0700
 @@ -0,0 +1,24 @@
 +#!/bin/sh
 +#
@@ -611,9 +617,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample .
 +	echo >&2 Duplicate Signed-off-by lines.
 +	exit 1
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.sample ../makedeb/.git/hooks/fsmonitor-watchman.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/fsmonitor-watchman.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.sample makedeb/.git/hooks/fsmonitor-watchman.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/fsmonitor-watchman.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,109 @@
 +#!/usr/bin/perl
 +
@@ -724,9 +730,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.
 +	local $, = "\0";
 +	print @{$o->{files}};
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample ../makedeb/.git/hooks/post-update.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/post-update.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample makedeb/.git/hooks/post-update.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/post-update.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,8 @@
 +#!/bin/sh
 +#
@@ -736,9 +742,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample 
 +# To enable this hook, rename this file to "post-update".
 +
 +exec git update-server-info
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.sample ../makedeb/.git/hooks/pre-applypatch.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/pre-applypatch.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.sample makedeb/.git/hooks/pre-applypatch.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/pre-applypatch.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,14 @@
 +#!/bin/sh
 +#
@@ -754,9 +760,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.samp
 +precommit="$(git rev-parse --git-path hooks/pre-commit)"
 +test -x "$precommit" && exec "$precommit" ${1+"$@"}
 +:
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample ../makedeb/.git/hooks/pre-commit.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/pre-commit.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample makedeb/.git/hooks/pre-commit.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/pre-commit.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,49 @@
 +#!/bin/sh
 +#
@@ -807,9 +813,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample .
 +
 +# If there are whitespace errors, print the offending file names and fail.
 +exec git diff-index --check --cached $against --
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sample ../makedeb/.git/hooks/pre-merge-commit.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/pre-merge-commit.sample	2021-11-01 12:50:34.502739272 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sample makedeb/.git/hooks/pre-merge-commit.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/pre-merge-commit.sample	2021-11-01 12:50:34.502739272 -0700
 @@ -0,0 +1,13 @@
 +#!/bin/sh
 +#
@@ -824,9 +830,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sa
 +test -x "$GIT_DIR/hooks/pre-commit" &&
 +        exec "$GIT_DIR/hooks/pre-commit"
 +:
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.sample ../makedeb/.git/hooks/prepare-commit-msg.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/prepare-commit-msg.sample	2021-11-01 12:50:34.502739272 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.sample makedeb/.git/hooks/prepare-commit-msg.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/prepare-commit-msg.sample	2021-11-01 12:50:34.502739272 -0700
 @@ -0,0 +1,42 @@
 +#!/bin/sh
 +#
@@ -870,9 +876,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.
 +# then
 +#   /usr/bin/perl -i.bak -pe 'print "\n" if !$first_line++' "$COMMIT_MSG_FILE"
 +# fi
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample ../makedeb/.git/hooks/pre-push.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/pre-push.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample makedeb/.git/hooks/pre-push.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/pre-push.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,53 @@
 +#!/bin/sh
 +
@@ -927,9 +933,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample ../
 +done
 +
 +exit 0
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample ../makedeb/.git/hooks/pre-rebase.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/pre-rebase.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample makedeb/.git/hooks/pre-rebase.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/pre-rebase.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,169 @@
 +#!/bin/sh
 +#
@@ -1100,9 +1106,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample .
 +	if this is empty, it is fully merged to "master".
 +
 +DOC_END
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample ../makedeb/.git/hooks/pre-receive.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/pre-receive.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample makedeb/.git/hooks/pre-receive.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/pre-receive.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,24 @@
 +#!/bin/sh
 +#
@@ -1128,9 +1134,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample 
 +		i=$((i + 1))
 +	done
 +fi
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample ../makedeb/.git/hooks/update.sample
---- ../makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/hooks/update.sample	2021-11-01 12:50:34.498739251 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample makedeb/.git/hooks/update.sample
+--- makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/hooks/update.sample	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,128 @@
 +#!/bin/sh
 +#
@@ -1260,10 +1266,10 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample ../ma
 +
 +# --- Finished
 +exit 0
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/index and ../makedeb/.git/index differ
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/info/exclude ../makedeb/.git/info/exclude
---- ../makedeb-7.1.2-bugfix1-stable/.git/info/exclude	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/info/exclude	2021-11-01 12:50:34.498739251 -0700
+Binary files makedeb-7.1.2-bugfix1-stable/.git/index and makedeb/.git/index differ
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/info/exclude makedeb/.git/info/exclude
+--- makedeb-7.1.2-bugfix1-stable/.git/info/exclude	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/info/exclude	2021-11-01 12:50:34.498739251 -0700
 @@ -0,0 +1,6 @@
 +# git ls-files --others --exclude-from=.git/info/exclude
 +# Lines that start with '#' are comments.
@@ -1271,52 +1277,66 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/info/exclude ../makedeb/.
 +# exclude patterns (uncomment them if you want to use them):
 +# *.[oa]
 +# *~
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/logs/HEAD ../makedeb/.git/logs/HEAD
---- ../makedeb-7.1.2-bugfix1-stable/.git/logs/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/logs/HEAD	2021-11-01 13:18:02.706917839 -0700
-@@ -0,0 +1,5 @@
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/HEAD makedeb/.git/logs/HEAD
+--- makedeb-7.1.2-bugfix1-stable/.git/logs/HEAD	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/logs/HEAD	2021-11-01 13:25:59.265254314 -0700
+@@ -0,0 +1,6 @@
 +0000000000000000000000000000000000000000 f37961fd0d22ee219b8aa53fb682f76d329b020b Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796236 -0700	clone: from ssh://github.com/gamer4life1/makedeb
 +f37961fd0d22ee219b8aa53fb682f76d329b020b 7b85e0ff46f7267d8ba5103755d7aa2b906532dc Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796675 -0700	checkout: moving from launchpad to 7b85e0ff46f7267d8ba5103755d7aa2b906532dc
 +7b85e0ff46f7267d8ba5103755d7aa2b906532dc f37961fd0d22ee219b8aa53fb682f76d329b020b Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797327 -0700	checkout: moving from 7b85e0ff46f7267d8ba5103755d7aa2b906532dc to launchpad
 +f37961fd0d22ee219b8aa53fb682f76d329b020b 969ee5de9861b38f7af219da70cf9e30392379f8 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797484 -0700	commit: patches :o
 +969ee5de9861b38f7af219da70cf9e30392379f8 74e1c17319aa7f5b67ad610afb105709b6972c26 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797882 -0700	commit: patches dont work
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/logs/refs/heads/launchpad ../makedeb/.git/logs/refs/heads/launchpad
---- ../makedeb-7.1.2-bugfix1-stable/.git/logs/refs/heads/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/logs/refs/heads/launchpad	2021-11-01 13:18:02.706917839 -0700
-@@ -0,0 +1,3 @@
++74e1c17319aa7f5b67ad610afb105709b6972c26 1ec0963328ee40a0e040e3142553568d0b04eff5 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635798359 -0700	commit: woah patches
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/refs/heads/launchpad makedeb/.git/logs/refs/heads/launchpad
+--- makedeb-7.1.2-bugfix1-stable/.git/logs/refs/heads/launchpad	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/logs/refs/heads/launchpad	2021-11-01 13:25:59.265254314 -0700
+@@ -0,0 +1,4 @@
 +0000000000000000000000000000000000000000 f37961fd0d22ee219b8aa53fb682f76d329b020b Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796236 -0700	clone: from ssh://github.com/gamer4life1/makedeb
 +f37961fd0d22ee219b8aa53fb682f76d329b020b 969ee5de9861b38f7af219da70cf9e30392379f8 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797484 -0700	commit: patches :o
 +969ee5de9861b38f7af219da70cf9e30392379f8 74e1c17319aa7f5b67ad610afb105709b6972c26 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797882 -0700	commit: patches dont work
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/HEAD ../makedeb/.git/logs/refs/remotes/origin/HEAD
---- ../makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/logs/refs/remotes/origin/HEAD	2021-11-01 12:50:36.494749452 -0700
++74e1c17319aa7f5b67ad610afb105709b6972c26 1ec0963328ee40a0e040e3142553568d0b04eff5 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635798359 -0700	commit: woah patches
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/HEAD makedeb/.git/logs/refs/remotes/origin/HEAD
+--- makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/HEAD	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/logs/refs/remotes/origin/HEAD	2021-11-01 12:50:36.494749452 -0700
 @@ -0,0 +1 @@
 +0000000000000000000000000000000000000000 7b85e0ff46f7267d8ba5103755d7aa2b906532dc Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796236 -0700	clone: from ssh://github.com/gamer4life1/makedeb
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/launchpad ../makedeb/.git/logs/refs/remotes/origin/launchpad
---- ../makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/logs/refs/remotes/origin/launchpad	2021-11-01 13:18:05.458931139 -0700
-@@ -0,0 +1,2 @@
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/launchpad makedeb/.git/logs/refs/remotes/origin/launchpad
+--- makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/launchpad	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/logs/refs/remotes/origin/launchpad	2021-11-01 13:26:02.209268896 -0700
+@@ -0,0 +1,3 @@
 +f37961fd0d22ee219b8aa53fb682f76d329b020b 969ee5de9861b38f7af219da70cf9e30392379f8 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797487 -0700	update by push
 +969ee5de9861b38f7af219da70cf9e30392379f8 74e1c17319aa7f5b67ad610afb105709b6972c26 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797885 -0700	update by push
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/2a/3beaf5ffa1ee92af66c1e4a12d3d4cb099ef3f and ../makedeb/.git/objects/2a/3beaf5ffa1ee92af66c1e4a12d3d4cb099ef3f differ
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/2f/eddcbc5445dc53372b03e188469da350bc2b87 and ../makedeb/.git/objects/2f/eddcbc5445dc53372b03e188469da350bc2b87 differ
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/46/a69d1506a6b046e0a37a1e43b7a3bc66a8dbc0 and ../makedeb/.git/objects/46/a69d1506a6b046e0a37a1e43b7a3bc66a8dbc0 differ
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26 ../makedeb/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26
---- ../makedeb-7.1.2-bugfix1-stable/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26	2021-11-01 13:18:02.706917839 -0700
++74e1c17319aa7f5b67ad610afb105709b6972c26 1ec0963328ee40a0e040e3142553568d0b04eff5 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635798362 -0700	update by push
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5 makedeb/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5
+--- makedeb-7.1.2-bugfix1-stable/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5	2021-11-01 13:25:59.265254314 -0700
+@@ -0,0 +1 @@
++x¥ŽËmÃ0@{Ö\ )•¢EÈ!+Ð?päÙ>E;B/ïôðò:ÏSÏôÑv3à@‚¦ÜÙ¼+ûÈ)c‘¬S.æ6Ými ŸF™$PR•û(Z"¡=!¦>&ñÙG§G×®¶ÂíxLµêRà«nŽˆt™_³Nõ\õ¸—óbí(–ÔNpBAtùw·Ù¿Cî¹ê›¶<ÚÝ½ƒcOî
+\ No newline at end of file
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/2a/3beaf5ffa1ee92af66c1e4a12d3d4cb099ef3f and makedeb/.git/objects/2a/3beaf5ffa1ee92af66c1e4a12d3d4cb099ef3f differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/2f/eddcbc5445dc53372b03e188469da350bc2b87 and makedeb/.git/objects/2f/eddcbc5445dc53372b03e188469da350bc2b87 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/46/a69d1506a6b046e0a37a1e43b7a3bc66a8dbc0 and makedeb/.git/objects/46/a69d1506a6b046e0a37a1e43b7a3bc66a8dbc0 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/53/170ea58eea522777ed16b65933e577cae69cde and makedeb/.git/objects/53/170ea58eea522777ed16b65933e577cae69cde differ
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26 makedeb/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26
+--- makedeb-7.1.2-bugfix1-stable/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26	2021-11-01 13:18:02.706917839 -0700
 @@ -0,0 +1,3 @@
 +x¥ËmÃ0sVÛ€åG\.`.À‡´ÀÏB‰‚LÙH÷’ry˜Ó`^jó<uÐ£ûè›Ðh	Y§â3‰ËšmŠÑ:ë:+1ÉkØdéÀŽEÆ,ìŠÆ
 +E+Î0ƒ†µ!.~{´îÒàsMµ†%Ã¥®Œˆê6Ïaªçög>/Ò¯ œ‰É{'$Ä!ýævù·èèïé!OÈíxñnÛ×ð
 +‰QÍ
 \ No newline at end of file
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/96/9ee5de9861b38f7af219da70cf9e30392379f8 and ../makedeb/.git/objects/96/9ee5de9861b38f7af219da70cf9e30392379f8 differ
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/bf/9e97af29102306f657577e6664aa144cafa384 and ../makedeb/.git/objects/bf/9e97af29102306f657577e6664aa144cafa384 differ
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/c3/d14ce4b8f1d2ee2009d8cbbdf80fa9b35d0ef8 and ../makedeb/.git/objects/c3/d14ce4b8f1d2ee2009d8cbbdf80fa9b35d0ef8 differ
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.idx and ../makedeb/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.idx differ
-Binary files ../makedeb-7.1.2-bugfix1-stable/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.pack and ../makedeb/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.pack differ
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/packed-refs ../makedeb/.git/packed-refs
---- ../makedeb-7.1.2-bugfix1-stable/.git/packed-refs	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/packed-refs	2021-11-01 12:50:36.490749432 -0700
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/80/08257b5c93a3db5e423a5ca5fecb19b0eb6961 and makedeb/.git/objects/80/08257b5c93a3db5e423a5ca5fecb19b0eb6961 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/96/9ee5de9861b38f7af219da70cf9e30392379f8 and makedeb/.git/objects/96/9ee5de9861b38f7af219da70cf9e30392379f8 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/bf/9e97af29102306f657577e6664aa144cafa384 and makedeb/.git/objects/bf/9e97af29102306f657577e6664aa144cafa384 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/c3/d14ce4b8f1d2ee2009d8cbbdf80fa9b35d0ef8 and makedeb/.git/objects/c3/d14ce4b8f1d2ee2009d8cbbdf80fa9b35d0ef8 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/d3/7302afdc47b966e03ed5c049e7b1a0d1f93319 and makedeb/.git/objects/d3/7302afdc47b966e03ed5c049e7b1a0d1f93319 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/e2/22fabdcf67681b50ef9840e25c7005014f2000 and makedeb/.git/objects/e2/22fabdcf67681b50ef9840e25c7005014f2000 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/eb/7081f121c88a4fb196dc6785a55f58e1fbca00 and makedeb/.git/objects/eb/7081f121c88a4fb196dc6785a55f58e1fbca00 differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.idx and makedeb/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.idx differ
+Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.pack and makedeb/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.pack differ
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/packed-refs makedeb/.git/packed-refs
+--- makedeb-7.1.2-bugfix1-stable/.git/packed-refs	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/packed-refs	2021-11-01 12:50:36.490749432 -0700
 @@ -0,0 +1,237 @@
 +# pack-refs with: peeled fully-peeled sorted 
 +2b8d710371bf5bd288e96299c8003162f05a6ae8 refs/remotes/origin/add-mansource
@@ -1555,33 +1575,33 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/packed-refs ../makedeb/.g
 +^3599b98716a079c35e4ed4d865f9d77c05bbf132
 +6e9ce240e68f820d506d659ce141cd3412e2b48c refs/tags/v8.1.0-beta
 +^3599b98716a079c35e4ed4d865f9d77c05bbf132
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/refs/heads/launchpad ../makedeb/.git/refs/heads/launchpad
---- ../makedeb-7.1.2-bugfix1-stable/.git/refs/heads/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/refs/heads/launchpad	2021-11-01 13:18:02.706917839 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/refs/heads/launchpad makedeb/.git/refs/heads/launchpad
+--- makedeb-7.1.2-bugfix1-stable/.git/refs/heads/launchpad	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/refs/heads/launchpad	2021-11-01 13:25:59.265254314 -0700
 @@ -0,0 +1 @@
-+74e1c17319aa7f5b67ad610afb105709b6972c26
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/HEAD ../makedeb/.git/refs/remotes/origin/HEAD
---- ../makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/refs/remotes/origin/HEAD	2021-11-01 12:50:36.494749452 -0700
++1ec0963328ee40a0e040e3142553568d0b04eff5
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/HEAD makedeb/.git/refs/remotes/origin/HEAD
+--- makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/HEAD	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/refs/remotes/origin/HEAD	2021-11-01 12:50:36.494749452 -0700
 @@ -0,0 +1 @@
 +ref: refs/remotes/origin/alpha
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/launchpad ../makedeb/.git/refs/remotes/origin/launchpad
---- ../makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.git/refs/remotes/origin/launchpad	2021-11-01 13:18:05.458931139 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/launchpad makedeb/.git/refs/remotes/origin/launchpad
+--- makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/launchpad	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.git/refs/remotes/origin/launchpad	2021-11-01 13:26:02.209268896 -0700
 @@ -0,0 +1 @@
-+74e1c17319aa7f5b67ad610afb105709b6972c26
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/.gitignore ../makedeb/.gitignore
---- ../makedeb-7.1.2-bugfix1-stable/.gitignore	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/.gitignore	2021-11-01 13:08:47.776322866 -0700
++1ec0963328ee40a0e040e3142553568d0b04eff5
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/.gitignore makedeb/.gitignore
+--- makedeb-7.1.2-bugfix1-stable/.gitignore	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/.gitignore	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,5 @@
 +debian/files
 +debian/.debhelper/
 +debian/debhelper-build-stamp
 +debian/makedeb
 +debian/makedeb.substvars
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/Makefile ../makedeb/Makefile
---- ../makedeb-7.1.2-bugfix1-stable/Makefile	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/Makefile	2021-11-01 13:09:56.380632323 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/Makefile makedeb/Makefile
+--- makedeb-7.1.2-bugfix1-stable/Makefile	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/Makefile	2021-11-01 13:09:56.380632323 -0700
 @@ -0,0 +1,39 @@
 +MAKEDEB_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/makedeb.8.adoc)"
 +PKGBUILD_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/pkgbuild.5.adoc)"
@@ -1622,9 +1642,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/Makefile ../makedeb/Makefile
 +	$(MAKE) prepare PKGVER="$(LATEST_STABLE_VERSION)" RELEASE=stable TARGET=local
 +	$(MAKE) package DESTDIR="$(DESTDIR)"
 +
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc ../makedeb/man/makedeb.8.adoc
---- ../makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/man/makedeb.8.adoc	2021-11-01 13:09:59.904648242 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc makedeb/man/makedeb.8.adoc
+--- makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/man/makedeb.8.adoc	2021-11-01 13:09:59.904648242 -0700
 @@ -2,6 +2,7 @@
  :doctype: manpage
  :hardbreaks:
@@ -1633,9 +1653,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc ../makedeb/
  
  == NAME
  makedeb - the modern packaging tool for Debian archives
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc ../makedeb/man/pkgbuild.5.adoc
---- ../makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/man/pkgbuild.5.adoc	2021-11-01 13:09:59.904648242 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc makedeb/man/pkgbuild.5.adoc
+--- makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/man/pkgbuild.5.adoc	2021-11-01 13:09:59.904648242 -0700
 @@ -2,6 +2,7 @@
  :doctype: manpage
  :hardbreaks:
@@ -1657,9 +1677,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc ../makedeb
    A string that specifies the path to a script to execute after a package is removed from a user's system.
  
  === OTHER
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh ../makedeb/PKGBUILD/pkgbuild.sh
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/PKGBUILD/pkgbuild.sh	2021-11-01 13:08:47.776322866 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh makedeb/PKGBUILD/pkgbuild.sh
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/PKGBUILD/pkgbuild.sh	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,130 @@
 +#!/usr/bin/env bash
 +set -e
@@ -1791,9 +1811,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh ../makede
 +			 -e "s|\$\${conflicts}|${conflicts}|" \
 +			 -e "s|\$\${url}|${url}|" \
 +			 "${extra_sed_args[@]}"
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md ../makedeb/PKGBUILD/README.md
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/PKGBUILD/README.md	2021-11-01 13:08:47.776322866 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md makedeb/PKGBUILD/README.md
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/PKGBUILD/README.md	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,20 @@
 +# Usage
 +The `pkgbuild.sh` script generates PKGBUILDs for all releases for Debian, the MPR, and the AUR.
@@ -1815,9 +1835,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md ../makedeb/
 +```
 +
 +Then run `./pkgbuild.sh`, which will output a generated PKGBUILD file.
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD ../makedeb/PKGBUILD/TEMPLATE.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/PKGBUILD/TEMPLATE.PKGBUILD	2021-11-01 13:08:47.776322866 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD makedeb/PKGBUILD/TEMPLATE.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/PKGBUILD/TEMPLATE.PKGBUILD	2021-11-01 13:08:47.776322866 -0700
 @@ -0,0 +1,27 @@
 +# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 +_release=$${release}
@@ -1846,9 +1866,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD ../
 +	cd makedeb/
 +	make package DESTDIR="${pkgdir}"
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/ALPHA.PKGBUILD ../makedeb/PKGBUILDs/AUR/ALPHA.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/ALPHA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/AUR/ALPHA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/ALPHA.PKGBUILD makedeb/PKGBUILDs/AUR/ALPHA.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/ALPHA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/AUR/ALPHA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,56 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=alpha
@@ -1906,9 +1926,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/ALPHA.PKGBUILD .
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/BETA.PKGBUILD ../makedeb/PKGBUILDs/AUR/BETA.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/BETA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/AUR/BETA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/BETA.PKGBUILD makedeb/PKGBUILDs/AUR/BETA.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/BETA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/AUR/BETA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,56 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=beta
@@ -1966,9 +1986,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/BETA.PKGBUILD ..
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/STABLE.PKGBUILD ../makedeb/PKGBUILDs/AUR/STABLE.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/STABLE.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/AUR/STABLE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/STABLE.PKGBUILD makedeb/PKGBUILDs/AUR/STABLE.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/STABLE.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/AUR/STABLE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,56 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=stable
@@ -2026,9 +2046,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/AUR/STABLE.PKGBUILD 
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/ALPHA.PKGBUILD ../makedeb/PKGBUILDs/LOCAL/ALPHA.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/ALPHA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/LOCAL/ALPHA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/ALPHA.PKGBUILD makedeb/PKGBUILDs/LOCAL/ALPHA.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/ALPHA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/LOCAL/ALPHA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,58 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=alpha
@@ -2088,9 +2108,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/ALPHA.PKGBUILD
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/BETA.PKGBUILD ../makedeb/PKGBUILDs/LOCAL/BETA.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/BETA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/LOCAL/BETA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/BETA.PKGBUILD makedeb/PKGBUILDs/LOCAL/BETA.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/BETA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/LOCAL/BETA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,58 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=beta
@@ -2150,9 +2170,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/BETA.PKGBUILD 
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/STABLE.PKGBUILD ../makedeb/PKGBUILDs/LOCAL/STABLE.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/STABLE.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/LOCAL/STABLE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/STABLE.PKGBUILD makedeb/PKGBUILDs/LOCAL/STABLE.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/STABLE.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/LOCAL/STABLE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,57 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=stable
@@ -2211,9 +2231,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/LOCAL/STABLE.PKGBUIL
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/ALPHA.PKGBUILD ../makedeb/PKGBUILDs/MPR/ALPHA.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/ALPHA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/MPR/ALPHA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/ALPHA.PKGBUILD makedeb/PKGBUILDs/MPR/ALPHA.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/ALPHA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/MPR/ALPHA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,56 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=alpha
@@ -2271,9 +2291,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/ALPHA.PKGBUILD .
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/BETA.PKGBUILD ../makedeb/PKGBUILDs/MPR/BETA.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/BETA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/MPR/BETA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/BETA.PKGBUILD makedeb/PKGBUILDs/MPR/BETA.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/BETA.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/MPR/BETA.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,56 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=beta
@@ -2331,9 +2351,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/BETA.PKGBUILD ..
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/STABLE.PKGBUILD ../makedeb/PKGBUILDs/MPR/STABLE.PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/STABLE.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/MPR/STABLE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/STABLE.PKGBUILD makedeb/PKGBUILDs/MPR/STABLE.PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/STABLE.PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/MPR/STABLE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,56 +0,0 @@
 -# Maintainer: Hunter Wittenborn: <hunter@hunterwittenborn.com>
 -_release_type=stable
@@ -2391,16 +2411,16 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/MPR/STABLE.PKGBUILD 
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/README.md ../makedeb/PKGBUILDs/README.md
---- ../makedeb-7.1.2-bugfix1-stable/PKGBUILDs/README.md	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/PKGBUILDs/README.md	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/README.md makedeb/PKGBUILDs/README.md
+--- makedeb-7.1.2-bugfix1-stable/PKGBUILDs/README.md	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/PKGBUILDs/README.md	1969-12-31 16:00:00.000000000 -0800
 @@ -1,3 +0,0 @@
 -Some of the variables inside these PKGBUILDs (variables without `$` characters) are taken from `src/PKGBUILD` during CI deployments.
 -
 -To find the relevant variables, find the corresponding value in `src/PKGBUILD`, which will be located under the same variable name.
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh ../makedeb/src/functions/arg_check.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/arg_check.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh makedeb/src/functions/arg_check.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/arg_check.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -7,6 +7,7 @@
    declare -Ag makedeb_args=()
    declare -ag apt_args=()
@@ -2432,9 +2452,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh ../
          --print-control)                   declare -g print_control=1 ;;
          --print-srcinfo | --printsrcinfo)  declare -g makepkg_printsrcinfo="true" ;;
          --skip-pgp-check | --skippgpcheck) declare -g makepkg_args+=("--skippgpcheck") ;;
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_optdepends_fields.sh ../makedeb/src/functions/control_file/generate_optdepends_fields.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_optdepends_fields.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/control_file/generate_optdepends_fields.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_optdepends_fields.sh makedeb/src/functions/control_file/generate_optdepends_fields.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_optdepends_fields.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/control_file/generate_optdepends_fields.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,25 +0,0 @@
 -generate_optdepends_fields() {
 -  local recommends=()
@@ -2461,9 +2481,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/control_file/gen
 -  declare -g recommends=("${recommends[@]}")
 -  declare -g suggests=("${suggests[@]}")
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_prefix_fields.sh ../makedeb/src/functions/control_file/generate_prefix_fields.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_prefix_fields.sh	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/src/functions/control_file/generate_prefix_fields.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_prefix_fields.sh makedeb/src/functions/control_file/generate_prefix_fields.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_prefix_fields.sh	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/src/functions/control_file/generate_prefix_fields.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -0,0 +1,46 @@
 +generate_prefix_fields() {
 +  # depends.
@@ -2511,9 +2531,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/control_file/gen
 +  declare -g recommends=("${recommends[@]}")
 +  declare -g suggests=("${suggests[@]}")
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_dependency_commas.sh ../makedeb/src/functions/convert/add_dependency_commas.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_dependency_commas.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/convert/add_dependency_commas.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_dependency_commas.sh makedeb/src/functions/convert/add_dependency_commas.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_dependency_commas.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/convert/add_dependency_commas.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -1,5 +1,6 @@
  add_dependency_commas() {
    declare -g depends=("$(echo "${depends[@]}" | sed 's| |, |g')")
@@ -2521,9 +2541,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_depe
    declare -g recommends=("$(echo "${recommends[@]}" | sed 's| |, |g')")
    declare -g suggests=("$(echo "${suggests[@]}" | sed 's| |, |g')")
    declare -g conflicts=("$(echo "${conflicts[@]}" | sed 's| |, |g')")
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_relationships_parentheses.sh ../makedeb/src/functions/convert/convert_relationships_parentheses.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_relationships_parentheses.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/convert/convert_relationships_parentheses.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_relationships_parentheses.sh makedeb/src/functions/convert/convert_relationships_parentheses.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_relationships_parentheses.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/convert/convert_relationships_parentheses.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -1,5 +1,5 @@
  convert_relationships_parentheses() {
 -  for i in depends recommends suggests conflicts makedepends checkdepends provides replaces; do
@@ -2531,9 +2551,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_
      local new_values=()
      var="${i}[@]"
  
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_dependency_conversion.sh ../makedeb/src/functions/convert/run_dependency_conversion.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_dependency_conversion.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/convert/run_dependency_conversion.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_dependency_conversion.sh makedeb/src/functions/convert/run_dependency_conversion.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_dependency_conversion.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/convert/run_dependency_conversion.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -1,5 +1,6 @@
  run_dependency_conversion() {
    check_relationships depends      "${depends[@]}"
@@ -2541,9 +2561,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_depe
    check_relationships recommends   "${recommends[@]}"
    check_relationships suggests     "${suggests[@]}"
    check_relationships conflicts    "${conflicts[@]}"
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_dependencies.sh ../makedeb/src/functions/dependency_checks/check_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/dependency_checks/check_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_dependencies.sh makedeb/src/functions/dependency_checks/check_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/dependency_checks/check_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,48 +0,0 @@
 -check_dependencies() {
 -  declare -g needed_dependencies=() \
@@ -2593,9 +2613,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 -
 -  unset bad_apt_dependencies
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_distro_dependencies.sh ../makedeb/src/functions/dependency_checks/check_distro_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_distro_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/dependency_checks/check_distro_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_distro_dependencies.sh makedeb/src/functions/dependency_checks/check_distro_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_distro_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/dependency_checks/check_distro_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -16,7 +16,7 @@
      distro_variable_string="${distro_codename}_${i}[@]"
      distro_variable_data=("${!distro_variable_string}")
@@ -2605,9 +2625,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
        create_array "${i}" "${distro_variable_data[@]}"
      fi
    done
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_missing_dependencies.sh ../makedeb/src/functions/dependency_checks/check_missing_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/src/functions/dependency_checks/check_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_missing_dependencies.sh makedeb/src/functions/dependency_checks/check_missing_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/src/functions/dependency_checks/check_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -0,0 +1,50 @@
 +check_missing_dependencies() {
 +  # Get list of missing dependencies.
@@ -2659,9 +2679,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 +  declare -g missing_build_dependencies
 +  declare -g missing_build_dependencies_no_relations=("${missing_build_dependencies_no_relations[@]}")
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/get_apt_output.sh ../makedeb/src/functions/dependency_checks/get_apt_output.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/get_apt_output.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/dependency_checks/get_apt_output.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/get_apt_output.sh makedeb/src/functions/dependency_checks/get_apt_output.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/get_apt_output.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/dependency_checks/get_apt_output.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,31 +0,0 @@
 -get_apt_output() {
 -  local starting_line="${2}" \
@@ -2694,9 +2714,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 -
 -  create_array "${returned_variable}" "${returned_packages[@]}"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_depends.sh ../makedeb/src/functions/dependency_checks/install_depends.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_depends.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/dependency_checks/install_depends.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_depends.sh makedeb/src/functions/dependency_checks/install_depends.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_depends.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/dependency_checks/install_depends.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,36 +0,0 @@
 -install_depends() {
 -  local failed_dependency_installation=0
@@ -2734,9 +2754,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 -    fi
 -  fi
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_missing_dependencies.sh ../makedeb/src/functions/dependency_checks/install_missing_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/src/functions/dependency_checks/install_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_missing_dependencies.sh makedeb/src/functions/dependency_checks/install_missing_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/src/functions/dependency_checks/install_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -0,0 +1,30 @@
 +install_missing_dependencies() {
 +  if [[ "${#missing_dependencies}" == "0" && "${#missing_build_dependencies}" == "0" ]]; then
@@ -2768,9 +2788,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 +    fi
 +  fi
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_dependencies.sh ../makedeb/src/functions/dependency_checks/remove_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/dependency_checks/remove_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_dependencies.sh makedeb/src/functions/dependency_checks/remove_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/dependency_checks/remove_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,32 +0,0 @@
 -remove_dependencies() {
 -  local build_dependencies=() \
@@ -2804,9 +2824,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 -  msg "Removing build dependencies..."
 -  sudo apt-get purge "${build_dependency_list[@]}" "${apt_args[@]}"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_installed_dependencies.sh ../makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_installed_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_installed_dependencies.sh makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_installed_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -0,0 +1,21 @@
 +remove_installed_dependencies() {
 +  if [[ "${#missing_build_dependencies_no_relations[@]}" == "0" ]]; then
@@ -2829,9 +2849,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 +  fi
 +  msg "Done."
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_dependencies.sh ../makedeb/src/functions/dependency_checks/verify_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/dependency_checks/verify_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_dependencies.sh makedeb/src/functions/dependency_checks/verify_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/dependency_checks/verify_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
 @@ -1,35 +0,0 @@
 -verify_dependencies() {
 -  if [[ "${#needed_dependencies_temp}" != "0" ]]; then
@@ -2868,9 +2888,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 -    exit 1
 -  fi
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_no_missing_dependencies.sh ../makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_no_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_no_missing_dependencies.sh makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_no_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -0,0 +1,11 @@
 +verify_no_missing_dependencies() {
 +  if [[ "${#missing_dependencies[@]}" != "0" || "${#missing_build_dependencies[@]}" != "0" ]]; then
@@ -2883,9 +2903,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/dependency_check
 +    exit 1
 +  fi
 +}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh ../makedeb/src/functions/fakeroot_build.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/fakeroot_build.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh makedeb/src/functions/fakeroot_build.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/fakeroot_build.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -44,7 +44,7 @@
      # Convert dependencies, then export data to control file.
      check_distro_dependencies
@@ -2895,9 +2915,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.s
      run_dependency_conversion
  
      msg2 "Generating control file..."
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh ../makedeb/src/functions/generate_control.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/generate_control.sh	2021-11-01 13:09:36.000000000 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh makedeb/src/functions/generate_control.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/generate_control.sh	2021-11-01 13:09:36.000000000 -0700
 @@ -15,6 +15,7 @@
    export_control "Maintainer:"    "${output_file}"  "${maintainer[@]}"
    export_control "Homepage:"      "${output_file}"  "${url[@]}"
@@ -2906,9 +2926,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/generate_control
    export_control "Depends:"       "${output_file}"  "${depends[@]}"
    export_control "Recommends:"    "${output_file}"  "${recommends[@]}"
    export_control "Suggests:"      "${output_file}"  "${suggests[@]}"
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/help.sh ../makedeb/src/functions/help.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/functions/help.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/functions/help.sh	2021-11-01 13:10:03.108662730 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/help.sh makedeb/src/functions/help.sh
+--- makedeb-7.1.2-bugfix1-stable/src/functions/help.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/functions/help.sh	2021-11-01 13:10:03.108662730 -0700
 @@ -1,55 +1,51 @@
  help() {
 -  if [[ "${target_os}" == "debian" ]]; then
@@ -3013,9 +3033,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/functions/help.sh ../maked
 +	echo
 +	echo "See makedeb(8) for information on available options and links for obtaining support."
  }
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/makedeb.sh ../makedeb/src/makedeb.sh
---- ../makedeb-7.1.2-bugfix1-stable/src/makedeb.sh	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/makedeb.sh	2021-11-01 13:10:03.108662730 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/makedeb.sh makedeb/src/makedeb.sh
+--- makedeb-7.1.2-bugfix1-stable/src/makedeb.sh	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/makedeb.sh	2021-11-01 13:10:03.108662730 -0700
 @@ -27,10 +27,19 @@
  declare package_convert="false"
  declare hide_control_output=0
@@ -3127,9 +3147,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/makedeb.sh ../makedeb/src/
  fi
  
  # Install built package
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/PKGBUILD ../makedeb/src/PKGBUILD
---- ../makedeb-7.1.2-bugfix1-stable/src/PKGBUILD	2021-10-21 00:57:18.000000000 -0700
-+++ ../makedeb/src/PKGBUILD	1969-12-31 16:00:00.000000000 -0800
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/PKGBUILD makedeb/src/PKGBUILD
+--- makedeb-7.1.2-bugfix1-stable/src/PKGBUILD	2021-10-21 00:57:18.000000000 -0700
++++ makedeb/src/PKGBUILD	1969-12-31 16:00:00.000000000 -0800
 @@ -1,57 +0,0 @@
 -# This PKGBUILD is used for local testing. Refer to the PKGBUILDs in
 -# PKGBUILDs for the sources of MPR, AUR, and APT PKGBUILDs.
@@ -3188,9 +3208,9 @@ diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/PKGBUILD ../makedeb/src/PK
 -    asciidoctor -b manpage man/pkgbuild.5.adoc \
 -                -o "${pkgdir}/usr/share/man/man5/pkgbuild.5"
 -}
-diff --color -Nru ../makedeb-7.1.2-bugfix1-stable/src/utils/missing_apt_dependencies.py ../makedeb/src/utils/missing_apt_dependencies.py
---- ../makedeb-7.1.2-bugfix1-stable/src/utils/missing_apt_dependencies.py	1969-12-31 16:00:00.000000000 -0800
-+++ ../makedeb/src/utils/missing_apt_dependencies.py	2021-11-01 12:50:36.510749534 -0700
+diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/utils/missing_apt_dependencies.py makedeb/src/utils/missing_apt_dependencies.py
+--- makedeb-7.1.2-bugfix1-stable/src/utils/missing_apt_dependencies.py	1969-12-31 16:00:00.000000000 -0800
++++ makedeb/src/utils/missing_apt_dependencies.py	2021-11-01 12:50:36.510749534 -0700
 @@ -0,0 +1,69 @@
 +#!/usr/bin/env python3
 +import apt_pkg
