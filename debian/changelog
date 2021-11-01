@@ -1,3 +1,9 @@
+makedeb (7.1.2+bugfix1-11) unstable; urgency=medium
+
+  * ahhh patches
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Mon, 01 Nov 2021 13:41:33 -0700
+
 makedeb (7.1.2+bugfix1-10) focal; urgency=medium
 
   * Should finally fix upstream building
