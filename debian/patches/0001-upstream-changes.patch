@@ -5,178 +5,6 @@ Subject: Debian packaging added
 * Fixed PKGBUILDs
 * Makefile added
 
-
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/changelog makedeb/debian/changelog
---- makedeb-7.1.2-bugfix1-stable/debian/changelog	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/changelog	2021-11-01 13:08:47.780322887 -0700
-@@ -0,0 +1,59 @@
-+makedeb (7.1.2+bugfix1-10) focal; urgency=medium
-+
-+  * Should finally fix upstream building
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Thu, 28 Oct 2021 08:10:27 -0700
-+
-+makedeb (7.1.2+bugfix1-9) focal; urgency=medium
-+
-+  * Upstream changes
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 19:38:48 -0700
-+
-+makedeb (7.1.2+bugfix1-8) focal; urgency=medium
-+
-+  * Fix find command
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:46:50 -0700
-+
-+makedeb (7.1.2+bugfix1-7) focal; urgency=medium
-+
-+  * typo
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:22:12 -0700
-+
-+makedeb (7.1.2+bugfix1-6) focal; urgency=medium
-+
-+  * Got a fix for the multiline-statement
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:15:08 -0700
-+
-+makedeb (7.1.2+bugfix1-5) focal; urgency=medium
-+
-+  * Fix bugs in building
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:03:11 -0700
-+
-+makedeb (7.1.2+bugfix1-4) focal; urgency=medium
-+
-+  * switch to copying pkgbuild
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 14:41:54 -0700
-+
-+makedeb (7.1.2+bugfix1-3) focal; urgency=medium
-+
-+  * Fix makefile
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 13:52:02 -0700
-+
-+makedeb (7.1.2+bugfix1-2) focal; urgency=medium
-+
-+  * Fix dependencies
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 13:49:40 -0700
-+
-+makedeb (7.1.2+bugfix1-1) focal; urgency=medium
-+
-+  * Initial Release.
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/control makedeb/debian/control
---- makedeb-7.1.2-bugfix1-stable/debian/control	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/control	2021-11-01 13:08:47.780322887 -0700
-@@ -0,0 +1,14 @@
-+Source: makedeb
-+Section: utils
-+Priority: optional
-+Maintainer: Leo Puvilland <lpuvilla0001@mymail.lausd.net>
-+Build-Depends: debhelper-compat (= 12), bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt, git
-+Standards-Version: 4.4.1
-+Homepage: https://makedeb.hunterwittenborn.com
-+Vcs-Browser: https://github.com/makedeb/makedeb
-+Vcs-Git: https://github.com/makedeb/makedeb.git -b stable
-+
-+Package: makedeb
-+Architecture: any
-+Depends: ${shlibs:Depends}, ${misc:Depends}, bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt
-+Description: The modern packaging tool for Debian archives.
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/copyright makedeb/debian/copyright
---- makedeb-7.1.2-bugfix1-stable/debian/copyright	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/copyright	2021-11-01 13:08:47.780322887 -0700
-@@ -0,0 +1,38 @@
-+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-+Upstream-Name: makedeb
-+Upstream-Contact: Hunter Wittenborn <hunter@hunterwittenborn.com>
-+Source: https://github.com/makedeb/makedeb
-+
-+Files: *
-+Copyright: 2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
-+License: GPL-2.0+
-+
-+Files: debian/*
-+Copyright: 2021 Leo Puvilland <lpuvilla0001@mymail.lausd.net>
-+License: GPL-2.0+
-+
-+License: GPL-2.0+
-+ This package is free software; you can redistribute it and/or modify
-+ it under the terms of the GNU General Public License as published by
-+ the Free Software Foundation; either version 2 of the License, or
-+ (at your option) any later version.
-+ .
-+ This package is distributed in the hope that it will be useful,
-+ but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ GNU General Public License for more details.
-+ .
-+ You should have received a copy of the GNU General Public License
-+ along with this program. If not, see <https://www.gnu.org/licenses/>
-+ .
-+ On Debian systems, the complete text of the GNU General
-+ Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
-+
-+# Please also look if there are files or directories which have a
-+# different copyright/license attached and list them here.
-+# Please avoid picking licenses with terms that are more restrictive than the
-+# packaged work, as it may make Debian's contributions unacceptable upstream.
-+#
-+# If you need, there are some extra license texts available in two places:
-+#   /usr/share/debhelper/dh_make/licenses/
-+#   /usr/share/common-licenses/
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/makedeb-docs.docs makedeb/debian/makedeb-docs.docs
---- makedeb-7.1.2-bugfix1-stable/debian/makedeb-docs.docs	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/makedeb-docs.docs	2021-11-01 13:08:47.780322887 -0700
-@@ -0,0 +1,3 @@
-+README.Debian
-+README.source
-+README
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/patches/series makedeb/debian/patches/series
---- makedeb-7.1.2-bugfix1-stable/debian/patches/series	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/patches/series	2021-11-01 13:22:14.708146310 -0700
-@@ -0,0 +1 @@
-+0000-upstream-changes.patch
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/README makedeb/debian/README
---- makedeb-7.1.2-bugfix1-stable/debian/README	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/README	2021-11-01 13:08:47.776322866 -0700
-@@ -0,0 +1,6 @@
-+The Debian Package makedeb
-+----------------------------
-+
-+The modern packaging tool for Debian archives
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/README.source makedeb/debian/README.source
---- makedeb-7.1.2-bugfix1-stable/debian/README.source	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/README.source	2021-11-01 13:08:47.776322866 -0700
-@@ -0,0 +1,7 @@
-+makedeb for Debian
-+-----------------
-+
-+The modern packaging tool for Debian archives.
-+
-+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700
-+
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/rules makedeb/debian/rules
---- makedeb-7.1.2-bugfix1-stable/debian/rules	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/rules	2021-11-01 13:08:47.780322887 -0700
-@@ -0,0 +1,6 @@
-+#!/usr/bin/make -f
-+%:
-+	dh $@
-+
-+
-+
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/debian/source/format makedeb/debian/source/format
---- makedeb-7.1.2-bugfix1-stable/debian/source/format	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/debian/source/format	2021-11-01 13:08:47.780322887 -0700
-@@ -0,0 +1 @@
-+3.0 (quilt)
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/docker/Dockerfile makedeb/docker/Dockerfile
 --- makedeb-7.1.2-bugfix1-stable/docker/Dockerfile	2021-10-21 00:57:18.000000000 -0700
 +++ makedeb/docker/Dockerfile	1969-12-31 16:00:00.000000000 -0800
@@ -201,7 +29,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/docker/Dockerfile makedeb/docker/
 -ENTRYPOINT ["/bin/bash"]
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet makedeb/.drone/drone.jsonnet
 --- makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/.drone/drone.jsonnet	2021-11-01 13:09:52.236613618 -0700
++++ makedeb/.drone/drone.jsonnet	2021-11-01 13:35:59.976249297 -0700
 @@ -14,39 +14,39 @@
  		},
  
@@ -292,7 +120,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/drone.jsonnet makedeb/.dro
  	userRepoPublish("makedeb-beta", "beta", "mpr"),
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh makedeb/.drone/scripts/build.sh
 --- makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/.drone/scripts/build.sh	2021-11-01 13:09:52.236613618 -0700
++++ makedeb/.drone/scripts/build.sh	2021-11-01 13:35:59.976249297 -0700
 @@ -1,17 +1,31 @@
  #!/usr/bin/env bash
 -set -exuo pipefail
@@ -340,7 +168,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/build.sh makedeb/.
 +makedeb -s --no-confirm
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh makedeb/.drone/scripts/create_tag.sh
 --- makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/.drone/scripts/create_tag.sh	2021-11-01 13:09:52.236613618 -0700
++++ makedeb/.drone/scripts/create_tag.sh	2021-11-01 13:35:59.976249297 -0700
 @@ -1,5 +1,5 @@
  #!/usr/bin/env bash
 -set -exuo pipefail
@@ -377,7 +205,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/create_tag.sh make
 +git push "ssh://git@${github_url}/makedeb/makedeb" "v${PKGVER}-${release_type}"
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py makedeb/.drone/scripts/publish.py
 --- makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.py	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.drone/scripts/publish.py	2021-11-01 13:08:47.776322866 -0700
++++ makedeb/.drone/scripts/publish.py	2021-11-01 13:35:59.976249297 -0700
 @@ -0,0 +1,40 @@
 +#!/usr/bin/env python3
 +import re
@@ -463,7 +291,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/publish.sh makedeb
 -fi
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh makedeb/.drone/scripts/user-repo.sh
 --- makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/.drone/scripts/user-repo.sh	2021-11-01 13:09:52.236613618 -0700
++++ makedeb/.drone/scripts/user-repo.sh	2021-11-01 13:35:59.976249297 -0700
 @@ -1,8 +1,26 @@
  #!/usr/bin/env bash
 -set -exuo pipefail
@@ -540,1059 +368,9 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/.drone/scripts/user-repo.sh maked
 +git commit -m "Updated version to ${PKGVER}-${PKGREL}"
  
  git push
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/COMMIT_EDITMSG makedeb/.git/COMMIT_EDITMSG
---- makedeb-7.1.2-bugfix1-stable/.git/COMMIT_EDITMSG	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/COMMIT_EDITMSG	2021-11-01 13:25:59.265254314 -0700
-@@ -0,0 +1 @@
-+woah patches
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/config makedeb/.git/config
---- makedeb-7.1.2-bugfix1-stable/.git/config	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/config	2021-11-01 12:50:36.494749452 -0700
-@@ -0,0 +1,11 @@
-+[core]
-+	repositoryformatversion = 0
-+	filemode = true
-+	bare = false
-+	logallrefupdates = true
-+[remote "origin"]
-+	url = ssh://github.com/gamer4life1/makedeb
-+	fetch = +refs/heads/*:refs/remotes/origin/*
-+[branch "launchpad"]
-+	remote = origin
-+	merge = refs/heads/launchpad
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/description makedeb/.git/description
---- makedeb-7.1.2-bugfix1-stable/.git/description	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/description	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1 @@
-+Unnamed repository; edit this file 'description' to name the repository.
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/HEAD makedeb/.git/HEAD
---- makedeb-7.1.2-bugfix1-stable/.git/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/HEAD	2021-11-01 13:08:47.784322907 -0700
-@@ -0,0 +1 @@
-+ref: refs/heads/launchpad
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.sample makedeb/.git/hooks/applypatch-msg.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/applypatch-msg.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/applypatch-msg.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,15 @@
-+#!/bin/sh
-+#
-+# An example hook script to check the commit log message taken by
-+# applypatch from an e-mail message.
-+#
-+# The hook should exit with non-zero status after issuing an
-+# appropriate message if it wants to stop the commit.  The hook is
-+# allowed to edit the commit message file.
-+#
-+# To enable this hook, rename this file to "applypatch-msg".
-+
-+. git-sh-setup
-+commitmsg="$(git rev-parse --git-path hooks/commit-msg)"
-+test -x "$commitmsg" && exec "$commitmsg" ${1+"$@"}
-+:
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample makedeb/.git/hooks/commit-msg.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/commit-msg.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/commit-msg.sample	2021-11-01 12:50:34.502739272 -0700
-@@ -0,0 +1,24 @@
-+#!/bin/sh
-+#
-+# An example hook script to check the commit log message.
-+# Called by "git commit" with one argument, the name of the file
-+# that has the commit message.  The hook should exit with non-zero
-+# status after issuing an appropriate message if it wants to stop the
-+# commit.  The hook is allowed to edit the commit message file.
-+#
-+# To enable this hook, rename this file to "commit-msg".
-+
-+# Uncomment the below to add a Signed-off-by line to the message.
-+# Doing this in a hook is a bad idea in general, but the prepare-commit-msg
-+# hook is more suited to it.
-+#
-+# SOB=$(git var GIT_AUTHOR_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
-+# grep -qs "^$SOB" "$1" || echo "$SOB" >> "$1"
-+
-+# This example catches duplicate Signed-off-by lines.
-+
-+test "" = "$(grep '^Signed-off-by: ' "$1" |
-+	 sort | uniq -c | sed -e '/^[ 	]*1[ 	]/d')" || {
-+	echo >&2 Duplicate Signed-off-by lines.
-+	exit 1
-+}
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.sample makedeb/.git/hooks/fsmonitor-watchman.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/fsmonitor-watchman.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/fsmonitor-watchman.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,109 @@
-+#!/usr/bin/perl
-+
-+use strict;
-+use warnings;
-+use IPC::Open2;
-+
-+# An example hook script to integrate Watchman
-+# (https://facebook.github.io/watchman/) with git to speed up detecting
-+# new and modified files.
-+#
-+# The hook is passed a version (currently 1) and a time in nanoseconds
-+# formatted as a string and outputs to stdout all files that have been
-+# modified since the given time. Paths must be relative to the root of
-+# the working tree and separated by a single NUL.
-+#
-+# To enable this hook, rename this file to "query-watchman" and set
-+# 'git config core.fsmonitor .git/hooks/query-watchman'
-+#
-+my ($version, $time) = @ARGV;
-+
-+# Check the hook interface version
-+
-+if ($version == 1) {
-+	# convert nanoseconds to seconds
-+	# subtract one second to make sure watchman will return all changes
-+	$time = int ($time / 1000000000) - 1;
-+} else {
-+	die "Unsupported query-fsmonitor hook version '$version'.\n" .
-+	    "Falling back to scanning...\n";
-+}
-+
-+my $git_work_tree;
-+if ($^O =~ 'msys' || $^O =~ 'cygwin') {
-+	$git_work_tree = Win32::GetCwd();
-+	$git_work_tree =~ tr/\\/\//;
-+} else {
-+	require Cwd;
-+	$git_work_tree = Cwd::cwd();
-+}
-+
-+my $retry = 1;
-+
-+launch_watchman();
-+
-+sub launch_watchman {
-+
-+	my $pid = open2(\*CHLD_OUT, \*CHLD_IN, 'watchman -j --no-pretty')
-+	    or die "open2() failed: $!\n" .
-+	    "Falling back to scanning...\n";
-+
-+	# In the query expression below we're asking for names of files that
-+	# changed since $time but were not transient (ie created after
-+	# $time but no longer exist).
-+	#
-+	# To accomplish this, we're using the "since" generator to use the
-+	# recency index to select candidate nodes and "fields" to limit the
-+	# output to file names only.
-+
-+	my $query = <<"	END";
-+		["query", "$git_work_tree", {
-+			"since": $time,
-+			"fields": ["name"]
-+		}]
-+	END
-+
-+	print CHLD_IN $query;
-+	close CHLD_IN;
-+	my $response = do {local $/; <CHLD_OUT>};
-+
-+	die "Watchman: command returned no output.\n" .
-+	    "Falling back to scanning...\n" if $response eq "";
-+	die "Watchman: command returned invalid output: $response\n" .
-+	    "Falling back to scanning...\n" unless $response =~ /^\{/;
-+
-+	my $json_pkg;
-+	eval {
-+		require JSON::XS;
-+		$json_pkg = "JSON::XS";
-+		1;
-+	} or do {
-+		require JSON::PP;
-+		$json_pkg = "JSON::PP";
-+	};
-+
-+	my $o = $json_pkg->new->utf8->decode($response);
-+
-+	if ($retry > 0 and $o->{error} and $o->{error} =~ m/unable to resolve root .* directory (.*) is not watched/) {
-+		print STDERR "Adding '$git_work_tree' to watchman's watch list.\n";
-+		$retry--;
-+		qx/watchman watch "$git_work_tree"/;
-+		die "Failed to make watchman watch '$git_work_tree'.\n" .
-+		    "Falling back to scanning...\n" if $? != 0;
-+
-+		# Watchman will always return all files on the first query so
-+		# return the fast "everything is dirty" flag to git and do the
-+		# Watchman query just to get it over with now so we won't pay
-+		# the cost in git to look up each individual file.
-+		print "/\0";
-+		eval { launch_watchman() };
-+		exit 0;
-+	}
-+
-+	die "Watchman: $o->{error}.\n" .
-+	    "Falling back to scanning...\n" if $o->{error};
-+
-+	binmode STDOUT, ":utf8";
-+	local $, = "\0";
-+	print @{$o->{files}};
-+}
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample makedeb/.git/hooks/post-update.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/post-update.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/post-update.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+#
-+# An example hook script to prepare a packed repository for use over
-+# dumb transports.
-+#
-+# To enable this hook, rename this file to "post-update".
-+
-+exec git update-server-info
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.sample makedeb/.git/hooks/pre-applypatch.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-applypatch.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/pre-applypatch.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+#
-+# An example hook script to verify what is about to be committed
-+# by applypatch from an e-mail message.
-+#
-+# The hook should exit with non-zero status after issuing an
-+# appropriate message if it wants to stop the commit.
-+#
-+# To enable this hook, rename this file to "pre-applypatch".
-+
-+. git-sh-setup
-+precommit="$(git rev-parse --git-path hooks/pre-commit)"
-+test -x "$precommit" && exec "$precommit" ${1+"$@"}
-+:
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample makedeb/.git/hooks/pre-commit.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-commit.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/pre-commit.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,49 @@
-+#!/bin/sh
-+#
-+# An example hook script to verify what is about to be committed.
-+# Called by "git commit" with no arguments.  The hook should
-+# exit with non-zero status after issuing an appropriate message if
-+# it wants to stop the commit.
-+#
-+# To enable this hook, rename this file to "pre-commit".
-+
-+if git rev-parse --verify HEAD >/dev/null 2>&1
-+then
-+	against=HEAD
-+else
-+	# Initial commit: diff against an empty tree object
-+	against=$(git hash-object -t tree /dev/null)
-+fi
-+
-+# If you want to allow non-ASCII filenames set this variable to true.
-+allownonascii=$(git config --bool hooks.allownonascii)
-+
-+# Redirect output to stderr.
-+exec 1>&2
-+
-+# Cross platform projects tend to avoid non-ASCII filenames; prevent
-+# them from being added to the repository. We exploit the fact that the
-+# printable range starts at the space character and ends with tilde.
-+if [ "$allownonascii" != "true" ] &&
-+	# Note that the use of brackets around a tr range is ok here, (it's
-+	# even required, for portability to Solaris 10's /usr/bin/tr), since
-+	# the square bracket bytes happen to fall in the designated range.
-+	test $(git diff --cached --name-only --diff-filter=A -z $against |
-+	  LC_ALL=C tr -d '[ -~]\0' | wc -c) != 0
-+then
-+	cat <<\EOF
-+Error: Attempt to add a non-ASCII file name.
-+
-+This can cause problems if you want to work with people on other platforms.
-+
-+To be portable it is advisable to rename the file.
-+
-+If you know what you are doing you can disable this check using:
-+
-+  git config hooks.allownonascii true
-+EOF
-+	exit 1
-+fi
-+
-+# If there are whitespace errors, print the offending file names and fail.
-+exec git diff-index --check --cached $against --
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sample makedeb/.git/hooks/pre-merge-commit.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-merge-commit.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/pre-merge-commit.sample	2021-11-01 12:50:34.502739272 -0700
-@@ -0,0 +1,13 @@
-+#!/bin/sh
-+#
-+# An example hook script to verify what is about to be committed.
-+# Called by "git merge" with no arguments.  The hook should
-+# exit with non-zero status after issuing an appropriate message to
-+# stderr if it wants to stop the merge commit.
-+#
-+# To enable this hook, rename this file to "pre-merge-commit".
-+
-+. git-sh-setup
-+test -x "$GIT_DIR/hooks/pre-commit" &&
-+        exec "$GIT_DIR/hooks/pre-commit"
-+:
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.sample makedeb/.git/hooks/prepare-commit-msg.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/prepare-commit-msg.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/prepare-commit-msg.sample	2021-11-01 12:50:34.502739272 -0700
-@@ -0,0 +1,42 @@
-+#!/bin/sh
-+#
-+# An example hook script to prepare the commit log message.
-+# Called by "git commit" with the name of the file that has the
-+# commit message, followed by the description of the commit
-+# message's source.  The hook's purpose is to edit the commit
-+# message file.  If the hook fails with a non-zero status,
-+# the commit is aborted.
-+#
-+# To enable this hook, rename this file to "prepare-commit-msg".
-+
-+# This hook includes three examples. The first one removes the
-+# "# Please enter the commit message..." help message.
-+#
-+# The second includes the output of "git diff --name-status -r"
-+# into the message, just before the "git status" output.  It is
-+# commented because it doesn't cope with --amend or with squashed
-+# commits.
-+#
-+# The third example adds a Signed-off-by line to the message, that can
-+# still be edited.  This is rarely a good idea.
-+
-+COMMIT_MSG_FILE=$1
-+COMMIT_SOURCE=$2
-+SHA1=$3
-+
-+/usr/bin/perl -i.bak -ne 'print unless(m/^. Please enter the commit message/..m/^#$/)' "$COMMIT_MSG_FILE"
-+
-+# case "$COMMIT_SOURCE,$SHA1" in
-+#  ,|template,)
-+#    /usr/bin/perl -i.bak -pe '
-+#       print "\n" . `git diff --cached --name-status -r`
-+# 	 if /^#/ && $first++ == 0' "$COMMIT_MSG_FILE" ;;
-+#  *) ;;
-+# esac
-+
-+# SOB=$(git var GIT_COMMITTER_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
-+# git interpret-trailers --in-place --trailer "$SOB" "$COMMIT_MSG_FILE"
-+# if test -z "$COMMIT_SOURCE"
-+# then
-+#   /usr/bin/perl -i.bak -pe 'print "\n" if !$first_line++' "$COMMIT_MSG_FILE"
-+# fi
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample makedeb/.git/hooks/pre-push.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-push.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/pre-push.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,53 @@
-+#!/bin/sh
-+
-+# An example hook script to verify what is about to be pushed.  Called by "git
-+# push" after it has checked the remote status, but before anything has been
-+# pushed.  If this script exits with a non-zero status nothing will be pushed.
-+#
-+# This hook is called with the following parameters:
-+#
-+# $1 -- Name of the remote to which the push is being done
-+# $2 -- URL to which the push is being done
-+#
-+# If pushing without using a named remote those arguments will be equal.
-+#
-+# Information about the commits which are being pushed is supplied as lines to
-+# the standard input in the form:
-+#
-+#   <local ref> <local sha1> <remote ref> <remote sha1>
-+#
-+# This sample shows how to prevent push of commits where the log message starts
-+# with "WIP" (work in progress).
-+
-+remote="$1"
-+url="$2"
-+
-+z40=0000000000000000000000000000000000000000
-+
-+while read local_ref local_sha remote_ref remote_sha
-+do
-+	if [ "$local_sha" = $z40 ]
-+	then
-+		# Handle delete
-+		:
-+	else
-+		if [ "$remote_sha" = $z40 ]
-+		then
-+			# New branch, examine all commits
-+			range="$local_sha"
-+		else
-+			# Update to existing branch, examine new commits
-+			range="$remote_sha..$local_sha"
-+		fi
-+
-+		# Check for WIP commit
-+		commit=`git rev-list -n 1 --grep '^WIP' "$range"`
-+		if [ -n "$commit" ]
-+		then
-+			echo >&2 "Found WIP commit in $local_ref, not pushing"
-+			exit 1
-+		fi
-+	fi
-+done
-+
-+exit 0
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample makedeb/.git/hooks/pre-rebase.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-rebase.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/pre-rebase.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,169 @@
-+#!/bin/sh
-+#
-+# Copyright (c) 2006, 2008 Junio C Hamano
-+#
-+# The "pre-rebase" hook is run just before "git rebase" starts doing
-+# its job, and can prevent the command from running by exiting with
-+# non-zero status.
-+#
-+# The hook is called with the following parameters:
-+#
-+# $1 -- the upstream the series was forked from.
-+# $2 -- the branch being rebased (or empty when rebasing the current branch).
-+#
-+# This sample shows how to prevent topic branches that are already
-+# merged to 'next' branch from getting rebased, because allowing it
-+# would result in rebasing already published history.
-+
-+publish=next
-+basebranch="$1"
-+if test "$#" = 2
-+then
-+	topic="refs/heads/$2"
-+else
-+	topic=`git symbolic-ref HEAD` ||
-+	exit 0 ;# we do not interrupt rebasing detached HEAD
-+fi
-+
-+case "$topic" in
-+refs/heads/??/*)
-+	;;
-+*)
-+	exit 0 ;# we do not interrupt others.
-+	;;
-+esac
-+
-+# Now we are dealing with a topic branch being rebased
-+# on top of master.  Is it OK to rebase it?
-+
-+# Does the topic really exist?
-+git show-ref -q "$topic" || {
-+	echo >&2 "No such branch $topic"
-+	exit 1
-+}
-+
-+# Is topic fully merged to master?
-+not_in_master=`git rev-list --pretty=oneline ^master "$topic"`
-+if test -z "$not_in_master"
-+then
-+	echo >&2 "$topic is fully merged to master; better remove it."
-+	exit 1 ;# we could allow it, but there is no point.
-+fi
-+
-+# Is topic ever merged to next?  If so you should not be rebasing it.
-+only_next_1=`git rev-list ^master "^$topic" ${publish} | sort`
-+only_next_2=`git rev-list ^master           ${publish} | sort`
-+if test "$only_next_1" = "$only_next_2"
-+then
-+	not_in_topic=`git rev-list "^$topic" master`
-+	if test -z "$not_in_topic"
-+	then
-+		echo >&2 "$topic is already up to date with master"
-+		exit 1 ;# we could allow it, but there is no point.
-+	else
-+		exit 0
-+	fi
-+else
-+	not_in_next=`git rev-list --pretty=oneline ^${publish} "$topic"`
-+	/usr/bin/perl -e '
-+		my $topic = $ARGV[0];
-+		my $msg = "* $topic has commits already merged to public branch:\n";
-+		my (%not_in_next) = map {
-+			/^([0-9a-f]+) /;
-+			($1 => 1);
-+		} split(/\n/, $ARGV[1]);
-+		for my $elem (map {
-+				/^([0-9a-f]+) (.*)$/;
-+				[$1 => $2];
-+			} split(/\n/, $ARGV[2])) {
-+			if (!exists $not_in_next{$elem->[0]}) {
-+				if ($msg) {
-+					print STDERR $msg;
-+					undef $msg;
-+				}
-+				print STDERR " $elem->[1]\n";
-+			}
-+		}
-+	' "$topic" "$not_in_next" "$not_in_master"
-+	exit 1
-+fi
-+
-+<<\DOC_END
-+
-+This sample hook safeguards topic branches that have been
-+published from being rewound.
-+
-+The workflow assumed here is:
-+
-+ * Once a topic branch forks from "master", "master" is never
-+   merged into it again (either directly or indirectly).
-+
-+ * Once a topic branch is fully cooked and merged into "master",
-+   it is deleted.  If you need to build on top of it to correct
-+   earlier mistakes, a new topic branch is created by forking at
-+   the tip of the "master".  This is not strictly necessary, but
-+   it makes it easier to keep your history simple.
-+
-+ * Whenever you need to test or publish your changes to topic
-+   branches, merge them into "next" branch.
-+
-+The script, being an example, hardcodes the publish branch name
-+to be "next", but it is trivial to make it configurable via
-+$GIT_DIR/config mechanism.
-+
-+With this workflow, you would want to know:
-+
-+(1) ... if a topic branch has ever been merged to "next".  Young
-+    topic branches can have stupid mistakes you would rather
-+    clean up before publishing, and things that have not been
-+    merged into other branches can be easily rebased without
-+    affecting other people.  But once it is published, you would
-+    not want to rewind it.
-+
-+(2) ... if a topic branch has been fully merged to "master".
-+    Then you can delete it.  More importantly, you should not
-+    build on top of it -- other people may already want to
-+    change things related to the topic as patches against your
-+    "master", so if you need further changes, it is better to
-+    fork the topic (perhaps with the same name) afresh from the
-+    tip of "master".
-+
-+Let's look at this example:
-+
-+		   o---o---o---o---o---o---o---o---o---o "next"
-+		  /       /           /           /
-+		 /   a---a---b A     /           /
-+		/   /               /           /
-+	       /   /   c---c---c---c B         /
-+	      /   /   /             \         /
-+	     /   /   /   b---b C     \       /
-+	    /   /   /   /             \     /
-+    ---o---o---o---o---o---o---o---o---o---o---o "master"
-+
-+
-+A, B and C are topic branches.
-+
-+ * A has one fix since it was merged up to "next".
-+
-+ * B has finished.  It has been fully merged up to "master" and "next",
-+   and is ready to be deleted.
-+
-+ * C has not merged to "next" at all.
-+
-+We would want to allow C to be rebased, refuse A, and encourage
-+B to be deleted.
-+
-+To compute (1):
-+
-+	git rev-list ^master ^topic next
-+	git rev-list ^master        next
-+
-+	if these match, topic has not merged in next at all.
-+
-+To compute (2):
-+
-+	git rev-list master..topic
-+
-+	if this is empty, it is fully merged to "master".
-+
-+DOC_END
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample makedeb/.git/hooks/pre-receive.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/pre-receive.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/pre-receive.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,24 @@
-+#!/bin/sh
-+#
-+# An example hook script to make use of push options.
-+# The example simply echoes all push options that start with 'echoback='
-+# and rejects all pushes when the "reject" push option is used.
-+#
-+# To enable this hook, rename this file to "pre-receive".
-+
-+if test -n "$GIT_PUSH_OPTION_COUNT"
-+then
-+	i=0
-+	while test "$i" -lt "$GIT_PUSH_OPTION_COUNT"
-+	do
-+		eval "value=\$GIT_PUSH_OPTION_$i"
-+		case "$value" in
-+		echoback=*)
-+			echo "echo from the pre-receive-hook: ${value#*=}" >&2
-+			;;
-+		reject)
-+			exit 1
-+		esac
-+		i=$((i + 1))
-+	done
-+fi
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample makedeb/.git/hooks/update.sample
---- makedeb-7.1.2-bugfix1-stable/.git/hooks/update.sample	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/hooks/update.sample	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,128 @@
-+#!/bin/sh
-+#
-+# An example hook script to block unannotated tags from entering.
-+# Called by "git receive-pack" with arguments: refname sha1-old sha1-new
-+#
-+# To enable this hook, rename this file to "update".
-+#
-+# Config
-+# ------
-+# hooks.allowunannotated
-+#   This boolean sets whether unannotated tags will be allowed into the
-+#   repository.  By default they won't be.
-+# hooks.allowdeletetag
-+#   This boolean sets whether deleting tags will be allowed in the
-+#   repository.  By default they won't be.
-+# hooks.allowmodifytag
-+#   This boolean sets whether a tag may be modified after creation. By default
-+#   it won't be.
-+# hooks.allowdeletebranch
-+#   This boolean sets whether deleting branches will be allowed in the
-+#   repository.  By default they won't be.
-+# hooks.denycreatebranch
-+#   This boolean sets whether remotely creating branches will be denied
-+#   in the repository.  By default this is allowed.
-+#
-+
-+# --- Command line
-+refname="$1"
-+oldrev="$2"
-+newrev="$3"
-+
-+# --- Safety check
-+if [ -z "$GIT_DIR" ]; then
-+	echo "Don't run this script from the command line." >&2
-+	echo " (if you want, you could supply GIT_DIR then run" >&2
-+	echo "  $0 <ref> <oldrev> <newrev>)" >&2
-+	exit 1
-+fi
-+
-+if [ -z "$refname" -o -z "$oldrev" -o -z "$newrev" ]; then
-+	echo "usage: $0 <ref> <oldrev> <newrev>" >&2
-+	exit 1
-+fi
-+
-+# --- Config
-+allowunannotated=$(git config --bool hooks.allowunannotated)
-+allowdeletebranch=$(git config --bool hooks.allowdeletebranch)
-+denycreatebranch=$(git config --bool hooks.denycreatebranch)
-+allowdeletetag=$(git config --bool hooks.allowdeletetag)
-+allowmodifytag=$(git config --bool hooks.allowmodifytag)
-+
-+# check for no description
-+projectdesc=$(sed -e '1q' "$GIT_DIR/description")
-+case "$projectdesc" in
-+"Unnamed repository"* | "")
-+	echo "*** Project description file hasn't been set" >&2
-+	exit 1
-+	;;
-+esac
-+
-+# --- Check types
-+# if $newrev is 0000...0000, it's a commit to delete a ref.
-+zero="0000000000000000000000000000000000000000"
-+if [ "$newrev" = "$zero" ]; then
-+	newrev_type=delete
-+else
-+	newrev_type=$(git cat-file -t $newrev)
-+fi
-+
-+case "$refname","$newrev_type" in
-+	refs/tags/*,commit)
-+		# un-annotated tag
-+		short_refname=${refname##refs/tags/}
-+		if [ "$allowunannotated" != "true" ]; then
-+			echo "*** The un-annotated tag, $short_refname, is not allowed in this repository" >&2
-+			echo "*** Use 'git tag [ -a | -s ]' for tags you want to propagate." >&2
-+			exit 1
-+		fi
-+		;;
-+	refs/tags/*,delete)
-+		# delete tag
-+		if [ "$allowdeletetag" != "true" ]; then
-+			echo "*** Deleting a tag is not allowed in this repository" >&2
-+			exit 1
-+		fi
-+		;;
-+	refs/tags/*,tag)
-+		# annotated tag
-+		if [ "$allowmodifytag" != "true" ] && git rev-parse $refname > /dev/null 2>&1
-+		then
-+			echo "*** Tag '$refname' already exists." >&2
-+			echo "*** Modifying a tag is not allowed in this repository." >&2
-+			exit 1
-+		fi
-+		;;
-+	refs/heads/*,commit)
-+		# branch
-+		if [ "$oldrev" = "$zero" -a "$denycreatebranch" = "true" ]; then
-+			echo "*** Creating a branch is not allowed in this repository" >&2
-+			exit 1
-+		fi
-+		;;
-+	refs/heads/*,delete)
-+		# delete branch
-+		if [ "$allowdeletebranch" != "true" ]; then
-+			echo "*** Deleting a branch is not allowed in this repository" >&2
-+			exit 1
-+		fi
-+		;;
-+	refs/remotes/*,commit)
-+		# tracking branch
-+		;;
-+	refs/remotes/*,delete)
-+		# delete tracking branch
-+		if [ "$allowdeletebranch" != "true" ]; then
-+			echo "*** Deleting a tracking branch is not allowed in this repository" >&2
-+			exit 1
-+		fi
-+		;;
-+	*)
-+		# Anything else (is there anything else?)
-+		echo "*** Update hook: unknown type of update to ref $refname of type $newrev_type" >&2
-+		exit 1
-+		;;
-+esac
-+
-+# --- Finished
-+exit 0
-Binary files makedeb-7.1.2-bugfix1-stable/.git/index and makedeb/.git/index differ
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/info/exclude makedeb/.git/info/exclude
---- makedeb-7.1.2-bugfix1-stable/.git/info/exclude	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/info/exclude	2021-11-01 12:50:34.498739251 -0700
-@@ -0,0 +1,6 @@
-+# git ls-files --others --exclude-from=.git/info/exclude
-+# Lines that start with '#' are comments.
-+# For a project mostly in C, the following would be a good set of
-+# exclude patterns (uncomment them if you want to use them):
-+# *.[oa]
-+# *~
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/HEAD makedeb/.git/logs/HEAD
---- makedeb-7.1.2-bugfix1-stable/.git/logs/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/logs/HEAD	2021-11-01 13:25:59.265254314 -0700
-@@ -0,0 +1,6 @@
-+0000000000000000000000000000000000000000 f37961fd0d22ee219b8aa53fb682f76d329b020b Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796236 -0700	clone: from ssh://github.com/gamer4life1/makedeb
-+f37961fd0d22ee219b8aa53fb682f76d329b020b 7b85e0ff46f7267d8ba5103755d7aa2b906532dc Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796675 -0700	checkout: moving from launchpad to 7b85e0ff46f7267d8ba5103755d7aa2b906532dc
-+7b85e0ff46f7267d8ba5103755d7aa2b906532dc f37961fd0d22ee219b8aa53fb682f76d329b020b Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797327 -0700	checkout: moving from 7b85e0ff46f7267d8ba5103755d7aa2b906532dc to launchpad
-+f37961fd0d22ee219b8aa53fb682f76d329b020b 969ee5de9861b38f7af219da70cf9e30392379f8 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797484 -0700	commit: patches :o
-+969ee5de9861b38f7af219da70cf9e30392379f8 74e1c17319aa7f5b67ad610afb105709b6972c26 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797882 -0700	commit: patches dont work
-+74e1c17319aa7f5b67ad610afb105709b6972c26 1ec0963328ee40a0e040e3142553568d0b04eff5 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635798359 -0700	commit: woah patches
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/refs/heads/launchpad makedeb/.git/logs/refs/heads/launchpad
---- makedeb-7.1.2-bugfix1-stable/.git/logs/refs/heads/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/logs/refs/heads/launchpad	2021-11-01 13:25:59.265254314 -0700
-@@ -0,0 +1,4 @@
-+0000000000000000000000000000000000000000 f37961fd0d22ee219b8aa53fb682f76d329b020b Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796236 -0700	clone: from ssh://github.com/gamer4life1/makedeb
-+f37961fd0d22ee219b8aa53fb682f76d329b020b 969ee5de9861b38f7af219da70cf9e30392379f8 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797484 -0700	commit: patches :o
-+969ee5de9861b38f7af219da70cf9e30392379f8 74e1c17319aa7f5b67ad610afb105709b6972c26 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797882 -0700	commit: patches dont work
-+74e1c17319aa7f5b67ad610afb105709b6972c26 1ec0963328ee40a0e040e3142553568d0b04eff5 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635798359 -0700	commit: woah patches
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/HEAD makedeb/.git/logs/refs/remotes/origin/HEAD
---- makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/logs/refs/remotes/origin/HEAD	2021-11-01 12:50:36.494749452 -0700
-@@ -0,0 +1 @@
-+0000000000000000000000000000000000000000 7b85e0ff46f7267d8ba5103755d7aa2b906532dc Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635796236 -0700	clone: from ssh://github.com/gamer4life1/makedeb
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/launchpad makedeb/.git/logs/refs/remotes/origin/launchpad
---- makedeb-7.1.2-bugfix1-stable/.git/logs/refs/remotes/origin/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/logs/refs/remotes/origin/launchpad	2021-11-01 13:26:02.209268896 -0700
-@@ -0,0 +1,3 @@
-+f37961fd0d22ee219b8aa53fb682f76d329b020b 969ee5de9861b38f7af219da70cf9e30392379f8 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797487 -0700	update by push
-+969ee5de9861b38f7af219da70cf9e30392379f8 74e1c17319aa7f5b67ad610afb105709b6972c26 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635797885 -0700	update by push
-+74e1c17319aa7f5b67ad610afb105709b6972c26 1ec0963328ee40a0e040e3142553568d0b04eff5 Leo Puvilland <lpuvilla0001@mymail.lausd.net> 1635798362 -0700	update by push
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5 makedeb/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5
---- makedeb-7.1.2-bugfix1-stable/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/objects/1e/c0963328ee40a0e040e3142553568d0b04eff5	2021-11-01 13:25:59.265254314 -0700
-@@ -0,0 +1 @@
-+x¥ŽËmÃ0@{Ö\ )•¢EÈ!+Ð?päÙ>E;B/ïôðò:ÏSÏôÑv3à@‚¦ÜÙ¼+ûÈ)c‘¬S.æ6Ými ŸF™$PR•û(Z"¡=!¦>&ñÙG§G×®¶ÂíxLµêRà«nŽˆt™_³Nõ\õ¸—óbí(–ÔNpBAtùw·Ù¿Cî¹ê›¶<ÚÝ½ƒcOî
-\ No newline at end of file
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/2a/3beaf5ffa1ee92af66c1e4a12d3d4cb099ef3f and makedeb/.git/objects/2a/3beaf5ffa1ee92af66c1e4a12d3d4cb099ef3f differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/2f/eddcbc5445dc53372b03e188469da350bc2b87 and makedeb/.git/objects/2f/eddcbc5445dc53372b03e188469da350bc2b87 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/46/a69d1506a6b046e0a37a1e43b7a3bc66a8dbc0 and makedeb/.git/objects/46/a69d1506a6b046e0a37a1e43b7a3bc66a8dbc0 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/53/170ea58eea522777ed16b65933e577cae69cde and makedeb/.git/objects/53/170ea58eea522777ed16b65933e577cae69cde differ
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26 makedeb/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26
---- makedeb-7.1.2-bugfix1-stable/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/objects/74/e1c17319aa7f5b67ad610afb105709b6972c26	2021-11-01 13:18:02.706917839 -0700
-@@ -0,0 +1,3 @@
-+x¥ËmÃ0sVÛ€åG\.`.À‡´ÀÏB‰‚LÙH÷’ry˜Ó`^jó<uÐ£ûè›Ðh	Y§â3‰ËšmŠÑ:ë:+1ÉkØdéÀŽEÆ,ìŠÆ
-+E+Î0ƒ†µ!.~{´îÒàsMµ†%Ã¥®Œˆê6Ïaªçög>/Ò¯ œ‰É{'$Ä!ýævù·èèïé!OÈíxñnÛ×ð
-+‰QÍ
-\ No newline at end of file
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/80/08257b5c93a3db5e423a5ca5fecb19b0eb6961 and makedeb/.git/objects/80/08257b5c93a3db5e423a5ca5fecb19b0eb6961 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/96/9ee5de9861b38f7af219da70cf9e30392379f8 and makedeb/.git/objects/96/9ee5de9861b38f7af219da70cf9e30392379f8 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/bf/9e97af29102306f657577e6664aa144cafa384 and makedeb/.git/objects/bf/9e97af29102306f657577e6664aa144cafa384 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/c3/d14ce4b8f1d2ee2009d8cbbdf80fa9b35d0ef8 and makedeb/.git/objects/c3/d14ce4b8f1d2ee2009d8cbbdf80fa9b35d0ef8 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/d3/7302afdc47b966e03ed5c049e7b1a0d1f93319 and makedeb/.git/objects/d3/7302afdc47b966e03ed5c049e7b1a0d1f93319 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/e2/22fabdcf67681b50ef9840e25c7005014f2000 and makedeb/.git/objects/e2/22fabdcf67681b50ef9840e25c7005014f2000 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/eb/7081f121c88a4fb196dc6785a55f58e1fbca00 and makedeb/.git/objects/eb/7081f121c88a4fb196dc6785a55f58e1fbca00 differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.idx and makedeb/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.idx differ
-Binary files makedeb-7.1.2-bugfix1-stable/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.pack and makedeb/.git/objects/pack/pack-be67ce756d4f8bc744f80b96ff2a658766610dce.pack differ
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/packed-refs makedeb/.git/packed-refs
---- makedeb-7.1.2-bugfix1-stable/.git/packed-refs	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/packed-refs	2021-11-01 12:50:36.490749432 -0700
-@@ -0,0 +1,237 @@
-+# pack-refs with: peeled fully-peeled sorted 
-+2b8d710371bf5bd288e96299c8003162f05a6ae8 refs/remotes/origin/add-mansource
-+7b85e0ff46f7267d8ba5103755d7aa2b906532dc refs/remotes/origin/alpha
-+3599b98716a079c35e4ed4d865f9d77c05bbf132 refs/remotes/origin/beta
-+f37961fd0d22ee219b8aa53fb682f76d329b020b refs/remotes/origin/launchpad
-+5116ab5a52816089d006e1c0e429a3a3209e8368 refs/remotes/origin/stable
-+05337e343858eb0252f320cc3228d44319cb61b6 refs/remotes/origin/whitesource/configure
-+e8fa50cd6b4e40f0ea123f027d8539793e40127c refs/tags/v5.10.0-alpha
-+^53d6f3212b186271b1e5ba196738a0e83c72e90c
-+91d3a653e3bd52b2c3ff89e7073659cbe68f979f refs/tags/v5.11.0-alpha
-+^75ed60bfc006e9aaea66754b1d22d429a82034ac
-+6fdda6fc2659aacb3d9bea513567b95eae1e8259 refs/tags/v5.11.0-beta
-+^75ed60bfc006e9aaea66754b1d22d429a82034ac
-+f95c3378043d7f50f12c96e9627c13661c5819b1 refs/tags/v5.11.1-alpha
-+^3fabd72a6edc87800cca5c86dce0e5cf98ffa383
-+4b807124ebfa1abd66f6a8b618db09d1203e0730 refs/tags/v5.11.1-beta
-+^3fabd72a6edc87800cca5c86dce0e5cf98ffa383
-+9ce17f010ab5afb661f176041379d2c28652c6dd refs/tags/v5.11.2-alpha
-+^cd856ea9e70aa1224399b8e651b442d4364245c3
-+c7421dacb9b5a074da1efd56e790e17551b6d70d refs/tags/v5.11.2-beta
-+^cd856ea9e70aa1224399b8e651b442d4364245c3
-+efeb2d744cc8b9d363833f047498d0234742988d refs/tags/v5.11.3-alpha
-+^826cc56ca6d6771063fc9e5ae3ac60baff8edb3e
-+de6cf8ecd4c2a61b342cd6d58894b5360f4d2cad refs/tags/v5.11.3-beta
-+^826cc56ca6d6771063fc9e5ae3ac60baff8edb3e
-+5fda2908c4d2103e9ad0a09f393048da5fadaebf refs/tags/v5.11.4-alpha
-+^a1189ff6119eac2645c26c5d8fa8e90acdc21f37
-+09989144294617bca9f098b5e690ce8412833a13 refs/tags/v5.11.5-alpha
-+^029001297278dc0c04d25977cce4de5d16eb1cdf
-+ff3f04a7cc94fdec221252ab14564e8c6e8c1e9d refs/tags/v5.11.5-beta
-+^029001297278dc0c04d25977cce4de5d16eb1cdf
-+d3754f509a229b1d19d15ca54383a3d844beebf0 refs/tags/v5.11.6-alpha
-+^deec54263858644f3ebb594db52e1ae9bb8a6112
-+65c6ad5d248394993d8f5d823f4d5ce1124c0cf2 refs/tags/v5.12.0-alpha
-+^6f94e2ef8c82b0313f717424d78da1a8c7fc8ac8
-+c9901c57c8044335842963cf83af959b07059abe refs/tags/v5.13.0-alpha
-+^6f801b87d353824fb912e8b43aae369d3a4534b0
-+2349451ed95ee8b8f13e084a151549fb52856650 refs/tags/v5.13.1-alpha
-+^8ba87400f9bca5a9c5b8e87568cde5a58225ceab
-+138f793088af1a41bcb4f95b5be87fd3e0736c68 refs/tags/v5.13.2-alpha
-+^4af10c1a9b1c82593ecf9f67861cd3e6aa48618a
-+ab2a382c8d5c1bd41ae4117d5cddb1de99240167 refs/tags/v5.13.2-beta
-+^4af10c1a9b1c82593ecf9f67861cd3e6aa48618a
-+0b2d130dc8d677ad06aee9952fd4fffaa05ae022 refs/tags/v5.13.3-alpha
-+^09ee77eddefa5d35dca9e558d461f2593ab37c56
-+1164760599a0cce01267a39a381528e1eac0c69e refs/tags/v5.13.3-beta
-+^391fd1b8981ccd9a7ff324ca501a652abe37bf3b
-+fc00ecdf465e2dedd0214cfcd37781d203feb104 refs/tags/v5.14.0-alpha
-+^63618efdfa402a7295bfe3de1177191a232339c9
-+098724dc0b9e31dcc85b1b8e838661e824a7beed refs/tags/v5.14.1-alpha
-+^16e5666b93c0592f8feb8edec15783bb910a5b87
-+7739aa7d5dbdf2b95c4e16c89513d9b414738d22 refs/tags/v5.14.2-alpha
-+^b36991a967bf15a2a29dc9ee27d160df899421ea
-+f7702b9542461c59a5519a97e98193aa52a1b602 refs/tags/v5.15.0-alpha
-+^6336169f2db117c31e14929eb060d82eb773538c
-+530efe6b1208913ae191dcd67ecaac1027b9642c refs/tags/v5.15.1-alpha
-+^ba45df84d325cf032c5a61678e4e873ac910fe1a
-+ae3daf59275aea1bba1ecaf693a959c407b54c84 refs/tags/v5.15.2-alpha
-+^04d2c54ac49aec812c87881d7c3c98c56276cab3
-+065a93463ab952e25595b530918070988da50dc7 refs/tags/v5.15.3-alpha
-+^023f664e5084c53d6a401a76287b017f64dbd2c0
-+d19859206f78350af4945c3ea1b128b04ae62b31 refs/tags/v5.15.4-alpha
-+^bdb74873d1da235cbe7f3d06749b10fff7879f4e
-+03813390f6a8ad6c4f473ee2f363c6e09fcbe564 refs/tags/v5.15.5-alpha
-+^3ccf2763570559edca60a805e8ad207f7c77696d
-+f1ef5289d573ef6dc0a36753a84ad0013a444378 refs/tags/v5.15.6-alpha
-+^b514550c898be3604a045064108c72ba0c4341db
-+b85d79e763e8d9ffa28204954f98a88f1c2a08c8 refs/tags/v5.15.7-alpha
-+^aa57e6bb63c28a0c2a4b64ba8674ff73914c11cf
-+3617ac5f97a378a32292c0ca54442ffe3a012352 refs/tags/v5.16.0-alpha
-+^255e10eb152cab27c2c212a67e4f8d2a02e27457
-+ab49b55d397769c834f8865d17ea2962897c215e refs/tags/v5.16.1-alpha
-+^d281d7cc86dee525e5ce73220445b6163d3e4169
-+e3bac27482775423eb3620928385153f8ceadcf6 refs/tags/v5.16.1-beta
-+^d281d7cc86dee525e5ce73220445b6163d3e4169
-+9e1b19b77896511efbcc1fc69a1071d3bf991a80 refs/tags/v5.16.2-alpha
-+^97f800290091cbc261fc99c4fa8cfb0dc1d8cbb2
-+197b233a4c14b50854a3e102366731e9960201ed refs/tags/v5.17.0-alpha
-+^eb9174d8da25457d70d2089f05ca1865b9742b90
-+fa67bd524b2750e1acc0a58dff4dc96684bc5d5b refs/tags/v5.18.0-alpha
-+^304e3fd2240c1dcd6279ba9ef800667dbf2da7bc
-+bbc92fcdbd3b8ae165ccc2be2324fd1950eb7474 refs/tags/v5.9.3-alpha
-+^0138d35c260325106af5f639ac6e08306d03cb5d
-+9b94d0f6d0bf50bce597c53ff9b86f8f8c166456 refs/tags/v5.9.4-alpha
-+^be558b3f1c3015cef54f810e78d0e16ed80a8c66
-+9f4fa359bcb8efa51fd4b6796fe8e70d903dbf03 refs/tags/v5.9.4-beta
-+^be558b3f1c3015cef54f810e78d0e16ed80a8c66
-+2ee6450128f40a4d887472a0dec5a013643b069c refs/tags/v5.9.5-alpha
-+^83ca384376671e32410fdddd5d8991b533cee3a1
-+e997a89d9d2108f3705813227fde700232830b3d refs/tags/v5.9.5-beta
-+^83ca384376671e32410fdddd5d8991b533cee3a1
-+2bb270d784449472c917569dea7daf2b1e1aa38b refs/tags/v5.9.5-stable
-+^83ca384376671e32410fdddd5d8991b533cee3a1
-+ffd2773c8e7e28335f4696747b4ce1e05132eb04 refs/tags/v6.0.0-alpha
-+^35e36a353a1451a9028a1a931b9f196c3380794b
-+2d080118ef506926f0ee8d7ad2a799076e07de1f refs/tags/v6.0.1-alpha
-+^f765e831cc98393373986bacbb8aa91695dd136c
-+8d336d168e7fc49d2cf6e05f6e2169c6e99cca12 refs/tags/v6.1.0-alpha
-+^efc035db93504e8398f3f93f3d2e47237c4b511c
-+05613943c584198d00b512b5d485cadf176b3a84 refs/tags/v6.1.1-alpha
-+^a225bd5f16e5c17b943c0ec23101766ec8c59539
-+4029c63f4a115110a4bad5e8402f69614390a2fc refs/tags/v6.1.2-alpha
-+^d9971ef5dbdee82f5654aab8191cc7e90cbc2af3
-+8f9cf2046c64970b3273e55e54ebac265ea5eaa1 refs/tags/v6.1.3-alpha
-+^332d3731f30d43bbf8370029ccaa66a7c4acc4b7
-+7031c7dfea405c183aca91c04371153a6efe3fce refs/tags/v6.1.4-alpha
-+^0edfb685fc924b2ca840b1b40ed5fb9407b120cf
-+00f6a29b4fb79e0fee2831ca7a48580e36aa6df2 refs/tags/v6.2.0-alpha
-+^6d44bc8820946e94bd13da8c2e476cf518621f63
-+50dfa927b85c1d9d4ea39f145c4449817c5047b2 refs/tags/v6.2.0-beta
-+^6d44bc8820946e94bd13da8c2e476cf518621f63
-+e585f8115f4036cc9b355b3b68e1c10fb04a3192 refs/tags/v6.2.1-alpha
-+^aea0f34474da50c2d9ae6456f594a85f3c26f914
-+6fe5a0913f06020908b2114491666eba12e3ecf5 refs/tags/v6.2.2-alpha
-+^e168b585e216829c77b507a918b785f3a39ccb13
-+1aafd6cc4f0909140674eec649d80deef27e768e refs/tags/v6.3.0-alpha
-+^2608d87270342e233928d046a8954473c28f4e0b
-+4d869623485aa4e5c15ecc4dd41593ccec9741f1 refs/tags/v6.3.0-beta
-+^2608d87270342e233928d046a8954473c28f4e0b
-+d7013e58453285f7597e1227cd8628258f5f4f2d refs/tags/v6.3.1-alpha
-+^98860179a06c95a4b5ff6d54f901ac2f079dd8bc
-+aa2ad91e2fd702ce58a64b4800de97d14a18e3e9 refs/tags/v6.3.1-beta
-+^98860179a06c95a4b5ff6d54f901ac2f079dd8bc
-+3c72e3cd6d0325655154a4a63c90c063cc238c1b refs/tags/v6.3.1-stable
-+^98860179a06c95a4b5ff6d54f901ac2f079dd8bc
-+54f27a4c31212b0d4f202a7535a473ca19321969 refs/tags/v6.3.10-alpha
-+^ea7be57fe4eaff0487f696b7693fdea9572ed39c
-+d46eb0101915668854ebb54006d90d42217db906 refs/tags/v6.3.10-beta
-+^ea7be57fe4eaff0487f696b7693fdea9572ed39c
-+0d791440b2f964791f0a1c34b54a46df808da135 refs/tags/v6.3.10-stable
-+^ea7be57fe4eaff0487f696b7693fdea9572ed39c
-+c70a9ec2f607ae87be714506988375467ab3c200 refs/tags/v6.3.11-alpha
-+^5fb428b06fe6c4b93ccbb5da009b542eff9a04cc
-+8325a8d2b77b41d405750f0149fa74bc0c311bad refs/tags/v6.3.11-beta
-+^5fb428b06fe6c4b93ccbb5da009b542eff9a04cc
-+fa3ca3ba987a0deaed25410ece65c557123ba603 refs/tags/v6.3.11-stable
-+^5fb428b06fe6c4b93ccbb5da009b542eff9a04cc
-+c5f28bcb397ee61f2ad40a92104e78e7e89d905d refs/tags/v6.3.12-alpha
-+^cd0fdeaf68dec2de276275ca8b20695722d96716
-+c14bb592ef13f5c4f3eab72ec5da5d60f2abf421 refs/tags/v6.3.12-beta
-+^cd0fdeaf68dec2de276275ca8b20695722d96716
-+8f6f2348f5b62fa9698ea35ca760e800e15bdcdb refs/tags/v6.3.2-alpha
-+^cfcbe1e0372357b0abf5aa1bb176af033e1fbbea
-+616e259e2c9809a4bc1c8c24f7e16e1c01fe88ae refs/tags/v6.3.2-beta
-+^cfcbe1e0372357b0abf5aa1bb176af033e1fbbea
-+6dc3c4ae75ea9d3607c910f1acb4575dd4ade2f0 refs/tags/v6.3.2-stable
-+^cfcbe1e0372357b0abf5aa1bb176af033e1fbbea
-+1f62dfc4654cee714415abccb313a651330d953b refs/tags/v6.3.3-alpha
-+^a82b27d78536ca8412934bfab543721f0122d8b5
-+920e96fbddf6612fe6ffaeaf90f1478de3cc1d7a refs/tags/v6.3.3-beta
-+^a82b27d78536ca8412934bfab543721f0122d8b5
-+bb997dd1396e0f02e9a6cc1c9ad50e907ed64991 refs/tags/v6.3.3-stable
-+^a82b27d78536ca8412934bfab543721f0122d8b5
-+3797a464a5f520b8668ff986def9110998ca049c refs/tags/v6.3.4-alpha
-+^455f004cec22a3bd78b8e4bc6f490a789614c94c
-+a667433f56fc09aea07020e7acc6c25b4019e727 refs/tags/v6.3.4-beta
-+^455f004cec22a3bd78b8e4bc6f490a789614c94c
-+c4654f09a2112ca6afe73b33060228e1f9eabf0b refs/tags/v6.3.4-stable
-+^455f004cec22a3bd78b8e4bc6f490a789614c94c
-+a1d3e573026a634a43288844fee6a16a604a3a8b refs/tags/v6.3.5-alpha
-+^31edcc4f02d0e39664b2194223c2a601c8f97b16
-+83e048be65d123ce9869268e282638df8eb8c6e7 refs/tags/v6.3.6-alpha
-+^ca0b492508cfe50dd0bd30224c1772262f365836
-+ef655e7be36052e857124883c0ddac767c2419bc refs/tags/v6.3.7-alpha
-+^ebc9511239199f0c9636c11fe4469cbfb2bb58ec
-+3d5d64d4f01a85569fec7be8179f3fbae18a395c refs/tags/v6.3.8-alpha
-+^f3999653efeed5c667e9d772b6b2adae09909226
-+937d2917ac75bd7b7af55d297067b41072cabb27 refs/tags/v6.3.9-alpha
-+^db82b57bd914cc8906652bdd56bc7698f02e84e1
-+fd919f5e74cb44bf6afcb09167f49117f9c94045 refs/tags/v6.4.0-alpha
-+^1457c49c273965d09aff7bd0c662fd8c469abccb
-+de6afd0caf459f324c8004e59c016e81c35e964a refs/tags/v6.4.1-alpha
-+^9a0a6f84824149125822898df598618799067cb6
-+48d03dec1e22f0f05b60b2ff1d30d97e68bffdbe refs/tags/v6.4.2-alpha
-+^a0cea4e0ec7dd75b3028123a3226e07ec12b7310
-+7c346be76b07814d1da00562ed7e9164895360c6 refs/tags/v6.5.0-alpha
-+^b39587d74cea590a1a808158466a8fd8492b3549
-+ff3bbbfb3e9e29c1efeadecfaab49905bb6399ba refs/tags/v6.5.1-alpha
-+^6e2a5d201ca59140128e57a23f8755c1228ae27e
-+e1c7c951f9c44119d75a9706b8839fc0e4c3c1d4 refs/tags/v6.6.0-alpha
-+^cadf2bb1ca94e75c0ec6a93f69ffc61a3091c050
-+9e05cd99d014a7ebd0920b7a3bbd20a4b0a9bb03 refs/tags/v6.7.0-alpha
-+^610236ea37b6aab5ccbdf8e58d6406ee059cb4fa
-+151ee156406890643772b7e358999f1a8d95a589 refs/tags/v6.7.1-alpha
-+^eac89b64b8177e518427446ddb43109f3accc349
-+adadd0bd524c198a8776ebd622678214a80dd12b refs/tags/v6.7.2-alpha
-+^ac0705fbf8dbf53bde812c9ede900e4ebe583612
-+8337edf82441654b6aeac83c9767170f53f525f5 refs/tags/v6.7.3-alpha
-+^20686e057bd07a98a4ef8d5af71dbdfd11ed429e
-+e60ef2cd97ee1a394d8ee22e76c9f45ebdb7f69a refs/tags/v6.7.4-alpha
-+^3cea63328881ed1e5ff68a4acbe8c36b6d4fd985
-+6ebfc7c3c1e9d10dfc44b76fa6972f12f99827c5 refs/tags/v6.7.5-alpha
-+^a98390e1e22428c2abe5ab47c359db2613838a4b
-+a5ef9dd2eff98e0c33b6b7e2c91190bd36926db6 refs/tags/v6.7.6-alpha
-+^dc3273bc1ba1d4d5419f85fbf1b9673fa4f89c07
-+85f2f50c984d0dfddae2e7cec2c74ae1b3c8afc7 refs/tags/v6.7.7-alpha
-+^be8fe062d6843ca3ff8c629265fba57ffdfd8528
-+799cfc0d67de5412624d48f4a8f0d24b381d734f refs/tags/v6.7.8-alpha
-+^5eaca07bc2acd929b215aef877ebe41cfd713d24
-+42985c90ed3e19bd3ba6e0eb33aefc7c2a50cc2c refs/tags/v7.0.0-alpha
-+^1539af2280569db9e32c8c659ee8abb982da714c
-+e86f0ec28276d3c316163263f73acbea6e8e155c refs/tags/v7.1.0-alpha
-+^afc8dd370a4521caf3b801c5060f70213cb1f9af
-+b983dfe5d6dd39f9e170a69cbe5f5bf1045059b1 refs/tags/v7.1.0-beta
-+^afc8dd370a4521caf3b801c5060f70213cb1f9af
-+4d0757a06a1e8ebd97f85f07a127efac8f1c2d65 refs/tags/v7.1.1-alpha
-+^3d47375cab03f7a758cc02ec1e6f690eab47c639
-+ffe910b48639ad14f848614ab88602255d43508c refs/tags/v7.1.2-alpha
-+^5116ab5a52816089d006e1c0e429a3a3209e8368
-+59e1ceb92feea44de5af145c9cef7716e6cc45e2 refs/tags/v7.1.2-beta
-+^5116ab5a52816089d006e1c0e429a3a3209e8368
-+2cb04a3fea82ddcc661ff51fe06da1076b500ef4 refs/tags/v7.1.2-stable
-+^5116ab5a52816089d006e1c0e429a3a3209e8368
-+991ed87c5c9e7920a7776569444c7df08f022c40 refs/tags/v7.2.0-alpha
-+^236d8e78e5736c9ce31c4a6ccfcf7eb40259b926
-+da4b6b65402af6a94d740fed94fa1a4e9d4ae1dc refs/tags/v8.0.0-alpha
-+^4655ae14c2b5bf587d5bb132d8ec097d2a54a8d7
-+1dccb569262c0b712d35f5772c434873981b6db0 refs/tags/v8.0.1-alpha
-+^07bf90e164d3994e6e14290e93289d90df442768
-+3abb161206e435463373db29c7383270381b9547 refs/tags/v8.0.2-alpha
-+^dba1ffbe418fa8f61ffdf05142d5925164882a88
-+7e5436988e67d154e28c78d3311dc8b71a62ae1c refs/tags/v8.0.3-alpha
-+^357ba5b767c1592bd0a5f7ae69ae87e2139d6897
-+e7fb35e850f2b4415195a0302ef51cd12379087f refs/tags/v8.0.4-alpha
-+^20f96b08a49c2fdbf50a0c8ecdb13b6e2ffdc1c5
-+0481dae476f313e82b7d5180dd71bfb0c427bfd2 refs/tags/v8.0.5-alpha
-+^65a2046f68f0e4d0ec754f06659c5efae0abfb64
-+ebd7fc534b120e920ca191db864f34f7c40429a3 refs/tags/v8.0.6-alpha
-+^05a73f9ea0b9e9c7d39f19f780a9f9e09454e75f
-+b0094c65f6fe04a8b19fff1a8364e37b970e3dcc refs/tags/v8.0.7-alpha
-+^36eeab2b0c7e836d4c5dc72b6f7f0fb1f6553ee4
-+e3ca0e44bdb87c38f45f5f53fa7b09bb8e460e43 refs/tags/v8.0.7-beta
-+^36eeab2b0c7e836d4c5dc72b6f7f0fb1f6553ee4
-+9b5dbb8581cae783ea599e186d7550a6e9a9800a refs/tags/v8.1.0-alpha
-+^3599b98716a079c35e4ed4d865f9d77c05bbf132
-+6e9ce240e68f820d506d659ce141cd3412e2b48c refs/tags/v8.1.0-beta
-+^3599b98716a079c35e4ed4d865f9d77c05bbf132
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/refs/heads/launchpad makedeb/.git/refs/heads/launchpad
---- makedeb-7.1.2-bugfix1-stable/.git/refs/heads/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/refs/heads/launchpad	2021-11-01 13:25:59.265254314 -0700
-@@ -0,0 +1 @@
-+1ec0963328ee40a0e040e3142553568d0b04eff5
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/HEAD makedeb/.git/refs/remotes/origin/HEAD
---- makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/HEAD	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/refs/remotes/origin/HEAD	2021-11-01 12:50:36.494749452 -0700
-@@ -0,0 +1 @@
-+ref: refs/remotes/origin/alpha
-diff --color -Nru makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/launchpad makedeb/.git/refs/remotes/origin/launchpad
---- makedeb-7.1.2-bugfix1-stable/.git/refs/remotes/origin/launchpad	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.git/refs/remotes/origin/launchpad	2021-11-01 13:26:02.209268896 -0700
-@@ -0,0 +1 @@
-+1ec0963328ee40a0e040e3142553568d0b04eff5
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/.gitignore makedeb/.gitignore
 --- makedeb-7.1.2-bugfix1-stable/.gitignore	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/.gitignore	2021-11-01 13:08:47.776322866 -0700
++++ makedeb/.gitignore	2021-11-01 13:35:59.976249297 -0700
 @@ -0,0 +1,5 @@
 +debian/files
 +debian/.debhelper/
@@ -1601,7 +379,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/.gitignore makedeb/.gitignore
 +debian/makedeb.substvars
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/Makefile makedeb/Makefile
 --- makedeb-7.1.2-bugfix1-stable/Makefile	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/Makefile	2021-11-01 13:09:56.380632323 -0700
++++ makedeb/Makefile	2021-11-01 13:35:59.976249297 -0700
 @@ -0,0 +1,39 @@
 +MAKEDEB_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/makedeb.8.adoc)"
 +PKGBUILD_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/pkgbuild.5.adoc)"
@@ -1644,7 +422,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/Makefile makedeb/Makefile
 +
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc makedeb/man/makedeb.8.adoc
 --- makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/man/makedeb.8.adoc	2021-11-01 13:09:59.904648242 -0700
++++ makedeb/man/makedeb.8.adoc	2021-11-01 13:35:59.976249297 -0700
 @@ -2,6 +2,7 @@
  :doctype: manpage
  :hardbreaks:
@@ -1655,7 +433,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/man/makedeb.8.adoc makedeb/man/ma
  makedeb - the modern packaging tool for Debian archives
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc makedeb/man/pkgbuild.5.adoc
 --- makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/man/pkgbuild.5.adoc	2021-11-01 13:09:59.904648242 -0700
++++ makedeb/man/pkgbuild.5.adoc	2021-11-01 13:35:59.976249297 -0700
 @@ -2,6 +2,7 @@
  :doctype: manpage
  :hardbreaks:
@@ -1679,7 +457,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/man/pkgbuild.5.adoc makedeb/man/p
  === OTHER
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh makedeb/PKGBUILD/pkgbuild.sh
 --- makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/PKGBUILD/pkgbuild.sh	2021-11-01 13:08:47.776322866 -0700
++++ makedeb/PKGBUILD/pkgbuild.sh	2021-11-01 13:35:59.976249297 -0700
 @@ -0,0 +1,130 @@
 +#!/usr/bin/env bash
 +set -e
@@ -1813,7 +591,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/pkgbuild.sh makedeb/PKGB
 +			 "${extra_sed_args[@]}"
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md makedeb/PKGBUILD/README.md
 --- makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/PKGBUILD/README.md	2021-11-01 13:08:47.776322866 -0700
++++ makedeb/PKGBUILD/README.md	2021-11-01 13:35:59.976249297 -0700
 @@ -0,0 +1,20 @@
 +# Usage
 +The `pkgbuild.sh` script generates PKGBUILDs for all releases for Debian, the MPR, and the AUR.
@@ -1837,7 +615,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/README.md makedeb/PKGBUI
 +Then run `./pkgbuild.sh`, which will output a generated PKGBUILD file.
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD makedeb/PKGBUILD/TEMPLATE.PKGBUILD
 --- makedeb-7.1.2-bugfix1-stable/PKGBUILD/TEMPLATE.PKGBUILD	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/PKGBUILD/TEMPLATE.PKGBUILD	2021-11-01 13:08:47.776322866 -0700
++++ makedeb/PKGBUILD/TEMPLATE.PKGBUILD	2021-11-01 13:35:59.976249297 -0700
 @@ -0,0 +1,27 @@
 +# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 +_release=$${release}
@@ -2420,7 +1198,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/PKGBUILDs/README.md makedeb/PKGBU
 -To find the relevant variables, find the corresponding value in `src/PKGBUILD`, which will be located under the same variable name.
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh makedeb/src/functions/arg_check.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/arg_check.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/arg_check.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/arg_check.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -7,6 +7,7 @@
    declare -Ag makedeb_args=()
    declare -ag apt_args=()
@@ -2483,7 +1261,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/control_file/genera
 -}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_prefix_fields.sh makedeb/src/functions/control_file/generate_prefix_fields.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/control_file/generate_prefix_fields.sh	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/src/functions/control_file/generate_prefix_fields.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/control_file/generate_prefix_fields.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -0,0 +1,46 @@
 +generate_prefix_fields() {
 +  # depends.
@@ -2533,7 +1311,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/control_file/genera
 +}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_dependency_commas.sh makedeb/src/functions/convert/add_dependency_commas.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_dependency_commas.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/convert/add_dependency_commas.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/convert/add_dependency_commas.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -1,5 +1,6 @@
  add_dependency_commas() {
    declare -g depends=("$(echo "${depends[@]}" | sed 's| |, |g')")
@@ -2543,7 +1321,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/add_depende
    declare -g conflicts=("$(echo "${conflicts[@]}" | sed 's| |, |g')")
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_relationships_parentheses.sh makedeb/src/functions/convert/convert_relationships_parentheses.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_relationships_parentheses.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/convert/convert_relationships_parentheses.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/convert/convert_relationships_parentheses.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -1,5 +1,5 @@
  convert_relationships_parentheses() {
 -  for i in depends recommends suggests conflicts makedepends checkdepends provides replaces; do
@@ -2553,7 +1331,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/convert_rel
  
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_dependency_conversion.sh makedeb/src/functions/convert/run_dependency_conversion.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/convert/run_dependency_conversion.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/convert/run_dependency_conversion.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/convert/run_dependency_conversion.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -1,5 +1,6 @@
  run_dependency_conversion() {
    check_relationships depends      "${depends[@]}"
@@ -2615,7 +1393,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/c
 -}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_distro_dependencies.sh makedeb/src/functions/dependency_checks/check_distro_dependencies.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_distro_dependencies.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/dependency_checks/check_distro_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/dependency_checks/check_distro_dependencies.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -16,7 +16,7 @@
      distro_variable_string="${distro_codename}_${i}[@]"
      distro_variable_data=("${!distro_variable_string}")
@@ -2627,7 +1405,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/c
    done
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_missing_dependencies.sh makedeb/src/functions/dependency_checks/check_missing_dependencies.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/check_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/src/functions/dependency_checks/check_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/dependency_checks/check_missing_dependencies.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -0,0 +1,50 @@
 +check_missing_dependencies() {
 +  # Get list of missing dependencies.
@@ -2756,7 +1534,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/i
 -}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_missing_dependencies.sh makedeb/src/functions/dependency_checks/install_missing_dependencies.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/install_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/src/functions/dependency_checks/install_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/dependency_checks/install_missing_dependencies.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -0,0 +1,30 @@
 +install_missing_dependencies() {
 +  if [[ "${#missing_dependencies}" == "0" && "${#missing_build_dependencies}" == "0" ]]; then
@@ -2826,7 +1604,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/r
 -}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_installed_dependencies.sh makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/remove_installed_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/dependency_checks/remove_installed_dependencies.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -0,0 +1,21 @@
 +remove_installed_dependencies() {
 +  if [[ "${#missing_build_dependencies_no_relations[@]}" == "0" ]]; then
@@ -2890,7 +1668,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/v
 -}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_no_missing_dependencies.sh makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/verify_no_missing_dependencies.sh	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/dependency_checks/verify_no_missing_dependencies.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -0,0 +1,11 @@
 +verify_no_missing_dependencies() {
 +  if [[ "${#missing_dependencies[@]}" != "0" || "${#missing_build_dependencies[@]}" != "0" ]]; then
@@ -2905,7 +1683,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/dependency_checks/v
 +}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh makedeb/src/functions/fakeroot_build.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/fakeroot_build.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/fakeroot_build.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -44,7 +44,7 @@
      # Convert dependencies, then export data to control file.
      check_distro_dependencies
@@ -2917,7 +1695,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/fakeroot_build.sh m
      msg2 "Generating control file..."
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh makedeb/src/functions/generate_control.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/generate_control.sh	2021-11-01 13:09:36.000000000 -0700
++++ makedeb/src/functions/generate_control.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -15,6 +15,7 @@
    export_control "Maintainer:"    "${output_file}"  "${maintainer[@]}"
    export_control "Homepage:"      "${output_file}"  "${url[@]}"
@@ -2928,7 +1706,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/generate_control.sh
    export_control "Suggests:"      "${output_file}"  "${suggests[@]}"
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/help.sh makedeb/src/functions/help.sh
 --- makedeb-7.1.2-bugfix1-stable/src/functions/help.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/functions/help.sh	2021-11-01 13:10:03.108662730 -0700
++++ makedeb/src/functions/help.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -1,55 +1,51 @@
  help() {
 -  if [[ "${target_os}" == "debian" ]]; then
@@ -3035,7 +1813,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/functions/help.sh makedeb/src
  }
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/makedeb.sh makedeb/src/makedeb.sh
 --- makedeb-7.1.2-bugfix1-stable/src/makedeb.sh	2021-10-21 00:57:18.000000000 -0700
-+++ makedeb/src/makedeb.sh	2021-11-01 13:10:03.108662730 -0700
++++ makedeb/src/makedeb.sh	2021-11-01 13:35:59.980249317 -0700
 @@ -27,10 +27,19 @@
  declare package_convert="false"
  declare hide_control_output=0
@@ -3210,7 +1988,7 @@ diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/PKGBUILD makedeb/src/PKGBUILD
 -}
 diff --color -Nru makedeb-7.1.2-bugfix1-stable/src/utils/missing_apt_dependencies.py makedeb/src/utils/missing_apt_dependencies.py
 --- makedeb-7.1.2-bugfix1-stable/src/utils/missing_apt_dependencies.py	1969-12-31 16:00:00.000000000 -0800
-+++ makedeb/src/utils/missing_apt_dependencies.py	2021-11-01 12:50:36.510749534 -0700
++++ makedeb/src/utils/missing_apt_dependencies.py	2021-11-01 13:35:59.980249317 -0700
 @@ -0,0 +1,69 @@
 +#!/usr/bin/env python3
 +import apt_pkg
