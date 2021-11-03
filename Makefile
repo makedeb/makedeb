@@ -1,6 +1,7 @@
-MAKEDEB_MAN_EPOCH = $(shell stat '--printf=\%Y' man/makedeb.8.adoc)
-PKGBUILD_MAN_EPOCH = $(shell stat 'printf=\%Y' man/pkgbuild.5.adoc)
-CURRENT_VERSION = $(shell cat .data.json  | jq -r '. | .current_pkgver + "-" + .current_pkgrel')
+CONFIG_FILE = $(shell cat .data.json)
+MAKEDEB_MAN_EPOCH = $(shell echo '$(CONFIG_FILE)' | jq -r '.makedeb_man_epoch')
+PKGBUILD_MAN_EPOCH = $(shell echo '$(CONFIG_FILE)' | jq -r '.pkgbuild_man_epoch')
+CURRENT_VERSION = $(shell echo '$(CONFIG_FILE)'  | jq -r -r '. | .current_pkgver + "-" + .current_pkgrel')
 
 .ONESHELL:
 
@@ -8,13 +9,13 @@ all:
 	true
 
 prepare:
-	sed -i 's|$$$${pkgver}|$(PKGVER)|' src/makedeb.sh
+	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' src/makedeb.sh
 	sed -i 's|$$$${release}|$(RELEASE)|' src/makedeb.sh
 	sed -i 's|$$$${target}|$(TARGET)|' src/makedeb.sh
 	find src/makedeb.sh src/functions/ -type f -exec sed -i 's|^.*# REMOVE AT PACKAGING$$||' '{}' \;
 	
-	sed -i 's|$$$${pkgver}|$(PKGVER)|' man/makedeb.8.adoc
-	sed -i 's|$$$${pkgver}|$(PKGVER)|' man/pkgbuild.5.adoc
+	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/makedeb.8.adoc
+	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/pkgbuild.5.adoc
 
 package:
 	mkdir -p "$(DESTDIR)/usr/bin"
@@ -35,6 +36,6 @@ package:
 
 # This is for use by dpkg-buildpackage. Please use prepare and package instead.
 install:
-	$(MAKE) prepare PKGVER="$(LATEST_STABLE_VERSION)" RELEASE=stable TARGET=local
+	$(MAKE) prepare PKGVER="$(CURRENT_VERSION)" RELEASE=stable TARGET=local
 	$(MAKE) package DESTDIR="$(DESTDIR)"
 

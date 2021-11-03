@@ -1,4 +1,6 @@
 {
-	"current_pkgver": "8.1.1",
-	"current_pkgrel": "1"
+	"current_pkgver": "8.8.1",
+	"current_pkgrel": "1",
+	"makedeb_man_epoch": "1635393570",
+	"pkgbuild_man_epoch": "1635393570"
 }

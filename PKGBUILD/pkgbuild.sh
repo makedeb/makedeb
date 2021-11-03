@@ -57,7 +57,7 @@ aur_alpha_conflicts=("${base_alpha_conflicts[@]}")
 ##################
 ## BEGIN SCRIPT ##
 ##################
-for i in 'TARGET' 'RELEASE' 'PKGVER' 'PKGREL'; do
+for i in 'TARGET' 'RELEASE'; do
 	if [[ "${!i+x}" != "x" ]]; then
 		echo "${i} isn't set."
 		missing_var="x"
@@ -93,6 +93,10 @@ if [[ "${bad_var+x}" == "x" ]]; then
 	exit 1
 fi
 
+config_file="$(cat "$(git rev-parse --show-toplevel)"/.data.json)"
+pkgver="$(echo "${config_file}" | jq -r ".current_pkgver")"
+pkgrel="$(echo "${config_file}" | jq -r ".current_pkgrel")"
+
 # Generate the PKGBUILD file.
 if [[ "${RELEASE}" == "stable" ]]; then
 	pkgname="makedeb"
@@ -119,8 +123,8 @@ fi
 template="$(cat TEMPLATE.PKGBUILD)"
 
 echo "${template}" | sed -e "s|\$\${pkgname}|${pkgname}|" \
-			 -e "s|\$\${pkgver}|${PKGVER}|" \
-			 -e "s|\$\${pkgrel}|${PKGREL}|" \
+			 -e "s|\$\${pkgver}|${pkgver}|" \
+			 -e "s|\$\${pkgrel}|${pkgrel}|" \
 			 -e "s|\$\${release}|${RELEASE}|" \
 			 -e "s|\$\${target}|${TARGET}|" \
 			 -e "s|\$\${depends}|${depends}|" \
