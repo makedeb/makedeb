@@ -9,10 +9,10 @@ all:
 	true
 
 prepare:
-	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' src/makedeb.sh
-	sed -i 's|$$$${release}|$(RELEASE)|' src/makedeb.sh
-	sed -i 's|$$$${target}|$(TARGET)|' src/makedeb.sh
-	find src/makedeb.sh src/functions/ -type f -exec sed -i 's|^.*# REMOVE AT PACKAGING$$||' '{}' \;
+	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' src/main.sh
+	sed -i 's|$$$${release}|$(RELEASE)|' src/main.sh
+	sed -i 's|$$$${target}|$(TARGET)|' src/main.sh
+	find src/main.sh src/functions/ -type f -exec sed -i 's|^.*# COMP_RM$$||' '{}' \;
 	
 	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/makedeb.8.adoc
 	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/pkgbuild.5.adoc
@@ -21,7 +21,7 @@ package:
 	mkdir -p "$(DESTDIR)/usr/bin"
 	echo '#!/usr/bin/env bash' > "$(DESTDIR)/usr/bin/makedeb"
 	find src/functions/ -type f -exec cat '{}' \; >> "$(DESTDIR)/usr/bin/makedeb"
-	cat "src/makedeb.sh" >> "$(DESTDIR)/usr/bin/makedeb"
+	cat "src/main.sh" >> "$(DESTDIR)/usr/bin/makedeb"
 	chmod 755 "$(DESTDIR)/usr/bin/makedeb"
 	
 	cd ./src/utils
