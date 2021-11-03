@@ -1,6 +1,7 @@
-MAKEDEB_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/makedeb.8.adoc)"
-PKGBUILD_MAN_EPOCH = "$(shell git log -1 --pretty='%ct' man/pkgbuild.5.adoc)"
-LATEST_STABLE_VERSION = "$(shell git tag | grep 'stable$$' | sort -Vr | head -n 1 | sed -e 's|-stable$$||' -e 's|^v||' )"
+MAKEDEB_MAN_EPOCH = $(shell stat '--printf=\%Y' man/makedeb.8.adoc)
+PKGBUILD_MAN_EPOCH = $(shell stat 'printf=\%Y' man/pkgbuild.5.adoc)
+CURRENT_VERSION = $(shell cat .data.json  | jq -r '. | .current_pkgver + "-" + .current_pkgrel')
+
 .ONESHELL:
 
 all:
