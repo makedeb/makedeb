@@ -20,5 +20,5 @@ chmod 500 "/${HOME}/.ssh/"* -R
 version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 
 # Create and push release
-git tag "${version}-${release_type}" -am ""
+git tag "v${version}-${release_type}" -am ""
 git push "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"
