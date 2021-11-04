@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import re
-import requests
 import json
 
 from os import environ as env
+from requests import post
 from requests.auth import HTTPBasicAuth
 
 commit_branch = env["DRONE_COMMIT_BRANCH"]
