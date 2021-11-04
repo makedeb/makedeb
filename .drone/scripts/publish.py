@@ -23,11 +23,12 @@ else:
 
 filename = f"{package_name}_{pkgver}-{pkgrel}_all.deb"
 
-with open(f"./PKGBUILD/{filename}") as file:
-    data = file.read()
-
 print("INFO: Uploading package...")
-response = post(f"https://{proget_server}/debian/packages/upload/makedeb/main/{filename}", data=data, auth=HTTPBasicAuth("api", proget_api_key))
+
+with open(f"./PKGBUILD/{filename}") as file:
+    response = post(f"https://{proget_server}/debian/packages/upload/makedeb/main/{filename}",
+                    data=file,
+                    auth=HTTPBasicAuth("api", proget_api_key))
 
 if response.status_code != 200:
     print(f"ERROR: There was an error uploading the package {response.reason}.")
