@@ -31,7 +31,10 @@ with open(f"./PKGBUILD/{filename}", "rb") as file:
                     auth=HTTPBasicAuth("api", proget_api_key))
 
 if response.status_code != 200:
-    print(f"ERROR: There was an error uploading the package {response.reason}.")
+    print(f"ERROR: There was an error uploading the package.")
+    print("=====")
+    print(response.reason)
+    print(response.text)
     exit(1)
 
 print("INFO: Succesfully uploaded package.")
