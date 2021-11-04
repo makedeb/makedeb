@@ -4,12 +4,6 @@ makedeb (8.2.0-1) unstable; urgency=medium
 
  -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Wed, 03 Nov 2021 18:25:27 -0700
 
-makedeb (8.2.1-1) unstable; urgency=medium
-
-  * Fix up everything, should work now
-
- -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Wed, 03 Nov 2021 18:12:16 -0700
-
 makedeb (7.1.2+bugfix1-11) unstable; urgency=medium
 
   * ahhh patches
