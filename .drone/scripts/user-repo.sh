@@ -3,22 +3,6 @@ set -e
 sudo chown 'makedeb:makedeb' ./ -R
 
 # Get package version.
-read PKGVER PKGREL < <(echo "${DRONE_COMMIT_MESSAGE}" | grep '^Package Version:' | awk -F ': ' '{print $2}' | sed 's|-| |g')
-
-for i in PKGVER PKGREL; do
-	if [[ "${!i}" == "" ]]; then
-		echo "ERROR: ${i} isn't set."
-		echo "Please make sure your commit message contained a 'Package Version' line."
-		bad_commit_message="x"
-	fi
-done
-
-if [[ "${bad_commit_meesage:+x}" == "x" ]]; then
-	echo "COMMIT MESSAGE:"
-	echo "==============="
-	echo "${DRONE_COMMIT_MESSAGE}"
-	exit 1
-fi
 
 # Set up SSH.
 rm -rf "/${HOME}/.ssh"
@@ -51,8 +35,6 @@ fi
 # Copy PKGBUILD to user repo.
 export TARGET="${target_repo}"
 export RELEASE="${release_type}"
-export PKGVER
-export PKGREL
 
 rm "${package_name}_${target_repo}/PKGBUILD"
 cd PKGBUILD/
@@ -73,8 +55,13 @@ fi
 git config user.name "Kavplex Bot"
 git config user.email "kavplex@hunterwittenborn.com"
 
+# Get current version info.
+config="$(cat ../.data.json)"
+pkgver="$(echo "${config}" | jq -r '.current_pkgver')"
+pkgrel="$(echo "${config}" | jq -r '.current_pkgrel')"
+
 # Commit changes and push
 git add PKGBUILD .SRCINFO
-git commit -m "Updated version to ${PKGVER}-${PKGREL}"
+git commit -m "Updated version to ${pkgver}-${pkgrel}"
 
 git push
