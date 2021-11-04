@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+git fetch
 sudo chown 'makedeb:makedeb' ./ -R
 
 # Build makedeb.
