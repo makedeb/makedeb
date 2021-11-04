@@ -43,7 +43,7 @@ local buildAndPublish(package_name, tag) = {
 			environment: {proget_api_key: {from_secret: "proget_api_key"}},
 			commands: [
 				"sudo apt-get install python3 python3-requests -yq",
-				".drone/scripts/publish.sh"
+				".drone/scripts/publish.py"
 			]
 		}
 	]
