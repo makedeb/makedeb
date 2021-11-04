@@ -26,7 +26,7 @@ filename = f"{package_name}_{pkgver}-{pkgrel}_all.deb"
 print("INFO: Uploading package...")
 
 with open(f"./PKGBUILD/{filename}", "rb") as file:
-    response = post(f"https://{proget_server}/debian/packages/upload/makedeb/main/{filename}",
+    response = post(f"https://{proget_server}/debian-packages/upload/makedeb/main/{filename}",
                     data=file,
                     auth=HTTPBasicAuth("api", proget_api_key))
 
