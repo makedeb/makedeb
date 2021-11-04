@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -exuo pipefail
+set -e
 sudo chown 'makedeb:makedeb' ./ -R
 
 # Set up SSH
@@ -17,8 +17,8 @@ ls -alF "/${HOME}/.ssh/"
 chmod 500 "/${HOME}/.ssh/"* -R
 
 # Get current package version
-package_version="$(cat "src/PKGBUILD" | grep '^pkgver=' | awk -F '=' '{print $2}')"
+version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 
 # Create and push release
-git tag "v${package_version}-${release_type}" -am ""
-git push "ssh://git@${github_url}/makedeb/makedeb" "v${package_version}-${release_type}"
+git tag "${version}-${release_type}" -am ""
+git push "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"

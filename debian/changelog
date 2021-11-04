@@ -1,0 +1,77 @@
+makedeb (8.2.0-2) unstable; urgency=medium
+
+  * Depend on jq
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Wed, 03 Nov 2021 20:30:24 -0700
+
+makedeb (8.2.0-1) unstable; urgency=medium
+
+  * Fix .data.json
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Wed, 03 Nov 2021 18:25:27 -0700
+
+makedeb (7.1.2+bugfix1-11) unstable; urgency=medium
+
+  * ahhh patches
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Mon, 01 Nov 2021 13:41:33 -0700
+
+makedeb (7.1.2+bugfix1-10) focal; urgency=medium
+
+  * Should finally fix upstream building
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Thu, 28 Oct 2021 08:10:27 -0700
+
+makedeb (7.1.2+bugfix1-9) focal; urgency=medium
+
+  * Upstream changes
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 19:38:48 -0700
+
+makedeb (7.1.2+bugfix1-8) focal; urgency=medium
+
+  * Fix find command
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:46:50 -0700
+
+makedeb (7.1.2+bugfix1-7) focal; urgency=medium
+
+  * typo
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:22:12 -0700
+
+makedeb (7.1.2+bugfix1-6) focal; urgency=medium
+
+  * Got a fix for the multiline-statement
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:15:08 -0700
+
+makedeb (7.1.2+bugfix1-5) focal; urgency=medium
+
+  * Fix bugs in building
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 15:03:11 -0700
+
+makedeb (7.1.2+bugfix1-4) focal; urgency=medium
+
+  * switch to copying pkgbuild
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 14:41:54 -0700
+
+makedeb (7.1.2+bugfix1-3) focal; urgency=medium
+
+  * Fix makefile
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 13:52:02 -0700
+
+makedeb (7.1.2+bugfix1-2) focal; urgency=medium
+
+  * Fix dependencies
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 13:49:40 -0700
+
+makedeb (7.1.2+bugfix1-1) focal; urgency=medium
+
+  * Initial Release.
+
+ -- Leo Puvilland <lpuvilla0001@mymail.lausd.net>  Sun, 24 Oct 2021 10:49:02 -0700

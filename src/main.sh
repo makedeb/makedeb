@@ -27,11 +27,18 @@ declare PREBUILT='false'
 declare package_convert="false"
 declare hide_control_output=0
 
-declare makedeb_package_version="git"
-declare makedeb_release_type="git"
-declare target_os="debian"
+declare makedeb_package_version="$${pkgver}"
+declare makedeb_release_type="$${release}"
+declare makedeb_release_target="$${target}"
+
+if [[ "${makedeb_release_target}" == "local" || "${makedeb_release_target}" == "mpr" ]]; then
+	declare target_os="debian"
+elif [[ "${makedeb_release_target}" == "arch" ]]; then
+	declare target_os="arch"
+fi
+
 declare makepkg_package_name="makedeb-makepkg"
-declare MAKEDEB_UTILS_DIR="./utils/" # REMOVE AT PACKAGING
+declare MAKEDEB_UTILS_DIR="./utils/" # COMP_RM
 declare makedeb_utils_dir="${MAKEDEB_UTILS_DIR:-/usr/share/makedeb/utils/}"
 
 cd ./
@@ -48,19 +55,19 @@ declare pkgdir="${DIR}/pkg/"
 source "/usr/share/${makepkg_package_name}/util/message.sh"
 colorize
 
-# Debug logs in case a function is                       # REMOVE AT PACKAGING
-# stopping something from working during testing         # REMOVE AT PACKAGING
-for i in $(find functions/); do                          # REMOVE AT PACKAGING
-                                                         # REMOVE AT PACKAGING
-  if ! [[ -d "${i}" ]]; then                             # REMOVE AT PACKAGING
-    if [[ "${in_fakeroot}" != "true" ]]; then            # REMOVE AT PACKAGING
-      msg "Sourcing functions from ${i}..."              # REMOVE AT PACKAGING
-    fi                                                   # REMOVE AT PACKAGING
-                                                         # REMOVE AT PACKAGING
-    source <(cat "${i}")                                 # REMOVE AT PACKAGING
-  fi                                                     # REMOVE AT PACKAGING
-done                                                     # REMOVE AT PACKAGING
-[[ "${in_fakeroot}" != "true" ]] && echo                 # REMOVE AT PACKAGING
+# Debug logs in case a function is                       # COMP_RM
+# stopping something from working during testing         # COMP_RM
+for i in $(find functions/); do                          # COMP_RM
+                                                         # COMP_RM
+  if ! [[ -d "${i}" ]]; then                             # COMP_RM
+    if [[ "${in_fakeroot}" != "true" ]]; then            # COMP_RM
+      msg "Sourcing functions from ${i}..."              # COMP_RM
+    fi                                                   # COMP_RM
+                                                         # COMP_RM
+    source <(cat "${i}")                                 # COMP_RM
+  fi                                                     # COMP_RM
+done                                                     # COMP_RM
+[[ "${in_fakeroot}" != "true" ]] && echo                 # COMP_RM
 
 trap_codes
 
