@@ -13,7 +13,7 @@ makedepends=($${makedepends})
 conflicts=($${conflicts})
 url="https://github.com/makedeb/makedeb"
 
-source=("makedeb::git+${url}/#tag=v${pkgver}-${_release}")
+source=("makedeb::git+${url}/#tag=v${pkgver}-${pkgrel}-${_release}")
 sha256sums=('SKIP')
 
 prepare() {
