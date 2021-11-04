@@ -10,7 +10,7 @@ base_beta_conflicts=('makedeb' 'makedeb-alpha')
 base_alpha_conflicts=('makedeb' 'makedeb-beta')
 
 base_debian_depends=('apt' 'bash' 'binutils' 'file' 'lsb-release' 'python3' 'python3-apt' 'tar')
-base_debian_makedepends=('asciidoctor' 'git')
+base_debian_makedepends=('asciidoctor' 'git' 'make')
 
 base_arch_depends=('tar' 'binutils' 'lsb-release' 'dpkg' 'asciidoctor')
 base_arch_makedepends=("${base_debian_makedepends[@]}")
