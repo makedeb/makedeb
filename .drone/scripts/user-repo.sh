@@ -2,8 +2,6 @@
 set -e
 sudo chown 'makedeb:makedeb' ./ -R
 
-# Get package version.
-
 # Set up SSH.
 rm -rf "/${HOME}/.ssh"
 mkdir -p "/${HOME}/.ssh"
