@@ -32,7 +32,7 @@ local buildAndPublish(package_name, tag) = {
 			image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 			environment: {release_type: tag, package_name: package_name},
 			commands: [
-				"sudo apt-get install sed grep mawk git -yq",
+				"sudo apt-get install git jq sudo sed -yq",
 				".drone/scripts/build.sh"
 			]
         	},
@@ -42,8 +42,8 @@ local buildAndPublish(package_name, tag) = {
 			image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 			environment: {proget_api_key: {from_secret: "proget_api_key"}},
 			commands: [
-				"sudo apt-get install sed grep curl findutils -yq",
-				".drone/scripts/publish.sh"
+				"sudo apt-get install python3 python3-requests -yq",
+				".drone/scripts/publish.py"
 			]
 		}
 	]
@@ -71,7 +71,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 		},
 
 		commands: [
-			"sudo apt-get install git ssh grep mawk sed -yq",
+			"sudo apt-get install sudo openssh-client sed git jq -yq",
 			".drone/scripts/user-repo.sh"
 		]
 	}]
