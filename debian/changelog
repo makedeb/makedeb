@@ -1,4 +1,4 @@
-makedeb (8.2.1-2) unstable; urgency=medium
+makedeb (8.2.0-2) unstable; urgency=medium
 
   * Fix .data.json
 
