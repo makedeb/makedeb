@@ -25,6 +25,9 @@ fakeroot_build() {
     tar -xf "../${package_filename}" -C "${package}/"
     rm "../${package_filename}"
 
+    # Get directory size, which we'll use for the 'Installed-Size' field in the built package's control file.
+    local installed_size="$(du -s --apparent-size -- "${package}" | awk '{print $1}')"
+
     # Set up Debian package directory structure
     mkdir -p "${package}/DEBIAN/"
     touch "${package}/DEBIAN/control"
@@ -48,7 +51,8 @@ fakeroot_build() {
     run_dependency_conversion
 
     msg2 "Generating control file..."
-    generate_control "../../${FILE}" ./DEBIAN/control
+    INSTALLED_SIZE="${installed_size}" \
+        generate_control "../../${FILE}" ./DEBIAN/control
 
     add_install_scripts
 
