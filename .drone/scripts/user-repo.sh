@@ -49,6 +49,12 @@ if [[ "${target_repo}" == "aur" ]]; then
 	cat .SRCINFO
 fi
 
+# Check if changes have been made
+if [[ "$(git diff)" == "" ]]; then
+  exit 0
+fi
+
+
 # Set up Git identity information
 git config user.name "Kavplex Bot"
 git config user.email "kavplex@hunterwittenborn.com"
@@ -60,6 +66,6 @@ pkgrel="$(echo "${config}" | jq -r '.current_pkgrel')"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO
-git commit -m "Updated version to ${pkgver}-${pkgrel}" || true
+git commit -m "Updated version to ${pkgver}-${pkgrel}"
 
-git push || true
+git push
