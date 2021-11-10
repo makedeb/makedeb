@@ -60,6 +60,6 @@ pkgrel="$(echo "${config}" | jq -r '.current_pkgrel')"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO
-git commit -m "Updated version to ${pkgver}-${pkgrel}"
+git commit -m "Updated version to ${pkgver}-${pkgrel}" || true
 
-git push
+git push || true
