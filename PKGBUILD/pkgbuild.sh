@@ -5,9 +5,9 @@ set -e
 targets=('local' 'mpr' 'aur')
 releases=('stable' 'beta' 'alpha')
 
-base_stable_conflicts=('makedeb-beta' 'makedeb-alpha')
-base_beta_conflicts=('makedeb' 'makedeb-alpha')
-base_alpha_conflicts=('makedeb' 'makedeb-beta')
+base_stable_conflicts=('makedeb-beta' 'makedeb-alpha' 'makedeb-makepkg')
+base_beta_conflicts=('makedeb' 'makedeb-alpha' 'makedeb-makepkg-beta')
+base_alpha_conflicts=('makedeb' 'makedeb-beta' 'makedeb-makepkg-alpha')
 
 base_debian_depends=('apt' 'bash' 'binutils' 'file' 'lsb-release' 'python3' 'python3-apt' 'tar')
 base_debian_makedepends=('asciidoctor' 'git' 'make' 'jq')

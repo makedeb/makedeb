@@ -9,25 +9,56 @@ all:
 	true
 
 prepare:
-	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' src/main.sh
-	sed -i 's|$$$${release}|$(RELEASE)|' src/main.sh
-	sed -i 's|$$$${target}|$(TARGET)|' src/main.sh
-	find src/main.sh src/functions/ -type f -exec sed -i 's|^.*# COMP_RM$$||' '{}' \;
+	# makedeb
+	cd src/makedeb/
+	sed -i 's|$$$${MAKEDEB_VERSION}|$(CURRENT_VERSION)|' main.sh
+	sed -i 's|$$$${MAKEDEB_RELEASE}|$(RELEASE)|' main.sh
+	sed -i 's|$$$${MAKEDEB_TARGET}|$(TARGET)|' main.sh
+	find ./main.sh functions/ -type f -exec sed -i 's|^.*# COMP_RM$$||' '{}' \;
+	cd ../../
 	
+	# makepkg
+	cd src/makepkg/
+	sed -i 's|$$$${MAKEPKG_VERSION}|$(CURRENT_VERSION)|' ./makepkg.sh
+	sed -i 's|$$$${TARGET_OS}|$(TARGET)|' ./makepkg.sh
+	sed -i 's|.*# REMOVE AT PACKAGING||g' ./makepkg.sh
+	cd ../../
+	
+	# man pages
 	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/makedeb.8.adoc
 	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/pkgbuild.5.adoc
 
 package:
+	# makedeb
+	cd src/makedeb/
 	mkdir -p "$(DESTDIR)/usr/bin"
 	echo '#!/usr/bin/env bash' > "$(DESTDIR)/usr/bin/makedeb"
-	find src/functions/ -type f -exec cat '{}' \; >> "$(DESTDIR)/usr/bin/makedeb"
-	cat "src/main.sh" >> "$(DESTDIR)/usr/bin/makedeb"
+	find functions/ ./main.sh -type f -exec cat '{}' \; >> "$(DESTDIR)/usr/bin/makedeb"
 	chmod 755 "$(DESTDIR)/usr/bin/makedeb"
 	
-	cd ./src/utils
+	cd ./utils
 	find ./ -type f -exec install -Dm 755 '{}' "$(DESTDIR)/usr/share/makedeb/utils/{}" \;
-	cd ../../
+	cd ../../../
 	
+	# makepkg
+	cd src/makepkg/
+	install -Dm 755 ./makepkg.sh '$(DESTDIR)/usr/bin/makedeb-makepkg'
+	
+	cd functions/
+	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb-makepkg/{}' \;
+	cd ../
+	
+	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'
+	install -Dm 755 ./makepkg-template '$(DESTDIR)/usr/bin/makepkg-template'
+	
+ifeq ("$(PACMAN_BINARY)", "1")
+    touch '$(DESTDIR)/usr/bin/pacman'
+    chmod 755 '$(DESTDIR)/usr/bin/pacman'
+endif
+	
+	cd ../../
+
+	# man pages
 	export SOURCE_DATE_EPOCH="$(MAKEDEB_MAN_EPOCH)"
 	asciidoctor -b manpage man/makedeb.8.adoc -o "$(DESTDIR)/usr/share/man/man8/makedeb.8"
 	

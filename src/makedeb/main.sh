@@ -27,9 +27,9 @@ declare PREBUILT='false'
 declare package_convert="false"
 declare hide_control_output=0
 
-declare makedeb_package_version="$${pkgver}"
-declare makedeb_release_type="$${release}"
-declare makedeb_release_target="$${target}"
+declare makedeb_package_version="$${MAKEDEB_VERSION}"
+declare makedeb_release_type="$${MAKEDEB_RELEASE}"
+declare makedeb_release_target="$${MAKEDEB_TARGET}"
 
 if [[ "${makedeb_release_target}" == "local" || "${makedeb_release_target}" == "mpr" ]]; then
 	declare target_os="debian"
@@ -67,6 +67,7 @@ for i in $(find functions/); do                          # COMP_RM
     source <(cat "${i}")                                 # COMP_RM
   fi                                                     # COMP_RM
 done                                                     # COMP_RM
+                                                         # COMP_RM
 [[ "${in_fakeroot}" != "true" ]] && echo                 # COMP_RM
 
 trap_codes
