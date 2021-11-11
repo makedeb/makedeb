@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Leo Puvilland <leo@craftcat.dev>
 Build-Depends: debhelper-compat (= 12), bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt, git, jq
-Standards-Version: 4.5.0
+Standards-Version: 4.5.1
 Homepage: https://makedeb.hunterwittenborn.com
 Vcs-Browser: https://github.com/makedeb/makedeb
 Vcs-Git: https://github.com/makedeb/makedeb.git -b stable
