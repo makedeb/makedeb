@@ -20,7 +20,7 @@ local createTag(tag) = {
 	}]
 };
 
-local buildAndPublish(package_name, tag) = {
+local buildAndPublish(package_name, tag, image_name) = {
 	name: "build-and-publish-" + tag,
 	kind: "pipeline",
 	type: "docker",
@@ -29,7 +29,7 @@ local buildAndPublish(package_name, tag) = {
 	steps: [
 		{
 			name: "build-debian-package",
-			image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+			image: "proget.hunterwittenborn.com/docker/makedeb/" + image_name + ":ubuntu-focal",
 			environment: {release_type: tag, package_name: package_name},
 			commands: [
 				"sudo apt-get install git jq sudo sed -yq",
@@ -109,9 +109,9 @@ local sendBuildNotification(tag) = {
 	createTag("beta"),
 	createTag("alpha"),
 
-	buildAndPublish("makedeb", "stable"),
-	buildAndPublish("makedeb-beta", "beta"),
-	buildAndPublish("makedeb-alpha", "alpha"),
+	buildAndPublish("makedeb", "stable", "makedeb"),
+	buildAndPublish("makedeb-beta", "beta", "makedeb-beta"),
+	buildAndPublish("makedeb-alpha", "alpha", "makedeb-alpha"),
 
 	userRepoPublish("makedeb", "stable", "mpr"),
 	userRepoPublish("makedeb-beta", "beta", "mpr"),
