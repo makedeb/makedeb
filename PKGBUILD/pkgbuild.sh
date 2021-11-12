@@ -16,17 +16,17 @@ base_arch_depends=('tar' 'binutils' 'lsb-release' 'dpkg')
 base_arch_makedepends=("${base_debian_makedepends[@]}")
 
 # Depends.
-local_stable_depends=("${base_debian_depends[@]}" 'makedeb-makepkg')
-local_beta_depends=("${base_debian_depends[@]}" 'makedeb-makepkg-beta')
-local_alpha_depends=("${base_debian_depends[@]}" 'makedeb-makepkg-alpha')
+local_stable_depends=("${base_debian_depends[@]}")
+local_beta_depends=("${base_debian_depends[@]}")
+local_alpha_depends=("${base_debian_depends[@]}")
 
 mpr_stable_depends=("${local_stable_depends[@]}")
 mpr_beta_depends=("${local_beta_depends[@]}")
 mpr_alpha_depends=("${local_alpha_depends[@]}")
 
-aur_stable_depends=("${base_arch_depends[@]}" 'makedeb-makepkg')
-aur_beta_depends=("${base_arch_depends[@]}" 'makedeb-makepkg-beta')
-aur_alpha_depends=("${base_arch_depends[@]}" 'makedeb-makepkg-alpha')
+aur_stable_depends=("${base_arch_depends[@]}")
+aur_beta_depends=("${base_arch_depends[@]}")
+aur_alpha_depends=("${base_arch_depends[@]}")
 
 # Makedepends.
 local_stable_makedepends=("${base_debian_makedepends[@]}")
