@@ -5,13 +5,20 @@ set -e
 targets=('local' 'mpr' 'aur')
 releases=('stable' 'beta' 'alpha')
 
-debian_depends=('apt' 'bash' 'binutils' 'file' 'lsb-release' 'python3' 'python3-apt' 'tar')
+debian_depends=('apt' 'bash' 'binutils' 'coreutils'
+                'curl' 'fakeroot' 'file' 'gettext'
+                'gawk' 'libarchive-tools' 'lsb-release'
+                'python3' 'python3-apt' 'tar' 'zstd')
 debian_makedepends=('asciidoctor' 'git' 'make' 'jq')
 debian_conflicts=('makedeb-makepkg' 'makedeb-makepkg-beta' 'makedeb-makepkg-alpha')
 debian_provides=("${debian_conflicts[@]}")
 debian_replaces=("${debian_conflicts[@]}")
 
-arch_depends=('tar' 'binutils' 'lsb-release' 'dpkg')
+arch_depends=('awk' 'binutils' 'bzip2' 'coreutils'
+              'dpkg' 'fakeroot' 'file' 'findutils'
+              'gettext' 'gnupg' 'grep' 'gzip'
+              'libarchive' 'lsb-release' 'ncurses'
+              'sed' 'tar' 'xz')
 arch_makedepends=("${debian_makedepends[@]}")
 arch_conflicts=("${debian_conflicts[@]}")
 arch_provides=("${debian_provides[@]}")
