@@ -41,7 +41,7 @@ cd PKGBUILD/
 # Create .SRCINFO file
 cd "../${package_name}_${target_repo}"
 
-makedeb --printsrcinfo | tee .SRCINFO
+PACMAN='/usr/bin/true' makedeb --printsrcinfo | tee .SRCINFO
 
 # Remove 'generated-by' line when using AUR deployments.
 if [[ "${target_repo}" == "aur" ]]; then

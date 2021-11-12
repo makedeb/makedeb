@@ -10,4 +10,4 @@ export RELEASE="${release_type}"
 cd PKGBUILD/
 ./pkgbuild.sh > PKGBUILD
 
-makedeb -s --no-confirm
+PACMAN='/usr/bin/true' makedeb -s --no-confirm
