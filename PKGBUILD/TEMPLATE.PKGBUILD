@@ -11,6 +11,8 @@ license=('GPL3')
 depends=($${depends})
 makedepends=($${makedepends})
 conflicts=($${conflicts})
+provides=($${provides})
+replaces=($${replaces})
 url="https://github.com/makedeb/makedeb"
 
 source=("makedeb::git+${url}/#tag=v${pkgver}-${pkgrel}-${_release}")
