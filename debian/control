@@ -10,5 +10,5 @@ Vcs-Git: https://github.com/makedeb/makedeb.git -b alpha
 
 Package: makedeb
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, bash, binutils, tar, file, lsb-release, asciidoctor, makedeb-makepkg, python3-apt
+Depends: ${shlibs:Depends}, ${misc:Depends}, bash, binutils, tar, file, lsb-release, asciidoctor, python3-apt
 Description: The modern packaging tool for Debian archives.
