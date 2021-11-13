@@ -1,0 +1,25 @@
+name: Build makedeb
+on:
+ pull_request:
+   branches:
+     - main
+ push:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    container:
+      image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-focal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate PKGBUILD and build with makedeb
+        run: |
+          sudo chown -R makedeb:makedeb .
+          sudo apt update && sudo apt install -y git jq
+          cd PKGBUILD
+          ./pkgbuild.sh > PKGBUILD
+          PACMAN='/usr/bin/true' makedeb -s --no-confirm
+        env:
+          TARGET: local
+          RELEASE: alpha
