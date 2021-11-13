@@ -67,6 +67,6 @@ endif
 
 # This is for use by dpkg-buildpackage. Please use prepare and package instead.
 install:
-	$(MAKE) prepare PKGVER="$(CURRENT_VERSION)" RELEASE=stable TARGET=local
+	$(MAKE) prepare PKGVER="$(CURRENT_VERSION)" RELEASE=alpha TARGET=local
 	$(MAKE) package DESTDIR="$(DESTDIR)"
 
