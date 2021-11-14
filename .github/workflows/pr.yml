@@ -28,7 +28,6 @@ jobs:
         with:
           name: makedeb-build
           path: "*.deb"
-        retention-days: 7
 
   build-native:
     runs-on: ubuntu-20.04
@@ -51,4 +50,3 @@ jobs:
         with:
           name: makedeb-native-build
           path: "*.deb"
-        retention-days: 7
