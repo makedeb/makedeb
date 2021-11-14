@@ -8,13 +8,19 @@ jobs:
     env:
       TARGET: local
       RELEASE: alpha
-    container:
-      image: sardine123/makedeb-github-ci:ubuntu-focal
+#    container:
+#      image: sardine123/makedeb-github-ci:ubuntu-focal
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: "makedeb"
+      - name: Install deps
+        run: |
+         sudo apt update
+         DEBIAN_FRONTEND=noninteractive sudo apt install wget gpg sudo -y
+         wget -qO - "https://proget.hunterwittenborn.com/debian-feeds/makedeb.pub" | gpg --dearmor | tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null
+         echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://proget.hunterwittenborn.com/ makedeb main" | tee /etc/apt/sources.list.d/makedeb.list
+         sudo apt update
+         sudo apt install makedeb-alpha -y
       - name: Generate PKGBUILD and build with makedeb
         run: |
           cd makedeb
