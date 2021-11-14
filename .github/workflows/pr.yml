@@ -31,14 +31,12 @@ jobs:
          sudo apt install makedeb-alpha -y
       - name: Generate PKGBUILD and build with makedeb
         run: |
-          cat << EOF > ../.env
-            VERSION=$(cat .data.json | jq -r '.current_pkgver')
-          EOF
+          git tag -f "v$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')-alpha"
           sudo apt update && sudo apt install -y git jq
           cd PKGBUILD
           ./pkgbuild.sh > PKGBUILD
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
-          source ../.env && mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
+          mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
       #- name: Rename result
       #  run: source .env && mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
       - name: Upload build output
