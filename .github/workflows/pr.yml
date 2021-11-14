@@ -11,9 +11,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: "makedeb"
+          path: "/home/makedeb/makedeb"
       - name: Generate PKGBUILD and build with makedeb
         run: |
+          cd /home/makedeb/makedeb
           sudo chown -R makedeb:makedeb .
           sudo apt update && sudo apt install -y git jq
           cd PKGBUILD
@@ -22,6 +23,12 @@ jobs:
         env:
           TARGET: local
           RELEASE: alpha
+      - name: Upload build output
+        uses: actions/upload-artifact@v2
+        with:
+          name: makedeb-build
+          path: *.deb
+        retention-days: 7
 
   build-native:
     runs-on: ubuntu-20.04
@@ -39,3 +46,9 @@ jobs:
         run: source .env && tar -cJf ../makedeb_$VERSION.orig.tar.xz .
       - name: build makedeb using native packaging
         run: source .env && ls .. && debuild -us -uc
+      - name: Upload build output
+        uses: actions/upload-artifact@v2
+        with:
+          name: makedeb-native-build
+          path: *.deb
+        retention-days: 7
