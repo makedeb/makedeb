@@ -1,7 +1,6 @@
 name: Build makedeb
 on:
  pull_request:
- push:
 
 jobs:
   build:
