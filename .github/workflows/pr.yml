@@ -1,7 +1,6 @@
 name: Build makedeb
 on:
  pull_request:
-
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -29,6 +28,7 @@ jobs:
           cd PKGBUILD
           ./pkgbuild.sh > PKGBUILD
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
+          ls -a
       - name: Rename result
         run: mv *.deb makedeb.deb
       - name: Upload build output
