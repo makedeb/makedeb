@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          path: "makedeb"
       - name: Generate PKGBUILD and build with makedeb
         run: |
           sudo chown -R makedeb:makedeb .
