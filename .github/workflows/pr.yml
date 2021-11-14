@@ -5,6 +5,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    env:
+      TARGET: local
+      RELEASE: alpha
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-focal
     steps:
@@ -20,14 +23,11 @@ jobs:
           cd PKGBUILD
           ./pkgbuild.sh > PKGBUILD
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
-        env:
-          TARGET: local
-          RELEASE: alpha
       - name: Upload build output
         uses: actions/upload-artifact@v2
         with:
           name: makedeb-build
-          path: *.deb
+          path: "*.deb"
         retention-days: 7
 
   build-native:
@@ -50,5 +50,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: makedeb-native-build
-          path: *.deb
+          path: "*.deb"
         retention-days: 7
