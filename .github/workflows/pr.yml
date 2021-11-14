@@ -34,9 +34,9 @@ jobs:
           cd PKGBUILD
           ./pkgbuild.sh > PKGBUILD
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
-          ls -a
-      - name: Rename result
-        run: source .env && mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
+          source .env && mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
+      #- name: Rename result
+      #  run: source .env && mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
       - name: Upload build output
         uses: actions/upload-artifact@v2
         with:
