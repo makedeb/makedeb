@@ -1,8 +1,6 @@
 name: Build makedeb
 on:
  pull_request:
-   branches:
-     - main
 
 jobs:
   build:
