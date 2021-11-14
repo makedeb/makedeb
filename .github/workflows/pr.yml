@@ -9,15 +9,15 @@ jobs:
       TARGET: local
       RELEASE: alpha
     container:
-      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
+      image: sardine123/makedeb-github-ci:ubuntu-focal
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: "/home/makedeb/makedeb"
+          path: "makedeb"
       - name: Generate PKGBUILD and build with makedeb
         run: |
-          cd /home/makedeb/makedeb
+          cd makedeb
           sudo chown -R makedeb:makedeb .
           sudo apt update && sudo apt install -y git jq
           cd PKGBUILD
