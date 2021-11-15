@@ -19,6 +19,13 @@ chmod 500 "/${HOME}/.ssh/"* -R
 # Get current package version
 version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 
+# Update debian version
+DEBVERSION="$(cat debian/changelog | cut -f2 -d" " - | grep "(" | cut -f2 -d"(" | cut -f1 -d")")"
+
+if [ $vresion != $DEBVERSION ]; then
+  dch -v $VERSION -i "Initial release (Closes: #998039)."
+fi
+
 # Create and push release
 git tag -f "v${version}-${release_type}" -am ""
 git push -f "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"
