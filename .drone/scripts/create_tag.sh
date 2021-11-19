@@ -22,8 +22,11 @@ version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 # Update debian version
 DEBVERSION="$(cat debian/changelog | cut -f2 -d" " - | grep "(" | cut -f2 -d"(" | cut -f1 -d")")"
 
+rm debian/changelog
+touch debian/changelog
+
 if [ $version != $DEBVERSION ]; then
-  dch -v $version -i "Initial release (Closes: #998039)."
+  dch -D unstable -v $version -i "Initial release (Closes: #998039)."
 fi
 
 # Create and push release
