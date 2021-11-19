@@ -20,7 +20,7 @@ local createTag(tag) = {
 	}]
 };
 
-local buildNative(package_name, tag, image_name) = {
+local buildNative(package_name, tag) = {
   name: "build-native-" + tag,
 	kind: "pipeline",
 	type: "docker",
