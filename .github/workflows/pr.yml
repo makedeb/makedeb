@@ -7,19 +7,11 @@ jobs:
     env:
       TARGET: local
       RELEASE: alpha
-#    container:
-#      image: sardine123/makedeb-github-ci:ubuntu-focal
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-#      - name: Setup version env var
-#        run: |
-#         cat << EOF > ../.env
-#            VERSION=$(cat .data.json | jq -r '.current_pkgver')
-#          EOF
 
       - name: Install deps
         run: |
@@ -38,8 +30,6 @@ jobs:
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
           ls -alt
           mv -v makedeb-alpha_$(cat ../.data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')_all.deb ../makedeb.deb
-      #- name: Rename result
-      #  run: source .env && mv makedeb-alpha_$VERSION-1_all.deb makedeb.deb
       - name: Upload build output
         uses: actions/upload-artifact@v2
         with:
