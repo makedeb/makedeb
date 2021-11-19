@@ -30,5 +30,5 @@ if [ $version != $DEBVERSION ]; then
 fi
 
 # Create and push release
-git tag -f "v${version}-${release_type}" -am ""
+git tag -f "v${version}-${release_type}" -am "Bump debian version to v${version} [CI SKIP]"
 git push -f "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"
