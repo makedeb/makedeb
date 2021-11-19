@@ -14,7 +14,7 @@ local createTag(tag) = {
 		},
 
 		commands: [
-			"sudo apt-get install openssh-client git jq ubuntu-dev-tools -yq",
+			"sudo apt-get install openssh-client git jq -yq",
 			".drone/scripts/create_tag.sh"
 		]
 	}]
