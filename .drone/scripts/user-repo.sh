@@ -15,7 +15,8 @@ current_fingerprint="${!current_fingerprint}"
 # Set up SSH.
 echo "${ssh_key}" | tee "/${HOME}/.ssh/ssh_key"
 
-SSH_HOST="${github_url}" \
+SSH_HOST="${target_url}_url"
+SSH_HOST="${!SSH_HOST}" \
 SSH_EXPECTED_FINGERPRINT="${current_fingerprint}" \
 SET_PERMS="true" \
 get-ssh-key
