@@ -24,15 +24,6 @@ fi
 # Upload packages.
 echo "Uploading ${deb_packages} to ${proget_server}..."
 
-curl_output="$(curl "https://${proget_server}/debian-packages/upload/makedeb/main/${deb_packages}" \
-            --user "api:${proget_api_key}" \
-            --upload-file "${deb_packages}")"
-
-# Verify that package was uploaded successfully.
-expected_curl_output="Package is now available at </_feeds/makedeb/main/${component_name}:all/${component_pkgver}-${component_pkgrel}>."
-
-if [[ "${curl_output}" != "${expected_curl_output}" ]]; then
-  echo "${curl_output}"
-  echo "Aborting due to unexpected output from curl."
-  exit 1
-fi
+curl "https://${proget_server}/debian-packages/upload/makedeb/main/${deb_packages}" \
+     --user "api:${proget_api_key}" \
+     --upload-file "${deb_packages}"
