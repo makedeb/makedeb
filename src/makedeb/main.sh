@@ -113,7 +113,7 @@ if (( "${print_control}" )); then
   exit "${?}"
 fi
 
-msg "Making package: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
+msg "Making package: ${pkgbase} ${package_version} ($(date '+%a %d %b %Y %T %p %Z'))..."
 find "${pkgdir}" &> /dev/null && rm "${pkgdir}" -rf
 
 # Check build dependencies.
