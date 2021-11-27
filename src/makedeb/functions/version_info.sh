@@ -1,6 +1,9 @@
 version_info() {
-  makepkg_package_version="$("${makepkg_package_name}" --version | awk NR=="1" | grep -o '([^)]*' | sed 's|(||')"
+    if [[ "${makedeb_release_target}" == "local" ]]; then
+        declare makedeb_release_target="APT"
+    fi
 
-  echo "makedeb (${makedeb_package_version}) - ${makedeb_release_type^} Release"
-  echo "makepkg (${makepkg_package_version})"
+    echo "makedeb ${makedeb_package_version}"
+    echo "${makedeb_release_type^} Release"
+    echo "Installed from ${makedeb_release_target}"
 }
