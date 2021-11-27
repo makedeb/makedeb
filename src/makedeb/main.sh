@@ -31,7 +31,7 @@ declare makedeb_package_version="$${MAKEDEB_VERSION}"
 declare makedeb_release_type="$${MAKEDEB_RELEASE}"
 declare makedeb_release_target="$${MAKEDEB_TARGET}"
 
-if [[ "${makedeb_release_target}" == "local" || "${makedeb_release_target}" == "mpr" ]]; then
+if [[ "${makedeb_release_target}" == "apt" || "${makedeb_release_target}" == "mpr" ]]; then
 	declare target_os="debian"
 elif [[ "${makedeb_release_target}" == "arch" ]]; then
 	declare target_os="arch"

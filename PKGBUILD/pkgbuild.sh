@@ -2,7 +2,7 @@
 set -e
 
 # Bases.
-targets=('local' 'mpr' 'aur')
+targets=('apt' 'mpr' 'aur')
 releases=('stable' 'beta' 'alpha')
 
 debian_depends=('apt' 'bash' 'binutils' 'coreutils'
@@ -72,7 +72,7 @@ else
     pkgname="makedeb-${RELEASE}"
 fi
 
-if [[ "${TARGET}" == "local" || "${TARGET}" == "mpr" ]]; then
+if [[ "${TARGET}" == "apt" || "${TARGET}" == "mpr" ]]; then
     var_prefix="debian"
 else
     var_prefix="arch"
@@ -97,7 +97,7 @@ provides="${provides[@]@Q}"
 replaces="${replaces[@]@Q}"
 
 # Generate the PKGBUILD file.
-if [[ "${TARGET}" == "local" ]]; then
+if [[ "${TARGET}" == "apt" ]]; then
 	extra_sed_args=('-e' "s|git+\${url}|git+file://$(git rev-parse --show-toplevel)|")
 fi
 

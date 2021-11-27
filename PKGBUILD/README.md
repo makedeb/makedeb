@@ -3,7 +3,7 @@ The `pkgbuild.sh` script generates PKGBUILDs for all releases for Debian, the MP
 
 To use, set the following variables to any of the specified values:
 
-- `TARGET`: `local`, `mpr`, or `aur`
+- `TARGET`: `apt`, `mpr`, or `aur` (use `apt` when building locally)
 - `RELEASE`: `stable`, `beta`, or `alpha`
 
 For example:
