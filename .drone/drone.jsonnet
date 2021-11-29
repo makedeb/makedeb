@@ -20,24 +20,7 @@ local createTag(tag) = {
 	}]
 };
 
-local buildNative(package_name, tag) = {
-  name: "build-native-" + tag,
-	kind: "pipeline",
-	type: "docker",
-	trigger: {branch: [tag]}
-	depends_on: ["create-tag-" + tag],
-	steps: [
-	  {
-		  name: "build-native-debian-package",
-			image: "ubuntu:20.04",
-			environment: {release_type: tag, package_name: package_name},
-			commands: [
-			  "sudo -E apt-get install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq",
-				".drone/scripts/build-native.sh"
-			]
-		}
-	]
-}
+
 
 local buildAndPublish(package_name, tag, image_name) = {
 	name: "build-and-publish-" + tag,
@@ -64,6 +47,25 @@ local buildAndPublish(package_name, tag, image_name) = {
 			commands: [
 				"sudo -E apt-get upgrade python3 python3-requests -yq",
 				".drone/scripts/publish.py"
+			]
+		}
+	]
+};
+
+local buildNative(package_name, tag) = {
+  name: "build-native-" + tag,
+	kind: "pipeline",
+	type: "docker",
+	trigger: {branch: [tag]}
+	depends_on: ["create-tag-" + tag],
+	steps: [
+	  {
+		  name: "build-native-debian-package",
+			image: "ubuntu:20.04",
+			environment: {release_type: tag, package_name: package_name},
+			commands: [
+			  "sudo -E apt-get install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq",
+				".drone/scripts/build-native.sh"
 			]
 		}
 	]
