@@ -9,12 +9,12 @@ local createTag(tag) = {
 		image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 		environment: {
 			ssh_key: {from_secret: "ssh_key"},
-			known_hosts: {from_secret: "known_hosts"},
 			release_type: tag
 		},
 
 		commands: [
-			"sudo apt-get install openssh-client git jq -yq",
+			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
+			"sudo -E apt-get upgrade jq git -yq",
 			".drone/scripts/create_tag.sh"
 		]
 	}]
@@ -62,7 +62,7 @@ local buildAndPublish(package_name, tag, image_name) = {
 			image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 			environment: {proget_api_key: {from_secret: "proget_api_key"}},
 			commands: [
-				"sudo apt-get install python3 python3-requests -yq",
+				"sudo -E apt-get upgrade python3 python3-requests -yq",
 				".drone/scripts/publish.py"
 			]
 		}
@@ -84,13 +84,13 @@ local userRepoPublish(package_name, tag, user_repo) = {
 		image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
 		environment: {
 			ssh_key: {from_secret: "ssh_key"},
-			known_hosts: {from_secret: "known_hosts"},
 			package_name: package_name,
 			release_type: tag,
 			target_repo: user_repo
 		},
 
 		commands: [
+			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
 			"sudo apt-get install sudo openssh-client sed git jq -yq",
 			".drone/scripts/user-repo.sh"
 		]

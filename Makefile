@@ -51,13 +51,8 @@ package:
 	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'
 	install -Dm 755 ./makepkg-template '$(DESTDIR)/usr/bin/makepkg-template'
 	
-ifeq ("$(PACMAN_BINARY)", "1")
-    touch '$(DESTDIR)/usr/bin/pacman'
-    chmod 755 '$(DESTDIR)/usr/bin/pacman'
-endif
-	
 	cd ../../
-
+	
 	# man pages
 	export SOURCE_DATE_EPOCH="$(MAKEDEB_MAN_EPOCH)"
 	asciidoctor -b manpage man/makedeb.8.adoc -o "$(DESTDIR)/usr/share/man/man8/makedeb.8"
@@ -67,6 +62,6 @@ endif
 
 # This is for use by dpkg-buildpackage. Please use prepare and package instead.
 install:
-	$(MAKE) prepare PKGVER="$(CURRENT_VERSION)" RELEASE=alpha TARGET=local
+	$(MAKE) prepare RELEASE=alpha TARGET=apt
 	$(MAKE) package DESTDIR="$(DESTDIR)"
 

@@ -6,8 +6,20 @@ sudo chown 'makedeb:makedeb' ./ -R
 rm -rf "/${HOME}/.ssh"
 mkdir -p "/${HOME}/.ssh"
 
+# Get current SSH fingerprint.
+mpr_fingerprint='SHA256:TQtnFwjBwpDOHnHTaANeudpXVmomlYo6Td/8T51FA/w'
+aur_fingerprint='SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4'
+current_fingerprint="${target_repo}_fingerprint"
+current_fingerprint="${!current_fingerprint}"
+
+# Set up SSH.
 echo "${ssh_key}" | tee "/${HOME}/.ssh/ssh_key"
-echo "${known_hosts}" | tee "/${HOME}/.ssh/known_hosts"
+
+SSH_HOST="${target_repo}_url"
+SSH_HOST="${!SSH_HOST}" \
+SSH_EXPECTED_FINGERPRINT="${current_fingerprint}" \
+SET_PERMS="true" \
+get-ssh-key
 
 if [[ "${target_repo}" == "mpr" ]]; then
 	echo "Host ${mpr_url}" | tee "/${HOME}/.ssh/config"

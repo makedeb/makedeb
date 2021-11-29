@@ -1204,7 +1204,7 @@ unset var
 PACKAGER=${PACKAGER:-"Unknown Packager"}
 
 # set pacman command if not already defined
-PACMAN=${PACMAN:-pacman}
+PACMAN="true"
 # save full path to command as PATH may change when sourcing /etc/profile
 PACMAN_PATH=$(type -P $PACMAN)
 

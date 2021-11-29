@@ -1,5 +1,5 @@
 help() {
-	echo "makedeb ${makedeb_package_version} (${makedeb_release_type}, ${makedeb_release_target})"
+	echo "makedeb ${makedeb_package_version}"
 	echo "Usage: makedeb [options]"
 	echo
 	echo "makedeb takes PKGBUILD files and creates archives installable via APT"
