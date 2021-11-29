@@ -24,7 +24,6 @@ jobs:
       - name: Generate PKGBUILD and build with makedeb
         run: |
           git tag -f "v$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')-alpha"
-          sudo apt update && sudo apt install -y git jq
           cd PKGBUILD
           ./pkgbuild.sh > PKGBUILD
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
