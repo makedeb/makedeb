@@ -31,7 +31,7 @@ rm debian/changelog
 touch debian/changelog
 
 if [ $version != $DEBVERSION ]; then
-  dch -D unstable -v $version -i "Initial release (Closes: #998039)."
+  dch --distribution unstable -v $version -i "Initial release (Closes: #998039)."
 fi
 
 # Create and push release
