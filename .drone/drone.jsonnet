@@ -14,7 +14,7 @@ local createTag(tag) = {
 
 		commands: [
 			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
-			"sudo -E apt-get upgrade jq git -yq",
+			"sudo -E apt-get upgrade jq git ubuntu-dev-tools -yq",
 			".drone/scripts/create_tag.sh"
 		]
 	}]

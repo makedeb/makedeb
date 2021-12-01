@@ -24,6 +24,16 @@ echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 # Get current package version
 version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 
+# Update debian version
+DEBVERSION="$(cat debian/changelog | cut -f2 -d" " - | grep "(" | cut -f2 -d"(" | cut -f1 -d")")"
+
+rm debian/changelog
+touch debian/changelog
+
+if [ $version != $DEBVERSION ]; then
+  dch -D unstable -v $version -i "Initial release (Closes: #998039)."
+fi
+
 # Create and push release
 git tag -f "v${version}-${release_type}" -am "Bump version to v${version}"
 git push -f "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"
