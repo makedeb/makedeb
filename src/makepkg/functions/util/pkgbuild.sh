@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   pkgbuild.sh - functions to extract information from PKGBUILD files
 #

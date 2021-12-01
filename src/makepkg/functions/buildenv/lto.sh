@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   lto.sh - Specify flags for building a package with link-time
 #            optimisation

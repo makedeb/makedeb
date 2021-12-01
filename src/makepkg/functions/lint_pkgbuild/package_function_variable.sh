@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   package_function_variable.sh - Check variables inside the package function.
 #

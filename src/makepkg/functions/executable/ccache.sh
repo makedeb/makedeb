@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   ccache.sh - Confirm presence of ccache binary
 #

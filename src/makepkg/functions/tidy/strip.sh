@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   strip.sh - Strip debugging symbols from binary files
 #

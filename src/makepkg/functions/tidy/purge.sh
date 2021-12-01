@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   purge.sh - Remove unwanted files from the package
 #

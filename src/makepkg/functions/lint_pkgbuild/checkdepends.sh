@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   checkdepends.sh - Check the 'checkdepends' array conforms to requirements.
 #

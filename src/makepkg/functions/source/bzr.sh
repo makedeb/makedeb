@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   bzr.sh - function for handling the download and "extraction" of Bazaar sources
 #

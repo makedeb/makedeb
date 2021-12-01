@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   generate_checksum.sh - functions for generating source checksums
 #

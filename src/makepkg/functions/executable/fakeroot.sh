@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   fakeroot.sh - Confirm presence of fakeroot binary
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   missing_backup.sh - Warn about missing files in the backup array
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   paths.sh - Check that pathname components do not contain odd characters
 #

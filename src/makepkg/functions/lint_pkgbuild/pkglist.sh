@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   pkglist.sh - Check the packages selected to build exist.
 #

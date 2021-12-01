@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   build_references.sh - Warn about files containing references to build directories
 #

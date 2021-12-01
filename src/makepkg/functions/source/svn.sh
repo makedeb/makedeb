@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   svn.sh - function for handling the download and "extraction" of Subversion sources
 #

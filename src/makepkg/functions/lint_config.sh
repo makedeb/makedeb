@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   lint_config.sh - functions for checking for makepkg.conf errors
 #

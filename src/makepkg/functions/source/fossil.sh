@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   fossil.sh - function for handling the download and extraction of Fossil sources
 #

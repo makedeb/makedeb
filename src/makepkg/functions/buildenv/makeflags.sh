@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   makeflags.sh - Clear user-specified makeflags if requested
 #

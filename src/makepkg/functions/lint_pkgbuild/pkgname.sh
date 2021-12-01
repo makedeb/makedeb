@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   pkgname.sh - Check the 'pkgname' variable conforms to requirements.
 #

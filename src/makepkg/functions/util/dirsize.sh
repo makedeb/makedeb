@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   dirsize.sh - calculate size of all files in a directory
 #

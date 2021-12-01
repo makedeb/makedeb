@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   options.sh - Check the 'options' array conforms to requirements.
 #

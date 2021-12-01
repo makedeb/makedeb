@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   compiler.sh - CCache and DistCC compilation
 #   ccache - Cache compilations and reuse them to save time on repetitions

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   ext.sh - Check that source/package extensions have valid prefixes
 #

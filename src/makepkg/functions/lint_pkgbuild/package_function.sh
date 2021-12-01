@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   package_function.sh - Check that required package functions exist.
 #

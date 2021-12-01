@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   emptydirs.sh - Remove empty directories from the package
 #

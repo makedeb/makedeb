@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   buildflags.sh - Clear user-specified buildflags if requested
 #

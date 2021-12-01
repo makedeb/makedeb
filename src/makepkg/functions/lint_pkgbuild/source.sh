@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   source.sh - Check the 'source' array is not sparse.
 #

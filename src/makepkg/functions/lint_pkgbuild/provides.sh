@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   provides.sh - Check the 'provides' array conforms to requirements.
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   distcc.sh - Confirm presence of distcc binary
 #

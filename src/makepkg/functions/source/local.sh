@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   local.sh - function for handling the "download" of local sources
 #

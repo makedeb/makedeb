@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   install.sh - Check the files in the 'install' array exist.
 #

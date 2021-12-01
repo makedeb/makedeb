@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   file.sh - function for handling the download and extraction of source files
 #

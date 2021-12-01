@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   parseopts.sh - getopt_long-like parser
 #

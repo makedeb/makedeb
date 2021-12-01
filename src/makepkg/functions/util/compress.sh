@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   compress.sh - functions to compress archives in a uniform manner
 #

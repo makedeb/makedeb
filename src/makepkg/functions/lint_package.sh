@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   lint_package.sh - functions for checking for packaging errors
 #

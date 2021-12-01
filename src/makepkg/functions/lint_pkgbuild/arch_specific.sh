@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   arch_specific.sh - Check that arch specific variables can be arch specific.
 #

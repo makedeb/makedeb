@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   option.sh - functions to test if build/packaging options are enabled
 #

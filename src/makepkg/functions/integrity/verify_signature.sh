@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   verify_signature.sh - functions for checking PGP signatures
 #

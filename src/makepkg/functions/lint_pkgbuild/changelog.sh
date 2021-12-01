@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   changelog.sh - Check the files in the 'changelog' array exist.
 #

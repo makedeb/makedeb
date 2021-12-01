@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   error.sh.in - error variable definitions for makepkg
 #

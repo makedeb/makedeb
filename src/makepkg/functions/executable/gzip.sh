@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   gzip.sh - Confirm presence of gzip binary
 #

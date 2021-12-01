@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   config.sh - functions for handling makepkg config files
 #

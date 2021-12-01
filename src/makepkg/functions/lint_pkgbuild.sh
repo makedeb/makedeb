@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   lint_pkgbuild.sh - functions for detecting PKGBUILD errors
 #

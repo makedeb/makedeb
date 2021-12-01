@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   arch.sh - Check the 'arch' array conforms to requirements.
 #

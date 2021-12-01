@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   variable.sh - Check that variables are or are not arrays as appropriate
 #

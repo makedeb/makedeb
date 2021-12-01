@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   backup.sh - Check the 'backup' array conforms to requirements.
 #

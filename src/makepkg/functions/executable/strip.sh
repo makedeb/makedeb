@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   strip.sh - Confirm presence of strip binary
 #

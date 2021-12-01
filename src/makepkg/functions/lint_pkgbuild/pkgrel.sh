@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   pkgrel.sh - Check the 'pkgrel' variable conforms to requirements.
 #

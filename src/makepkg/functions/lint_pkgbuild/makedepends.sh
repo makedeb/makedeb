@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   makedepends.sh - Check the 'makedepends' array conforms to requirements.
 #

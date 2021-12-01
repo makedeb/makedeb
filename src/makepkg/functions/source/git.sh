@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   git.sh - function for handling the download and "extraction" of Git sources
 #

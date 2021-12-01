@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   generate_signature.sh - functions for generating PGP signatures
 #

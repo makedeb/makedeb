@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   pacman.sh - Confirm presence of pacman binary
 #

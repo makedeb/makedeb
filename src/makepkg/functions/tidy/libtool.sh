@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   libtool.sh - Remove libtool files from the package
 #

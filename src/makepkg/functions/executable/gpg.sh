@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   gpg.sh - Confirm presence of gpg binary
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   epoch.sh - Check the 'epoch' variable conforms to requirements.
 #

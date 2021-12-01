@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   source_date_epoch.sh - Check that reproducible builds timestamp is valid
 #

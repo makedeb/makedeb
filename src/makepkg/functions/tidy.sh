@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   tidy.sh - functions for modifying/removing installed files before
 #   package creation

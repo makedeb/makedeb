@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   hg.sh - function for handling the download and "extraction" of Mercurial sources
 #

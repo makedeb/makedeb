@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   staticlibs.sh - Remove static library files from the package
 #

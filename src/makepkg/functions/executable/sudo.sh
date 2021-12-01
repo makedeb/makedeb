@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   sudo.sh - Confirm presence of sudo binary
 #

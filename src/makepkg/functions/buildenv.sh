@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   buildenv.sh - functions for altering the build environment before
 #   compilation

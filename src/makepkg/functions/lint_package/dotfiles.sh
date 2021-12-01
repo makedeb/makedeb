@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   dotfiles.sh - check for dotfiles in the package root
 #

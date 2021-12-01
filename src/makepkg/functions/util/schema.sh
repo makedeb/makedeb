@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   schema.sh - declare specific groups of pkgbuild variables
 #

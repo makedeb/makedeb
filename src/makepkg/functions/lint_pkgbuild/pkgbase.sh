@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   pkgbase.sh - Check the 'pkgbase' variable conforms to requirements.
 #

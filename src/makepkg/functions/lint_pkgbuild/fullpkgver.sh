@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   fullpkgver.sh - Check whether a full version conforms to requirements.
 #

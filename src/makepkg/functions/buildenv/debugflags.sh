@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   debugflags.sh - Specify flags for building a package with debugging
 #   symbols

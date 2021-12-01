@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   message.sh - functions for outputting messages in makepkg
 #

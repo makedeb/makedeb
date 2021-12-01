@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   checksum.sh - Confirm presence of binaries for checksum operations
 #

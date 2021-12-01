@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   vcs.sh - Confirm presence of binaries for VCS operations
 #

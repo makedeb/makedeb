@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   source.sh - functions for downloading and extracting sources
 #

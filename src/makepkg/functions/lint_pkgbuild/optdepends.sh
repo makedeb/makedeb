@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   optdepends.sh - Check the 'optdepends' array conforms to requirements.
 #

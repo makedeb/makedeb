@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   verify_checksum.sh - functions for checking source checksums
 #

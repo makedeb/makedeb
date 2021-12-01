@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   conflicts.sh - Check the 'conflicts' array conforms to requirements.
 #

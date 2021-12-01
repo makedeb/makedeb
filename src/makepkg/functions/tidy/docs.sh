@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 #   docs.sh - Remove documentation files from the package
 #
