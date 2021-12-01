@@ -25,5 +25,5 @@ echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 
 # Create and push release
-git tag -f "v${version}-${release_type}" -am ""
+git tag -f "v${version}-${release_type}" -am "Bump version to v${version}"
 git push -f "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"
