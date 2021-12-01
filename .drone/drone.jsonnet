@@ -56,7 +56,7 @@ local buildNative(package_name, tag) = {
   name: "build-native-" + tag,
 	kind: "pipeline",
 	type: "docker",
-	trigger: {branch: [tag]}
+	trigger: {branch: [tag]},
 	depends_on: ["create-tag-" + tag],
 	steps: [
 	  {
@@ -134,9 +134,9 @@ local sendBuildNotification(tag) = {
 	buildAndPublish("makedeb-beta", "beta", "makedeb-beta"),
 	buildAndPublish("makedeb-alpha", "alpha", "makedeb-alpha"),
 
-	buildNative("makedeb", "stable", "makedeb"),
-	buildNative("makedeb-beta", "beta", "makedeb-beta"),
-	buildNative("makedeb-alpha", "alpha", "makedeb-alpha")
+	buildNative("makedeb", "stable"),
+	buildNative("makedeb-beta", "beta"),
+	buildNative("makedeb-alpha", "alpha"),
 
 	userRepoPublish("makedeb", "stable", "mpr"),
 	userRepoPublish("makedeb-beta", "beta", "mpr"),
