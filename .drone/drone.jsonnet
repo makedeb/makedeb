@@ -64,8 +64,9 @@ local buildNative(package_name, tag) = {
 			image: "ubuntu:20.04",
 			environment: {release_type: tag, package_name: package_name},
 			commands: [
-			  "apt-get install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq",
-			  ".drone/scripts/build-native.sh"
+                "apt-get update",
+                "apt-get install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq",
+                ".drone/scripts/build-native.sh"
 			]
 		}
 	]
