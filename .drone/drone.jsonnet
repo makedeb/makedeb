@@ -109,10 +109,11 @@ local sendBuildNotification(tag) = {
 		status: ["success", "failure"]
 	},
 	depends_on: [
-		"create-tag-" + tag,
-		"build-and-publish-" + tag,
-		"mpr-publish-" + tag,
-		"aur-publish-" + tag
+        "create-tag-" + tag,
+        "build-and-publish-" + tag,
+        "build-native-" + tag,
+        "mpr-publish-" + tag,
+        "aur-publish-" + tag
 	],
 	steps: [{
 		name: "send-notification",
