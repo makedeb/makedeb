@@ -32,10 +32,9 @@ DEBFULLNAME="Leo Puvilland"
 DEBEMAIL="leo@craftcat.dev"
 
 rm debian/changelog
-touch debian/changelog
 
 if [ $version != $DEBVERSION ]; then
-  dch -D unstable -v $version "Initial release (Closes: #998039)."
+  dch --create --package makedeb -D unstable -v $version "Initial release (Closes: #998039)."
 fi
 
 # Create and push release
