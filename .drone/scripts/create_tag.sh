@@ -21,22 +21,7 @@ echo "Host ${github_url}" | tee "/${HOME}/.ssh/config"
 echo "  Hostname ${github_url}" | tee -a "/${HOME}/.ssh/config"
 echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
-# Get current package version
-version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
-
-# Update debian version
-DEBVERSION="$(cat debian/changelog | cut -f2 -d" " - | grep "(" | cut -f2 -d"(" | cut -f1 -d")")"
-
-# Setup env vars needed
-DEBFULLNAME="Leo Puvilland"
-DEBEMAIL="leo@craftcat.dev"
-
-rm debian/changelog
-
-if [ $version != $DEBVERSION ]; then
-  dch --create --package makedeb -D unstable -v $version "Initial release (Closes: #998039)."
-fi
-
 # Create and push release
+version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 git tag -f "v${version}-${release_type}" -am "Bump version to v${version}"
 git push -f "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"

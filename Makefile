@@ -48,9 +48,11 @@ package:
 	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb-makepkg/{}' \;
 	cd ../
 	
+ifneq ("$(TARGET)", "aur")
 	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'
 	install -Dm 755 ./makepkg-template '$(DESTDIR)/usr/bin/makepkg-template'
-	
+endif
+
 	cd ../../
 	
 	# man pages
@@ -63,5 +65,5 @@ package:
 # This is for use by dpkg-buildpackage. Please use prepare and package instead.
 install:
 	$(MAKE) prepare RELEASE=alpha TARGET=apt
-	$(MAKE) package DESTDIR="$(DESTDIR)"
+	$(MAKE) package DESTDIR="$(DESTDIR)" TARGET=apt
 

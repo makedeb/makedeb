@@ -25,5 +25,5 @@ prepare() {
 
 package() {
 	cd makedeb/
-	make package DESTDIR="${pkgdir}"
+	make package DESTDIR="${pkgdir}" TARGET="${_target}"
 }

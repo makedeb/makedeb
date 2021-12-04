@@ -7,9 +7,7 @@ The project utilizes a few Git hooks to help make things a bit easier when chang
 To install the Git hooks, you can run the following from inside of your cloned repository:
 
 ```sh
-gitdir="$(git rev-parse --show-toplevel)"
-
-ln -s "${gitdir}/.githooks/"* "${gitdir}/.git/hooks/"
+git config --local core.hooksPath "$(git rev-parse --show-toplevel)/.githooks/"
 ```
 
 # Cody styling
