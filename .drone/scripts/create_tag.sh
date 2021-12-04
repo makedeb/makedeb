@@ -22,5 +22,6 @@ echo "  Hostname ${github_url}" | tee -a "/${HOME}/.ssh/config"
 echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
 # Create and push release
+version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
 git tag -f "v${version}-${release_type}" -am "Bump version to v${version}"
 git push -f "ssh://git@${github_url}/makedeb/makedeb" "v${version}-${release_type}"
