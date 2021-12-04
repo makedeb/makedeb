@@ -1,0 +1,60 @@
+name: Build makedeb
+on:
+ pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      TARGET: local
+      RELEASE: alpha
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install deps
+        run: |
+         sudo apt update
+         DEBIAN_FRONTEND=noninteractive sudo apt install wget gpg sudo -y
+         wget -qO - "https://proget.hunterwittenborn.com/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null
+         echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://proget.hunterwittenborn.com/ makedeb main" | sudo tee /etc/apt/sources.list.d/makedeb.list
+         sudo apt update
+         sudo apt install makedeb-alpha -y
+      - name: Generate PKGBUILD and build with makedeb
+        run: |
+          git tag -f "v$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')-alpha"
+          cd PKGBUILD
+          ./pkgbuild.sh > PKGBUILD
+          PACMAN='/usr/bin/true' makedeb -s --no-confirm
+          ls -alt
+          mv -v makedeb-alpha_$(cat ../.data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')_all.deb ../makedeb.deb
+      - name: Upload build output
+        uses: actions/upload-artifact@v2
+        with:
+          name: makedeb-build
+          path: "makedeb.deb"
+
+  build-native:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq
+      - name: add VERSION env var
+        run: |
+          cat << EOF > .env
+          VERSION=$(cat .data.json | jq -r '.current_pkgver')
+          EOF
+      - name: tar directory into source tarball
+        run: source .env && tar -cJf ../makedeb_$VERSION.orig.tar.xz .
+      - name: build makedeb using native packaging
+        run: source .env && ls .. && debuild -us -uc
+      - name: Move artifact to current dir
+        run: mv -v ../*.deb ./makedeb.deb
+      - name: Upload build output
+        uses: actions/upload-artifact@v2
+        with:
+          name: makedeb-native-build
+          path: "makedeb.deb"

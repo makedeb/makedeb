@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
-set -exuo pipefail
+set -e
+
+git fetch
 sudo chown 'makedeb:makedeb' ./ -R
 
-# Get variables
-pkgver="$(cat 'src/PKGBUILD' | grep '^pkgver=' | awk -F '=' '{print $2}')"
+# Build makedeb.
+export TARGET=apt
+export RELEASE="${release_type}"
 
-# Copy PKGBUILD
-rm 'src/PKGBUILD'
-cp "PKGBUILDs/LOCAL/${release_type^^}.PKGBUILD" "src/PKGBUILD"
+cd PKGBUILD/
+./pkgbuild.sh > PKGBUILD
 
-# Configure PKGBUILD
-sed -i "s|pkgver={pkgver}|pkgver=${pkgver}|" 'src/PKGBUILD'
-
-# Build makedeb
-cd src
-./makedeb.sh --sync-deps --no-confirm
+PACMAN='/usr/bin/true' makedeb -s --no-confirm

@@ -1,0 +1,5 @@
+makedeb (8.4.2-1) unstable; urgency=medium
+
+  * Initial release (Closes: #998039).
+
+ -- Leo Puvilland <leo@craftcat.dev>  Wed, 01 Dec 2021 10:56:35 -0800
