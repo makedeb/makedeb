@@ -66,5 +66,5 @@ _makedeb() {
 			COMPREPLY=('-A -d -F -g -h -H -i -V -r -s')
 			;;
 	esac
-} &&
+}
 complete -o filenames -o bashdefault -F _makedeb makedeb
