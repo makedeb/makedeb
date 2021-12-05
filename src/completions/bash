@@ -59,11 +59,11 @@ _makedeb() {
 
 	case "$cur" in
 		-*)
-			COMPREPLY=( $( compgen -W '--ignore-arch --no-deps --file --gen-integ --help --help --field --install --version --rm-deps --sync-deps --print-control --print-srcinfo --skip-pgp-check --verbose --as-deps --no-confirm' -- "$cur" ) )
+			COMPREPLY=('--ignore-arch --no-deps --file --gen-integ --help --help --field --install --version --rm-deps --sync-deps --print-control --print-srcinfo --skip-pgp-check --verbose --as-deps --no-confirm')
 			;;
 
 		*)
-			COMPREPLY=( $( compgen -W '-A -d -F -g -h -H -i -V -r -s' -- "$cur" ) )
+			COMPREPLY=('-A -d -F -g -h -H -i -V -r -s')
 			;;
 	esac
 } &&
