@@ -23,7 +23,8 @@ jobs:
          sudo apt install makedeb-alpha -y
       - name: Generate PKGBUILD and build with makedeb
         run: |
-          git tag -f "v$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')-alpha"
+          # No idea why this returns 1 even if it works
+          git tag -f "v$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')-alpha" || true
           cd PKGBUILD
           ./pkgbuild.sh > PKGBUILD
           PACMAN='/usr/bin/true' makedeb -s --no-confirm
