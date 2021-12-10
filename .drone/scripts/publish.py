@@ -21,7 +21,7 @@ if commit_branch == "stable":
 else:
     package_name = f"makedeb-{commit_branch}"
 
-filename = f"{package_name}_{pkgver}-{pkgrel}_all.deb"
+filename = f"{package_name}_{pkgver}-{pkgrel}_amd64.deb"
 
 print("INFO: Uploading package...")
 
