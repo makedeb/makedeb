@@ -8,7 +8,7 @@ Homepage: https://makedeb.hunterwittenborn.com
 Vcs-Browser: https://github.com/makedeb/makedeb
 Vcs-Git: https://github.com/makedeb/makedeb.git -b alpha
 
-Package: makedeb
+Package: $${pkgname}
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, binutils, file, lsb-release, asciidoctor, python3-apt, python3
 Conflicts: makedeb-makepkg

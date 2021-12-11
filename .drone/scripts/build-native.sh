@@ -17,6 +17,9 @@ if [ $version != $DEBVERSION ]; then
   dch --create --package makedeb -D unstable -v $version "Initial release (Closes: #998039)."
 fi
 
+# Set package name
+sed -i "s|\$\${pkgname}|${pkgname}| debian/control
+
 git fetch
 export NEEDED_VERSION="$(cat .data.json | jq -r '.current_pkgver')"
 tar -cJf "../makedeb_$NEEDED_VERSION.orig.tar.xz" .
