@@ -16,10 +16,10 @@ with open(".data.json") as file:
     pkgver = json["current_pkgver"]
     pkgrel = json["current_pkgrel"]
 
- if commit_branch == "stable":
-     package_name = "makedeb"
- else:
-     package_name = f"makedeb-{commit_branch}"
+if commit_branch == "stable":
+    package_name = "makedeb"
+else:
+    package_name = f"makedeb-{commit_branch}"
 
 filename = f"{package_name}_{pkgver}-{pkgrel}_all.deb"
 
