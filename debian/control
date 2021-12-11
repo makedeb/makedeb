@@ -9,7 +9,7 @@ Vcs-Browser: https://github.com/makedeb/makedeb
 Vcs-Git: https://github.com/makedeb/makedeb.git -b alpha
 
 Package: $${pkgname}
-Architecture: any
+Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, binutils, file, lsb-release, asciidoctor, python3-apt, python3
 Conflicts: makedeb-makepkg
 Description: The modern packaging tool for Debian archives.
