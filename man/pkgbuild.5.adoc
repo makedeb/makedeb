@@ -2,6 +2,7 @@
 :doctype: manpage
 :hardbreaks:
 :manmanual: makedeb manual pages
+:mansource: MAKEDEB $${MAKEDEB_VERSION}
 
 == NAME
 PKGBUILD - file format used by makedeb(8)
@@ -147,10 +148,10 @@ See https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#summary-o
 *postinst (optional, function, array)*::
   A string that specifies the path to a script to execute after a package is unpacked onto a user's system.
 
-*postinst (optional, function, array)*::
+*prerm (optional, function, array)*::
   A string that specifies the path to a script to execute before a package is removed from a user's system.
 
-*postinst (optional, function, array)*::
+*postrm (optional, function, array)*::
   A string that specifies the path to a script to execute after a package is removed from a user's system.
 
 === OTHER

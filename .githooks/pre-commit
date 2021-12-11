@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+import subprocess
+import logging
+import json
+
+from os import chdir, environ, remove
+
+
+def _run_command(command_args, *args, **kwargs):
+    command = subprocess.run(command_args, *args, **kwargs, stdout=subprocess.PIPE)
+
+    if command.returncode != 0:
+        command_string = " ".join(command_args)
+        logging.error(f"Failed to run command '{command_string}'")
+        exit(1)
+
+    return command.stdout.decode()
+
+
+def _read_config(repo_path):
+    with open(f"{repo_path}/.data.json", "r") as file:
+        data = file.read()
+
+        try:
+            return json.loads(data)
+        except json.decoder.JSONDecodeError:
+            logging.error("Data file '.data.json' isn't valid.")
+            exit(1)
+
+
+def main():
+    # Set up logger.
+    logging.basicConfig(format="(Pre-Commit Hook, %(levelname)s): %(message)s")
+    logging.root.setLevel(logging.INFO)
+    changed_files = []
+
+    # Declare man files.
+    man_files = {
+        "man/makedeb.8.adoc": "makedeb_man_epoch",
+        "man/pkgbuild.5.adoc": "pkgbuild_man_epoch",
+    }
+
+    # Change current directory to root of Git repository.
+    repo_path = _run_command(["git", "rev-parse", "--show-toplevel"]).strip()
+    chdir(repo_path)
+
+    # Read data file.
+    repo_data = _read_config(repo_path)
+
+    # Get list of files being added in the current commit.
+    staged_files = _run_command(["git", "diff", "--name-only", "--staged"]).splitlines()
+
+    # Check if recorded epochs need updated for any man pages.
+    for i in man_files:
+        if i in staged_files:
+            epoch_key = man_files[i]
+            current_epoch = _run_command(["stat", "--format=%Z", "--", i]).strip()
+
+            if repo_data[epoch_key] != current_epoch:
+                logging.info(f"Updating recorded epoch for '{i}'...")
+                changed_files += [".data.json"]
+                repo_data[epoch_key] = current_epoch
+
+    # Check if we need to update the version in 'debian/changelog'.
+    if (".data.json" in staged_files) and ("debian/changelog" not in staged_files):
+        environ["DEBFULLNAME"] = "Leo Puvilland"
+        environ["DEBEMAIL"] = "leo@craftcat.dev"
+
+        logging.info("Updating version in 'debian/changelog'...")
+        changed_files += ["debian/changelog"]
+        remove("debian/changelog")
+        _run_command(
+            [
+                "dch",
+                "--create",
+                "--package",
+                "makedeb",
+                "-D",
+                "unstable",
+                "-v",
+                repo_data["current_pkgver"] + "-" + repo_data["current_pkgrel"],
+                "Initial release (Closes: #998039).",
+            ]
+        )
+
+    # If we updated '.data.json', write the file.
+    if ".data.json" in staged_files:
+        with open(".data.json", "w") as file:
+            file.write(json.dumps(repo_data, indent="    "))
+
+    # If we updated any files, add them to the current commit.
+    if changed_files != []:
+        logging.info("Adding changed files to current commit...")
+        _run_command(["git", "add", "--"] + list(set(changed_files)))
+
+
+if __name__ == "__main__":
+    main()

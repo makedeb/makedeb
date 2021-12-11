@@ -1,0 +1,6 @@
+libmakepkgdir=/usr/share/makepkg
+
+Name: libmakepkg
+Description: Arch Linux package build utility
+URL: https://archlinux.org/pacman/
+Version: 6.0.0

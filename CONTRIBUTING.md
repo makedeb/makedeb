@@ -1,46 +1,18 @@
-# Code styling
-1\. We use double spaces for indentation. Note that this means you **CAN NOT** use tabs. Some editors also have the ability to auto-indent on spaces - just make sure it saves to the file as double spaces and not tabs.
+# Setting up your local system
+You'll first need to have forked and cloned the repository of course. Instructions for doing such are plethorous on the internet, but if you find yourself still needing help, feel free to hop into [#makedeb-contributing:hunterwittenborn.com](https://matrix.to/#/#makedeb-contributing:hunterwittenborn.com).
 
-2\. Lines for nested indentations should not be separated by spaces.
+## Setting up Git hooks
+The project utilizes a few Git hooks to help make things a bit easier when changing certain files, with those notably being man pages at current.
 
-I.e. **DO NOT** do this:
+To install the Git hooks, you can run the following from inside of your cloned repository:
 
 ```sh
-while true; do
-
-  if [[ "${i}" == "e" ]]; then
-    echo "yo"
-
-    echo "whoah"
-  fi
-
-done
+git config --local core.hooksPath "$(git rev-parse --show-toplevel)/.githooks/"
 ```
 
-But rather do this:
-```sh
-while true; do
-  if [[ "${i}" == "e" ]]; then
-    echo "yo"
+# Cody styling
+When creating any kind of function, create its file inside of the `src/functions/` folder with a suffix of `.sh`. Function files should be isolated and only contain a single function.
 
-    echo "whoah"
-  fi
-done
-```
+All files inside of `src/functions/` are squished into a single file, alongside the main `src/makedeb.sh` file, at build time, so it is important that function files only contain the function data, and nothing else.
 
-Outside of indenting, spacing between lines should happen on a case by case basis - just make sure you're grouping logical pieces of code with each other.
-
-3\. In general, if it makes sense to put something in a function, put it inside a function (see the directory layout in the next guideline for specific information on where to place them).
-
-4\. Functions should also be isolated by themselves inside of files. The name of the file should also match the name of the contained function.
-
-5\. Any lines that should be removed from `makedeb.sh` or function files should be appended with `# REMOVE AT PACKAGING`. The beginning of `makedeb.sh` contains a good example of such, which contains a chunk of code for sourcing functions from function files during build time.
-
-Note that you shouldn't use this to improve styling in the built package, but rather only to omit commands.
-
-# Directory layout
-1\. All functions should be placed in the `src/functions/` folder.
-
-2\. If your function is specific to a certain aspect of makedeb, feel free to put the function inside of a subfolder as well (see `src/functions/control_file/` as an example).
-
-3\. All functions are automatically sourced before makedeb starts, so all that's needed to run a function is to call its name.
+If for whatever reason you need to remove any lines of code at build time (such is the case for the function file squishing mentioned above), add the `# COMP_RM` suffix at the end of the relevant lines, all of which get removed during builds.
