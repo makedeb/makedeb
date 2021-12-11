@@ -36,6 +36,7 @@ package:
 	find functions/ ./main.sh -type f -exec cat '{}' \; >> "$(DESTDIR)/usr/bin/makedeb"
 	chmod 755 "$(DESTDIR)/usr/bin/makedeb"
 	
+	install -Dm 644 ./completions/makedeb.bash '$(DESTDIR)/usr/share/bash-completion/completions/makedeb'
 	cd ./utils
 	find ./ -type f -exec install -Dm 755 '{}' "$(DESTDIR)/usr/share/makedeb/utils/{}" \;
 	cd ../../../
