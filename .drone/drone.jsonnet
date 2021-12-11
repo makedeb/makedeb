@@ -52,26 +52,6 @@ local buildAndPublish(package_name, tag, image_name) = {
 	]
 };
 
-local buildNative(package_name, tag) = {
-  name: "build-native-" + tag,
-	kind: "pipeline",
-	type: "docker",
-	trigger: {branch: [tag]},
-	depends_on: ["create-tag-" + tag],
-	steps: [
-	  {
-		  name: "build-native-debian-package",
-			image: "ubuntu:20.04",
-			environment: {release_type: tag, package_name: package_name},
-			commands: [
-                "apt-get update",
-                "apt-get install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq",
-                ".drone/scripts/build-native.sh"
-			]
-		}
-	]
-};
-
 local userRepoPublish(package_name, tag, user_repo) = {
 	name: user_repo + "-publish-" + tag,
 	kind: "pipeline",
@@ -111,7 +91,6 @@ local sendBuildNotification(tag) = {
 	depends_on: [
         "create-tag-" + tag,
         "build-and-publish-" + tag,
-        "build-native-" + tag,
         "mpr-publish-" + tag,
         "aur-publish-" + tag
 	],
@@ -135,10 +114,6 @@ local sendBuildNotification(tag) = {
 	buildAndPublish("makedeb", "stable", "makedeb"),
 	buildAndPublish("makedeb-beta", "beta", "makedeb-beta"),
 	buildAndPublish("makedeb-alpha", "alpha", "makedeb-alpha"),
-
-	buildNative("makedeb", "stable"),
-	buildNative("makedeb-beta", "beta"),
-	buildNative("makedeb-alpha", "alpha"),
 
 	userRepoPublish("makedeb", "stable", "mpr"),
 	userRepoPublish("makedeb-beta", "beta", "mpr"),
