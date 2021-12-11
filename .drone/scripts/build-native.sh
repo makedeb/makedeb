@@ -5,7 +5,7 @@ stable_conflicts=('makedeb-beta' 'makedeb-alpha')
 beta_conflicts=('makedeb' 'makedeb-alpha')
 alpha_conflicts=('makedeb' 'makedeb-beta')
 conflicts="${release_type}_conflicts[@]"
-conflicts="${!conflicts}"
+conflicts="$(echo "${!conflicts}" | sed 's| |, |g')"
 
 # Set package information.
 sed -i "s|\$\${pkgname}|${pkgname}|" debian/control
