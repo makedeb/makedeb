@@ -21,7 +21,7 @@ with open(".data.json") as file:
  else:
      package_name = f"makedeb-{commit_branch}"
 
-filename = f"{package_name}_{pkgver}-{pkgrel}_amd64.deb"
+filename = f"{package_name}_{pkgver}-{pkgrel}_all.deb"
 
 print("INFO: Uploading package...")
 
