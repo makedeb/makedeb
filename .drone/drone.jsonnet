@@ -14,7 +14,7 @@ local createTag(tag) = {
 
 		commands: [
 			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
-			"sudo -E apt-get upgrade jq git ubuntu-dev-tools -yq",
+			"sudo -E apt-get upgrade jq git -yq",
 			".drone/scripts/create_tag.sh"
 		]
 	}]
@@ -22,7 +22,7 @@ local createTag(tag) = {
 
 
 
-local buildAndPublish(package_name, tag, image_name) = {
+local buildAndPublish(pkgname, tag) = {
 	name: "build-and-publish-" + tag,
 	kind: "pipeline",
 	type: "docker",
@@ -31,12 +31,15 @@ local buildAndPublish(package_name, tag, image_name) = {
 	steps: [
 		{
 			name: "build-debian-package",
-			image: "proget.hunterwittenborn.com/docker/makedeb/" + image_name + ":ubuntu-focal",
-			environment: {release_type: tag, package_name: package_name},
+			image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+			environment: {
+                release_type: tag,
+                pkgname: pkgname
+            },
 			commands: [
-				"sudo -E apt-get install tzdata git jq sudo sed -yq",
-				"sudo chown 'makedeb:makedeb' ./ -R",
-				".drone/scripts/build.sh"
+				"sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -yq",
+				"sudo chown 'makedeb:makedeb' ../ -R",
+				".drone/scripts/build-native.sh"
 			]
         	},
 
@@ -47,26 +50,6 @@ local buildAndPublish(package_name, tag, image_name) = {
 			commands: [
 				"sudo -E apt-get upgrade python3 python3-requests -yq",
 				".drone/scripts/publish.py"
-			]
-		}
-	]
-};
-
-local buildNative(package_name, tag) = {
-  name: "build-native-" + tag,
-	kind: "pipeline",
-	type: "docker",
-	trigger: {branch: [tag]},
-	depends_on: ["create-tag-" + tag],
-	steps: [
-	  {
-		  name: "build-native-debian-package",
-			image: "ubuntu:20.04",
-			environment: {release_type: tag, package_name: package_name},
-			commands: [
-                "apt-get update",
-                "apt-get install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq",
-                ".drone/scripts/build-native.sh"
 			]
 		}
 	]
@@ -111,7 +94,6 @@ local sendBuildNotification(tag) = {
 	depends_on: [
         "create-tag-" + tag,
         "build-and-publish-" + tag,
-        "build-native-" + tag,
         "mpr-publish-" + tag,
         "aur-publish-" + tag
 	],
@@ -132,13 +114,9 @@ local sendBuildNotification(tag) = {
 	createTag("beta"),
 	createTag("alpha"),
 
-	buildAndPublish("makedeb", "stable", "makedeb"),
-	buildAndPublish("makedeb-beta", "beta", "makedeb-beta"),
-	buildAndPublish("makedeb-alpha", "alpha", "makedeb-alpha"),
-
-	buildNative("makedeb", "stable"),
-	buildNative("makedeb-beta", "beta"),
-	buildNative("makedeb-alpha", "alpha"),
+	buildAndPublish("makedeb", "stable"),
+	buildAndPublish("makedeb-beta", "beta"),
+	buildAndPublish("makedeb-alpha", "alpha"),
 
 	userRepoPublish("makedeb", "stable", "mpr"),
 	userRepoPublish("makedeb-beta", "beta", "mpr"),
