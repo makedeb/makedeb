@@ -6,7 +6,7 @@ Build-Depends: debhelper-compat (= 12), binutils, file, lsb-release, asciidoctor
 Standards-Version: 4.6.0.1
 Homepage: https://makedeb.hunterwittenborn.com
 Vcs-Browser: https://github.com/makedeb/makedeb
-Vcs-Git: https://github.com/makedeb/makedeb.git -b alpha
+Vcs-Git: https://github.com/makedeb/makedeb.git -b stable
 
 Package: $${pkgname}
 Architecture: all
