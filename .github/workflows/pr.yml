@@ -16,6 +16,8 @@ jobs:
           EOF
       - name: tar directory into source tarball
         run: source .env && tar -cJf ../makedeb_$VERSION.orig.tar.xz .
+      - name: set package name
+        run: source .env && sed -i "s|\$\${pkgname}|${pkgname}|" debian/control
       - name: build makedeb using native packaging
         run: source .env && ls .. && debuild -us -uc
       - name: Move artifact to current dir
