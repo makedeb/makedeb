@@ -1,7 +1,8 @@
 Source: makedeb
 Section: utils
 Priority: optional
-Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>, Leo Puvilland <leo@craftcat.dev>
+Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Uploaders: Leo Puvilland <leo@craftcat.dev>
 Build-Depends: debhelper-compat (= 12), binutils, file, lsb-release, asciidoctor, python3-apt, git, jq, python3
 Standards-Version: 4.6.0.1
 Homepage: https://makedeb.hunterwittenborn.com
