@@ -22,7 +22,7 @@ local createTag(tag) = {
 
 
 
-local buildAndPublish(package_name, tag, image_name) = {
+local buildAndPublish(pkgname, tag) = {
 	name: "build-and-publish-" + tag,
 	kind: "pipeline",
 	type: "docker",
@@ -31,8 +31,11 @@ local buildAndPublish(package_name, tag, image_name) = {
 	steps: [
 		{
 			name: "build-debian-package",
-			image: "proget.hunterwittenborn.com/docker/makedeb/" + image_name + ":ubuntu-focal",
-			environment: {release_type: tag, package_name: package_name},
+			image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+			environment: {
+                release_type: tag,
+                pkgname: pkgname
+            },
 			commands: [
 				"sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -yq",
 				"sudo chown 'makedeb:makedeb' ../ -R",
@@ -111,9 +114,9 @@ local sendBuildNotification(tag) = {
 	createTag("beta"),
 	createTag("alpha"),
 
-	buildAndPublish("makedeb", "stable", "makedeb"),
-	buildAndPublish("makedeb-beta", "beta", "makedeb-beta"),
-	buildAndPublish("makedeb-alpha", "alpha", "makedeb-alpha"),
+	buildAndPublish("makedeb", "stable"),
+	buildAndPublish("makedeb-beta", "beta"),
+	buildAndPublish("makedeb-alpha", "alpha"),
 
 	userRepoPublish("makedeb", "stable", "mpr"),
 	userRepoPublish("makedeb-beta", "beta", "mpr"),
