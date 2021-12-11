@@ -35,7 +35,7 @@ local buildAndPublish(package_name, tag, image_name) = {
 			environment: {release_type: tag, package_name: package_name},
 			commands: [
 				"sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools -yq",
-				"sudo chown 'makedeb:makedeb' ./ -R",
+				"sudo chown 'makedeb:makedeb' ../ -R",
 				".drone/scripts/build-native.sh"
 			]
         	},
