@@ -3,7 +3,7 @@ Section: utils
 Priority: optional
 Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 Uploaders: Leo Puvilland <leo@craftcat.dev>
-Build-Depends: debhelper-compat (= 12), binutils, file, lsb-release, asciidoctor, python3-apt, git, jq, python3
+Build-Depends: debhelper-compat (= 12), asciidoctor, git, jq, make
 Standards-Version: 4.6.0.1
 Homepage: https://makedeb.hunterwittenborn.com
 Vcs-Browser: https://github.com/makedeb/makedeb
@@ -11,6 +11,6 @@ Vcs-Git: https://github.com/makedeb/makedeb.git -b stable
 
 Package: $${pkgname}
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, binutils, file, lsb-release, asciidoctor, python3-apt, python3
+Depends: ${shlibs:Depends}, ${misc:Depends}, binutils, libarchive-tools, file, lsb-release, python3-apt, python3
 Conflicts: makedeb-makepkg, makedeb-makepkg-beta, makedeb-makepkg-alpha, $${conflicts}
 Description: The modern packaging tool for Debian archives.
