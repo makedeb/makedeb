@@ -13,6 +13,7 @@ local createTag(tag) = {
 		},
 
 		commands: [
+            "sudo -E apt-get install curl -y",
 			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
 			"sudo -E apt-get upgrade jq git -yq",
 			".drone/scripts/create_tag.sh"
@@ -76,6 +77,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 		},
 
 		commands: [
+            "sudo -E apt-get install curl -y",
 			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
 			"sudo apt-get install sudo openssh-client sed git jq -yq",
 			".drone/scripts/user-repo.sh"
