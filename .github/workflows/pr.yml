@@ -10,7 +10,8 @@ jobs:
       - name: Set directory permissions
         run: sudo chown 'makedeb:makedeb' ../ -R
       - name: Checkout
-        uses: actions/checkout@v2
+        run: |
+          git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
       - name: Build
         run: |
           export DEBIAN_FRONTEND=noninteractive release_type=alpha pkgname=makedeb-alpha
