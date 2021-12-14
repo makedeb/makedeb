@@ -7,13 +7,14 @@ jobs:
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
     steps:
+      - name: Set directory permissions
+        run: sudo chown 'makedeb:makedeb' ../ -R
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
           export DEBIAN_FRONTEND=noninteractive release_type=alpha pkgname=makedeb-alpha
           sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
-          sudo chown 'makedeb:makedeb' ../ -R
           .drone/scripts/build-native.sh
       - name: Move built .deb to current directory
         run: mv -v ../*.deb ./makedeb.deb
