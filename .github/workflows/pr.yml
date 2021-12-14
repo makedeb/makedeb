@@ -3,12 +3,13 @@ on:
  pull_request:
 jobs:
   build:
-    runs-on: 
+    runs-on: ubuntu-latest
+    container:
+      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
-        uses: docker://proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
         run: |
           export DEBIAN_FRONTEND=noninteractive release_type=alpha pkgname=makedeb-alpha
           sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
