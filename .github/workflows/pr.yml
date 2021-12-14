@@ -9,13 +9,19 @@ jobs:
     steps:
       - name: Set directory permissions
         run: sudo chown 'makedeb:makedeb' ../ -R
+      - name: Install needed dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
       - name: Checkout
         run: |
-          git clone "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+          git init
+          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+          git fetch origin
+          git checkout alpha
       - name: Build
         run: |
-          export DEBIAN_FRONTEND=noninteractive release_type=alpha pkgname=makedeb-alpha
-          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
+          export release_type=alpha pkgname=makedeb-alpha
           .drone/scripts/build-native.sh
       - name: Move built .deb to current directory
         run: mv -v ../*.deb ./makedeb.deb
@@ -24,3 +30,5 @@ jobs:
         with:
           name: makedeb-native-build
           path: "makedeb.deb"
+
+# vim: expandtab ts=2 sw=2
