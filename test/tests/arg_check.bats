@@ -43,7 +43,7 @@ load ../util/util
     pkgbuild string pkgrel 1
     pkgbuild array arch any
     pkgbuild clean
-    sudo makedeb -dr --install
+    makedeb -dr --install
 }
 
 @test "run makedeb with invalid singled short option" {
