@@ -16,7 +16,7 @@ load ../util/util
 
     [[ "${#files[@]}" == "${#expected_files[@]}" ]]
 
-    for i in $(seq $(( "${#files[@]}" - 1 )) ); do
+    for i in $(seq 0 $(( "${#files[@]}" - 1 )) ); do
         [[ "${files[$i]}" == "${expected_files[$i]}" ]]
     done
 }

@@ -49,12 +49,13 @@ load ../util/util
 }
 
 @test "incorrect pkgname - disallowed character" {
-    pkgbuild string pkgname test-pkg
+    pkgbuild string pkgbase testpkg
+    pkgbuild string pkgname 'testp%kg'
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "[!] pkgbase contains invalid characters: '%'" ]]
+    [[ "${output}" == "[!] pkgname contains invalid characters: '%'" ]]
 }
