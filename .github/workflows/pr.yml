@@ -14,11 +14,9 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
       - name: Checkout
-        run: |
-          git init
-          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
-          git fetch origin
-          git checkout alpha
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Build
         run: |
           export release_type=alpha pkgname=makedeb-alpha
