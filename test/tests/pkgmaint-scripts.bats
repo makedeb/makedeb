@@ -11,13 +11,10 @@ load ../util/util
     makedeb -d
 
     ar xf testpkg_1.0.0-1_all.deb
-    mapfile -t files < <(tar tf control.tar.gz)
-    expected_files=('./control' './preinst')
+    mapfile -t files < <(tar tf control.tar.gz | sort -V)
+    mapfile -t expected_files < <(printf '%s\n' './control' './preinst' | sort -V)
 
     [[ "${#files[@]}" == "${#expected_files[@]}" ]]
-    
-    echo "${files[@]}"
-    echo "${expected_files[@]}"
 
     for i in $(seq 0 $(( "${#files[@]}" - 1 )) ); do
         [[ "${files[$i]}" == "${expected_files[$i]}" ]]
