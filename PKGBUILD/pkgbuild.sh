@@ -5,10 +5,9 @@ set -e
 targets=('apt' 'mpr' 'aur')
 releases=('stable' 'beta' 'alpha')
 
-debian_depends=('apt' 'bash' 'binutils' 'coreutils'
-                'curl' 'fakeroot' 'file' 'gettext'
-                'gawk' 'libarchive-tools' 'lsb-release'
-                'python3' 'python3-apt' 'tar' 'zstd')
+debian_depends=('apt' 'binutils' 'curl' 'fakeroot'
+                'file' 'gettext' 'gawk' 'libarchive-tools'
+                'lsb-release' 'python3' 'python3-apt' 'zstd')
 debian_makedepends=('asciidoctor' 'git' 'make' 'jq')
 debian_conflicts=('makedeb-makepkg' 'makedeb-makepkg-beta' 'makedeb-makepkg-alpha')
 debian_provides=("${debian_conflicts[@]}")
