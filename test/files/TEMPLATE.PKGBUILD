@@ -25,6 +25,16 @@ source=$${source}
 sha256sums=$${sha256sums}
 noextract=$${noextract}
 
+focal_depends=$${focal_depends}
+focal_optdepends=$${focal_depends}
+focal_makedepends=$${focal_makedepends}
+focal_checkdepends=$${focal_checkdepends}
+focal_conflicts=$${focal_conflicts}
+focal_provides=$${focal_provides}
+focal_replaces=$${focal_replaces}
+focal_source=$${focal_source}
+focal_sha256sums=$${focal_sha256sums}
+
 prepare() {
     true
 }

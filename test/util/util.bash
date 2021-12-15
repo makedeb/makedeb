@@ -3,6 +3,12 @@ setup() {
     mkdir build_area/
     cp ../files/TEMPLATE.PKGBUILD ./build_area/PKGBUILD
     cd build_area/
+
+    lsb_release() {
+        echo "focal"
+    }
+
+    export -f lsb_release
 }
 
 teardown() {
@@ -27,6 +33,18 @@ pkgbuild() {
     elif [[ "${cmd}" == "clean" ]]; then
         sed -i 's|^.*$${.*$||g' "${PKGBUILD:-PKGBUILD}"
     fi
+}
+
+remove_function() {
+    mapfile -t lines < <(cat "${PKGBUILD:-PKGBUILD}")
+
+    for i in $(seq "${#lines[@]}"); do
+        if echo "${lines[$i]}" | grep -q "${1}()"; then
+            two_more="$(( "${i}" + 3 ))"
+            sed -i "${i},${two_more}d" "${PKGBUILD:-PKGBUILD}"
+            break
+        fi
+    done
 }
 
 sudo_check() {
