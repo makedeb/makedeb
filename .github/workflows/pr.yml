@@ -3,27 +3,32 @@ on:
  pull_request:
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    container:
+      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install -y git gnupg pbuilder ubuntu-dev-tools apt-file python3 python3-pip debhelper asciidoctor jq
-      - name: add VERSION env var
+      - name: Set directory permissions
+        run: sudo chown 'makedeb:makedeb' ../ -R
+      - name: Install needed dependencies
         run: |
-          cat << EOF > .env
-          VERSION=$(cat .data.json | jq -r '.current_pkgver')
-          EOF
-      - name: tar directory into source tarball
-        run: source .env && tar -cJf ../makedeb_$VERSION.orig.tar.xz .
-      - name: set package name
-        run: source .env && sed -i "s|\$\${pkgname}|makedeb-alpha|" debian/control
-      - name: build makedeb using native packaging
-        run: source .env && ls .. && debuild -us -uc
-      - name: Move artifact to current dir
+          export DEBIAN_FRONTEND=noninteractive
+          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
+      - name: Checkout
+        run: |
+          git init
+          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+          git fetch origin
+          git checkout alpha
+      - name: Build
+        run: |
+          export release_type=alpha pkgname=makedeb-alpha
+          .drone/scripts/build-native.sh
+      - name: Move built .deb to current directory
         run: mv -v ../*.deb ./makedeb.deb
       - name: Upload build output
         uses: actions/upload-artifact@v2
         with:
           name: makedeb-native-build
           path: "makedeb.deb"
+
+# vim: expandtab ts=2 sw=2
