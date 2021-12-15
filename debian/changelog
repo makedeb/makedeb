@@ -1,5 +1,5 @@
-makedeb (8.5.9-1) unstable; urgency=medium
+makedeb (8.5.10-1) unstable; urgency=medium
 
   * Initial release (Closes: #998039).
 
- -- Leo Puvilland <leo@craftcat.dev>  Sun, 12 Dec 2021 04:20:49 -0600
+ -- Leo Puvilland <leo@craftcat.dev>  Tue, 14 Dec 2021 23:33:20 -0600
