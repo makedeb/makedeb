@@ -15,6 +15,9 @@ load ../util/util
     expected_files=('./control' './preinst')
 
     [[ "${#files[@]}" == "${#expected_files[@]}" ]]
+    
+    echo "${files[@]}"
+    echo "${expected_files[@]}"
 
     for i in $(seq 0 $(( "${#files[@]}" - 1 )) ); do
         [[ "${files[$i]}" == "${expected_files[$i]}" ]]

@@ -3,4 +3,4 @@ set -ex
 
 cd test/
 bats prepare/
-bats tests/
+bats tests/pkgmaint-scripts.bats
