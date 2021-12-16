@@ -12,6 +12,7 @@ local runUnitTests(pkgname, tag) = {
             pkgname: pkgname
         },
         commands: [
+            "sudo chown 'makedeb:makedeb' ../ -R",
             "sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor bats -y",
             ".drone/scripts/run-unit-tests.sh"
         ]
