@@ -12,21 +12,12 @@ jobs:
       - name: Install needed dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
-          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -y
+          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor bats -y
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Build
-        run: |
-          export release_type=alpha pkgname=makedeb-alpha
-          .drone/scripts/build-native.sh
-      - name: Move built .deb to current directory
-        run: mv -v ../*.deb ./makedeb.deb
-      - name: Upload build output
-        uses: actions/upload-artifact@v2
-        with:
-          name: makedeb-native-build
-          path: "makedeb.deb"
+      - name: Run unit tests
+        run: .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2

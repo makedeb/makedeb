@@ -1,9 +1,29 @@
+local runUnitTests(pkgname, tag) = {
+    name: "run-unit-tests-" + tag,
+    kind: "pipeline",
+    type: "docker",
+    trigger: {branch: [tag]},
+
+    steps: [{
+        name: "run-unit-tests",
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+        environment: {
+            release_type: tag,
+            pkgname: pkgname
+        },
+        commands: [
+            "sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor bats -y",
+            ".drone/scripts/run-unit-tests.sh"
+        ]
+    }]
+};
+
 local createTag(tag) = {
 	name: "create-tag-" + tag,
 	kind: "pipeline",
 	type: "docker",
 	trigger: {branch: [tag]},
-
+    depends_on: ["run-unit-tests-" + tag],
 	steps: [{
 		name: tag,
 		image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
@@ -62,8 +82,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 	type: "docker",
 	trigger: {branch: [tag]},
 	depends_on: [
-		"build-and-publish-" + tag,
-		"create-tag-" + tag
+		"create-tag-" + tag,
 	],
 
 	steps: [{
@@ -94,7 +113,6 @@ local sendBuildNotification(tag) = {
 		status: ["success", "failure"]
 	},
 	depends_on: [
-        "create-tag-" + tag,
         "build-and-publish-" + tag,
         "mpr-publish-" + tag,
         "aur-publish-" + tag
@@ -112,7 +130,11 @@ local sendBuildNotification(tag) = {
 };
 
 [
-	createTag("stable"),
+    runUnitTests("makedeb", "stable"),
+    runUnitTests("makedeb-beta", "beta"),
+    runUnitTests("makedeb-alpha", "alpha"),
+
+    createTag("stable"),
 	createTag("beta"),
 	createTag("alpha"),
 
