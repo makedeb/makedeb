@@ -135,7 +135,10 @@ run_dependency_conversion
 msg "Entering fakeroot environment..."
 
 "${makepkg_package_name}" --format-makedeb --nodeps -p "${FILE}" "${makepkg_args[@]}"
+
+cd "${pkgname}/"
 built_package_version="$(get_variables pkgver)/$(get_variables pkgrel)"
+cd ../
 
 # Create .deb files
 in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} "${@}"
