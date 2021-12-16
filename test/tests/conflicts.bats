@@ -1,7 +1,6 @@
 load ../util/util
 
 @test "correct depends - all valid characters" {
-    skip "THIS WON'T CURRENTLY PASS DUE TO A BUG IN MAKEDEB."
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

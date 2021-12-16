@@ -1,13 +1,12 @@
 load ../util/util
 
 @test "correct - build and install a package" {
-    skip "THIS WON'T PASS DUE TO THE '-i' FLAG ISSUE IN MAKEDEB"
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    makedeb -si --no-confirm
 }
 
 @test "correct - set dependencies from a distro-dependency variable" {
