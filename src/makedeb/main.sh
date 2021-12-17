@@ -1,20 +1,5 @@
 #!/usr/bin/env bash
 
-# Copyright 2020-2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 set -Ee
 
 # Values to expose to makepkg.
@@ -31,13 +16,18 @@ declare makedeb_package_version="$${MAKEDEB_VERSION}"
 declare makedeb_release_type="$${MAKEDEB_RELEASE}"
 declare makedeb_release_target="$${MAKEDEB_TARGET}"
 
+declare makedeb_package_version=git # COMP_RM
+declare makedeb_release_type=alpha # COMP_RM
+declare makedeb_release_target=apt # COMP_RM
+
 if [[ "${makedeb_release_target}" == "apt" || "${makedeb_release_target}" == "mpr" ]]; then
 	declare target_os="debian"
 elif [[ "${makedeb_release_target}" == "arch" ]]; then
 	declare target_os="arch"
 fi
 
-declare makepkg_package_name="makedeb-makepkg"
+declare MAKEPKG_PACKAGE_NAME="$(git rev-parse --show-toplevel)/src/makepkg/makepkg.sh" # COMP_RM
+declare makepkg_package_name="${MAKEPKG_PACKAGE_NAME:-makedeb-makepkg}"
 declare MAKEDEB_UTILS_DIR="./utils/" # COMP_RM
 declare makedeb_utils_dir="${MAKEDEB_UTILS_DIR:-/usr/share/makedeb/utils/}"
 
@@ -47,12 +37,20 @@ declare DIR="$(echo $PWD)"
 declare srcdir="${DIR}/src/"
 declare pkgdir="${DIR}/pkg/"
 
+declare makedeb_from_source=1 # COMP_RM
+makedeb_from_source="${makedeb_from_source:-0}"
 
 ####################
 ##  BEGIN SCRIPT  ##
 ####################
 # Get makepkg message syntax
-source "/usr/share/${makepkg_package_name}/util/message.sh"
+if (( "${makedeb_from_source}" )); then
+    export LIBRARY="$(dirname "${MAKEPKG_PACKAGE_NAME}")/functions/"
+    source "${LIBRARY}/util/message.sh"
+else
+    source "/usr/share/${makepkg_package_name}/util/message.sh"
+fi
+
 colorize
 
 # Debug logs in case a function is                       # COMP_RM
