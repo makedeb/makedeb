@@ -22,11 +22,12 @@ load ../util/util
 }
 
 @test "incorrect pkgver - invalid character" {
-    skip "THIS ISN'T FAILING PROPERLY DUE TO A BUG IN MAKEDEB."
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver '1.0.0+al%ha'
     pkgbuild string pkgrel 1
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    run makedeb -d
+    [[ "${status}" == '12' ]]
+    [[ "${output}" == "[!] pkgver contains invalid characters." ]]
 }
