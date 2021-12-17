@@ -49,7 +49,6 @@ declare -r startdir="$(pwd -P)"
 declare -r makepkg_target_os='$${TARGET_OS}'
 declare -r distro_release_name="$(lsb_release -cs)"
 
-LIBRARY=${LIBRARY:-'./functions'}    # REMOVE AT PACKAGING
 LIBRARY=${LIBRARY:-'/usr/share/makedeb-makepkg'}
 
 # Options

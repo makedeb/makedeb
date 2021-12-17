@@ -1,20 +1,5 @@
 #!/usr/bin/env bash
 
-# Copyright 2020-2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 set -Ee
 
 # Values to expose to makepkg.
@@ -31,13 +16,18 @@ declare makedeb_package_version="$${MAKEDEB_VERSION}"
 declare makedeb_release_type="$${MAKEDEB_RELEASE}"
 declare makedeb_release_target="$${MAKEDEB_TARGET}"
 
+declare makedeb_package_version=git # COMP_RM
+declare makedeb_release_type=alpha # COMP_RM
+declare makedeb_release_target=apt # COMP_RM
+
 if [[ "${makedeb_release_target}" == "apt" || "${makedeb_release_target}" == "mpr" ]]; then
 	declare target_os="debian"
 elif [[ "${makedeb_release_target}" == "arch" ]]; then
 	declare target_os="arch"
 fi
 
-declare makepkg_package_name="makedeb-makepkg"
+declare MAKEPKG_PACKAGE_NAME="$(git rev-parse --show-toplevel)/src/makepkg/makepkg.sh" # COMP_RM
+declare makepkg_package_name="${MAKEPKG_PACKAGE_NAME:-makedeb-makepkg}"
 declare MAKEDEB_UTILS_DIR="./utils/" # COMP_RM
 declare makedeb_utils_dir="${MAKEDEB_UTILS_DIR:-/usr/share/makedeb/utils/}"
 
@@ -47,12 +37,20 @@ declare DIR="$(echo $PWD)"
 declare srcdir="${DIR}/src/"
 declare pkgdir="${DIR}/pkg/"
 
+declare makedeb_from_source=1 # COMP_RM
+makedeb_from_source="${makedeb_from_source:-0}"
 
 ####################
 ##  BEGIN SCRIPT  ##
 ####################
 # Get makepkg message syntax
-source "/usr/share/${makepkg_package_name}/util/message.sh"
+if (( "${makedeb_from_source}" )); then
+    export LIBRARY="$(dirname "${MAKEPKG_PACKAGE_NAME}")/functions/"
+    source "${LIBRARY}/util/message.sh"
+else
+    source "/usr/share/${makepkg_package_name}/util/message.sh"
+fi
+
 colorize
 
 # Debug logs in case a function is                       # COMP_RM
@@ -136,9 +134,9 @@ msg "Entering fakeroot environment..."
 
 "${makepkg_package_name}" --format-makedeb --nodeps -p "${FILE}" "${makepkg_args[@]}"
 
-# We keep tihs as a normal string (instead of an array) so that we can access
-# the variable inside of subshells. <https://stackoverflow.com/a/5564589>
-declare makedeb_apt_package_version="$(echo "${makedeb_package_version}" | sed 's|^[^:].*:||g')"
+cd "pkg/${pkgname}/"
+built_package_version="$(get_variables pkgver)"
+cd ../../
 
 # Create .deb files
 in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} "${@}"
@@ -148,7 +146,7 @@ msg "Cleaning up..."
 rm -rf dependency_deb
 
 # Print finished build message.
-msg "Finished making: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
+msg "Finished making: ${pkgbase} ${package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
 
 # Remove build dependencies
 if [[ "${remove_dependencies}" == "true" ]]; then
@@ -160,7 +158,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
   declare apt_install_list=()
 
   for i in "${pkgname[@]}"; do
-    apt_installation_list+=("./${i}_${makedeb_apt_package_version}_${MAKEDEB_CARCH}.deb")
+    apt_installation_list+=("./${i}_${built_package_version}_${MAKEDEB_CARCH}.deb")
   done
 
   apt_installation_string="$(echo "${pkgname[@]}" | sed 's| |, |g')"

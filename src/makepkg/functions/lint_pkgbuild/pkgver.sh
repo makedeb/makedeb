@@ -37,18 +37,16 @@ check_pkgver() {
 		return 1
 	fi
 
-	if [[ $ver = *[[:space:]/:-]* ]]; then
-		error "$(gettext "%s is not allowed to contain colons, forward slashes, hyphens or whitespace.")" "pkgver${type:+ in $type}"
-		return 1
-	fi
+    invalid_characters="$(echo "${ver}" | sed 's|[a-z0-9.+~]||g')"
 
-	if [[ $ver = *[![:ascii:]]* ]]; then
-		error "$(gettext "%s may only contain ascii characters.")" "pkgver${type:+ in $type}"
-		return 1
-	fi
+    if [[ "${invalid_characters:+x}" == "x" ]]; then
+        error "$(gettext "%s contains invalid characters.")" "pkgver${type:+ in $type}"
+        return 1
+    fi
 
 	if ! echo "$ver" | awk -F '' '{print $1}' | grep -q '[0-9]'; then
 		error "$(gettext "%s must start with a number.")" "pkgver${type:+ in $type}"
+        return 1
 	fi
 }
 
