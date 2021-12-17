@@ -136,9 +136,9 @@ msg "Entering fakeroot environment..."
 
 "${makepkg_package_name}" --format-makedeb --nodeps -p "${FILE}" "${makepkg_args[@]}"
 
-# We keep tihs as a normal string (instead of an array) so that we can access
-# the variable inside of subshells. <https://stackoverflow.com/a/5564589>
-declare makedeb_apt_package_version="$(echo "${makedeb_package_version}" | sed 's|^[^:].*:||g')"
+cd "pkg/${pkgname}/"
+built_package_version="$(get_variables pkgver)"
+cd ../../
 
 # Create .deb files
 in_fakeroot="true" fakeroot -- bash ${BASH_SOURCE[0]} "${@}"
@@ -148,7 +148,7 @@ msg "Cleaning up..."
 rm -rf dependency_deb
 
 # Print finished build message.
-msg "Finished making: ${pkgbase} ${makedeb_package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
+msg "Finished making: ${pkgbase} ${package_version} ($(date '+%a %d %b %Y %T %p %Z'))."
 
 # Remove build dependencies
 if [[ "${remove_dependencies}" == "true" ]]; then
@@ -160,7 +160,7 @@ if [[ "${target_os}" == "debian" ]] && [[ ${INSTALL} == "TRUE" ]]; then
   declare apt_install_list=()
 
   for i in "${pkgname[@]}"; do
-    apt_installation_list+=("./${i}_${makedeb_apt_package_version}_${MAKEDEB_CARCH}.deb")
+    apt_installation_list+=("./${i}_${built_package_version}_${MAKEDEB_CARCH}.deb")
   done
 
   apt_installation_string="$(echo "${pkgname[@]}" | sed 's| |, |g')"
