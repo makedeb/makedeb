@@ -26,7 +26,7 @@ arg_check() {
         -v | --distro-packages)            warning "'${1}' has been deprecated, and should not be used." ;;
         -V | --version)                    version_info; exit 0 ;;
         --as-deps)                         declare -g makedeb_args["as-deps"]=1 ;;
-        --mpr-check)                       declare -g mpr_check="true" ;;
+        --mpr-check | --dur-check)                       declare -g mpr_check="true" ;;
         --no-confirm)                      declare -g apt_args+=("--yes") ;;
         --print-control)                   declare -g print_control=1 ;;
         --print-srcinfo | --printsrcinfo)  declare -g makepkg_printsrcinfo="true" ;;
@@ -52,7 +52,7 @@ arg_check() {
         -s | --sync-deps | --syncdeps)     declare -g install_dependencies="true" ;;
         -v | --distro-packages)            warning "'${1}' has been deprecated, and should not be used." ;;
         -V | --version)                    version_info; exit 0 ;;
-        --mpr-check)                       declare -g mpr_check="true" ;;
+        --mpr-check | --dur-check)                       declare -g mpr_check="true" ;;
         --no-confirm)                      declare -g pacman_args+=("--noconfirm") ;;
         --print-control)                   declare -g print_control=1 ;;
         --print-srcinfo | --printsrcinfo)  declare -g makepkg_printsrcinfo="true" ;;
