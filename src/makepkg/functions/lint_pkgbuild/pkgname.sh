@@ -88,6 +88,11 @@ lint_pkgname() {
 		done
 	fi
 
+	if [[ "${pkgname}" =~ [A-Z] ]]; then
+		error "'pkgname' contains capital letters"
+		ret=1
+	fi
+
 	return $ret
 }
 

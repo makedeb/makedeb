@@ -105,16 +105,6 @@ generate_prefix_fields
 # Set pkgbase
 pkgbase="${pkgbase:-${pkgname[0]}}"
 
-if [[ "${pkgbase}" =~ [A-Z] ]]; then
-  error "'pkgbase' contains capital letters"
-  exit 1
-fi
-
-if [[ "${pkgname}" =~ [A-Z] ]]; then
-  error "'pkgname' contains capital letters"
-  exit 1
-fi
-
 # Check if we're printing a generated control file
 if (( "${print_control}" )); then
   generate_control "./${FILE}" "/dev/stdout"

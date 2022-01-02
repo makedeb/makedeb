@@ -34,6 +34,10 @@ lint_pkgbase() {
 	if [[ -z $pkgbase ]]; then
 		return 0
 	fi
+	if [[ "${pkgbase}" =~ [A-Z] ]]; then
+  	error "'pkgbase' contains capital letters"
+  	return 1
+	fi
 
 	lint_one_pkgname "pkgbase" "$pkgbase"
 }
