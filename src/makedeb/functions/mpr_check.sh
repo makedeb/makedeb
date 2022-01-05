@@ -1,4 +1,4 @@
-dur_check() {
+mpr_check() {
   printf "
  .--.                  Pacman v6.0.0 - libalpm v13.0.0
 / _.-' .-.  .-.  .-.   Copyright (C) 2006-2021 Pacman Development Team
