@@ -73,6 +73,16 @@ lint_one_pkgname() {
 		ret=1
 	fi
 
+	if [[ "${pkgname}" =~ [A-Z] ]]; then
+		error "'pkgname' contains capital letters"
+		ret=1
+	fi
+
+	if [[ "${pkgbase}" =~ [A-Z] ]]; then
+  	error "'pkgbase' contains capital letters"
+  	return 1
+	fi
+
 	return $ret
 }
 
@@ -86,11 +96,6 @@ lint_pkgname() {
 		for i in "${pkgname[@]}"; do
 			lint_one_pkgname "pkgname" "$i" || ret=1
 		done
-	fi
-
-	if [[ "${pkgname}" =~ [A-Z] ]]; then
-		error "'pkgname' contains capital letters"
-		ret=1
 	fi
 
 	return $ret
