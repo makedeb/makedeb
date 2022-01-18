@@ -1306,10 +1306,12 @@ else
 	source_buildfile "$BUILDFILE"
 fi
 
+_pkgbase="${pkgbase:-${pkgname[0]}}"
+
 # check the PKGBUILD for some basic requirements
 lint_pkgbuild || exit $E_PKGBUILD_ERROR
 
-pkgbase=${pkgbase:-${pkgname[0]}}
+pkgbase="${_pkgbase}"
 
 # Exit regardless of sucess status if '--lint' was passed.
 (( "${LINT_PKGBUILD}" )) && exit 0
