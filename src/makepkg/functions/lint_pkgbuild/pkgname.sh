@@ -51,7 +51,8 @@ lint_one_pkgname() {
 		error "$(gettext "%s may only contain ascii characters.")" "$type"
 		return 1
 	fi
-
+	
+	# These first two need to be put into 'depends.sh' and 'optdepends.sh' respectively.
 	if [[ "${type}" == "depends" ]]; then
 		if ! check_prefix prefix "${name}" 'p!'; then
 			error "$(gettext "%s contains an invalid prefix: '%s'")" "${type}" "${prefix}"
@@ -65,22 +66,18 @@ lint_one_pkgname() {
 			return 1
 		fi
 		strip_prefix name "${name}"
+	
+	elif [[ "${type}" == "pkgname" || "${type}" == "pkgbase" ]]; then
+		if [[ "${name}" =~ [A-Z] ]]; then
+			error "'${type}' contains capital letters"
+			ret=1
+		fi
 	fi
 	
 	if [[ $name = *[^[:alnum:]+_.@-]* ]]; then
 		error "$(gettext "%s contains invalid characters: '%s'")" \
 				"$type" "${name//[[:alnum:]+_.@-]}"
 		ret=1
-	fi
-
-	if [[ "${pkgname}" =~ [A-Z] ]]; then
-		error "'pkgname' contains capital letters"
-		ret=1
-	fi
-
-	if [[ "${pkgbase}" =~ [A-Z] ]]; then
-  	error "'pkgbase' contains capital letters"
-  	return 1
 	fi
 
 	return $ret
