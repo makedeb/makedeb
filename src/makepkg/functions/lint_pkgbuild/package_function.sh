@@ -43,7 +43,7 @@ lint_package_function() {
 		fi
 	else
 		if have_function "package"; then
-			error "$(gettext "Extra %s function for split package '%s'")" "package()" "$pkgbase"
+			error "$(gettext "Extra %s function for split package '%s'")" "package()" "$_pkgbase"
 			ret=1
 		fi
 		for i in "${pkgname[@]}"; do
