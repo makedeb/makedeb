@@ -74,6 +74,7 @@ fi
 if [[ "${TARGET}" == "apt" || "${TARGET}" == "mpr" ]]; then
     var_prefix="debian"
 else
+    TARGET="arch"
     var_prefix="arch"
 fi
 
@@ -110,7 +111,7 @@ echo "${template}" | sed -e "s|\$\${pkgname}|${pkgname}|" \
 			 -e "s|\$\${depends}|${depends}|" \
 			 -e "s|\$\${makedepends}|${makedepends}|" \
 			 -e "s|\$\${conflicts}|${conflicts}|" \
-             -e "s|\$\${provides}|${provides}|" \
-             -e "s|\$\${replaces}|${replaces}|" \
+			 -e "s|\$\${provides}|${provides}|" \
+			 -e "s|\$\${replaces}|${replaces}|" \
 			 -e "s|\$\${url}|${url}|" \
 			 "${extra_sed_args[@]}"

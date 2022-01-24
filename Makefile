@@ -50,7 +50,7 @@ package:
 	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb-makepkg/{}' \;
 	cd ../
 	
-ifneq ("$(TARGET)", "aur")
+ifneq ("$(TARGET)", "arch")
 	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'
 	install -Dm 755 ./makepkg-template '$(DESTDIR)/usr/bin/makepkg-template'
 endif
