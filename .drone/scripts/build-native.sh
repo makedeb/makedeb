@@ -19,4 +19,4 @@ debuild -us -uc
 
 cp "../${pkgname}_${NEEDED_VERSION}-1_all.deb" ./
 
-[[ -z "${DRONE}" ]] && cp "../${pkgname}_${NEEDED_VERSION}-1_source.changes" ./
+[[ -n "${DRONE}" ]] && cp "../${pkgname}_${NEEDED_VERSION}-1_source.changes" ./
