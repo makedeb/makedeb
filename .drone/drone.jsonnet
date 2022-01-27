@@ -73,7 +73,16 @@ local buildAndPublish(pkgname, tag) = {
 				"sudo -E apt-get upgrade python3 python3-requests -yq",
 				".drone/scripts/publish.py"
 			]
-		}
+		},
+
+                {
+                        name: "publish-mentors",
+                        image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+                        environment: {gpg_key: {from_secret: "debian_packaging_key"}},
+                        commands: [
+                                ".drone/scripts/mentors.sh"
+                        ]
+                }
 	]
 };
 

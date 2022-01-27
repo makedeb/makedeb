@@ -1,0 +1,10 @@
+[mentors-ftp]
+fqdn = mentors.debian.net
+login = anonymous
+progress_indicator = 2
+passive_ftp = 1
+incoming = /pub/UploadQueue/
+method = ftp
+allow_unsigned_uploads = 0
+# Allow uploads for UNRELEASED packages
+allowed_distributions = .*

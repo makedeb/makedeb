@@ -18,3 +18,4 @@ tar -cJf "../makedeb_${NEEDED_VERSION}.orig.tar.xz" .
 debuild -us -uc
 
 cp "../${pkgname}_${NEEDED_VERSION}-1_all.deb" ./
+cp "../${pkgname}_${NEEDED_VERSION}-1_source.changes" ./
