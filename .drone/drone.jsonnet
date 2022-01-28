@@ -24,7 +24,7 @@ local createTag(tag) = {
 	kind: "pipeline",
 	type: "docker",
 	trigger: {branch: [tag]},
-  depends_on: ["run-unit-tests-" + tag],
+        depends_on: ["run-unit-tests-" + tag],
 	steps: [{
 		name: tag,
 		image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
@@ -34,7 +34,7 @@ local createTag(tag) = {
 		},
 
 		commands: [
-      "sudo -E apt-get install curl -y",
+                        "sudo -E apt-get install curl -y",
 			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
 			"sudo -E apt-get upgrade jq git -yq",
 			".drone/scripts/create_tag.sh"
@@ -55,9 +55,9 @@ local buildAndPublish(pkgname, tag) = {
 			name: "build-debian-package",
 			image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
 			environment: {
-        release_type: tag,
-        pkgname: pkgname
-      },
+        			release_type: tag,
+        			pkgname: pkgname
+      			},
 			commands: [
 				"sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor -yq",
 				"sudo chown 'makedeb:makedeb' ../ -R",
@@ -97,7 +97,7 @@ local userRepoPublish(package_name, tag, user_repo) = {
 		},
 
 		commands: [
-      "sudo -E apt-get install curl -y",
+      			"sudo -E apt-get install curl -y",
 			"curl -Ls \"https://shlink.$${hw_url}/ci-utils\" | sudo bash -",
 			"sudo apt-get install sudo openssh-client sed git jq -yq",
 			".drone/scripts/user-repo.sh"
@@ -137,15 +137,15 @@ local buildForMentors(pkgname, tag) = {
 	trigger: {branch: [tag]},
 	depends_on: ["create-tag-" + tag],
 	steps: [{
-    name: "publish-mentors",
-    image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
-    environment: {debian_packaging_key: {from_secret: "debian_packaging_key"}},
-    when: {branch: ["alpha"]},
-    commands: [
-        "sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor gpg -yq",
-        ".drone/scripts/mentors.sh"
-    ]
-  }]
+            name: "publish-mentors",
+            image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
+            environment: {debian_packaging_key: {from_secret: "debian_packaging_key"}},
+            when: {branch: ["alpha"]},
+            commands: [
+                "sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor gpg -yq",
+                ".drone/scripts/mentors.sh"
+            ]
+        }]
 };
 
 [
@@ -154,24 +154,24 @@ local buildForMentors(pkgname, tag) = {
     runUnitTests("makedeb-alpha", "alpha"),
 
     createTag("stable"),
-	  createTag("beta"),
-	  createTag("alpha"),
+    createTag("beta"),
+    createTag("alpha"),
 
-	  buildAndPublish("makedeb", "stable"),
-	  buildAndPublish("makedeb-beta", "beta"),
-	  buildAndPublish("makedeb-alpha", "alpha"),
+    buildAndPublish("makedeb", "stable"),
+    buildAndPublish("makedeb-beta", "beta"),
+    buildAndPublish("makedeb-alpha", "alpha"),
 
-	  userRepoPublish("makedeb", "stable", "mpr"),
-	  userRepoPublish("makedeb-beta", "beta", "mpr"),
-	  userRepoPublish("makedeb-alpha", "alpha", "mpr"),
+    userRepoPublish("makedeb", "stable", "mpr"),
+    userRepoPublish("makedeb-beta", "beta", "mpr"),
+    userRepoPublish("makedeb-alpha", "alpha", "mpr"),
 
-	  userRepoPublish("makedeb", "stable", "aur"),
-	  userRepoPublish("makedeb-beta", "beta", "aur"),
-	  userRepoPublish("makedeb-alpha", "alpha", "aur"),
+    userRepoPublish("makedeb", "stable", "aur"),
+    userRepoPublish("makedeb-beta", "beta", "aur"),
+    userRepoPublish("makedeb-alpha", "alpha", "aur"),
 
     buildForMentors("makedeb-alpha", "alpha")
 
-	  sendBuildNotification("stable"),
-	         sendBuildNotification("beta"),
-	  sendBuildNotification("alpha")
+    sendBuildNotification("stable"),
+    sendBuildNotification("beta"),
+    sendBuildNotification("alpha")
 ]
