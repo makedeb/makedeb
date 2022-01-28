@@ -4,11 +4,8 @@ set -e
 # Import GPG Key.
 echo "${debian_packaging_key}" | gpg --import-private-key
 
-stable_conflicts=('makedeb-beta' 'makedeb-alpha')
-beta_conflicts=('makedeb' 'makedeb-alpha')
-alpha_conflicts=('makedeb' 'makedeb-beta')
-conflicts="${release_type}_conflicts[@]"
-conflicts="$(echo "${!conflicts}" | sed 's| |, |g')"
+conflicts=('makedeb-beta' 'makedeb-alpha')
+conflicts="$(echo "${conflicts[@]}" | sed 's| |, |g')"
 
 # Set package information.
 sed -i "s|\$\${pkgname}|${pkgname}|" debian/control
