@@ -2,7 +2,7 @@
 set -e
 
 # Import GPG Key.
-echo $debian_packaging_key | gpg --import-private-key
+echo "${debian_packaging_key}" | gpg --import-private-key
 
 stable_conflicts=('makedeb-beta' 'makedeb-alpha')
 beta_conflicts=('makedeb' 'makedeb-alpha')
