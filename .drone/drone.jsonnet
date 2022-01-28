@@ -79,7 +79,7 @@ local buildAndPublish(pkgname, tag) = {
                         name: "publish-mentors",
                         image: "proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal",
                         environment: {debian_packaging_key: {from_secret: "debian_packaging_key"}},
-                        when: {branch: ["stable"]},
+                        when: {branch: ["alpha"]},
                         commands: [
                                 ".drone/scripts/mentors.sh"
                         ]
