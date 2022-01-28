@@ -21,6 +21,4 @@ tar -cJf "../makedeb_${NEEDED_VERSION}.orig.tar.xz" .
 debuild -S -sa -kkavplex@hunterwittenborn.com
 
 cp files/dput.cf $HOME/.dput.cf
-
-export NEEDED_VERSION="$(cat .data.json | jq -r '.current_pkgver')"
 dput mentors "../${pkgname}_${NEEDED_VERSION}-1_source.changes"
