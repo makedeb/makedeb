@@ -129,7 +129,7 @@ local buildForMentors(pkgname, tag) = {
             debian_packaging_key: {from_secret: "debian_packaging_key"},
             pkgname: pkgname
         },
-        when: {branch: ["alpha"]},
+        when: {branch: ["stable"]},
         commands: [
             ".drone/scripts/mentors.sh"
         ]
