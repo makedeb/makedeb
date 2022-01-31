@@ -1,5 +1,15 @@
 load ../util/util
 
+@test "install a package with '-i' that contains an epoch" {
+    pkgbuild string pkgname testpkg
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string epoch 2
+    pkgbuild array arch any
+    pkgbuild clean
+    makedeb -i
+}
+
 @test "correct epoch - all allowed characters" {
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
@@ -45,3 +55,5 @@ load ../util/util
     run makedeb -d
     [[ "${status}" == "12" ]]
 }
+
+# vim: set ts=4 sw=4 expandtab:
