@@ -4,14 +4,16 @@ import subprocess
 
 from os import environ
 from github import Github
-from github.GithubException import BadCredentialsException
-from github.Repository import Repository
 
 # Get all the info we need.
 github_api_key = environ["github_api_key"]
 drone_branch = environ["DRONE_COMMIT_BRANCH"]
 drone_repo = "makedeb/makedeb"
-commit_sha = subprocess.run(["git", "log", "-n", "1", "--format=%H"], stdout=subprocess.PIPE).stdout.decode().strip("\n")
+commit_sha = (
+    subprocess.run(["git", "log", "-n", "1", "--format=%H"], stdout=subprocess.PIPE)
+    .stdout.decode()
+    .strip("\n")
+)
 
 with open(".data.json", "r") as file:
     data = json.loads(file.read())
