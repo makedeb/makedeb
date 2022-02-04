@@ -26,13 +26,13 @@ local createTag(tag) = {
     depends_on: ["run-unit-tests-" + tag],
     steps: [{
         name: tag,
-        image: "proget.hunterwittenborn.com/docker/makedeb/ci-image:" + tag,
+        image: "python:3",
         environment: {
-            ssh_key: {from_secret: "ssh_key"},
-            release_type: tag
+            github_api_key: {from_secret: "github_api_key"}
         },
         commands: [
-            ".drone/scripts/create_tag.sh"
+            "pip install PyGithub",
+            ".drone/scripts/create_tag.py"
         ]
     }]
 };
