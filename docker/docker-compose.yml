@@ -1,0 +1,7 @@
+version: "3.5"
+services:
+  tests:
+    build: ./
+    image: 0.0.0.0/makedeb-unit-tests
+    volumes:
+      - ../:/tmp/makedeb/

@@ -1,5 +1,6 @@
 setup() {
     cd "${BATS_TEST_DIRNAME}"
+    rm -rf build_area/
     mkdir build_area/
     cp ../files/TEMPLATE.PKGBUILD ./build_area/PKGBUILD
     cd build_area/
@@ -9,11 +10,6 @@ setup() {
     }
 
     export -f lsb_release
-}
-
-teardown() {
-    cd ../
-    rm build_area/ -r
 }
 
 pkgbuild() {

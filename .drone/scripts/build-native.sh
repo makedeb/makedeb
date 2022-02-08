@@ -11,6 +11,10 @@ conflicts="$(echo "${!conflicts}" | sed 's| |, |g')"
 sed -i "s|\$\${pkgname}|${pkgname}|" debian/control
 sed -i "s|\$\${conflicts}|${conflicts}|" debian/control
 
+# Install needed dependencies.
+needed_deps="$(cat debian/control  | grep '^Build-Depends:' | sed 's|^Build-Depends: ||')"
+sudo apt-get satisfy "${needed_deps}" -y
+
 # Build package.
 git fetch
 export NEEDED_VERSION="$(cat .data.json | jq -r '.current_pkgver')"
