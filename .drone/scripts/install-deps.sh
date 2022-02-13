@@ -6,5 +6,7 @@ set -ex
 #
 # Additionally, we use a single file to install deps instead of one for each CI
 # script as it makes things easier to manage.
-sudo apt-get install asciidoctor bats curl debhelper git gpg jq openssh-client python3 python3-requests sed tzdata ubuntu-dev-tools -y
+sudo apt-get install asciidoctor bats curl debhelper git gpg jq openssh-client python3 python3-pip python3-requests sed tzdata ubuntu-dev-tools -y
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
+
+pip install PyGithub

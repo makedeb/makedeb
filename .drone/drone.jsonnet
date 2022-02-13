@@ -27,14 +27,13 @@ local createTag(tag) = {
     depends_on: ["run-unit-tests-" + tag],
     steps: [{
         name: tag,
-        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+        image: "python:3",
         environment: {
-            ssh_key: {from_secret: "ssh_key"},
-            release_type: tag
+            github_api_key: {from_secret: "github_api_key"}
         },
         commands: [
             ".drone/scripts/install-deps.sh",
-            ".drone/scripts/create_tag.sh"
+            ".drone/scripts/create_tag.py"
         ]
     }]
 };
@@ -74,18 +73,18 @@ local buildAndPublish(pkgname, tag) = {
     ]
 };
 
-local userRepoPublish(package_name, tag, user_repo) = {
+local userRepoPublish(pkgname, tag, user_repo) = {
     name: user_repo + "-publish-" + tag,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
     depends_on: ["create-tag-" + tag],
     steps: [{
-        name: package_name,
+        name: pkgname,
         image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
         environment: {
             ssh_key: {from_secret: "ssh_key"},
-            package_name: package_name,
+            package_name: pkgname,
             release_type: tag,
             target_repo: user_repo
         },
