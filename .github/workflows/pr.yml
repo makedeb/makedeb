@@ -19,6 +19,7 @@ jobs:
 
       - name: debug
         run: |
+          pwd
           ls -alF /github/home/
           exit 1
 
