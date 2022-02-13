@@ -17,6 +17,11 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head_sha }}
 
+      - name: debug
+        run: |
+          ls -alF /github/home/
+          exit 1
+
       - name: Install needed dependencies
         run: .drone/scripts/install-deps.sh
       
