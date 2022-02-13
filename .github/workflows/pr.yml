@@ -12,7 +12,7 @@ jobs:
       - name: Install needed dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
-          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor bats -y
+          .drone/scripts/install-deps.sh
       - name: Checkout
         uses: actions/checkout@v2
         with:
