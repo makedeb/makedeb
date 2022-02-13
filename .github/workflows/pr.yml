@@ -1,6 +1,6 @@
 name: Build makedeb
 on: {"pull_request"}
-env: {"DEBiAN_FRONTEND": "noninteractive"}
+env: {"DEBIAN_FRONTEND": "noninteractive"}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,6 +11,9 @@ jobs:
       - name: Set directory permissions
         run: sudo chown 'makedeb:makedeb' ../ /github/home/ -R
       
+      - name: Install CI prerequisites
+        run: sudo -E apt-get install git -y
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
