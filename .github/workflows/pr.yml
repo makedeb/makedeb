@@ -4,7 +4,6 @@ env: {"DEBIAN_FRONTEND": "noninteractive"}
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment:
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
     steps:
