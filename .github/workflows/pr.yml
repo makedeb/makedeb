@@ -1,11 +1,10 @@
 name: Build makedeb
-on:
- pull_request:
+on: {"pull_request"}
+env: {"DEBiAN_FRONTEND": "noninteractive"}
 jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      DEBIAN_FRONTEND: noninteractive
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
     steps:
