@@ -6,12 +6,13 @@ local runUnitTests(pkgname, tag) = {
 
     steps: [{
         name: "run-unit-tests",
-        image: "proget.hunterwittenborn.com/docker/makedeb/ci-image:" + tag,
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
         environment: {
             release_type: tag,
             pkgname: pkgname
         },
         commands: [
+            ".drone/scripts/install-deps.sh",
             "sudo chown 'makedeb:makedeb' ../ -R",
             ".drone/scripts/run-unit-tests.sh"
         ]
@@ -31,7 +32,7 @@ local createTag(tag) = {
             github_api_key: {from_secret: "github_api_key"}
         },
         commands: [
-            "pip install PyGithub",
+            "NO_SUDO=1 .drone/scripts/install-deps.sh",
             ".drone/scripts/create_tag.py"
         ]
     }]
@@ -48,12 +49,13 @@ local buildAndPublish(pkgname, tag) = {
     steps: [
         {
             name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/makedeb/ci-image:" + tag,
+            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
             environment: {
                 release_type: tag,
                 pkgname: pkgname
             },
             commands: [
+                ".drone/scripts/install-deps.sh",
                 "sudo chown 'makedeb:makedeb' ../ -R",
                 ".drone/scripts/build-native.sh"
             ]
@@ -61,31 +63,33 @@ local buildAndPublish(pkgname, tag) = {
 
         {
             name: "publish-proget",
-            image: "proget.hunterwittenborn.com/docker/makedeb/ci-image:" + tag,
+            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
             environment: {proget_api_key: {from_secret: "proget_api_key"}},
             commands: [
+                ".drone/scripts/install-deps.sh",
                 ".drone/scripts/publish.py"
             ]
         }
     ]
 };
 
-local userRepoPublish(package_name, tag, user_repo) = {
+local userRepoPublish(pkgname, tag, user_repo) = {
     name: user_repo + "-publish-" + tag,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
     depends_on: ["create-tag-" + tag],
     steps: [{
-        name: package_name,
-        image: "proget.hunterwittenborn.com/docker/makedeb/ci-image:" + tag,
+        name: pkgname,
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
         environment: {
             ssh_key: {from_secret: "ssh_key"},
-            package_name: package_name,
+            package_name: pkgname,
             release_type: tag,
             target_repo: user_repo
         },
         commands: [
+            ".drone/scripts/install-deps.sh",
             ".drone/scripts/user-repo.sh"
         ]
     }]
@@ -124,13 +128,14 @@ local buildForMentors(pkgname, tag) = {
     depends_on: ["create-tag-" + tag],
     steps: [{
         name: "publish-mentors",
-        image: "proget.hunterwittenborn.com/docker/makedeb/ci-image:" + tag,
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
         environment: {
             debian_packaging_key: {from_secret: "debian_packaging_key"},
             pkgname: pkgname
         },
         when: {branch: ["stable"]},
         commands: [
+            ".drone/scripts/install-deps.sh",
             ".drone/scripts/mentors.sh"
         ]
     }]

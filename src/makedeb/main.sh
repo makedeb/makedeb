@@ -135,7 +135,7 @@ msg "Entering fakeroot environment..."
 "${makepkg_package_name}" --format-makedeb --nodeps -p "${FILE}" "${makepkg_args[@]}"
 
 cd "pkg/${pkgname}/"
-built_package_version="$(get_variables pkgver)"
+built_package_version="$(get_variables pkgver | grep -o '[^:]*$')"
 cd ../../
 
 # Create .deb files
