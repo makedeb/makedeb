@@ -35,7 +35,7 @@ check_missing_dependencies() {
         declare var_string="${i}[@]"
 
         for j in "${!var_string}"; do
-            declare current_program="$(echo "${j}" | sed -E 's/<.*|>.*|=.*//')"
+            declare current_program="$(echo "${j}" | grep -o '^[^ ]*')"
             declare current_array+=("${current_program}")
         done
 
@@ -45,8 +45,8 @@ check_missing_dependencies() {
     
     declare -g missing_dependencies
     declare -g missing_build_dependencies
-
-    echo "${missing_dependencies}"
+    declare -g missing_dependencies_no_relations
+    declare -g missing_build_dependencies_no_relations
 }
 
 # vim: set syntax=bash ts=4 sw=4 expandtab:

@@ -60,4 +60,4 @@ load ../util/util
     [[ "${output}" == "[!] depends contains an invalid prefix: 'z!'" ]]
 }
 
-# set: syntax=bash ts=4 sw=4 expandtab:
+# vim: set syntax=bash ts=4 sw=4 expandtab:
