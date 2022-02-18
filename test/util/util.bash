@@ -64,7 +64,7 @@ apt() {
         install|reinstall|satisfy) args+=('--allow-downgrades') ;;
     esac
 
-    apt_cmd=("${apt_path}" "${@}" "${args[@]}")
+    apt_cmd=("${apt_path}" "${args[@]}" "${@}")
 
     if [[ -n "${SUDO_PREFIX}" ]]; then
         "${sudo_path}" "${apt_cmd[@]}"
