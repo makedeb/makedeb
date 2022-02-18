@@ -61,7 +61,7 @@ apt() {
     cmd="${1}"
 
     case "${cmd}" in
-        install) args+=('--allow-downgrades') ;;
+        install|reinstall|satisfy) args+=('--allow-downgrades') ;;
     esac
 
     apt_cmd=("${apt_path}" "${@}" "${args[@]}")
