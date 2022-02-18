@@ -53,7 +53,8 @@ sudo_check() {
 }
 
 # APT wrapper for common options that we need.
-apt_path="$(type -pf apt-get)"
+export apt_path="$(type -pf apt-get)"
+export sudo_path="$(type -pf sudo)"
 
 apt() {
     args=()
@@ -66,7 +67,7 @@ apt() {
     apt_cmd=("${apt_path}" "${@}" "${args[@]}")
 
     if [[ -n "${SUDO_PREFIX}" ]]; then
-        sudo "${apt_cmd[@]}"
+        "${sudo_path}" "${apt_cmd[@]}"
     else
         "${apt_cmd[@]}"
     fi
@@ -82,6 +83,7 @@ sudo() {
 
     case "${cmd}" in
         apt|apt-get) SUDO_PREFIX=y apt "${@:2}" ;;
+        *) "${sudo_path}" "${@}"
     esac
 }
 

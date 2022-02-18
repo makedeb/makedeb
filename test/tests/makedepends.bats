@@ -43,7 +43,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array makedepends restic
     pkgbuild clean
-    makedeb -sr
+    makedeb -sr --no-confirm
 
     run dpkg -s restic
     [[ "${lines[0]}" == "dpkg-query: package 'restic' is not installed and no information is available" ]]
