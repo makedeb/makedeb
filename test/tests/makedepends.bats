@@ -34,6 +34,7 @@ load ../util/util
 }
 
 @test "correct makedepends - remove installed build dependencies" {
+    skip "Awaiting packaging of Bats and Bats libraries on the MPR"
     sudo_check
     sudo apt-get purge restic -y
 
