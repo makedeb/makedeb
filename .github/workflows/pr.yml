@@ -1,6 +1,6 @@
 name: Build makedeb
-on:
- pull_request:
+on: {"pull_request"}
+env: {"DEBIAN_FRONTEND": "noninteractive"}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -8,15 +8,20 @@ jobs:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
     steps:
       - name: Set directory permissions
-        run: sudo chown 'makedeb:makedeb' ../ -R
-      - name: Install needed dependencies
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          sudo -E apt-get install tzdata git jq sudo sed ubuntu-dev-tools debhelper asciidoctor bats -y
+        run: sudo chown 'makedeb:makedeb' ../ /github/home/ -R
+      
+      - name: Install CI prerequisites
+        run: sudo -E apt-get install git -y
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head_sha }}
+
+      - name: Install needed dependencies
+        run: .drone/scripts/install-deps.sh
+      
       - name: Run unit tests
         run: .drone/scripts/run-unit-tests.sh
 

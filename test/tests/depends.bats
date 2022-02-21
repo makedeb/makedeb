@@ -22,6 +22,19 @@ load ../util/util
     makedeb -s --no-confirm
 }
 
+@test "correct depends - satisfy a build dependency via a provided package" {
+	sudo_check
+	sudo apt-get satisfy mawk -y
+
+	pkgbuild string pkgname testpkg
+	pkgbuild string pkgver 1.0.0
+	pkgbuild string pkgrel 1
+	pkgbuild array arch any
+	pkgbuild array depends 'awk'
+	pkgbuild clean
+	makedeb
+}
+
 @test "correct depends - valid dependency prefixes" {
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
@@ -46,3 +59,5 @@ load ../util/util
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] depends contains an invalid prefix: 'z!'" ]]
 }
+
+# vim: set syntax=bash ts=4 sw=4 expandtab:
