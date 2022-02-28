@@ -1,0 +1,5 @@
+Package: testpkg
+Version: 1.0.0-1
+Architecture: all
+Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Installed-Size: 10

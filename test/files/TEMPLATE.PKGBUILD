@@ -34,23 +34,3 @@ focal_provides=$${focal_provides}
 focal_replaces=$${focal_replaces}
 focal_source=$${focal_source}
 focal_sha256sums=$${focal_sha256sums}
-
-prepare() {
-    true
-}
-
-pkgver() {
-    echo "1.0.0"
-}
-
-build() {
-    true
-}
-
-check() {
-    true
-}
-
-package() {
-    true
-}

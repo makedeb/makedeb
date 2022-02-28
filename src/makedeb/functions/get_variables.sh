@@ -7,7 +7,7 @@ get_variables() {
   fi
 
   # Process variables.
-  for i in pkgname pkgver pkgdesc url arch license provides replaces; do
+  for i in pkgname pkgver pkgdesc url arch license provides replaces backup; do
     local returned_array=()
 
     # Get field values
