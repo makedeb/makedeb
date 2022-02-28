@@ -24,7 +24,7 @@ add_packaging_files() {
 		touch "${pkgdir}/${package}/DEBIAN/conffiles"
 
 		for i in "${backup[@]}"; do
-			echo "${i}" > "${pkgdir}/${package}/DEBIAN/conffiles"
+			echo "${i}" >> "${pkgdir}/${package}/DEBIAN/conffiles"
 		done
 	fi
 }
