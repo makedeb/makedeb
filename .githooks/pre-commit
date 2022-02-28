@@ -86,7 +86,7 @@ def main():
     # If we updated '.data.json', write the file.
     if ".data.json" in staged_files:
         with open(".data.json", "w") as file:
-            file.write(json.dumps(repo_data, indent="    "))
+            file.write(json.dumps(repo_data, indent="    ") + "\n")
 
     # If we updated any files, add them to the current commit.
     if changed_files != []:
