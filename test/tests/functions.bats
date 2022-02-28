@@ -22,12 +22,15 @@ load ../util/util
 }
 
 @test "incorrect pkgver() - incorrect syntax for returned version" {
+    pkgver() {
+        echo "asdf me"
+    }
+
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild array arch any
-    remove_function "pkgver"
-    echo -e '\npkgver() { echo "asdf me"; }' >> PKGBUILD
+    pkgbuild function pkgver
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
