@@ -41,8 +41,8 @@ lint_backup() {
 	done
 
 	for name in "${backup_list[@]}"; do
-		if [[ ${name:0:1} = "/" ]]; then
-			error "$(gettext "%s entry should not contain leading slash : %s")" "backup" "$name"
+		if [[ ${name:0:1} != "/" ]]; then
+			error "$(gettext "%s entry should start with a foward slash : %s")" "backup" "$name"
 			ret=1
 		fi
 	done

@@ -1,10 +1,12 @@
 # Setup function run before each test.
 setup() {
     cd "${BATS_TEST_DIRNAME}"
-    rm -rf build_area/
-    mkdir build_area/
-    cp ../files/TEMPLATE.PKGBUILD ./build_area/PKGBUILD
-    cd build_area/
+
+    rm test_dir/ -rf
+    mkdir test_dir/
+
+    cp ../files/TEMPLATE.PKGBUILD test_dir/PKGBUILD
+    cd test_dir/
 
     lsb_release() {
         echo "focal"
@@ -28,8 +30,20 @@ pkgbuild() {
         strings="${strings@Q}"
         sed -i "s|\$\${${variable}}|${strings}|" "${PKGBUILD:-PKGBUILD}"
 
+    elif [[ "${cmd}" == "function" ]]; then
+        if [[ "$(type -t "${variable}")" != 'function' ]]; then
+            echo "'${variable}' isn't a function. Not adding to PKGBUILD."
+            return 1
+        fi
+
+        type "${variable}" | sed 1d | tee -a PKGBUILD 1> /dev/null
+
     elif [[ "${cmd}" == "clean" ]]; then
         sed -i 's|^.*$${.*$||g' "${PKGBUILD:-PKGBUILD}"
+
+    else
+        echo "Invalid command '${cmd}'."
+        return 1
     fi
 }
 

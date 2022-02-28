@@ -3,3 +3,5 @@ debian/.debhelper/
 debian/debhelper-build-stamp
 debian/makedeb
 debian/makedeb.substvars
+test/tests/test_dir
+src/makedeb/PKGBUILD
