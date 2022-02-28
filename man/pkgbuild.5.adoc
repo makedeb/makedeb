@@ -65,6 +65,9 @@ If you need to set custom variables for your own use in a build script, it is re
   ++
   When using *custom*, it is also recommended to install the license under **/usr/share/doc/pkgname/copyright/**, replacing *pkgname* with the name of the package.
 
+*backup (optional, function, array)*::
+  A list of files to be treates as conffiles(*deb-conffiles*(5)).
+
 === DEPENDENCIES
 *depends (optional, function, array)*::
   A list of packages needed to execute a program. When listed as a variable from the root of a PKGBUILD, the dependencies get installed before a build takes place. If placed inside of a function such as *package()*, the dependencies get marked as needed by the built package, but won't be checked for while building.
