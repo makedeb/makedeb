@@ -26,7 +26,6 @@ body:
       label: Installation source
       options:
         - APT Repository
-        - Arch User Repository (AUR)
         - makedeb Package Repository (MPR)
     validations:
       required: true
@@ -44,11 +43,5 @@ body:
   - type: input
     attributes:
       label: Installed makedeb version
-    validations:
-      required: true
-
-  - type: input
-    attributes:
-      label: Installed makepkg version
     validations:
       required: true
