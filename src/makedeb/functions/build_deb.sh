@@ -1,6 +1,6 @@
 # This function should be run from the directory containing the 'DEBIAN' folder.
-zstdthreads=0
-zstdlevel=10
+zstdthreads="0"
+zstdlevel="10"
 build_deb() {
   local pkgname="${1}" \
         tar_control_arguments \
@@ -10,7 +10,7 @@ build_deb() {
   cd DEBIAN/
   mapfile -t tar_control_arguments < <(find ./ | grep -v '^\./$')
   tar -cf ./control.tar "${tar_control_arguments[@]}"
-  zstd -T${zstdthreads} -${zstdlevel} --rm -q control.tar
+  zstd "-T${zstdthreads}" "-${zstdlevel}" --rm -q control.tar
   cd ..
 
   # Generate data.tar.zst archive.
@@ -24,7 +24,7 @@ build_deb() {
   else
     printf '' | tar -cf data.tar --files-from -
   fi
-  zstd -T${zstdthreads} -${zstdlevel} --rm -q data.tar
+  zstd "-T${zstdthreads}" "-${zstdlevel}" --rm -q data.tar
   # Create the debian-binary file.
   echo "2.0" > debian-binary
 
