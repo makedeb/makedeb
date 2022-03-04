@@ -46,12 +46,36 @@ download_git() {
 	url=${url%%#*}
 	url=${url%%\?*}
 
+	local ref=origin/HEAD
+	if [[ -n $fragment ]]; then
+		case ${fragment%%=*} in
+			commit|tag)
+				ref=${fragment##*=}
+				;;
+			branch)
+				ref=${fragment##*=}
+				;;
+			*)
+				error "$(gettext "Unrecognized reference: %s")" "${fragment}"
+				plainerr "$(gettext "Aborting...")"
+				exit 1
+		esac
+	fi
+
 	if [[ ! -d "$dir" ]] || dir_is_empty "$dir" ; then
 		msg2 "$(gettext "Cloning %s %s repo...")" "${repo}" "git"
-		if ! git clone --mirror "$url" "$dir"; then
-			error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
-			plainerr "$(gettext "Aborting...")"
-			exit 1
+		if [[ $ref != "origin/HEAD" ]] || (( updating )) ; then
+			if ! git clone --depth 1 --branch "${ref}" "$url" "$dir"; then
+				error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
+				plainerr "$(gettext "Aborting...")"
+				exit 1
+			fi
+		else
+			if ! git clone --depth 1 "$url" "$dir"; then
+				error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
+				plainerr "$(gettext "Aborting...")"
+				exit 1
+			fi
 		fi
 	elif (( ! HOLDVER )); then
 		cd_safe "$dir"
@@ -98,39 +122,6 @@ extract_git() {
 	fi
 
 	cd_safe "${dir##*/}"
-
-	local ref=origin/HEAD
-	if [[ -n $fragment ]]; then
-		case ${fragment%%=*} in
-			commit|tag)
-				ref=${fragment##*=}
-				;;
-			branch)
-				ref=origin/${fragment##*=}
-				;;
-			*)
-				error "$(gettext "Unrecognized reference: %s")" "${fragment}"
-				plainerr "$(gettext "Aborting...")"
-				exit 1
-		esac
-	fi
-
-	if [[ ${fragment%%=*} = tag ]]; then
-		tagname="$(git tag -l --format='%(tag)' "$ref")"
-		if [[ -n $tagname && $tagname != "$ref" ]]; then
-			error "$(gettext "Failure while checking out version %s, the git tag has been forged")" "$ref"
-			plainerr "$(gettext "Aborting...")"
-			exit 1
-		fi
-	fi
-
-	if [[ $ref != "origin/HEAD" ]] || (( updating )) ; then
-		if ! git checkout --force --no-track -B makepkg "$ref" --; then
-			error "$(gettext "Failure while creating working copy of %s %s repo")" "${repo}" "git"
-			plainerr "$(gettext "Aborting...")"
-			exit 1
-		fi
-	fi
 
 	popd &>/dev/null
 }
