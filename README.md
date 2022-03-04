@@ -3,11 +3,9 @@
 [![Deployment - Beta](https://img.shields.io/drone/build/makedeb/makedeb/beta?label=beta&logo=drone&server=https%3A%2F%2Fdrone.hunterwittenborn.com)](https://drone.hunterwittenborn.com/makedeb/makedeb/branches)
 [![Deployment - Alpha](https://img.shields.io/drone/build/makedeb/makedeb/alpha?label=alpha&logo=drone&server=https%3A%2F%2Fdrone.hunterwittenborn.com)](https://drone.hunterwittenborn.com/makedeb/makedeb/branches)
 
-makedeb is a packaging tool for Debian-based systems that aims to be simple and easy to use, whilst still remaining just as powerful as standard Debian tooling.
+makedeb is a packaging tool for Debian and Ubuntu based systems that aims to be simple and easy to use, whilst still remaining just as powerful as standard Debian tooling.
 
 ## Installation and usage
-makedeb is available on both Debian-based and Arch-based Linux distributions.
-
 Full instructions on installation can be found in [makedeb's documentation](https://docs.hunterwittenborn.com/makedeb).
 
 Help with available usage can also be found after installation with `makedeb --help`.

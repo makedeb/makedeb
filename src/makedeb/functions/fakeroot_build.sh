@@ -54,7 +54,7 @@ fakeroot_build() {
     INSTALLED_SIZE="${installed_size}" \
         generate_control "../../${FILE}" ./DEBIAN/control
 
-    add_install_scripts
+    add_packaging_files
 
     # Remove leftover build files from makepkg.
     # We don't print a message for this, as there's some spots in makepkg that

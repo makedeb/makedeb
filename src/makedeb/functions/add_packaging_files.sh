@@ -1,4 +1,5 @@
-add_install_scripts() {
+add_packaging_files() {
+	# Maintainer scripts.
 	# Print a warning if .install scripts are being used, as we've deprecated them.
 	if [[ -f ".INSTALL" ]]; then
 		warning2 "Installation scripts have been deprecated, and will no longer work. See the PKGBUILD(5) man page for information on using the new implementation."
@@ -17,4 +18,13 @@ add_install_scripts() {
 			fi
 		fi
 	done
+
+	# conffiles.
+	if [[ "${backup[@]+x}" == "x" ]]; then
+		touch "${pkgdir}/${package}/DEBIAN/conffiles"
+
+		for i in "${backup[@]}"; do
+			echo "${i}" >> "${pkgdir}/${package}/DEBIAN/conffiles"
+		done
+	fi
 }

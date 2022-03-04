@@ -31,7 +31,7 @@ lint_package_functions+=('warn_missing_backup')
 warn_missing_backup() {
 	local file
 	for file in "${backup[@]}"; do
-		if [[ ! -f $file ]]; then
+		if [[ ! -f "${pkgdir}/${file}" ]]; then
 			warning "$(gettext "%s entry file not in package : %s")" "backup" "$file"
 		fi
 	done
