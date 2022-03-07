@@ -125,7 +125,7 @@ extract_git() {
 	fi
 
 	if [[ $ref != "origin/HEAD" ]] || (( updating )) ; then
-		if ! git checkout --force --no-track -B makepkg "$ref" --; then
+		if ! git checkout --force --no-track -B makedeb "$ref" --; then
 			error "$(gettext "Failure while creating working copy of %s %s repo")" "${repo}" "git"
 			plainerr "$(gettext "Aborting...")"
 			exit 1
