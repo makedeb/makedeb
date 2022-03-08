@@ -122,6 +122,6 @@ extract_git() {
 	fi
 
 	cd_safe "${dir##*/}"
-
+  
 	popd &>/dev/null
 }
