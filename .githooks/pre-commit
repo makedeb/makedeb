@@ -51,9 +51,8 @@ def main():
     staged_files = _run_command(["git", "diff", "--name-only", "--staged"]).splitlines()
 
     # Check if recorded epochs need updated for any man pages.
-    for i in man_files:
+    for i, epoch_key in man_files.items():
         if i in staged_files:
-            epoch_key = man_files[i]
             current_epoch = _run_command(["stat", "--format=%Z", "--", i]).strip()
 
             if repo_data[epoch_key] != current_epoch:
