@@ -31,7 +31,7 @@ with open(f"./{filename}", "rb") as file:
                     auth=HTTPBasicAuth("api", proget_api_key))
 
 if response.reason != "Created":
-    print(f"ERROR: There was an error uploading the package.")
+    print("ERROR: There was an error uploading the package.")
     print("=====")
     print(response.reason)
     print(response.text)
