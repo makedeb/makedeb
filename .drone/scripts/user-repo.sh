@@ -7,7 +7,7 @@ rm -rf "/${HOME}/.ssh"
 mkdir -p "/${HOME}/.ssh"
 
 # Get current SSH fingerprint.
-mpr_fingerprint='SHA256:7Wki/ZTENAVOYmAtH4+vhqZB8vHkLURS+eK1SQy0jTs'
+mpr_fingerprint="$(curl "https://${mpr_url}/api/meta" | jq -r '.ssh_key_fingerprints.ECDSA')"
 aur_fingerprint='SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4'
 current_fingerprint="${target_repo}_fingerprint"
 current_fingerprint="${!current_fingerprint}"
