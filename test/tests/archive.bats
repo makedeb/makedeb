@@ -11,7 +11,7 @@ load ../util/util
     makedeb -d
 
     ar xf testpkg_1.0.0-1_all.deb
-    mapfile -t files < <(tar tf control.tar.gz | sort -V)
+    mapfile -t files < <(tar tf control.tar.zst | sort -V)
     mapfile -t expected_files < <(printf '%s\n' './control' './preinst' | sort -V)
 
     [[ "${#files[@]}" == "${#expected_files[@]}" ]]
