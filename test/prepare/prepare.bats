@@ -10,6 +10,6 @@ setup() {
 
 @test "install makedeb from native-packaged version" {
     cd ../../
-    version="$(cat .data.json | jq -r ".current_pkgver_${release_type} + \"-1\"")"
+    version="$(cat .data.json | jq -r ".current_pkgver + \"-\" + .current_pkgrel_${release_type}")"
     sudo -n DEBIAN_FRONTEND=noninteractive apt-get reinstall --allow-downgrades "./${pkgname}_${version}_all.deb" -y
 }
