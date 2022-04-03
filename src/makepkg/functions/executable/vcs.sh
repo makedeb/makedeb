@@ -58,11 +58,6 @@ executable_vcs() {
 		return $ret
 	fi
 
-	if [[ -z $PACMAN_PATH ]]; then
-		warning "$(gettext "Cannot find the %s binary needed to check VCS source requirements.")" "$PACMAN"
-		return $ret
-	fi
-
 	# we currently only use global depends/makedepends arrays for --syncdeps
 	for attr in depends makedepends; do
 		get_pkgbuild_attribute "$pkg" "$attr" 1 'deps'

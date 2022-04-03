@@ -35,12 +35,14 @@ export TEXTDOMAINDIR='/usr/share/locale'
 
 # file -i does not work on Mac OSX unless legacy mode is set
 export COMMAND_MODE='legacy'
+
 # Ensure CDPATH doesn't screw with our cd calls
 unset CDPATH
+
 # Ensure GREP_OPTIONS doesn't screw with our grep calls
 unset GREP_OPTIONS
 
-declare -r makepkg_program_name="${makepkg_program_name:-makedeb-makepkg}"
+declare -r makepkg_program_name="makedeb"
 declare -r makepkg_version='$${MAKEPKG_VERSION}'
 declare -r confdir='/etc'
 declare -r BUILDSCRIPT='PKGBUILD'
@@ -69,11 +71,14 @@ LOGGING=0
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
+NOCONFIRM=0
 NODEPS=0
 NOEXTRACT=0
 PKGFUNC=0
 PKGVERFUNC=0
 PREPAREFUNC=0
+PRINTCONTROL=0
+PRINTSRCINFO=0
 REPKG=0
 REPRODUCIBLE=0
 RMDEPS=0
@@ -83,6 +88,7 @@ SIGNPKG=''
 SPLITPKG=0
 SOURCEONLY=0
 VERIFYSOURCE=0
+CONTROL_FIELDS=()
 
 if [[ -n $SOURCE_DATE_EPOCH ]]; then
 	REPRODUCIBLE=1
@@ -95,24 +101,24 @@ PACMAN_OPTS=()
 
 shopt -s extglob
 
-### SUBROUTINES ###
+#################
+## SUBROUTINES ##
+#################
 
 # Import libmakepkg
 for lib in "$LIBRARY"/*.sh; do
 	source "$lib"
 done
 
-##
 # Special exit call for traps, Don't print any error messages when inside,
 # the fakeroot call, the error message will be printed by the main call.
-##
 trap_exit() {
 	local signal=$1; shift
 
 	if (( ! INFAKEROOT )); then
 
 		# Don't print interrupt errors when formatting output for makedeb.
-		if [[ "$signal" == "INT" ]] && ! (( "${FORMAT_MAKEDEB}" )); then
+		if [[ "$signal" == "INT" ]]; then
 			echo
 			error "$@"
 		fi
@@ -125,9 +131,7 @@ trap_exit() {
 }
 
 
-##
 # Clean up function. Called automatically when the script exits.
-##
 clean_up() {
 	local EXIT_CODE=$?
 
@@ -179,17 +183,11 @@ clean_up() {
 			done
 		fi
 	fi
-
-	if ! remove_deps && (( EXIT_CODE == E_OK )); then
-	    exit $E_REMOVE_DEPS_FAILED
-	else
-	    exit $EXIT_CODE
-	fi
 }
 
 enter_fakeroot() {
-	(( ! FORMAT_MAKEDEB )) && msg "$(gettext "Entering %s environment...")" "fakeroot"
-	fakeroot -- bash -$- "${BASH_SOURCE[0]}" -F "${ARGLIST[@]}" || exit $?
+	msg "$(gettext "Entering %s environment...")" "fakeroot"
+	fakeroot -- bash -$- "${BASH_SOURCE[0]}" --in-fakeroot "${ARGLIST[@]}" || exit $?
 }
 
 # Automatically update pkgver variable if a pkgver() function is provided
@@ -230,140 +228,6 @@ missing_source_file() {
 	error "$(gettext "Unable to find source file %s.")" "$(get_filename "$1")"
 	plainerr "$(gettext "Aborting...")"
 	exit $E_MISSING_FILE
-}
-
-run_pacman() {
-	local cmd cmdescape
-	if [[ $1 = -@(T|Q)*([[:alpha:]]) ]]; then
-		cmd=("$PACMAN_PATH" "$@")
-	else
-		cmd=("$PACMAN_PATH" "${PACMAN_OPTS[@]}" "$@")
-		cmdescape="$(printf '%q ' "${cmd[@]}")"
-		if (( ${#PACMAN_AUTH[@]} )); then
-			if in_array '%c' "${PACMAN_AUTH[@]}"; then
-				cmd=("${PACMAN_AUTH[@]/\%c/$cmdescape}")
-			else
-				cmd=("${PACMAN_AUTH[@]}" "${cmd[@]}")
-			fi
-		elif type -p sudo >/dev/null; then
-			cmd=(sudo "${cmd[@]}")
-		else
-			cmd=(su root -c "$cmdescape")
-		fi
-		local lockfile="$(pacman-conf DBPath)/db.lck"
-		while [[ -f $lockfile ]]; do
-			local timer=0
-			msg "$(gettext "Pacman is currently in use, please wait...")"
-			while [[ -f $lockfile ]] && (( timer < 10 )); do
-				(( ++timer ))
-				sleep 3
-			done
-		done
-	fi
-	"${cmd[@]}"
-}
-
-check_deps() {
-	(( $# > 0 )) || return 0
-
-	local ret=0
-	local pmout
-	pmout=$(run_pacman -T "$@")
-	ret=$?
-
-	if (( ret == 127 )); then #unresolved deps
-		printf "%s\n" "$pmout"
-	elif (( ret )); then
-		error "$(gettext "'%s' returned a fatal error (%i): %s")" "$PACMAN" "$ret" "$pmout"
-		return "$ret"
-	fi
-}
-
-handle_deps() {
-	local R_DEPS_SATISFIED=0
-	local R_DEPS_MISSING=1
-
-	(( $# == 0 )) && return $R_DEPS_SATISFIED
-
-	local deplist=("$@")
-
-	if (( ! DEP_BIN )); then
-		return $R_DEPS_MISSING
-	fi
-
-	if (( DEP_BIN )); then
-		# install missing deps from binary packages (using pacman -S)
-		msg "$(gettext "Installing missing dependencies...")"
-
-		if ! run_pacman -S --asdeps "${deplist[@]}"; then
-			error "$(gettext "'%s' failed to install missing dependencies.")" "$PACMAN"
-			return $R_DEPS_MISSING
-		fi
-	fi
-
-	# we might need the new system environment
-	# save our shell options and turn off extglob
-	local shellopts=$(shopt -p extglob)
-	shopt -u extglob
-	source /etc/profile &>/dev/null
-	eval "$shellopts"
-
-	# umask might have been changed in /etc/profile
-	# ensure that sane default is set again
-	umask 0022
-
-	return $R_DEPS_SATISFIED
-}
-
-resolve_deps() {
-	local R_DEPS_SATISFIED=0
-	local R_DEPS_MISSING=1
-
-	# deplist cannot be declared like this: local deplist=$(foo)
-	# Otherwise, the return value will depend on the assignment.
-	local deplist
-	deplist=($(check_deps "$@")) || exit $E_INSTALL_DEPS_FAILED
-	[[ -z $deplist ]] && return $R_DEPS_SATISFIED
-
-	if handle_deps "${deplist[@]}"; then
-		# check deps again to make sure they were resolved
-		deplist=$(check_deps "$@")
-		[[ -z $deplist ]] && return $R_DEPS_SATISFIED
-	fi
-
-	msg "$(gettext "Missing dependencies:")"
-	local dep
-	for dep in ${deplist[@]}; do
-		msg2 "$dep"
-	done
-
-	return $R_DEPS_MISSING
-}
-
-remove_deps() {
-	(( ! RMDEPS )) && return 0
-
-	# check for packages removed during dependency install (e.g. due to conflicts)
-	# removing all installed packages is risky in this case
-	if [[ -n $(grep -xvFf <(printf '%s\n' "${current_pkglist[@]}") \
-			<(printf '%s\n' "${original_pkglist[@]}")) ]]; then
-		warning "$(gettext "Failed to remove installed dependencies.")"
-		return $E_REMOVE_DEPS_FAILED
-	fi
-
-	local deplist
-	deplist=($(grep -xvFf <(printf "%s\n" "${original_pkglist[@]}") \
-			<(printf "%s\n" "${current_pkglist[@]}")))
-	if [[ -z $deplist ]]; then
-		return 0
-	fi
-
-	msg "Removing installed dependencies..."
-	# exit cleanly on failure to remove deps as package has been built successfully
-	if ! run_pacman -Rnu ${deplist[@]}; then
-		warning "$(gettext "Failed to remove installed dependencies.")"
-		return $E_REMOVE_DEPS_FAILED
-	fi
 }
 
 error_function() {
@@ -479,121 +343,6 @@ run_package() {
 	run_function_safe "package${1:+_$1}"
 }
 
-find_libdepends() {
-	local d sodepends
-
-	sodepends=0
-	for d in "${depends[@]}"; do
-		if [[ $d = *.so ]]; then
-			sodepends=1
-			break
-		fi
-	done
-
-	if (( sodepends == 0 )); then
-		(( ${#depends[@]} )) && printf '%s\n' "${depends[@]}"
-		return 0
-	fi
-
-	local libdeps filename soarch sofile soname soversion
-	declare -A libdeps
-
-	while IFS= read -rd '' filename; do
-		# get architecture of the file; if soarch is empty it's not an ELF binary
-		soarch=$(LC_ALL=C readelf -h "$filename" 2>/dev/null | sed -n 's/.*Class.*ELF\(32\|64\)/\1/p')
-		[[ -n "$soarch" ]] || continue
-
-		# process all libraries needed by the binary
-		for sofile in $(LC_ALL=C readelf -d "$filename" 2>/dev/null | sed -nr 's/.*Shared library: \[(.*)\].*/\1/p')
-		do
-			# extract the library name: libfoo.so
-			soname="${sofile%.so?(+(.+([0-9])))}".so
-			# extract the major version: 1
-			soversion="${sofile##*\.so\.}"
-
-			if [[ ${libdeps[$soname]} ]]; then
-				if [[ ${libdeps[$soname]} != *${soversion}-${soarch}* ]]; then
-					libdeps[$soname]+=" ${soversion}-${soarch}"
-				fi
-			else
-				libdeps[$soname]="${soversion}-${soarch}"
-			fi
-		done
-	done < <(find "$pkgdir" -type f -perm -u+x -print0)
-
-	local libdepends v
-	for d in "${depends[@]}"; do
-		case "$d" in
-			*.so)
-				if [[ ${libdeps[$d]} ]]; then
-					for v in ${libdeps[$d]}; do
-						libdepends+=("$d=$v")
-					done
-				else
-					warning "$(gettext "Library listed in %s is not required by any files: %s")" "'depends'" "$d"
-					libdepends+=("$d")
-				fi
-				;;
-			*)
-				libdepends+=("$d")
-				;;
-		esac
-	done
-
-	(( ${#libdepends[@]} )) && printf '%s\n' "${libdepends[@]}"
-}
-
-
-find_libprovides() {
-	local p versioned_provides libprovides missing
-	for p in "${provides[@]}"; do
-		missing=0
-		versioned_provides=()
-		case "$p" in
-			*.so)
-				mapfile -t filename < <(find "$pkgdir" -type f -name $p\* | LC_ALL=C sort)
-				if [[ $filename ]]; then
-					# packages may provide multiple versions of the same library
-					for fn in "${filename[@]}"; do
-						# check if we really have a shared object
-						if LC_ALL=C readelf -h "$fn" 2>/dev/null | grep -q '.*Type:.*DYN (Shared object file).*'; then
-							# get the string binaries link to (e.g. libfoo.so.1.2 -> libfoo.so.1)
-							local sofile=$(LC_ALL=C readelf -d "$fn" 2>/dev/null | sed -n 's/.*Library soname: \[\(.*\)\].*/\1/p')
-							if [[ -z "$sofile" ]]; then
-								warning "$(gettext "Library listed in %s is not versioned: %s")" "'provides'" "$p"
-								continue
-							fi
-
-							# get the library architecture (32 or 64 bit)
-							local soarch=$(LC_ALL=C readelf -h "$fn" | sed -n 's/.*Class.*ELF\(32\|64\)/\1/p')
-
-							# extract the library major version
-							local soversion="${sofile##*\.so\.}"
-
-							versioned_provides+=("${p}=${soversion}-${soarch}")
-						else
-							warning "$(gettext "Library listed in %s is not a shared object: %s")" "'provides'" "$p"
-						fi
-					done
-				else
-					missing=1
-				fi
-				;;
-		esac
-
-		if (( missing )); then
-			warning "$(gettext "Cannot find library listed in %s: %s")" "'provides'" "$p"
-		fi
-		if (( ${#versioned_provides[@]} > 0 )); then
-			libprovides+=("${versioned_provides[@]}")
-		else
-			libprovides+=("$p")
-		fi
-	done
-
-	(( ${#libprovides[@]} )) && printf '%s\n' "${libprovides[@]}"
-}
-
 write_kv_pair() {
 	local key="$1"
 	shift
@@ -705,12 +454,12 @@ create_package() {
 	fi
 
 	cd_safe "$pkgdir"
-	(( NOARCHIVE || FORMAT_MAKEDEB )) || msg "$(gettext "Creating package \"%s\"...")" "$pkgname"
+	(( NOARCHIVE )) || msg "$(gettext "Creating package \"%s\"...")" "$pkgname"
 
 	pkgarch=$(get_pkg_arch)
-	(( ! FORMAT_MAKEDEB )) && msg2 "$(gettext "Generating %s file...")" ".PKGINFO"
+	msg2 "$(gettext "Generating %s file...")" ".PKGINFO"
 	write_pkginfo > .PKGINFO
-	(( ! FORMAT_MAKEDEB )) && msg2 "$(gettext "Generating %s file...")" ".BUILDINFO"
+	msg2 "$(gettext "Generating %s file...")" ".BUILDINFO"
 	write_buildinfo > .BUILDINFO
 
 	# check for changelog/install files
@@ -739,13 +488,13 @@ create_package() {
 	# ensure all elements of the package have the same mtime
 	find . -exec touch -h -d @$SOURCE_DATE_EPOCH {} +
 
-	(( ! FORMAT_MAKEDEB )) && msg2 "$(gettext "Generating .MTREE file...")"
+	msg2 "$(gettext "Generating .MTREE file...")"
 	list_package_files | LANG=C bsdtar -cnf - --format=mtree \
 		--options='!all,use-set,type,uid,gid,mode,time,size,md5,sha256,link' \
 		--null --files-from - --exclude .MTREE | gzip -c -f -n > .MTREE
 	touch -d @$SOURCE_DATE_EPOCH .MTREE
 
-	(( FORMAT_MAKEDEB )) || msg2 "$(gettext "Compressing package...")"
+	msg2 "$(gettext "Compressing package...")"
 	# TODO: Maybe this can be set globally for robustness
 	shopt -s -o pipefail
 	list_package_files | LANG=C bsdtar --no-fflags -cnf - --null --files-from - |
@@ -1002,71 +751,36 @@ usage() {
 	printf -- "$(gettext "Usage: %s [options]")\n" "makepkg"
 	echo
 	printf -- "$(gettext "Options:")\n"
-	printf -- "$(gettext "  -A, --ignorearch    Ignore incomplete %s field in %s")\n" "arch" "$BUILDSCRIPT"
-	printf -- "$(gettext "  -c, --clean         Clean up work files after build")\n"
-	printf -- "$(gettext "  -C, --cleanbuild    Remove %s dir before building the package")\n" "\$srcdir/"
-	printf -- "$(gettext "  -d, --nodeps        Skip all dependency checks")\n"
-	printf -- "$(gettext "  -e, --noextract     Do not extract source files (use existing %s dir)")\n" "\$srcdir/"
-	printf -- "$(gettext "  -f, --force         Overwrite existing package")\n"
-	printf -- "$(gettext "  -g, --geninteg      Generate integrity checks for source files")\n"
-	printf -- "$(gettext "  -h, --help          Show this help message and exit")\n"
-	printf -- "$(gettext "  -i, --install       Install package after successful build")\n"
-	printf -- "$(gettext "  -L, --log           Log package build process")\n"
-	printf -- "$(gettext "  -m, --nocolor       Disable colorized output messages")\n"
-	printf -- "$(gettext "  -o, --nobuild       Download and extract files only")\n"
-	printf -- "$(gettext "  -p <file>           Use an alternate build script (instead of '%s')")\n" "$BUILDSCRIPT"
-	printf -- "$(gettext "  -r, --rmdeps        Remove installed dependencies after a successful build")\n"
-	printf -- "$(gettext "  -R, --repackage     Repackage contents of the package without rebuilding")\n"
-	printf -- "$(gettext "  -s, --syncdeps      Install missing dependencies with %s")\n" "pacman"
-	printf -- "$(gettext "  -S, --source        Generate a source-only tarball without downloaded sources")\n"
-	printf -- "$(gettext "  -V, --version       Show version information and exit")\n"
-	printf -- "$(gettext "  --allsource         Generate a source-only tarball including downloaded sources")\n"
-	printf -- "$(gettext "  --check             Run the %s function in the %s")\n" "check()" "$BUILDSCRIPT"
-	printf -- "$(gettext "  --config <file>     Use an alternate config file (instead of '%s')")\n" "$confdir/makepkg.conf"
-	printf -- "$(gettext "  --format-makedeb    Properly format output for makedeb\n")"
-	printf -- "$(gettext "  --holdver           Do not update VCS sources")\n"
-	printf -- "$(gettext "  --key <key>         Specify a key to use for %s signing instead of the default")\n" "gpg"
-	printf -- "$(gettext "  --lint              Check that a build file is using correct syntax")\n"
-	printf -- "$(gettext "  --noarchive         Do not create package archive")\n"
-	printf -- "$(gettext "  --nocheck           Do not run the %s function in the %s")\n" "check()" "$BUILDSCRIPT"
-	printf -- "$(gettext "  --noprepare         Do not run the %s function in the %s")\n" "prepare()" "$BUILDSCRIPT"
-	printf -- "$(gettext "  --nosign            Do not create a signature for the package")\n"
-	printf -- "$(gettext "  --packagelist       Only list package filepaths that would be produced")\n"
-	printf -- "$(gettext "  --printsrcinfo      Print the generated SRCINFO and exit")\n"
-	printf -- "$(gettext "  --sign              Sign the resulting package with %s")\n" "gpg"
-	printf -- "$(gettext "  --skipchecksums     Do not verify checksums of the source files")\n"
-	printf -- "$(gettext "  --skipinteg         Do not perform any verification checks on source files")\n"
-	printf -- "$(gettext "  --skippgpcheck      Do not verify source files with PGP signatures")\n"
-	printf -- "$(gettext "  --verifysource      Download source files (if needed) and perform integrity checks")\n"
+	printf -- "$(gettext "  -A, --ignore-arch    Ignore errors about mismatching architectures")\n"
+	printf -- "$(gettext "  -d, --no-deps        Skip all dependency checks")\n"
+	printf -- "$(gettext "  -F, --file, -p       Specify a location to the build file (defaults to 'PKGBUILD')")\n"
+	printf -- "$(gettext "  -g, --gen-integ      Generate hashes for source files")\n"
+	printf -- "$(gettext "  -h, --help           Show this help menu and exit")\n"
+	printf -- "$(gettext "  -H, --field          Append the packaged control file with custom control fields")\n"
+	printf -- "$(gettext "  -i, --install        Automatically install the built package(s) after building")\n"
+	printf -- "$(gettext "  -V, --version        Show version information and exit")\n"
+	printf -- "$(gettext "  -r, --rm-deps        Remove installed makedepends and checkdepends after building")\n"
+	printf -- "$(gettext "  -s, --sync-deps      Install missing dependencies")\n"
+	printf -- "$(gettext "  --print-control      Print a generated control file and exit")\n"
+	printf -- "$(gettext "  --print-srcinfo      Print a generated .SRCINFO file and exit")\n"
+	printf -- "$(gettext "  --skip-pgp-check     Do not verify source files against PGP signatures")\n"
 	echo
-
-	if [[ "${makepkg_target_os}" == "arch" ]]; then
-		printf "These options can be passed to pacman:\n"
-
-		printf -- "$(gettext "  --asdeps         Install packages as non-explicitly installed")\n"
-		printf -- "$(gettext "  --needed         Do not reinstall the targets that are already up to date")\n"
-		printf -- "$(gettext "  --noconfirm      Do not ask for confirmation when resolving dependencies")\n"
-		printf -- "$(gettext "  --noprogressbar  Do not show a progress bar when downloading files")\n"
-
-		printf -- "$(gettext "If %s is not specified, %s will look for '%s'")\n" "-p" "makepkg" "$BUILDSCRIPT"
-		echo
-	fi
+	printf -- "$(gettext "The following options can modify the behavior of APT during package and dependency installation:")\n"
+	printf -- "$(gettext "  --as-deps            Mark built packages as automatically installed")\n"
+	printf -- "$(gettext "  --no-confirm         Don't ask before installing packages")\n"
+	echo
+	printf -- "$(gettext "See makedeb(8) for information on available options and links for obtaining support.")\n"
 }
 
 version() {
-	printf "makepkg (%s) %s\n" "$makepkg_version"
-	printf -- "    Copyright (c) 2021 Hunter Wittenborn <hunter@hunterwittenborn.com>.\n"
-	printf -- "\n"
-	printf -- "Thank you for the work done by the Arch Linux team in creating makepkg itself, without which makedeb wouldn't be possible.\n"
-	printf -- "    2002-2006 Judd Vinet <jvinet@zeroflux.org>.\n"
-	printf -- "    2006-2021 Pacman Development Team <pacman-dev@archlinux.org>.\n"
-	printf '\n'
-	printf -- "$(gettext "\
-This is free software; see the source for copying conditions.\n\
-There is NO WARRANTY, to the extent permitted by law.\n")"
+	printf "makedeb ${makepkg_version}\n"
+	printf "Alpha Release\n"
+	printf "Installed from APT\n"
 }
 
-# PROGRAM START
+###################
+## BEGIN PROGRAM ##
+###################
 
 # ensure we have a sane umask set
 umask 0022
@@ -1081,19 +795,11 @@ fi
 ARGLIST=("$@")
 
 # Parse Command Line Options.
-OPT_SHORT="AcCdefFghiLmop:rRsSV"
-OPT_LONG=('allsource' 'check' 'clean' 'cleanbuild' 'config:' 'force' 'geninteg'
-          'help' 'holdver' 'ignorearch' 'install' 'key:' 'log' 'noarchive' 'nobuild'
-          'nocolor' 'nocheck' 'nodeps' 'noextract' 'noprepare' 'nosign' 'packagelist'
-          'printsrcinfo' 'repackage' 'rmdeps' 'sign' 'skipchecksums' 'skipinteg'
-          'skippgpcheck' 'source' 'syncdeps' 'verifysource' 'version'
-
-		  'distrovars' 'skip-makedeb-warning' 'format-makedeb' 'lint')
-
-# Pacman options
-if [[ "${makepkg_target_os}" == "arch" ]]; then
-	OPT_LONG+=('asdeps' 'needed' 'noconfirm' 'noprogressbar')
-fi
+OPT_SHORT='AdF:p:ghH:ivrs'
+OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
+	  'help' 'field:' 'install' 'version' 'rm-deps'
+	  'sync-deps' 'print-control' 'print-srcinfo'
+	  'skip-pgp-check' 'as-deps' 'no-confirm')
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
 	exit $E_INVALID_OPTION
@@ -1103,72 +809,29 @@ unset OPT_SHORT OPT_LONG OPTRET
 
 while true; do
 	case "$1" in
-		# Pacman Options
-		--asdeps)                ASDEPS=1;;
-		--needed)                NEEDED=1;;
-		--noconfirm)             PACMAN_OPTS+=("--noconfirm") ;;
-		--noprogressbar)         PACMAN_OPTS+=("--noprogressbar") ;;
+		# makedeb options.
+		-A|--ignore-arch) IGNOREARCH=1 ;;
+		-d|--no-deps)     NODEPS=1 ;;
+		-F|-p|--file)     shift; BUILDFILE="${1}" ;;
+		-g|--gen-integ)   BUILDPKG=0 GENINTEG=1 IGNOREARCH=1 ;;
+		-h|--help)        usage; exit $E_OK ;;
+		-H|--field)       shift; CONTROL_FIELDS+=("${1}") ;;
+		-i|--install)     INSTALL=1 ;;
+		-V|--version)     version; exit $E_OK ;;
+		-r|--rm-deps)     RMDEPS=1 ;;
+		-s|--sync-deps)   DEP_BIN=1 ;;
+		--print-control)  BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
+		--print-srcinfo)  BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--skip-pgp-check) SKIPPGPCHECK=1 ;;
 
-		# Makepkg Options
-		--allsource)             BUILDPKG=0 SOURCEONLY=2 ;;
-		-A|--ignorearch)         IGNOREARCH=1 ;;
-		-c|--clean)              CLEANUP=1 ;;
-		-C|--cleanbuild)         CLEANBUILD=1 ;;
-		--check)                 RUN_CHECK='y' ;;
-		--config)                shift; MAKEPKG_CONF=$1 ;;
-		-d|--nodeps)             NODEPS=1 ;;
-		-e|--noextract)          NOEXTRACT=1 ;;
-		-f|--force)              FORCE=1 ;;
-		-F)                      INFAKEROOT=1 ;;
-		# generating integrity checks does not depend on architecture
-		-g|--geninteg)           BUILDPKG=0 GENINTEG=1 IGNOREARCH=1;;
-		--holdver)               HOLDVER=1 ;;
-		-i|--install)            INSTALL=1 ;;
-		--key)                   shift; GPGKEY=$1 ;;
-		-L|--log)                LOGGING=1 ;;
-		--lint)                  LINT_PKGBUILD=1 ;;
-		-m|--nocolor)            USE_COLOR='n'; PACMAN_OPTS+=("--color" "never") ;;
-		--noarchive)             NOARCHIVE=1 ;;
-		--nocheck)               RUN_CHECK='n' ;;
-		--noprepare)             RUN_PREPARE='n' ;;
-		--nosign)                SIGNPKG='n' ;;
-		-o|--nobuild)            BUILDPKG=0 NOBUILD=1 ;;
-		-p)                      shift; BUILDFILE=$1 ;;
-		--packagelist)           BUILDPKG=0 PACKAGELIST=1 IGNOREARCH=1;;
-		--printsrcinfo)          BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1;;
-		-r|--rmdeps)             RMDEPS=1 ;;
-		-R|--repackage)          REPKG=1 ;;
-		--sign)                  SIGNPKG='y' ;;
-		--skipchecksums)         SKIPCHECKSUMS=1 ;;
-		--skipinteg)             SKIPCHECKSUMS=1; SKIPPGPCHECK=1 ;;
-		--skippgpcheck)          SKIPPGPCHECK=1;;
-		-s|--syncdeps)           DEP_BIN=1 ;;
-		-S|--source)             BUILDPKG=0 SOURCEONLY=1 ;;
-		--verifysource)          BUILDPKG=0 VERIFYSOURCE=1 ;;
+		# APT options.
+		--as-deps)        ASDEPS=1 ;;
+		--no-confirm)     NOCONFIRM=1 ;;
 
-		-h|--help)               usage; exit $E_OK ;;
-		-V|--version)            version; exit $E_OK ;;
-
-		--distrovars)            warning "'${1}' has been deprecated, and should not be used." ;;
-		--format-makedeb)        FORMAT_MAKEDEB=1 ;;
-		--)                      shift; break ;;
+		--)               shift; break ;;
 	esac
 	shift
 done
-
-# Check if '--skip-makedeb-warning' was passed
-if ! (( FORMAT_MAKEDEB )); then
-	warning "This program is for internal use by makedeb, and should not be called directly."
-	warning "The changes to this fork of makepkg are not well documented, and you may run into issues."
-	warning "To supress this warning, use the '--format-makedeb' option."
-fi
-
-# Set variable if running on Arch Linux
-export RUNNING_ON_ARCH=0
-
-if [[ "${makepkg_target_os}" == "arch" ]]; then
-	export RUNNING_ON_ARCH=1
-fi
 
 # attempt to consume any extra argv as environment variables. this supports
 # overriding (e.g. CC=clang) as well as overriding (e.g. CFLAGS+=' -g').
@@ -1200,12 +863,6 @@ for var in PKGDEST SRCDEST SRCPKGDEST LOGDEST BUILDDIR; do
 	printf -v "$var" '%s' "$(canonicalize_path "${!var:-$startdir}")"
 done
 unset var
-PACKAGER=${PACKAGER:-"Unknown Packager"}
-
-# set pacman command if not already defined
-PACMAN="true"
-# save full path to command as PATH may change when sourcing /etc/profile
-PACMAN_PATH=$(type -P $PACMAN)
 
 # check if messages are to be printed using color
 if [[ -t 2 && $USE_COLOR != "n" ]] && check_buildenv "color" "y"; then
@@ -1253,8 +910,7 @@ fi
 
 if (( ! INFAKEROOT )); then
 	if (( EUID == 0 )); then
-		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\n\
-catastrophic damage to your system.")" "makepkg"
+		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\ncatastrophic damage to your system.")" "makepkg"
 		exit $E_ROOT
 	fi
 else

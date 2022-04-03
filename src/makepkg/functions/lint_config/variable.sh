@@ -41,7 +41,7 @@ lint_config_variables() {
 
 	# global variables
 	for i in ${array[@]}; do
-		eval "keys=(\"\${!$i[@]}\")"
+ 	eval "keys=(\"\${!$i[@]}\")"
 		if (( ${#keys[*]} > 0 )); then
 			if ! is_array $i; then
 				error "$(gettext "%s should be an array")" "$i"
@@ -59,12 +59,6 @@ lint_config_variables() {
 			fi
 		fi
 	done
-
-	# pacman should be able to extract an email address from PACKAGER for WKD key lookup
-	local match='^([^<>]+ )?<[^<>]*>$'
-	if ! [[ $PACKAGER == "Unknown Packager" || $PACKAGER =~ $match ]]; then
-		warning "$(gettext "PACKAGER should have the format 'Example Name <email@address.invalid>'")"
-	fi
 
 	return $ret
 }
