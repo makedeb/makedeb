@@ -10,5 +10,4 @@ load ../util/util
     makedeb -d
 
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Replaces:')" == "Replaces: bats (>= 0), bash" ]]
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Breaks:')" == "Breaks: bats (>= 0), bash" ]]
 }
