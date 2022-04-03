@@ -5,7 +5,7 @@ import subprocess
 
 from os import environ
 from github import Github
-from github.GithubExceptionimport GithubException
+from github.GithubException import GithubException
 
 # Set up our environment.
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
