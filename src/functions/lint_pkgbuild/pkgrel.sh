@@ -36,8 +36,8 @@ check_pkgrel() {
 		return 1
 	fi
 
-	if [[ $rel != +([0-9])?(.+([0-9])) ]]; then
-		error "$(gettext "%s must be of the form 'integer[.integer]', not %s.")" "pkgrel${type:+ in $type}" "$rel"
+	if ! echo "${rel}" | grep -q '^[0-9][a-z0-9.+~]*$'; then
+		error "$(gettext "Invalid characters in %s.")" "pkgrel${type:+ in type}"
 		return 1
 	fi
 }

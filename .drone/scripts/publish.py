@@ -13,8 +13,8 @@ proget_api_key = env["proget_api_key"]
 with open(".data.json") as file:
     data = file.read()
     json = json.loads(data)
-    pkgver = json["current_pkgver_" + commit_branch]
-    pkgrel = json["current_pkgrel"]
+    pkgver = json["current_pkgver"]
+    pkgrel = json["current_pkgrel_" + commit_branch]
 
 if commit_branch == "stable":
     package_name = "makedeb"

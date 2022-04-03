@@ -17,3 +17,4 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 - Implement a changelog (#145).
 - Move all code to `src/makepkg` codebase (#130).
 - Disable all colored output if file descriptor 2 isn't a terminal (#81).
+- Allow `pkgver` to include all characters allowed in the [Debian control file specification](https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-version).

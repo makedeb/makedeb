@@ -73,7 +73,7 @@ git config user.email "kavplex@hunterwittenborn.com"
 
 # Get current version info.
 config="$(cat ../.data.json)"
-pkgver="$(echo "${config}" | jq -r ".current_pkgver_${release_type}")"
+pkgver="$(echo "${config}" | jq -r ".current_pkgver + \"-\" + .current_pkgrel_${release_type}")"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO
