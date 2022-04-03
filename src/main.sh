@@ -429,7 +429,7 @@ write_buildinfo() {
 write_control_info() {
 	local fullver=$(get_full_version)
 	local new_predepends
-	local depends
+	local new_depends
 	local new_recommends
 	local new_suggests
 	local new_conflicts
@@ -442,7 +442,7 @@ write_control_info() {
 	convert_relationships new_recommends "${recommends[@]}"
 	convert_relationships new_suggests "${suggests[@]}"
 	convert_relationships new_conflicts "${conflicts[@]}"
-	convert_relationships nwe_provides "${provides[@]}"
+	convert_relationships new_provides "${provides[@]}"
 	convert_relationships new_replaces "${replaces[@]}"
 	convert_relationships new_breaks "${breaks[@]}"
 
@@ -502,7 +502,7 @@ create_package() {
 
 	# Create the archive.
 	local fullver=$(NOEPOCH=1 get_full_version)
-	local pkg_file="${PKGDEST}/${pkgname}-${fullver}-${pkgarch}.deb"
+	local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.deb"
 	local ret=0
 
 	if [[ -f $pkg_file ]]; then
@@ -523,7 +523,7 @@ create_package() {
 	mv control.tar.gz ../
 	cd ../
 
-	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary')
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
@@ -650,7 +650,7 @@ install_package() {
 	for pkg in ${pkgname[@]}; do
 		fullver=$(NOEPOCH=1 get_full_version)
 		pkgarch=$(get_pkg_arch $pkg)
-		pkglist+=("${PKGDEST}/${pkg}-${fullver}-${pkgarch}.deb")
+		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
 	if ! sudo apt-get reinstall "${APT_ARGS[@]}" -- "${pkglist[@]}"; then
@@ -741,6 +741,7 @@ run_single_packaging() {
 		run_package $1
 	fi
 	tidy_install
+
 	lint_package || exit $E_PACKAGE_FAILED
 	create_package
 }
@@ -774,11 +775,11 @@ check_distro_variables() {
 }
 
 usage() {
-	printf "makepkg (%s)\n" "$makepkg_version"
+	printf "makedeb (%s)\n" "${MAKEDEB_VERSION}"
 	echo
-	printf -- "$(gettext "Arch Linux build utility")\n"
+	printf -- "$(gettext "makedeb takes PKGBUILD files and creates archives installable via APT")\n"
 	echo
-	printf -- "$(gettext "Usage: %s [options]")\n" "makepkg"
+	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
 	echo
 	printf -- "$(gettext "Options:")\n"
 	printf -- "$(gettext "  -A, --ignore-arch    Ignore errors about mismatching architectures")\n"
@@ -1121,7 +1122,7 @@ if (( INFAKEROOT )); then
 	exit $E_OK
 fi
 
-(( ! FORMAT_MAKEDEB )) && msg "$(gettext "Making package: %s")" "$pkgbase $basever ($(date +%c))"
+msg "$(gettext "Making package: %s")" "$pkgbase $basever ($(date +%c))"
 
 # if we are creating a source-only package, go no further
 if (( SOURCEONLY )); then
@@ -1157,7 +1158,7 @@ fi
 
 # Check for missing dependencies.
 if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
-	if (( NODEPS )) && ! (( "${FORMAT_MAKEDEB}" )); then
+	if (( NODEPS )); then
 		warning "$(gettext "Skipping dependency checks.")"
 	fi
 else
@@ -1239,6 +1240,6 @@ if (( NOARCHIVE )); then
 	exit $E_OK
 fi
 
-(( ! FORMAT_MAKEDEB )) && msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
+msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
 
 install_package && exit $E_OK || exit $E_INSTALL_FAILED

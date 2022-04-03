@@ -1,6 +1,7 @@
 convert_dependencies() {
     # Convert depends.
     local old_depends=("${depends[@]}")
+    local depname
     declare -g depends=()
     declare -g predepends=()
 

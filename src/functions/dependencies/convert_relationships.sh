@@ -8,7 +8,7 @@ convert_relationships() {
 
     for pkg in "${values[@]}"; do
         for rel in '<=' '>=' '=' '>' '<'; do
-            if echo "${pkg}" | grep -s "${rel}"; then
+            if echo "${pkg}" | grep -q "${rel}"; then
                 pkgname="$(echo "${pkg}" | sed "s|${rel}.*$||")"
                 pkgver="$(echo "${pkg}" | sed "s|^.*${rel}||")"
                 
@@ -28,6 +28,8 @@ convert_relationships() {
         else
             new_values+=("${pkg}")
         fi
+
+        unset matched_rel
     done
     
     create_array "${target_var}" "${new_values[@]}"

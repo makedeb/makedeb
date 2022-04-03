@@ -52,7 +52,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
-    pkgbuild array arch x86_64
+    pkgbuild array arch all
     pkgbuild array depends 'z!bats'
     pkgbuild clean
     run makedeb -d
