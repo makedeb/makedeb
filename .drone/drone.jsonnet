@@ -105,8 +105,7 @@ local sendBuildNotification(tag) = {
     },
     depends_on: [
         "build-and-publish-" + tag,
-        "mpr-publish-" + tag,
-        "aur-publish-" + tag
+        "mpr-publish-" + tag
     ],
     steps: [{
         name: "send-notification",
