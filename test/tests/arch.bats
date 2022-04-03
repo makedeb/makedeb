@@ -28,5 +28,5 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "[!] testpkg is not available for the 'x86_64' architecture." ]]
+    [[ "${output}" == "[!] testpkg is not available for the 'amd64' architecture." ]]
 }

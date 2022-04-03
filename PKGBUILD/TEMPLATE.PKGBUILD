@@ -4,9 +4,9 @@ _target=$${target}
 
 pkgname=$${pkgname}
 pkgver=$${pkgver}
-pkgrel=$${pkgrel}
+pkgrel=1
 pkgdesc="A simplicity-focused packaging tool for Debian archives (${_release} release)"
-arch=('any')
+arch=('all')
 license=('GPL3')
 depends=($${depends})
 makedepends=($${makedepends})

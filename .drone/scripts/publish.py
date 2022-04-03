@@ -14,7 +14,7 @@ with open(".data.json") as file:
     data = file.read()
     json = json.loads(data)
     pkgver = json["current_pkgver"]
-    pkgrel = json["current_pkgrel"]
+    pkgrel = json["current_pkgrel_" + commit_branch]
 
 if commit_branch == "stable":
     package_name = "makedeb"

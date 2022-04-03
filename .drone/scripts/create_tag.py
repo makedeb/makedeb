@@ -5,7 +5,7 @@ import subprocess
 
 from os import environ
 from github import Github
-from github.GithubException import GithubException
+from github.GithubExceptionimport GithubException
 
 # Set up our environment.
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
@@ -23,11 +23,11 @@ with open(".data.json", "r") as file:
     data = json.loads(file.read())
 
 pkgver = data["current_pkgver"]
-pkgrel = data["current_pkgrel"]
+pkgrel = data["current_pkgrel_" + drone_branch]
 
 client = Github(github_api_key)
 
-tag = f"v{pkgver}-{pkgrel}-{drone_branch}"
+tag = f"v{pkgver}-{pkgrel}"
 name = f"v{pkgver}-{pkgrel}"
 message = f"Released {name}."
 

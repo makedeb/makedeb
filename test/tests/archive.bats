@@ -5,7 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
-    pkgbuild array arch any
+    pkgbuild array arch all
     pkgbuild string preinst './file'
     pkgbuild clean
     makedeb -d
