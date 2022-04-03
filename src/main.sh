@@ -653,7 +653,7 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
-	if ! sudo apt-get reinstall "${APT_ARGS[@]}" -- "${pkglist[@]}"; then
+	if ! sudo apt-get reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
