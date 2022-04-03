@@ -526,7 +526,7 @@ create_package() {
 	mv control.tar ../
 	cd ../
 
-	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar')
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
