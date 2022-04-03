@@ -52,7 +52,8 @@ fi
 
 # Get needed info.
 config_file="$(cat "$(git rev-parse --show-toplevel)"/.data.json)"
-pkgver="$(echo "${config_file}" | jq -r ".current_pkgver_${RELEASE}")"
+pkgver="$(echo "${config_file}" | jq -r '.current_pkgver')"
+pkgrel="$(echo "${config_file}" | jq -r ".current_pkgrel_${RELEASE}")"
 
 if [[ "${RELEASE}" == "stable" ]]; then
     pkgname="makedeb"

@@ -4,7 +4,7 @@ _target=$${target}
 
 pkgname=$${pkgname}
 pkgver=$${pkgver}
-pkgrel=1
+pkgrel=$${pkgrel}
 pkgdesc="A simplicity-focused packaging tool for Debian archives (${_release} release)"
 arch=('all')
 license=('GPL3')
@@ -15,7 +15,7 @@ provides=($${provides})
 replaces=($${replaces})
 url="https://github.com/makedeb/makedeb"
 
-source=("makedeb::git+${url}/#tag=v${pkgver}-${pkgrel}-${_release}")
+source=("makedeb::git+${url}/#tag=v${pkgver}-${pkgrel}")
 sha256sums=('SKIP')
 
 prepare() {

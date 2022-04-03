@@ -78,7 +78,7 @@ local userRepoPublish(pkgname, tag, user_repo) = {
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
-    depends_on: ["create-tag-" + tag],
+    depends_on: ["create-tag-" + tag, "build-and-publish-" + tag],
     steps: [{
         name: pkgname,
         image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
@@ -157,10 +157,6 @@ local buildForMentors(pkgname, tag) = {
     userRepoPublish("makedeb", "stable", "mpr"),
     userRepoPublish("makedeb-beta", "beta", "mpr"),
     userRepoPublish("makedeb-alpha", "alpha", "mpr"),
-
-    userRepoPublish("makedeb", "stable", "aur"),
-    userRepoPublish("makedeb-beta", "beta", "aur"),
-    userRepoPublish("makedeb-alpha", "alpha", "aur"),
 
     sendBuildNotification("stable"),
     sendBuildNotification("beta"),
