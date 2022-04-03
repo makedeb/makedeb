@@ -33,7 +33,7 @@ lint_pkgbuild_functions+=('lint_arch')
 lint_arch() {
 	local a name list ret=0
 
-	if in_array "any" "${arch[@]}"; then
+	if in_array "any" "${arch[@]}" || in_array "all" "${arch[@]}"; then
 		if (( ${#arch[@]} == 1 )); then
 			return 0;
 		else
@@ -50,16 +50,22 @@ lint_arch() {
 		fi
 	done
 
-	if (( ! IGNOREARCH )) && ! in_array "$CARCH" "${arch[@]}"; then
-		error "$(gettext "%s is not available for the '%s' architecture.")" "$_pkgbase" "$CARCH"
-		return 1
+	if (( ! IGNOREARCH )) && ! in_array "${MAKEDEB_DPKG_ARCHITECTURE}" "${arch[@]}"; then
+		# If the user provides an Arch Linux style architecture (from the output of 'uname -p' it's seeming), allow such to pass the architecture check, but encourage the use of the Debian style.
+		if in_array "${CARCH}" "${arch[@]}"; then
+			! (( "${INFAKEROOT}" )) && warning "$(gettext "Detected invalid architecture '%s'. Please use '%s' instead.")" "${CARCH}" "${MAKEDEB_DPKG_ARCHITECTURE}"
+			arch+=("${MAKEDEB_DPKG_ARCHITECTURE}")
+		else
+			error "$(gettext "%s is not available for the '%s' architecture.")" "$_pkgbase" "${MAKEDEB_DPKG_ARCHITECTURE}"
+			return 1
+		fi
 	fi
 
 	for name in "${pkgname[@]}"; do
 		get_pkgbuild_attribute "$name" 'arch' 1 list
-		if [[ $list && $list != 'any' ]] && ! in_array $CARCH "${list[@]}"; then
+		if [[ $list && $list != 'any' ]] && ! in_array "${MAKEDEB_DPKG_ARCHITECTURE}" "${list[@]}"; then
 			if (( ! IGNOREARCH )); then
-				error "$(gettext "%s is not available for the '%s' architecture.")" "$name" "$CARCH"
+				error "$(gettext "%s is not available for the '%s' architecture.")" "$name" "${MAKEDEB_DPKG_ARCHITECTURE}"
 				ret=1
 			fi
 		fi

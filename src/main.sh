@@ -50,6 +50,7 @@ declare -r startdir="$(pwd -P)"
 declare -r MAKEDEB_VERSION='$${MAKEDEB_VERSION}'
 declare -r MAKEDEB_RELEASE='$${MAKEDEB_RELEASE}'
 declare -r MAKEDEB_INSTALLATION_SOURCE='$${MAKEDEB_INSTALLATION_SOURCE}'
+declare -r MAKEDEB_DPKG_ARCHITECTURE="$(dpkg --print-architecture)"
 declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 
 LIBRARY=${LIBRARY:-'/usr/share/makedeb'}
@@ -619,8 +620,8 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-
-	remove_deps || return $?
+	
+	remove_installed_dependencies
 	RMDEPS=0
 
 	if (( ! SPLITPKG )); then

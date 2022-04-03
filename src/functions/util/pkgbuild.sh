@@ -176,10 +176,10 @@ get_full_version() {
 ##
 get_pkg_arch() {
 	if [[ -z $1 ]]; then
-		if [[ $arch = "any" ]]; then
-			printf "%s\n" "any"
+		if [[ $arch = "all" ]]; then
+			printf "%s\n" "all"
 		else
-			printf "%s\n" "$CARCH"
+			printf "%s\n" "${MAKEDEB_DPKG_ARCHITECTURE}"
 		fi
 	else
 		local arch_override

@@ -5,19 +5,10 @@ remove_installed_dependencies() {
 
     msg "Removing installed build dependencies..."
 
-    if [[ "${target_os}" == "debian" ]]; then
-        if ! sudo apt-get purge "${apt_args[@]}" -- "${missing_build_dependencies_no_relations[@]}"; then
-            error "There was an error removing build dependencies."
-            exit 1
-        fi
-
-    elif [[ "${target_os}" == "arch" ]]; then
-        if ! sudo pacman -R "${pacman_args[@]}" -- "${missing_build_dependencies_no_relations[@]}"; then
-            error "There was an error removing build dependencies."
-            exit 1
-        fi
+    if ! sudo apt-get purge "${apt_args[@]}" -- "${missing_build_dependencies_no_relations[@]}"; then
+        error "There was an error removing build dependencies."
+        exit 1
     fi
-
     msg "Done."
 }
 
