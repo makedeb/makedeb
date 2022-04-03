@@ -18,6 +18,7 @@ sudo apt-get satisfy "${needed_deps}" -y
 # Build package.
 git fetch
 export NEEDED_VERSION="$(cat .data.json | jq -r ".current_pkgver_${release_type}")"
+sed -i "s|\$\${pkgver}|${NEEDED_VERSION}|" debian/changelog
 tar -cJf "../makedeb_${NEEDED_VERSION}.orig.tar.xz" .
 debuild -us -uc
 
