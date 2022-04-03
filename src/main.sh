@@ -1096,6 +1096,18 @@ if (( PRINTSRCINFO )); then
 	exit $E_OK
 fi
 
+if (( PRINTCONTROL )); then
+	output=""
+
+	for pkg in "${pkgname[@]}"; do
+		output+="$(pkgname="${pkg}" write_control_info)"
+		output+=$'\n\n'
+	done
+
+	echo -n "${output}" | head -n -1
+	exit $E_OK
+fi
+
 if (( ! PKGVERFUNC )); then
 	check_build_status
 fi
