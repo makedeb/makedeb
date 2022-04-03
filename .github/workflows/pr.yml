@@ -23,6 +23,6 @@ jobs:
         run: .drone/scripts/install-deps.sh
       
       - name: Run unit tests
-        run: release_type="${GITHUB_HEAD_REF}" .drone/scripts/run-unit-tests.sh
+        run: release_type="${GITHUB_BASE_REF}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2
