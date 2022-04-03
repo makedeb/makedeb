@@ -17,7 +17,7 @@ sudo apt-get satisfy "${needed_deps}" -y
 
 # Build package.
 git fetch
-export NEEDED_VERSION="$(cat .data.json | jq -r '.current_pkgver')"
+export NEEDED_VERSION="$(cat .data.json | jq -r ".current_pkgver_${release_type}")"
 tar -cJf "../makedeb_${NEEDED_VERSION}.orig.tar.xz" .
 debuild -us -uc
 

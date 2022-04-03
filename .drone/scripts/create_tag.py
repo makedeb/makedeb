@@ -22,13 +22,13 @@ commit_sha = (
 with open(".data.json", "r") as file:
     data = json.loads(file.read())
 
-pkgver = data["current_pkgver"]
+pkgver = data["current_pkgver_" + drone_branch]
 pkgrel = data["current_pkgrel"]
 
 client = Github(github_api_key)
 
-tag = f"v{pkgver}-{pkgrel}-{drone_branch}"
-name = f"v{pkgver}-{pkgrel}"
+tag = f"v{pkgver}"
+name = f"v{pkgver}"
 message = f"Released {name}."
 
 repo = client.get_repo(drone_repo)

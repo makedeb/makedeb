@@ -13,7 +13,7 @@ proget_api_key = env["proget_api_key"]
 with open(".data.json") as file:
     data = file.read()
     json = json.loads(data)
-    pkgver = json["current_pkgver"]
+    pkgver = json["current_pkgver_" + commit_branch]
     pkgrel = json["current_pkgrel"]
 
 if commit_branch == "stable":

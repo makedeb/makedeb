@@ -2,7 +2,7 @@
 set -e
 
 # Bases.
-targets=('apt' 'mpr' 'aur')
+targets=('apt' 'mpr')
 releases=('stable' 'beta' 'alpha')
 
 debian_depends=('apt' 'binutils' 'curl' 'fakeroot'
@@ -12,16 +12,6 @@ debian_makedepends=('asciidoctor' 'git' 'make' 'jq')
 debian_conflicts=('makedeb-makepkg' 'makedeb-makepkg-beta' 'makedeb-makepkg-alpha')
 debian_provides=("${debian_conflicts[@]}")
 debian_replaces=("${debian_conflicts[@]}")
-
-arch_depends=('awk' 'binutils' 'bzip2' 'coreutils'
-              'dpkg' 'fakeroot' 'file' 'findutils'
-              'gettext' 'gnupg' 'grep' 'gzip'
-              'libarchive' 'lsb-release' 'ncurses'
-              'sed' 'tar' 'xz')
-arch_makedepends=("${debian_makedepends[@]}")
-arch_conflicts=("${debian_conflicts[@]}")
-arch_provides=("${debian_provides[@]}")
-arch_replaces=("${debian_replaces[@]}")
 
 # Variable checks.
 for i in 'TARGET' 'RELEASE'; do
@@ -62,8 +52,7 @@ fi
 
 # Get needed info.
 config_file="$(cat "$(git rev-parse --show-toplevel)"/.data.json)"
-pkgver="$(echo "${config_file}" | jq -r ".current_pkgver")"
-pkgrel="$(echo "${config_file}" | jq -r ".current_pkgrel")"
+pkgver="$(echo "${config_file}" | jq -r ".current_pkgver_${RELEASE}")"
 
 if [[ "${RELEASE}" == "stable" ]]; then
     pkgname="makedeb"
