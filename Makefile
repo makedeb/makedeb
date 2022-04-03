@@ -26,10 +26,10 @@ package:
 	install -Dm 644 ./completions/makedeb.bash '$(DESTDIR)/usr/share/bash-completion/completions/makedeb'
 	
 	cd src/
-	install -Dm 755 ./makepkg.sh '$(DESTDIR)/usr/bin/makedeb-makepkg'
+	install -Dm 755 ./makepkg.sh '$(DESTDIR)/usr/bin/makedeb'
 	
 	cd functions/
-	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb-makepkg/{}' \;
+	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb/{}' \;
 	cd ../
 	
 	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'

@@ -52,7 +52,7 @@ declare -r MAKEDEB_RELEASE='$${MAKEDEB_RELEASE}'
 declare -r MAKEDEB_INSTALLATION_SOURCE='$${MAKEDEB_INSTALLATION_SOURCE}'
 declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 
-LIBRARY=${LIBRARY:-'/usr/share/makedeb-makepkg'}
+LIBRARY=${LIBRARY:-'/usr/share/makedeb'}
 
 # Options
 ASDEPS=0
