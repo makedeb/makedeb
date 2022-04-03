@@ -15,7 +15,7 @@ prepare:
 	sed -i 's|$$$${MAKEDEB_RELEASE}|$(RELEASE)|' main.sh
 	sed -i 's|$$$${MAKEDEB_INSTALLATION_SOURCE}|$(TARGET)|' main.sh
 	find ./main.sh functions/ -type f -exec sed -i 's|^.*# COMP_RM$$||' '{}' \;
-	cd ../../
+	cd ../
 	
 	# man pages.
 	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/makedeb.8.adoc
@@ -35,7 +35,7 @@ package:
 	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'
 	install -Dm 755 ./makepkg-template '$(DESTDIR)/usr/bin/makepkg-template'
 	
-	cd ../../
+	cd ../
 	
 	# man pages
 	export SOURCE_DATE_EPOCH="$(MAKEDEB_MAN_EPOCH)"
