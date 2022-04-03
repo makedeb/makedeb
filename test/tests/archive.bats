@@ -5,13 +5,13 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
-    pkgbuild array arch any
+    pkgbuild array arch all
     pkgbuild string preinst './file'
     pkgbuild clean
     makedeb -d
 
     ar xf testpkg_1.0.0-1_all.deb
-    mapfile -t files < <(tar tf control.tar.zst | sort -V)
+    mapfile -t files < <(tar tf control.tar.gz | sort -V)
     mapfile -t expected_files < <(printf '%s\n' './control' './preinst' | sort -V)
 
     [[ "${#files[@]}" == "${#expected_files[@]}" ]]

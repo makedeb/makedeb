@@ -56,6 +56,7 @@ declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 LIBRARY=${LIBRARY:-'/usr/share/makedeb'}
 
 # Options
+APTARGS=()
 ASDEPS=0
 BUILDFUNC=0
 BUILDPKG=1
@@ -426,6 +427,16 @@ write_buildinfo() {
 }
 
 write_control_info() {
+	local fullver=$(get_full_version)
+	local new_predepends
+	local depends
+	local new_recommends
+	local new_suggests
+	local new_conflicts
+	local new_provides
+	local new_replaces
+	local new_breaks
+
 	convert_relationships new_predepends "${predepends[@]}"
 	convert_relationships new_depends "${depends[@]}"
 	convert_relationships new_recommends "${recommends[@]}"
@@ -505,10 +516,14 @@ create_package() {
 	find . -exec touch -h -d @$SOURCE_DATE_EPOCH {} +
 
 	msg2 "$(gettext "Compressing package...")"
-	mapfile -t control_files < <(find "DEBIAN" -mindepth 1 -maxdepth 1)
-	mapfile -t package_files < <(find "./" -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary')
 
+	cd DEBIAN/
+	mapfile -t control_files < <(find ./ -mindepth 1 -maxdepth 1)
 	tar -czf ./control.tar.gz "${control_files[@]}"
+	mv control.tar.gz ../
+	cd ../
+
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary')
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
@@ -625,28 +640,30 @@ install_package() {
 	RMDEPS=0
 
 	if (( ! SPLITPKG )); then
-		msg "$(gettext "Installing package %s with %s...")" "$pkgname" "$PACMAN -U"
+		msg "$(gettext "Installing package %s...")" "$pkgname"
 	else
-		msg "$(gettext "Installing %s package group with %s...")" "$pkgbase" "$PACMAN -U"
+		msg "$(gettext "Installing %s package group...")" "$pkgbase"
 	fi
 
 	local fullver pkgarch pkg pkglist
-	(( ASDEPS )) && pkglist+=('--asdeps')
-	(( NEEDED )) && pkglist+=('--needed')
 
 	for pkg in ${pkgname[@]}; do
-		fullver=$(get_full_version)
+		fullver=$(NOEPOCH=1 get_full_version)
 		pkgarch=$(get_pkg_arch $pkg)
-		pkglist+=("$PKGDEST/${pkg}-${fullver}-${pkgarch}${PKGEXT}")
-
-		if [[ -f "$PKGDEST/${pkg}-debug-${fullver}-${pkgarch}${PKGEXT}" ]]; then
-			pkglist+=("$PKGDEST/${pkg}-debug-${fullver}-${pkgarch}${PKGEXT}")
-		fi
+		pkglist+=("${PKGDEST}/${pkg}-${fullver}-${pkgarch}.deb")
 	done
 
-	if ! run_pacman -U "${pkglist[@]}"; then
+	if ! sudo apt-get reinstall "${APT_ARGS[@]}" -- "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
+	fi
+	
+	if (( "${ASDEPS}" )); then
+		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
+
+		if ! sudo apt-mark auto "${pkgname[@]}"; then
+			warning "$(gettext "Failed to mark built package(s) as automatically installed.")"
+		fi
 	fi
 }
 
@@ -843,7 +860,7 @@ while true; do
 
 		# APT options.
 		--as-deps)        ASDEPS=1 ;;
-		--no-confirm)     NOCONFIRM=1 ;;
+		--no-confirm)     APTARGS+=('-y') ;;
 
 		# Internal options.
 		--in-fakeroot)    INFAKEROOT=1 ;;

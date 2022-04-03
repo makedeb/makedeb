@@ -185,10 +185,10 @@ get_pkg_arch() {
 		local arch_override
 		get_pkgbuild_attribute "$1" arch 1 arch_override
 		(( ${#arch_override[@]} == 0 )) && arch_override=("${arch[@]}")
-		if [[ $arch_override = "any" ]]; then
-			printf "%s\n" "any"
+		if [[ $arch_override = "all" ]]; then
+			printf "%s\n" "all"
 		else
-			printf "%s\n" "$CARCH"
+			printf "%s\n" "${MAKEDEB_DPKG_ARCHITECTURE}"
 		fi
 	fi
 }
