@@ -9,10 +9,10 @@ makedeb is a packaging tool for Debian and Ubuntu based systems that aims to be 
 Full instructions on installation can be found in the [makedeb Docs](https://docs.makedeb.org/installing).
 
 ## Building
-See [BUILDING.md](./BUILDING.md)
+See [BUILDING.md](./BUILDING.md).
 
 ## Contributing
-See [CONTRIBUTING.md](./CONTRIBUTING.md)
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Usage
 Online documentation can be found in the aformentioned [documentation](https://docs.makedeb.org).
