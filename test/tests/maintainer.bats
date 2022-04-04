@@ -1,8 +1,11 @@
+load ../util/util
+
 @test "correct maintainer" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "test"
     pkgbuild array arch any
     pkgbuild clean
     makedeb --lint
@@ -12,6 +15,7 @@
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "test"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
@@ -24,6 +28,7 @@
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "test"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint

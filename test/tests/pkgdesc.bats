@@ -8,7 +8,7 @@ load ../util/util
     pkgbuild string pkgdesc "Normal package description: on the package"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
 @test "incorrect pkgdesc - only whitespace" {
@@ -19,7 +19,7 @@ load ../util/util
     pkgbuild string pkgdesc "     "
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${output}" == "[!] pkgdesc must contain characters other than spaces." ]]
 }
 
