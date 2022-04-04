@@ -19,7 +19,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    makedeb --lint |& cat >&3
+    cat PKGBUILD >&3
     [[ "${output}" == "[!] A maintainer must be specified." ]]
 }
 
