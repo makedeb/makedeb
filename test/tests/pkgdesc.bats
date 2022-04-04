@@ -11,12 +11,23 @@ load ../util/util
 }
 
 @test "incorrect pkgdesc - only whitespace" {
-    skip "THIS WON'T CURRENT FAIL DUE TO A BUG IN MAKEDEB"
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "     "
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    run makedeb -d
+    [[ "${output}" == "[!] pkgdesc must contain characters other than spaces." ]]
+}
+
+@test "incorrect pkgdesc - empty pkgdesc" {
+    pkgbuild string pkgname testpkg
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc ""
+    pkgbuild array arch any
+    pkgbuild clean
+    run makedeb --lint
+    [[ "${output}" == "[!] pkgdesc cannot be empty." ]]
 }
