@@ -55,7 +55,7 @@ declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 
 LIBRARY=${LIBRARY:-'$${MAKEDEB_LIBRARY_DIR}'}
 
-if [[ "${LIBRARY}" == '$${MAKEDEB_LIBRARY_DIR}' ]]; then
+if [[ "${LIBRARY}" == "\$\${MAKEDEB_LIBRARY_DIR}" ]]; then
 	LIBRARY='./functions'
 fi
 
