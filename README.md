@@ -5,13 +5,21 @@
 
 makedeb is a packaging tool for Debian and Ubuntu based systems that aims to be simple and easy to use, whilst still remaining just as powerful as standard Debian tooling.
 
-## Installation and usage
-Full instructions on installation can be found in [makedeb's documentation](https://docs.hunterwittenborn.com/makedeb).
+## Installing
+Full instructions on installation can be found in the [makedeb Docs](https://docs.makedeb.org/installing).
 
+## Building
+See [BUILDING.md](./BUILDING.md).
+
+## Contributing
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## Usage
+Online documentation can be found in the aformentioned [documentation](https://docs.makedeb.org).
 Help with available usage can also be found after installation with `makedeb --help`.
 
 ## Support
-Support and discussion regarding makedeb and other related projects happens on the Matrix space at [#makedeb:hunterwittenborn.com](https://matrix.to/#/#makedeb:hunterwittenborn.com).
+See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
 ## Supporters
 Thank you to the following companies who have generously given resources to help the makedeb project:
