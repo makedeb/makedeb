@@ -2,7 +2,7 @@ lint_pkgbuild_functions+=('lint_pkgdesc')
 
 lint_pkgdesc() {
     # See if the pkgdesc variable was set.
-    if [[ "${pkgdesc:+x}" != "x" ]]; then
+    if [[ "${pkgdesc+x}" != "x" ]]; then
 	return 0
     fi
     
