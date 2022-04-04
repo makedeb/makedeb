@@ -16,7 +16,7 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 - Updated `CONTRIBUTING.md` with better guidelines.
 - Require `pkgdesc` to not be empty and contain characters other than spaces.
 - Show warning when `pkgdesc` or a maintainer entry isn't present in PKGBUILDs.
-- Show warning when more than on maintainer is specified.
+- Show warning when more than one maintainer is specified.
 
 ### Deprecated
 - An architecture listing of `any` now sets the package architecture to the system's DPKG architecture (as required by the [Debian control file specification](https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-architecture)). Previously `any` was automatically converted to `all` (which identifies an architecture-independent package), and using `all` now fulfills that purpose.
