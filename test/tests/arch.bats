@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct arch - all allowed characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -10,6 +11,7 @@ load ../util/util
 }
 
 @test "incorrect arch - use any with another architecture" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -21,6 +23,7 @@ load ../util/util
 }
 
 @test "incorrect arch - unknown architecture" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct makedepends - all valid characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -13,6 +14,7 @@ load ../util/util
 @test "correct makedepends - install missing dependencies" {
     skip "THIS IS CURRENTLY FAILING DUE TO A BUG IN MAKEDEB."
     sudo_check
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -23,6 +25,7 @@ load ../util/util
 }
 
 @test "correct makedepends - don't add to 'Depends' in control file" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -37,7 +40,7 @@ load ../util/util
     skip "Awaiting packaging of Bats and Bats libraries on the MPR"
     sudo_check
     sudo apt-get purge restic -y
-
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -51,6 +54,7 @@ load ../util/util
 }
 
 @test "incorrect makedepends - invalid dependency prefix" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -61,5 +65,3 @@ load ../util/util
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] makedepends contains invalid characters: '!'" ]]
 }
-
-# vim: set syntax=bash ts=4 sw=4 expandtab:

@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct checkdepends - all valid characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -13,6 +14,7 @@ load ../util/util
 @test "correct checkdepends - install missing dependencies" {
     skip "THIS IS CURRENTLY FAILING DUE TO A BUG IN MAKEDEB"
     sudo_check
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -23,6 +25,7 @@ load ../util/util
 }
 
 @test "correct checkdepends - don't add to 'Depends' in control file" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -34,6 +37,7 @@ load ../util/util
 }
 
 @test "incorrect checkdepends - invalid dependency prefix" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

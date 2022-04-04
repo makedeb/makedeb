@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct prepare()" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -10,6 +11,7 @@ load ../util/util
 }
 
 @test "incorrect prepare() - bad exit code" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -26,6 +28,7 @@ load ../util/util
         echo "hi me"
     }
 
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -41,6 +44,7 @@ load ../util/util
         true
     }
 
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

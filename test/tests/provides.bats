@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct provides - all valid characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -13,6 +14,7 @@ load ../util/util
 }
 
 @test "incorrect provides - uses comparison operators" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

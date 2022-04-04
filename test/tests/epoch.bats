@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "install a package with '-i' that contains an epoch" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -11,6 +12,7 @@ load ../util/util
 }
 
 @test "correct epoch - all allowed characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -21,6 +23,7 @@ load ../util/util
 }
 
 @test "incorrect epoch - negative number" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -33,6 +36,7 @@ load ../util/util
 }
 
 @test "incorrect epoch - decimal" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -46,6 +50,7 @@ load ../util/util
 
 @test "incorrect epoch - letter" {
     skip "THIS IS FAILING DUE TO A BUG IN MAKEDEB."
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct - build and install a package" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -10,6 +11,7 @@ load ../util/util
 }
 
 @test "correct - set dependencies from a distro-dependency variable" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -22,6 +24,7 @@ load ../util/util
 }
 
 @test "correct - generate SRCINFO and control files" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -33,6 +36,7 @@ load ../util/util
 
 @test "incorrect - set distro-specific sources without distro-specific hashsums" {
     skip "THIS ISN'T WORKING DUE TO AN ISSUE IN MAKEDEB."
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

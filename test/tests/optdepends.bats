@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct optdepends - all valid characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -13,6 +14,7 @@ load ../util/util
 @test "correct optdepends - install missing dependencies" {
     skip "THIS IS CURRENTLY NOT WORKING DUE TO A BUG IN MAKEDEB."
     sudo_check
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -23,6 +25,7 @@ load ../util/util
 }
 
 @test "correct optdepends - valid dependency prefixes" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -36,6 +39,7 @@ load ../util/util
 }
 
 @test "incorrect optdepends - invalid dependency prefix" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

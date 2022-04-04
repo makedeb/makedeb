@@ -2,6 +2,7 @@ load ../util/util
 
 @test "correct preinst - valid path" {
     touch file
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -23,6 +24,7 @@ load ../util/util
 
 @test "incorrect preinst - invalid path" {
     skip "THIS TEST WON'T PASS DUE TO THE 'colorize' BUG IN MAKEDEB"
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1

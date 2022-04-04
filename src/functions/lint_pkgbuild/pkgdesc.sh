@@ -1,12 +1,11 @@
 lint_pkgbuild_functions+=('lint_pkgdesc')
 
 lint_pkgdesc() {
-    # See if the pkgdesc variable was set.
-    if [[ "${pkgdesc+x}" != "x" ]]; then
-	return 0
+    if [[ "${pkgdesc-x}" == "x" ]]; then
+        error "$(gettext "pkgdesc must be set.")"
+        return 1
     fi
-    
-    # Check pkgdesc requirements.
+
     if [[ "${pkgdesc}" == "" ]]; then
 	error "$(gettext "pkgdesc cannot be empty.")"
 	return 1

@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct depends - all valid characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -13,6 +14,7 @@ load ../util/util
 @test "correct depends - install missing dependencies" {
     skip "THIS IS CURRENTLY NOT WORKING DUE TO A BUG IN MAKEDEB."
     sudo_check
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -25,7 +27,7 @@ load ../util/util
 @test "correct depends - satisfy a build dependency via a provided package" {
 	sudo_check
 	sudo apt-get satisfy mawk -y
-
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
 	pkgbuild string pkgname testpkg
 	pkgbuild string pkgver 1.0.0
 	pkgbuild string pkgrel 1
@@ -36,6 +38,7 @@ load ../util/util
 }
 
 @test "correct depends - valid dependency prefixes" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -49,6 +52,7 @@ load ../util/util
 }
 
 @test "incorrect depends - invalid dependency prefix" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -59,5 +63,3 @@ load ../util/util
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] depends contains an invalid prefix: 'z!'" ]]
 }
-
-# vim: set syntax=bash ts=4 sw=4 expandtab:
