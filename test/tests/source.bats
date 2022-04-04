@@ -1,9 +1,11 @@
 load ../util/util
 
 @test "correct source - valid URL" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source 'https://mpr.hunterwittenborn.com'
     pkgbuild array sha256sums 'SKIP'
@@ -13,9 +15,11 @@ load ../util/util
 
 @test "correct source - valid hashsum" {
     touch file
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source "file://${PWD}/file"
     pkgbuild array sha256sums "$(sha256sum file | awk '{print $1}')"
@@ -24,9 +28,11 @@ load ../util/util
 }
 
 @test "correct source - noextract" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source 'makedeb.tar.gz::https://github.com/makedeb/makedeb/archive/refs/tags/v8.5.6-1-stable.tar.gz'
     pkgbuild array sha256sums 'SKIP'
@@ -37,9 +43,11 @@ load ../util/util
 }
 
 @test "incorrect source - invalid URL" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source 'https://mpr.hunterwittenborn.corn'
     pkgbuild array sha256sums 'SKIP'
@@ -49,9 +57,11 @@ load ../util/util
 }
 
 @test "incorrect source - missing hashsum" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source 'https://mpr.hunterwittenborn.com'
     pkgbuild clean
@@ -61,9 +71,11 @@ load ../util/util
 
 @test "incorrect source - incorrect hashsum" {
     touch file
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source "file://${PWD}/file"
     pkgbuild array sha256sums 'no_way_this_is_the_hashsum_man'
