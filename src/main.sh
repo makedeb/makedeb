@@ -53,7 +53,11 @@ declare -r MAKEDEB_INSTALLATION_SOURCE='$${MAKEDEB_INSTALLATION_SOURCE}'
 declare -r MAKEDEB_DPKG_ARCHITECTURE="$(dpkg --print-architecture)"
 declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 
-LIBRARY=${LIBRARY:-'/usr/share/makedeb'}
+LIBRARY=${LIBRARY:-'$${MAKEDEB_LIBRARY_DIR}'}
+
+if [[ "${LIBRARY}" == '$${MAKEDEB_LIBRARY_DIR}' ]]; then
+	LIBRARY='./functions'
+fi
 
 # Options
 APTARGS=()
