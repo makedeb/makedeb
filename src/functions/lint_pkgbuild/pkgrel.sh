@@ -36,7 +36,7 @@ check_pkgrel() {
 		return 1
 	fi
 
-	if ! echo "${rel}" | grep -q '^[0-9][a-z0-9.+~]*$'; then
+	if ! echo "${rel}" | grep -q '^[a-z0-9.+~]*$'; then
 		error "$(gettext "Invalid characters in %s.")" "pkgrel${type:+ in type}"
 		return 1
 	fi
