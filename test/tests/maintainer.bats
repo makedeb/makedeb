@@ -12,6 +12,7 @@ load ../util/util
 }
 
 @test "incorrect maintainer - no maintainer" {
+    skip "Awaiting packaging of Bats and Bats libraries on MPR"
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -23,6 +24,7 @@ load ../util/util
 }
 
 @test "incorrect maintainer - more than one maintainer" {
+    skip "Awaiting packaging of Bats and Bats libraries on MPR"
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string maintainer2 'Bar Foo <bar@foo.com>'
     pkgbuild string pkgname testpkg

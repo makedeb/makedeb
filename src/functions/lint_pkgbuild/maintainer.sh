@@ -4,11 +4,11 @@ get_maintainers() {
 	mapfile -t maintainer < <(cat "${BUILDFILE}" | grep '^# Maintainer: ' | sed 's|^# Maintainer: ||')
 	
 	if [[ "${#maintainer[@]}" == 0 ]]; then
-		error "$(gettext "A maintainer must be specified." )"
-		return 1
+		warning "$(gettext "A maintainer must be specified. This will be an error in a future release." )"
 	elif [[ "${#maintainer[@]}" -gt 1 ]]; then
-		error "$(gettext "More than one maintainer was specified.")"
-		return 1
+		warning "$(gettext "More than one maintainer was specified. This will be an error in a future release.")"
+		warning "$(gettext "Falling back to first maintainer '${maintainer[0]}'...")"
+		maintainer="${maintainer[0]}"
 	fi
 
 	declare -r maintainer
