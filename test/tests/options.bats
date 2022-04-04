@@ -5,6 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array options '!zipman'
     pkgbuild clean
@@ -16,6 +17,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array options '!no_way_this_option_exists'
     pkgbuild clean

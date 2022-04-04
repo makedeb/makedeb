@@ -6,6 +6,7 @@ load ../util/util
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string epoch 2
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     makedeb -i
@@ -17,6 +18,7 @@ load ../util/util
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string epoch 200
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     makedeb -d
@@ -28,6 +30,7 @@ load ../util/util
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string epoch '-50'
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
@@ -41,6 +44,7 @@ load ../util/util
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string epoch 20.1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
@@ -55,6 +59,7 @@ load ../util/util
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string epoch a5
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d

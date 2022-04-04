@@ -5,6 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     makedeb -si --no-confirm
@@ -15,6 +16,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array depends 'gimp'
     pkgbuild array focal_depends 'krita'
@@ -28,6 +30,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     makedeb --print-srcinfo
@@ -40,6 +43,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array source 'https://mpr.hunterwittenborn.com'
     pkgbuild array focal_source 'https://proget.hunterwittenborn.com'

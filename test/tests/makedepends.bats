@@ -5,6 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array makedepends 'bats>0' 'bash'
     pkgbuild clean
@@ -18,6 +19,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array makedepends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
@@ -29,6 +31,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array makedepends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
@@ -44,6 +47,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array makedepends restic
     pkgbuild clean
@@ -58,6 +62,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array makedepends 'z!bats'
     pkgbuild clean

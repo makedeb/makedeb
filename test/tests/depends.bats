@@ -5,6 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array depends 'bats>0' 'bash'
     pkgbuild clean
@@ -18,6 +19,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array depends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
@@ -25,16 +27,17 @@ load ../util/util
 }
 
 @test "correct depends - satisfy a build dependency via a provided package" {
-	sudo_check
-	sudo apt-get satisfy mawk -y
+    sudo_check
+    sudo apt-get satisfy mawk -y
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
-	pkgbuild string pkgname testpkg
-	pkgbuild string pkgver 1.0.0
-	pkgbuild string pkgrel 1
-	pkgbuild array arch any
-	pkgbuild array depends 'awk'
-	pkgbuild clean
-	makedeb
+    pkgbuild string pkgname testpkg
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
+    pkgbuild array arch any
+    pkgbuild array depends 'awk'
+    pkgbuild clean
+    makedeb
 }
 
 @test "correct depends - valid dependency prefixes" {
@@ -42,6 +45,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array depends 'p!bats>0' 'bash'
     pkgbuild clean
@@ -56,6 +60,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch all
     pkgbuild array depends 'z!bats'
     pkgbuild clean

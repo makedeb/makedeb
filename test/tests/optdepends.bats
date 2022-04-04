@@ -5,6 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array optdepends 'bats>0: good shell testing framework' 'bash: king of shell'
     pkgbuild clean
@@ -18,6 +19,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array optdepends 'zsh: adding a reason so we can see if makedeb strips it before adding it to the control file' 'yash>=0.0.1'
     pkgbuild clean
@@ -29,6 +31,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array optdepends 'r!bats>0' 's!bash' 'yash'
     pkgbuild clean
@@ -43,6 +46,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch all
     pkgbuild array optdepends 'z!bats'
     pkgbuild clean

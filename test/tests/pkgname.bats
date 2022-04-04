@@ -5,6 +5,7 @@ load ../util/util
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     makedeb -d
@@ -15,6 +16,7 @@ load ../util/util
     pkgbuild string pkgname test-pkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
@@ -25,6 +27,7 @@ load ../util/util
     pkgbuild string pkgname test-pkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
@@ -35,6 +38,7 @@ load ../util/util
     pkgbuild string pkgname test-pkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
@@ -46,6 +50,7 @@ load ../util/util
     pkgbuild string pkgname test-pkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
@@ -59,6 +64,7 @@ load ../util/util
     pkgbuild string pkgname 'testp%kg'
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
