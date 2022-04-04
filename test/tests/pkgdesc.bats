@@ -43,6 +43,5 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    cat PKGBUILD >&3         
     [[ "${output}" == "[!] pkgdesc must be set." ]]
 }
