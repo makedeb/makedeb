@@ -9,6 +9,6 @@ fi
 set -x
 cd test/
 bats prepare/
-bats tests/
+bats tests/{'maintainer.bats','pkgdesc.bats'}
 
 # vim: set syntax=bash ts=4 sw=4 expandtab:
