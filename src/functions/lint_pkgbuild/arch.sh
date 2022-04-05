@@ -71,5 +71,15 @@ lint_arch() {
 		fi
 	done
 
+	# Make sure the user didn't provide an architecture-overridable item as an item in 'arch=()' (see https://github.com/makedeb/makedeb/issues/92).
+	for pkgbuild_variable in "${pkgbuild_schema_arch_arrays[@]}"; do
+		for a in "${arch[@]}"; do
+			if echo "${a}" | grep -q "${pkgbuild_variable}"; then
+				error "$(gettext "Architecture '%s' cannot contain PKGBUILD variable reference '%s'.")" "${a}" "${pkgbuild_variable}"
+				ret=1
+			fi
+		done
+	done
+
 	return $ret
 }
