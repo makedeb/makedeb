@@ -17,6 +17,9 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 - Require `pkgdesc` to not be empty and contain characters other than spaces.
 - Show warning when `pkgdesc` or a maintainer entry isn't present in PKGBUILDs.
 - Show warning when more than one maintainer is specified.
+- Disallow distribution and architecture-specific variables from pairing up with each other (#150).
+- Require sources with distribution or architecture extensions in the variable name to have a matching
+ hashsum entry with the same extensions (#150).
 
 ### Deprecated
 - An architecture listing of `any` now sets the package architecture to the system's DPKG architecture (as required by the [Debian control file specification](https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-architecture)). Previously `any` was automatically converted to `all` (which identifies an architecture-independent package), and using `all` now fulfills that purpose.
