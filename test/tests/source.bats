@@ -66,7 +66,7 @@ load ../util/util
     pkgbuild array source 'https://mpr.hunterwittenborn.com'
     pkgbuild clean
     run makedeb -d
-    [[ "${status}" == "1" ]]
+    [[ "${status}" == "12" ]]
 }
 
 @test "incorrect source - incorrect hashsum" {
