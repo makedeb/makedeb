@@ -59,7 +59,6 @@ lint_source() {
 	for hashtype in "${known_hash_algos[@]}"; do
 		if in_array "${hashtype}sums" "${env_keys[@]}"; then
 			hash_variables+=("${hashtype}sums")
-			hash_types+=("${hashtype}")
 		fi
 		
 		mapfile -O "${#hash_variables[@]}" -t hash_variables < <(printf '%s\n' "${env_keys[@]}" | grep -E ".+_${hashtype}sums$" | head -c -1)
@@ -71,14 +70,14 @@ lint_source() {
 	done
 	
 	# If we have sources but not hashes, that's an error.
-	if [[ "${#sources_vars[@]}" == 0 && "${#hash_variables[@]}" != 0 ]]; then
+	if [[ "${#source_vars[@]}" != 0 && "${#hash_variables[@]}" == 0 ]]; then
 		error "$(gettext "Sources were listed but no hashes could be found.")"
 		return 1
 	fi
 
 	# Check that each source item has a matching hash item for each hash type used in the PKGBUILD, and that the hash array length is equal to the source length.
 	for src in "${source_vars[@]}"; do
-		distro="$(echo "${src}" | grep -o '.*source' | sed 's|_source$||')"
+		distro="$(echo "${src}" | sed 's|source.*||' | sed 's|_$||')"
 		arch_name="$(echo "${src}" | sed 's|.*source||' | sed 's|^_||')"
 
 		for hashtype in "${known_hash_algos[@]}"; do
