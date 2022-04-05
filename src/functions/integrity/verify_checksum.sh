@@ -28,44 +28,49 @@ source "$LIBRARY/util/pkgbuild.sh"
 source "$LIBRARY/util/schema.sh"
 
 check_checksums() {
-	local integ a
+	local integ a distros
 	declare -A correlation
 	(( SKIPCHECKSUMS )) && return 0
 
 	# Initialize a map which we'll use to verify that every source array has at
 	# least some kind of checksum array associated with it.
 	(( ${#source[*]} )) && correlation['source']=1
-
-	array_build _ "${distro_release_name}_source" && correlation["${distro_release_name}_source"]=1
+	array_build _ "${MAKEDEB_DISTRO_CODENAME}_source" && correlation["${MAKEDEB_DISTRO_CODENAME}_source"]=1
 
 	case $1 in
 		all)
 			for a in "${arch[@]}"; do
-				array_build _ source_"$a" && correlation["source_$a"]=1
+				array_build _ "source_${a}" && correlation["source_${a}"]=1
+				mapfile -t distros < <(printf '%s\n' "${env_keys[@]}" | grep "^[^_]*_source_${a}" | sed "s|_source_${a}\$||")
+
+				for distro in "${distros[@]}"; do
+					correlation["${distro}_source_${a}"]=1
+				done
 			done
 			;;
 		*)
-			array_build _ source_"$CARCH" && correlation["source_$CARCH"]=1
-
-			array_build _ "${distro_release_name}_source_${CARCH}" && correlation["${distro_release_name}_source_${CARCH}"]=1
+			array_build _ "source_${MAKEDEB_DPKG_ARCHITECTURE}" && correlation["source_${MAKEDEB_DPKG_ARCHITECTURE}"]=1
+			array_build _ "${MAKEDEB_DISTRO_CODENAME}_source_${MAKEDEB_DPKG_ARCHITECTURE}" && correlation["${MAKEDEB_DISTRO_CODENAME}_source_${MAKEDEB_DPKG_ARCHITECTURE}"]=1
 			;;
 	esac
-
+	
 	for integ in "${known_hash_algos[@]}"; do
-		verify_integrity_sums "$integ" && unset "correlation[source]"
-
-		verify_integrity_sums "$integ" "" "${distro_release_name}" && unset "correlation[${distro_release_name}_source]"
+		verify_integrity_sums "${integ}" && unset "correlation[source]"
+		verify_integrity_sums "${integ}" "" "${MAKEDEB_DISTRO_CODENAME}" && unset "correlation[${MAKEDEB_DISTRO_CODENAME}_source]"
 
 		case $1 in
 			all)
 				for a in "${arch[@]}"; do
-					verify_integrity_sums "$integ" "$a" && unset "correlation[source_$a]"
+					verify_integrity_sums "${integ}" "${a}" && unset "correlation[source_${a}]"
+
+					for distro in "${distros[@]}"; do
+						verify_itegrity_sums "${integ}" "${a}" "${distro}" && unset "correlation[${distro}_source_${a}]"
+					done
 				done
 				;;
 			*)
-				verify_integrity_sums "$integ" "$CARCH" && unset "correlation[source_$CARCH]"
-
-				verify_integrity_sums "$integ" "$CARCH" "$distro_release_name" && unset "correlation[${distro_release_name}_source_${CARCH}]"
+				verify_integrity_sums "${integ}" "${MAKEDEB_DPKG_ARCHITECTURE}" && unset "correlation[source_${MAKEDEB_DPKG_ARCHITECTURE}]"
+				verify_integrity_sums "${integ}" "${MAKEDEB_DPKG_ARCHITECTURE}" "${MAKEDEB_DISTRO_CODENAME}" && unset "correlation[${MAKEDEB_DISTRO_CODENAME}_source_${MAKEDEB_DPKG_ARCHITECTURE}]"
 				;;
 		esac
 	done

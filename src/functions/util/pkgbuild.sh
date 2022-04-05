@@ -207,7 +207,7 @@ print_all_package_names() {
 }
 
 get_all_sources() {
-	local aggregate l a current_environment_variables
+	local aggregate l a d current_environment_variables
 
 	current_environment_variables="$(set | grep -o '^[^= ]*=' | sed 's|=$||')"
 
@@ -215,43 +215,34 @@ get_all_sources() {
 		aggregate+=("${l[@]}")
 	fi
 
-	for i in $(echo "${current_environment_variables}" | grep '.*_source$'); do
-		if array_build l "${i}"; then
+	for d in $(printf '%s\n' "${env_keys[@]}" | grep '.*_source$'); do
+		if array_build l "${d}"; then
 			aggregate+=("${l[@]}")
 		fi
 	done
 
 	for a in "${arch[@]}"; do
-		if array_build l "source_$a"; then
+		if array_build l "source_${a}"; then
 			aggregate+=("${l[@]}")
 		fi
 
-		for i in $(echo "${current_environment_variables}" | grep ".*_source_${a}\$"); do
+		for i in $(printf '%s\n' "${env_keys[@]}" | grep ".*_source_${a}\$"); do
 			if array_build l "${i}"; then
 				aggregate+=("${l[@]}")
 			fi
 		done
 	done
 
-	array_build "$1" "aggregate"
+	array_build "${1}" "aggregate"
 }
 
 get_all_sources_for_arch() {
 	local aggregate l
-
-	if array_build l 'source'; then
-		aggregate+=("${l[@]}")
-	fi
-
-array_build l "${distro_release_name}_source" && aggregate+=("${l[@]}")
-
-	if array_build l "source_$CARCH"; then
-		aggregate+=("${l[@]}")
-	fi
-
-  array_build l "${distro_release_name}_source_${CARCH}" && aggregate+=("${l[@]}")
-
-	array_build "$1" "aggregate"
+	array_build l 'source' && aggregate=("${l[@]}")
+	array_build l "${MAKEDEB_DISTRO_CODENAME}_source" && aggregate=("${l[@]}")
+	array_build l "source_${MAKEDEB_DPKG_ARCHITECTURE}" && aggregate=("${l[@]}")
+	array_build l "${MAKEDEB_DISTRO_CODENAME}_source_${MAKEDEB_DPKG_ARCHITECTURE}" && aggregate=("${l[@]}")
+	array_build "${1}" "aggregate"
 }
 
 get_integlist() {
@@ -266,13 +257,25 @@ get_integlist() {
 			continue
 		fi
 
-		# check for e.g. "sha256sums_x86_64"
+		# check for e.g. "sha256sums_amd64".
 		for a in "${arch[@]}"; do
 			local sumname="${integ}sums_${a}[@]"
 			if [[ -n ${!sumname} ]]; then
 				integlist+=("$integ")
 				break
 			fi
+		done
+
+		# check for e.g. 'focal_sha256sums'.
+		for d in $(printf '%s\n' "${env_keys[@]}" | grep ".*_${integ}sums\$"); do
+			integlist+=("${integ}")
+		done
+
+		# check for e.g. 'focal_sha256sums_amd64'.
+		for a in "${arch[@]}"; do
+			for d in $(printf '%s\n' "${env_keys[@]}" | grep ".*_${integ}sums_${a}"); do
+				integlist+=("${integ}")
+			done
 		done
 	done
 
