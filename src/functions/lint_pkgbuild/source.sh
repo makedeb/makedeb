@@ -69,9 +69,9 @@ lint_source() {
 			mapfile -O "${#hash_variables[@]}" -t hash_variables < <(printf '%s\n' "${env_keys[@]}" | grep -E ".+_${hashtype}sums_${arch_name}\$" | head -c -1)
 		done
 	done
-
+	
 	# If we have sources but not hashes, that's an error.
-	if [[ "${#sources_vars[@]}" == 0 && "${#hash_variables[@]}" == 0 ]]; then
+	if [[ "${#sources_vars[@]}" == 0 && "${#hash_variables[@]}" != 0 ]]; then
 		error "$(gettext "Sources were listed but no hashes could be found.")"
 		return 1
 	fi
