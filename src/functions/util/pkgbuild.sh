@@ -207,9 +207,7 @@ print_all_package_names() {
 }
 
 get_all_sources() {
-	local aggregate l a d current_environment_variables
-
-	current_environment_variables="$(set | grep -o '^[^= ]*=' | sed 's|=$||')"
+	local aggregate l a d
 
 	if array_build l 'source'; then
 		aggregate+=("${l[@]}")

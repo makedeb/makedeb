@@ -2,4 +2,4 @@ makedeb ($${pkgver}) unstable; urgency=medium
 
   * Initial release (Closes: #998039).
 
- -- Leo Puvilland <leo@craftcat.dev>  Mon, 04 Apr 2022 18:13:29 -0500
+ -- Leo Puvilland <leo@craftcat.dev>  Tue, 05 Apr 2022 02:38:22 -0500
