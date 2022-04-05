@@ -15,7 +15,7 @@ prepare:
 	sed -i 's|{MAKEDEB_VERSION}|$(CURRENT_VERSION)|' main.sh
 	sed -i 's|{MAKEDEB_RELEASE}|$(RELEASE)|' main.sh
 	sed -i 's|{MAKEDEB_INSTALLATION_SOURCE}|$(TARGET)|' main.sh
-	sed -i 's|{FILESYSTEM_PREFIX}|$(FILESYSTEM_PREFIX)/usr/share/makedeb|' main.sh
+	sed -i 's|{FILESYSTEM_PREFIX}|$(FILESYSTEM_PREFIX)|' main.sh
 	find ./main.sh functions/ -type f -exec sed -i 's|^.*# COMP_RM$$||' '{}' \;
 	cd ../
 	
