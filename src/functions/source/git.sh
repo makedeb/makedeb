@@ -45,6 +45,7 @@ download_git() {
 	url=${url#git+}
 	url=${url%%#*}
 	url=${url%%\?*}
+	local fragment=$(get_uri_fragment "$netfile")
 
 	local ref=origin/HEAD
 	if [[ -n $fragment ]]; then
