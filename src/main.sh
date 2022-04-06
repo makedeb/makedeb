@@ -452,7 +452,7 @@ write_control_info() {
 
 	write_control_pair "Package" "${pkgname}"
 	write_control_pair "Version" "${fullver}"
-	write_control_pair "Description" "${spd}"
+	write_control_pair "Description" "${pkgdesc}"
 	write_control_pair "Architecture" "${pkgarch}"
 	write_control_pair "License" "${license[@]}"
 	write_control_pair "Maintainer" "${maintainer}"
