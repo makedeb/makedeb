@@ -441,10 +441,13 @@ write_control_info() {
 	local new_replaces
 	local new_breaks
 
+	remove_optdepends_description clean_recommends "${recommends[@]}"
+	remove_optdepends_description clean_suggests "${suggests[@]}"
+
 	convert_relationships new_predepends "${predepends[@]}"
 	convert_relationships new_depends "${depends[@]}"
-	convert_relationships new_recommends "${recommends[@]}"
-	convert_relationships new_suggests "${suggests[@]}"
+	convert_relationships new_recommends "${clean_recommends[@]}"
+	convert_relationships new_suggests "${clean_suggests[@]}"
 	convert_relationships new_conflicts "${conflicts[@]}"
 	convert_relationships new_provides "${provides[@]}"
 	convert_relationships new_replaces "${replaces[@]}"
@@ -1109,6 +1112,12 @@ if (( PRINTSRCINFO )); then
 	exit $E_OK
 fi
 
+# Process distro-specific dependencies.
+check_distro_dependencies
+
+# Convert needed dependencies.
+convert_dependencies
+
 if (( PRINTCONTROL )); then
 	output=""
 
@@ -1124,12 +1133,6 @@ fi
 if (( ! PKGVERFUNC )); then
 	check_build_status
 fi
-
-# Process distro-specific dependencies.
-check_distro_dependencies
-
-# Convert needed dependencies.
-convert_dependencies
 
 # Run the bare minimum in fakeroot
 if (( INFAKEROOT )); then

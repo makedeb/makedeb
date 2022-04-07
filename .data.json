@@ -2,7 +2,7 @@
     "current_pkgver": "14.0.0",
     "current_pkgrel_stable": "stable",
     "current_pkgrel_beta": "beta",
-    "current_pkgrel_alpha": "alpha8",
+    "current_pkgrel_alpha": "alpha9",
     "makedeb_man_epoch": "1635393570",
     "pkgbuild_man_epoch": "1649142725"
 }
