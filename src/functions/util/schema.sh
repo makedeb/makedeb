@@ -41,6 +41,8 @@ pkgbuild_schema_arch_arrays=(checkdepends conflicts depends makedepends
                              optdepends provides replaces source control_fields
                              "${known_hash_algos[@]/%/sums}")
 
+pkgbuild_schema_arch_strings=(preinst postinst prerm postrm)
+
 pkgbuild_schema_package_overrides=(pkgdesc arch url license groups depends
                                    optdepends provides conflicts replaces
                                    backup options install preinst postinst
@@ -48,4 +50,4 @@ pkgbuild_schema_package_overrides=(pkgdesc arch url license groups depends
 
 readonly -a known_hash_algos pkgbuild_schema_arrays \
 	pkgbuild_schema_strings pkgbuild_schema_arch_arrays \
-	pkgbuild_schema_package_overrides
+	pkgbuild_schema_package_overrides pkgbuild_schema_arch_strings

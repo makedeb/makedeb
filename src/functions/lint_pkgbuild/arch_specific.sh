@@ -47,7 +47,7 @@ lint_arch_specific() {
 		fi
 
 		for i in ${pkgbuild_schema_arrays[@]} ${pkgbuild_schema_strings[@]}; do
-			in_array "$i" ${pkgbuild_schema_arch_arrays[@]} && continue
+			in_array "$i" "${pkgbuild_schema_arch_arrays[@]}" "${pkgbuild_schema_arch_strings[@]}" && continue
 			v="${i}_${a}"
 			if declare -p "$v" > /dev/null 2>&1; then
 				error "$(gettext "%s can not be architecture specific: %s")" "$i" "${i}_${a}"

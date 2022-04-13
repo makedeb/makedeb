@@ -430,6 +430,19 @@ write_buildinfo() {
 	write_kv_pair "options" "${OPTIONS[@]}"
 }
 
+write_extra_control_fields() {
+	local control_field
+	local control_key
+	local control_value
+
+	for control_field in "${MERGED_CONTROL_FIELDS[@]}"; do
+		control_key="$(echo "${control_field}" | grep -o '^[^:]*')"
+		control_value="$(echo "${control_field}" | grep -o '[^:]*$' | sed 's|^ ||')"
+
+		write_control_pair "${control_key}" "${control_value}"
+	done
+}
+
 write_control_info() {
 	local fullver=$(get_full_version)
 	local new_predepends
@@ -468,6 +481,7 @@ write_control_info() {
 	write_control_pair "Provides" "${new_provides[@]}"
 	write_control_pair "Replaces" "${new_replaces[@]}"
 	write_control_pair "Breaks" "${new_breaks[@]}"
+	write_extra_control_fields
 }
 
 create_package() {
@@ -1108,7 +1122,7 @@ if (( PACKAGELIST )); then
 fi
 
 if (( PRINTSRCINFO )); then
-	write_srcinfo_content
+	write_srcinfo
 	exit $E_OK
 fi
 
