@@ -41,8 +41,14 @@ write_srcinfo() {
 	local item
 	local matches
 	local match
-
+	
 	srcinfo_write_value 'generated-by' 'makedeb'
+
+	# 'pkgname' is special, as it can be both a string and an array.
+	# Likewise, it's not in the schema_strings or schema_arrays lists.
+	for item in "${pkgname[@]}"; do
+		srcinfo_write_value pkgname "${item}"
+	done
 
 	for string in "${pkgbuild_schema_strings[@]}"; do
 		in_array "${string}" "${env_keys[@]}" && srcinfo_write_value "${string}" "${!string}"
@@ -68,7 +74,7 @@ write_srcinfo() {
 	done
 
 	for array_item in "${pkgbuild_schema_arch_arrays[@]}"; do
-		mapfile -t matches < <(printf '%s\n' "${env_keys[@]}" | grep "${array_item}" | grep -v "^${string}\$" | head -c -1)
+		mapfile -t matches < <(printf '%s\n' "${env_keys[@]}" | grep "${array_item}" | grep -v "^${array_item}\$" | head -c -1)
 
 		for match in "${matches[@]}"; do
 			current_array_item="${match}[@]"
