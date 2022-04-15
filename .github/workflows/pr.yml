@@ -10,16 +10,15 @@ jobs:
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
 
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head_sha }}
-      
+      - name: Checkout Git repository
+        run: git clone "${{ github.repositoryUrl }}" -b "${{ github.head_ref }}"
+
       - name: Install needed dependencies
+        working-directory: ./makedeb
         run: .drone/scripts/install-deps.sh
       
       - name: Run unit tests
+        working-directory: ./makedeb
         run: release_type="${GITHUB_BASE_REF}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2
