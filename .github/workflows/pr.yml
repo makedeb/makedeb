@@ -14,9 +14,10 @@ jobs:
       - name: Check user
         run: |
           echo "$(whoami) ${PWD}"
+          ls -alF ./ ../
 
       - name: Checkout Git repository
-        run: git clone "${{ github.repositoryUrl }}" -b "${{ github.head_ref }}"
+        run: git clone "${{ github.server_url }}/${{ github.repository }}" -b "${{ github.head_ref }}"
 
       - name: Install needed dependencies
         working-directory: ./makedeb
