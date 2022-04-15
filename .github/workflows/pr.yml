@@ -11,10 +11,8 @@ jobs:
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
 
-      - name: Check user
-        run: |
-          echo "$(whoami) ${PWD}"
-          ls -alF ./ ../
+      - name: Ensure directory permissions are correct
+        run: chown 'makedeb:makedeb' ../ -R
 
       - name: Checkout Git repository
         run: git clone "${{ github.server_url }}/${{ github.repository }}" -b "${{ github.head_ref }}"
