@@ -17,6 +17,7 @@ jobs:
         run: |
           topdir="$(echo "${PWD}" | grep -o '^/[^/]*')"
           sudo chown "${USER}" "${topdir}" -R
+          sudo chmod u+rwx "${topdir}" -R
 
       - name: Checkout
         uses: actions/checkout@v2
