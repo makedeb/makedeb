@@ -13,7 +13,7 @@ jobs:
 
       - name: Check user
         run: |
-          echo "${USER} ${UID} ${PWD}"
+          echo "$(whoami) ${PWD}"
 
       - name: Checkout Git repository
         run: git clone "${{ github.repositoryUrl }}" -b "${{ github.head_ref }}"
