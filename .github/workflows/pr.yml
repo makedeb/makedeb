@@ -12,7 +12,7 @@ jobs:
         run: sudo -E apt-get install git -y
 
       - name: Ensure directory permissions are correct
-        run: sudo chown 'makedeb:makedeb' ../ -R
+        run: sudo chown 'makedeb:makedeb' ../ "${HOME}" -R
 
       - name: Checkout Git repository
         run: git clone "${{ github.server_url }}/${{ github.repository }}" -b "${{ github.head_ref }}"
