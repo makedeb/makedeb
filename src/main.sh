@@ -75,6 +75,7 @@ INFAKEROOT=0
 INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
+MPR_CHECK=0
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
@@ -838,6 +839,17 @@ version() {
 	printf "Installed from ${MAKEDEB_INSTALLATION_SOURCE^^}\n"
 }
 
+mpr_check() {
+	printf "
+ .--.                  Pacman v6.0.0 - libalpm v13.0.0
+/ _.-' .-.  .-.  .-.   Copyright (C) 2006-2021 Pacman Development Team
+\  '-. '-'  '-'  '-'   Copyright (C) 2002-2006 Judd Vinet
+ '--'
+                       This program may be freely redistributed under
+                       the terms of the GNU General Public License.
+"
+}
+
 ###################
 ## PROGRAM START ##
 ###################
@@ -860,7 +872,7 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
 	  'sync-deps' 'print-control' 'print-srcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check')
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
 	exit $E_INVALID_OPTION
@@ -871,21 +883,22 @@ unset OPT_SHORT OPT_LONG OPTRET
 while true; do
 	case "$1" in
 		# makedeb options.
-		-A|--ignore-arch) IGNOREARCH=1 ;;
-		-d|--no-deps)     NODEPS=1 ;;
-		-F|-p|--file)     shift; BUILDFILE="${1}" ;;
-		-g|--gen-integ)   BUILDPKG=0 GENINTEG=1 IGNOREARCH=1 ;;
-		-h|--help)        usage; exit $E_OK ;;
-		-H|--field)       shift; CONTROL_FIELDS+=("${1}") ;;
-		-i|--install)     INSTALL=1 ;;
-		-V|--version)     version; exit $E_OK ;;
-		-r|--rm-deps)     RMDEPS=1 ;;
-		-s|--sync-deps)   SYNCDEPS=1 ;;
-		--lint)           LINTPKGBUILD=1 ;;
-		--print-control)  BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
-		--print-srcinfo)  BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
-		--skip-pgp-check) SKIPPGPCHECK=1 ;;
-		--)               shift; break ;;
+		-A|--ignore-arch)        IGNOREARCH=1 ;;
+		-d|--no-deps)            NODEPS=1 ;;
+		-F|-p|--file)            shift; BUILDFILE="${1}" ;;
+		-g|--gen-integ)          BUILDPKG=0 GENINTEG=1 IGNOREARCH=1 ;;
+		-h|--help)               usage; exit $E_OK ;;
+		-H|--field)              shift; CONTROL_FIELDS+=("${1}") ;;
+		-i|--install)            INSTALL=1 ;;
+		-V|--version)            version; exit $E_OK ;;
+		-r|--rm-deps)            RMDEPS=1 ;;
+		-s|--sync-deps)          SYNCDEPS=1 ;;
+		--lint)                  LINTPKGBUILD=1 ;;
+		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
+		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
+		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
+		--)                      shift; break ;;
 
 		# APT options.
 		--as-deps)        ASDEPS=1 ;;
