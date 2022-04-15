@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
+      options: --user makedeb
     steps:
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
