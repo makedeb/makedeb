@@ -11,6 +11,10 @@ jobs:
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
 
+      - name: Check user
+        run: |
+          echo "${USER} ${UID} ${PWD}"
+
       - name: Checkout Git repository
         run: git clone "${{ github.repositoryUrl }}" -b "${{ github.head_ref }}"
 
