@@ -13,6 +13,11 @@ jobs:
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
 
+      - name: Ensure directory permissions are correct
+        run: |
+          topdir="$(echo "${PWD}" | grep -o '^/[^/]*')"
+          sudo chown "${topdir}" "${USER}" -R
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
