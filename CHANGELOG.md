@@ -23,10 +23,11 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ### Deprecated
 - An architecture listing of `any` now sets the package architecture to the system's DPKG architecture (as required by the [Debian control file specification](https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-architecture)). Previously `any` was automatically converted to `all` (which identifies an architecture-independent package), and using `all` now fulfills that purpose.
+- Removed the `--ignorearch`, `--nodeps`, `--geninteg`, `-Q`/`--no-fields`, and `-v`/`--distro-packages` options. `--ignorearch`, `--nodeps`, and `--geninteg`, should now be replaced with their hyphen-separated counterparts, with those being `--ignore-arch`, `--no-deps`, and `--gen-integ` respectively. All other previously mentioned options have been fully removed.
 
 ### Fixed
-- Implement a changelog (#145).
-- Move all code to `src/makepkg` codebase (#130).
-- Disable all colored output if file descriptor 2 isn't a terminal (#81).
+- Implemented a changelog (#145).
+- Moved all code to `src/makepkg` codebase (#130).
+- Disabled all colored output if file descriptor 2 isn't a terminal (#81).
 - Allow `pkgver` to include all characters allowed in the [Debian control file specification](https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-version).
 - Don't require `pkgver` to start with a number.
