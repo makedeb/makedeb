@@ -11,7 +11,7 @@ jobs:
         run: sudo -E apt-get install git -y
 
       - name: Set directory permissions
-        run: sudo chown 'makedeb:makedeb' ../ /github/home/ /__w/ -R
+        run: sudo chown 'makedeb:makedeb' /__w/ -R
 
       - name: Checkout
         uses: actions/checkout@v3
