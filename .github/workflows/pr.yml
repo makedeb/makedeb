@@ -10,15 +10,15 @@ jobs:
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
 
+      - name: Set directory permissions
+        run: sudo chown 'makedeb:makedeb' ../ /github/home/ /__w/ -R
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head_sha }}
       
-      - name: Set directory permissions
-        run: sudo chown 'makedeb:makedeb' ../ /github/home/ -R
-
       - name: Install needed dependencies
         run: .drone/scripts/install-deps.sh
       
