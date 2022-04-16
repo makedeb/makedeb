@@ -8,8 +8,11 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ## [Unreleased]
 ### Added
-- Added `BUILDING.md`
 - Added support for custom installing directories during builds (#61).
+
+## [14.0.0] - 2022-04-16
+### Added
+- Added `BUILDING.md`.
 
 ### Changed
 - Show a warning when using Arch Linux styled architectures (those can be seen from the output of `uname -p`). Such architectures are still allowed for builds, but makedeb prompts the user to switch the architecture listing in the PKGBUILD to the Debian styled one (which can be seen from the output of `dpkg --print-architecture`).
