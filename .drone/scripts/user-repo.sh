@@ -7,7 +7,7 @@ rm -rf "/${HOME}/.ssh"
 mkdir -p "/${HOME}/.ssh"
 
 # Get current SSH fingerprint.
-mpr_fingerprint='SHA256:7Wki/ZTENAVOYmAtH4+vhqZB8vHkLURS+eK1SQy0jTs'
+mpr_fingerprint="$(curl "https://${mpr_url}/api/meta" | jq -r '.ssh_key_fingerprints.ECDSA')"
 aur_fingerprint='SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4'
 current_fingerprint="${target_repo}_fingerprint"
 current_fingerprint="${!current_fingerprint}"
@@ -53,7 +53,7 @@ cd PKGBUILD/
 # Create .SRCINFO file
 cd "../${package_name}_${target_repo}"
 
-PACMAN='/usr/bin/true' makedeb --printsrcinfo | tee .SRCINFO
+PACMAN='/usr/bin/true' makedeb --print-srcinfo | tee .SRCINFO
 
 # Remove 'generated-by' line when using AUR deployments.
 if [[ "${target_repo}" == "aur" ]]; then
@@ -73,8 +73,7 @@ git config user.email "kavplex@hunterwittenborn.com"
 
 # Get current version info.
 config="$(cat ../.data.json)"
-pkgver="$(echo "${config}" | jq -r '.current_pkgver')"
-pkgrel="$(echo "${config}" | jq -r '.current_pkgrel')"
+pkgver="$(echo "${config}" | jq -r ".current_pkgver + \"-\" + .current_pkgrel_${release_type}")"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO

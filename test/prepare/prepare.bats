@@ -10,6 +10,9 @@ setup() {
 
 @test "install makedeb from native-packaged version" {
     cd ../../
-    version="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel')"
-    sudo -n DEBIAN_FRONTEND=noninteractive apt-get reinstall --allow-downgrades "./${pkgname}_${version}_all.deb" -y
+    version="$(cat .data.json | jq -r ".current_pkgver + \"-\" + .current_pkgrel_${release_type}")"
+
+    # Annoyingly it looks like 'apt-get' will try to install a package from a repository if the local one we specify can be found in one, so we have to manually install the package with dpkg.
+    sudo -n DEBIAN_FRONTEND=noninteractive apt-get install "./${pkgname}_${version}_all.deb" -fy --allow-downgrades
+    sudo dpkg -i "${pkgname}_${version}_all.deb"
 }

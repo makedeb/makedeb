@@ -14,7 +14,7 @@ with open(".data.json") as file:
     data = file.read()
     json = json.loads(data)
     pkgver = json["current_pkgver"]
-    pkgrel = json["current_pkgrel"]
+    pkgrel = json["current_pkgrel_" + commit_branch]
 
 if commit_branch == "stable":
     package_name = "makedeb"
@@ -31,7 +31,7 @@ with open(f"./{filename}", "rb") as file:
                     auth=HTTPBasicAuth("api", proget_api_key))
 
 if response.reason != "Created":
-    print(f"ERROR: There was an error uploading the package.")
+    print("ERROR: There was an error uploading the package.")
     print("=====")
     print(response.reason)
     print(response.text)

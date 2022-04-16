@@ -15,7 +15,7 @@ sed -i "s|\$\${conflicts}|${conflicts}|" debian/control
 
 # Build package.
 git fetch
-export NEEDED_VERSION="$(cat .data.json | jq -r '.current_pkgver')"
+export NEEDED_VERSION="$(cat .data.json | jq -r '.current_pkgver + "-" + .current_pkgrel_stable')"
 tar -cJf "../makedeb_${NEEDED_VERSION}.orig.tar.xz" .
 debuild -S -sa -kkavplex@hunterwittenborn.com
 

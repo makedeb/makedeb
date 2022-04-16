@@ -6,9 +6,11 @@ package() {
 }
 
 @test "correct backup" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch 'any'
     pkgbuild array backup '/etc/hi'
     pkgbuild function package
@@ -17,9 +19,11 @@ package() {
 }
 
 @test "incorrect backup - doesn't start with forward slash" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch 'any'
     pkgbuild array backup 'etc/hi'
     pkgbuild function package

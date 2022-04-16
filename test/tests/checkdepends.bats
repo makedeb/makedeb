@@ -1,9 +1,11 @@
 load ../util/util
 
 @test "correct checkdepends - all valid characters" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array checkdepends 'bats>0' 'bash'
     pkgbuild clean
@@ -13,9 +15,11 @@ load ../util/util
 @test "correct checkdepends - install missing dependencies" {
     skip "THIS IS CURRENTLY FAILING DUE TO A BUG IN MAKEDEB"
     sudo_check
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array checkdepends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
@@ -23,9 +27,11 @@ load ../util/util
 }
 
 @test "correct checkdepends - don't add to 'Depends' in control file" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array checkdepends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
@@ -34,9 +40,11 @@ load ../util/util
 }
 
 @test "incorrect checkdepends - invalid dependency prefix" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array checkdepends 'z!bats'
     pkgbuild clean

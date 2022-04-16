@@ -1,6 +1,12 @@
 #!/usr/bin/bash
-set -ex
+set -e
 
+if git log -1 --pretty='%s' | grep '\[TEST SKIP\]$'; then
+    echo "Skipping unit tests..."
+    exit 0
+fi
+
+set -x
 cd test/
 bats prepare/
 bats tests/

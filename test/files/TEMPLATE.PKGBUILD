@@ -1,4 +1,5 @@
-# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+# Maintainer: $${maintainer1}
+# Maintainer: $${maintainer2}
 pkgbase=$${pkgbase}
 pkgname=$${pkgname}
 pkgver=$${pkgver}
