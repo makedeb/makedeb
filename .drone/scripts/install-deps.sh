@@ -20,8 +20,6 @@ apt_install_cmd=(
     'jq'
     'openssh-client'
     'python3'
-    'python3-bs4'
-    'python3-markdown'
     'python3-pip'
     'python3-requests'
     'sed'
@@ -29,6 +27,14 @@ apt_install_cmd=(
     'tzdata'
     'ubuntu-dev-tools'
     '-y'
+)
+pip_install_cmd=(
+    'pip'
+    'install'
+    'PyGithub'
+    'beautifulsoup4'
+    'markdown'
+    'requests'
 )
 
 if [[ -z "${NO_SUDO}" ]]; then
@@ -40,6 +46,8 @@ else
     "${apt_upgrade_cmd[@]}"
     "${apt_install_cmd[@]}"
 fi
+
+"${pip_install_cmd[@]}"
 
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
 
