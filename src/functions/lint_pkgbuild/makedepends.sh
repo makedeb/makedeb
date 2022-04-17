@@ -33,24 +33,5 @@ lint_pkgbuild_functions+=('lint_makedepends')
 
 
 lint_makedepends() {
-	local makedepends_list makedepend name ver ret=0
-
-	get_pkgbuild_all_split_attributes makedepends makedepends_list
-
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
-
-	for makedepend in "${makedepends_list[@]}"; do
-		name=${makedepend%%@(<|>|=|>=|<=)*}
-		lint_one_pkgname makedepends "$name" || ret=1
-		if [[ $name != "$makedepend" ]]; then
-			ver=${makedepend##$name@(<|>|=|>=|<=)}
-			check_fullpkgver "$ver" makedepends || ret=1
-		fi
-	done
-
-	eval "$shellopts"
-
-	return $ret
+	lint_deps 'makedepends' '' || return 1
 }

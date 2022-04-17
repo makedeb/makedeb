@@ -1007,8 +1007,10 @@ unset "${!cksums_@}" "${!md5sums_@}" "${!sha1sums_@}" "${!sha224sums_@}"
 unset "${!sha256sums_@}" "${!sha384sums_@}" "${!sha512sums_@}" "${!b2sums_@}"
 
 # Read environment variables.
-mapfile -t env_vars < <(set | grep '^[^= ]*=')
-mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*')
+# We don't process variables that start with '_', as those are meant for custom
+# user-defined variables.
+mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
+mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
 
 # Unset distro-specific environment variables from a user's environment variables.
 # This processes distro-specific global variables (i.e. 'focal_depends') as well
@@ -1045,8 +1047,8 @@ else
 fi
 
 # Re-read environment variables.
-mapfile -t env_vars < <(set | grep '^[^= ]*=')
-mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*')
+mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
+mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
 
 # Set pkgbase variable if the user didn't define it.
 # We don't set to 'pkgbase' yet so that we don't lint that variable when the user didn't set it.

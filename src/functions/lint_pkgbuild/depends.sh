@@ -31,29 +31,49 @@ source "$LIBRARY/util/pkgbuild.sh"
 
 lint_pkgbuild_functions+=('lint_depends')
 
-
 lint_depends() {
-	local depends_list depend name ver ret=0
+	lint_deps 'depends' 'p' || return 1
+}
 
-	get_pkgbuild_all_split_attributes depends depends_list
+lint_deps() {
+	local ret=0
+	local var="${1}"
+	local valid_prefixes
+	local depends_var_list
+	local depends_list
+	local deps
+	local prefix
+	local name
+	local ver
+	local i
+	local j
+	local k
 
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
+	mapfile -t depends_var_list < <(get_extended_variables "${var}")
+	mapfile -t valid_prefixes < <(echo "${2}" | sed 's| |\n|g' | head -c -1)
 
-	for depend in "${depends_list[@]}"; do
-		name=${depend%%@(<|>|=|>=|<=)*}
-		lint_one_pkgname depends "$name" || ret=1
-		if [[ $name != "$depend" ]]; then
-			ver=${depend##$name@(<|>|=|>=|<=)}
-			# Don't validate empty version because of https://bugs.archlinux.org/task/58776
-			if [[ -n $ver ]]; then
-				check_fullpkgver "$ver" depends || ret=1
-			fi
-		fi
+	for i in "${depends_var_list[@]}"; do
+		depends_list="${i}[@]"
+		depends_list=("${!depends_list}")
+
+		for j in "${depends_list[@]}"; do
+			mapfile -t deps < <(split_dep_by_pipe "${j}")
+
+			for k in "${deps[@]}"; do
+				prefix="$(echo "${k}" | grep '!' | grep -o '^[^!]*')"
+				name="$(echo "${k}" | grep -o '^[^<>=]*')"
+				ver="$(echo "${k}" | grep -o '[<>=].*$' | sed -E 's/<=|>=|=|<|>//')"
+
+				if [[ "${prefix}" != "" ]] && ! in_array "${prefix}" "${valid_prefixes[@]}"; then
+					error "$(gettext "Dependency '%s' under '%s' contains an invalid prefix: '%s'")" "${k}" "${i}" "${prefix}"
+				fi
+
+				lint_one_pkgname "${name}"
+				
+				[[ "${ver}"  != "" ]] && check_pkgver "${ver}"
+			done
+		done
 	done
-
-	eval "$shellopts"
 
 	return $ret
 }

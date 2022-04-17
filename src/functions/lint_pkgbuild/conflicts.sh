@@ -33,24 +33,5 @@ lint_pkgbuild_functions+=('lint_conflicts')
 
 
 lint_conflicts() {
-	local conflicts_list conflict name ver ret=0
-
-	get_pkgbuild_all_split_attributes conflicts conflicts_list
-
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
-
-	for conflict in "${conflicts_list[@]}"; do
-		name=${conflict%%@(<|>|=|>=|<=)*}
-		lint_one_pkgname conflicts "$name" || ret=1
-		if [[ $name != "$conflict" ]]; then
-			ver=${conflict##$name@(<|>|=|>=|<=)}
-			check_fullpkgver "$ver" conflicts || ret=1
-		fi
-	done
-
-	eval "$shellopts"
-
-	return $ret
+	lint_deps 'conflicts' '' || return 1
 }
