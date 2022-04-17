@@ -66,11 +66,14 @@ lint_deps() {
 
 				if [[ "${prefix}" != "" ]] && ! in_array "${prefix}" "${valid_prefixes[@]}"; then
 					error "$(gettext "Dependency '%s' under '%s' contains an invalid prefix: '%s'")" "${k}" "${i}" "${prefix}"
+					ret=1
 				fi
 
-				lint_one_pkgname "${name}"
+				lint_one_pkgname "${name}" || ret=1
 				
-				[[ "${ver}"  != "" ]] && check_pkgver "${ver}"
+				if [[ "${ver}"  != "" ]]; then
+					check_pkgver "${ver}" || ret=1
+				fi
 			done
 		done
 	done
