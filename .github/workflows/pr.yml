@@ -1,4 +1,4 @@
-name: Unit Tests
+name: run-unit-tests
 on: {"pull_request"}
 env: {"DEBIAN_FRONTEND": "noninteractive"}
 jobs:
