@@ -103,4 +103,11 @@ sudo() {
 
 export -f apt apt-get sudo
 
+# Wrap 'lsb_release' calls so we can have a fixed distro in unit tests.
+lsb_release() {
+    "$(type -pf lsb_release)" -cs
+}
+
+export -f lsb_release
+
 # vim: set ts=4 sw=4 expandtab:
