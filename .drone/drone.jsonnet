@@ -1,14 +1,14 @@
-local runUnitTests(pkgname, tag) = {
-    name: "run-unit-tests-" + tag,
+local runUnitTests(pkgname, branch_tag, image_tag) = {
+    name: "run-unit-tests-" + branch_tag + "-" + image_tag,
     kind: "pipeline",
     type: "docker",
-    trigger: {branch: [tag]},
+    trigger: {branch: [branch_tag]},
 
     steps: [{
         name: "run-unit-tests",
-        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":" + image_tag,
         environment: {
-            release_type: tag,
+            release_type: branch_tag,
             pkgname: pkgname
         },
         commands: [
@@ -24,7 +24,10 @@ local createTag(tag) = {
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
-    depends_on: ["run-unit-tests-" + tag],
+    depends_on: [
+        "run-unit-tests-" + tag + "-ubuntu-focal",
+        "run-unit-tests-" + tag + "-debian-bullseye"
+    ],
     steps: [{
         name: tag,
         image: "python:3",
@@ -78,7 +81,10 @@ local userRepoPublish(pkgname, tag, user_repo) = {
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
-    depends_on: ["create-tag-" + tag, "build-and-publish-" + tag],
+    depends_on: [
+        "create-tag-" + tag,
+        "build-and-publish-" + tag
+    ],
     steps: [{
         name: pkgname,
         image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
@@ -141,9 +147,13 @@ local buildForMentors(pkgname, tag) = {
 };
 
 [
-    runUnitTests("makedeb", "stable"),
-    runUnitTests("makedeb-beta", "beta"),
-    runUnitTests("makedeb-alpha", "alpha"),
+    runUnitTests("makedeb", "stable", "ubuntu-focal"),
+    runUnitTests("makedeb-beta", "beta", "ubuntu-focal"),
+    runUnitTests("makedeb-alpha", "alpha", "ubuntu-focal"),
+
+    runUnitTests("makedeb", "stable", "debian-bullseye"),
+    runUnitTests("makedeb-beta", "beta", "debian-bullseye"),
+    runUnitTests("makedeb-alpha", "alpha", "debian-bullseye"),
 
     createTag("stable"),
     createTag("beta"),
