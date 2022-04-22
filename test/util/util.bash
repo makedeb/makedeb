@@ -104,8 +104,10 @@ sudo() {
 export -f apt apt-get sudo
 
 # Wrap 'lsb_release' calls so we can have a fixed distro in unit tests.
+# We currently only use 'lsb_release' to get the distro codename, so we can
+# safely ignore any passed arguments for the time being.
 lsb_release() {
-    "$(type -pf lsb_release)" -cs
+    echo 'focal'
 }
 
 export -f lsb_release
