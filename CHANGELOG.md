@@ -10,6 +10,14 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Added
 - Added support for custom installing directories during builds (#61).
 
+## [14.0.2] - 2022-04-19
+### Fixed
+- Revert ZSTD support in built archives, as Debian 11 doesn't support them (#158).
+
+## [14.0.1] - 2022-04-19
+### Fixed
+-  Fix '--no-confirm' not working properly during builds (#157).
+
 ## [14.0.0] - 2022-04-16
 ### Added
 - Added `BUILDING.md`.

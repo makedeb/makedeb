@@ -486,9 +486,6 @@ write_control_info() {
 }
 
 create_package() {
-	zstdthreads=0
-	zstdlevel=10
-
 	if [[ ! -d $pkgdir ]]; then
 		error "$(gettext "Missing %s directory.")" "\$pkgdir/"
 		plainerr "$(gettext "Aborting...")"
@@ -544,25 +541,21 @@ create_package() {
 
 	cd DEBIAN/
 	mapfile -t control_files < <(find ./ -mindepth 1 -maxdepth 1)
-	tar -cf ./control.tar "${control_files[@]}"
-	mv control.tar ../
+	tar -czf ./control.tar.gz "${control_files[@]}"
+	mv control.tar.gz ../
 	cd ../
 
-	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar')
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
-		tar -cf ./data.tar --files-from /dev/null
+		tar -cf ./data.tar.gz --files-from /dev/null
 	else
-		tar -cf ./data.tar "${package_files[@]}"
+		tar -cf ./data.tar.gz "${package_files[@]}"
 	fi
 	
-	for archive in 'control.tar' 'data.tar'; do
-		zstd "-T${zstdthreads}" "-${zstdlevel}" --rm -q "${archive}"
-	done
-
-	ar -rU "${pkg_file}" debian-binary control.tar.zst data.tar.zst 2> /dev/null
-	rm debian-binary control.tar.zst data.tar.zst
+	ar -rU "${pkg_file}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
+	rm debian-binary control.tar.gz data.tar.gz
 }
 
 create_debug_package() {
