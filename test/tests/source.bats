@@ -83,3 +83,19 @@ load ../util/util
     run makedeb -d
     [[ "${status}" == "1" ]]
 }
+
+@test "correct source - ensure tags are cloned" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
+    pkgbuild string pkgname testpkg
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc 'package description'
+    pkgbuild array arch any
+    pkgbuild array source 'git+https://github.com/makedeb/makedeb'
+    pkgbuild array sha256sums 'SKIP'
+    pkgbuild clean
+    makedeb -d
+
+    mapfile -t tags < <(cd src/makedeb; git tag)
+    [[ "${#tags[@]}" -gt 0 ]]
+}
