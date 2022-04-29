@@ -47,7 +47,9 @@ check_checksums() {
 	fi
 
 	for integ in "${known_hash_algos[@]}"; do
-		in_array "${distro}${integ}sums${arch_name}" "${env_keys[@]}" && verify_integrity_sums "${distro}source${arch_name}" "${distro}${integ}sums${arch_name}" "${integ}"
+		if in_array "${distro}${integ}sums${arch_name}" "${env_keys[@]}"; then
+			verify_integrity_sums "${distro}source${arch_name}" "${distro}${integ}sums${arch_name}" "${integ}"
+		fi
 	done
 }
 
