@@ -1,7 +1,7 @@
 ---
 name: Feature request
 description: Request a feature
-labels: [feature-request]
+labels: [T-Enhancement]
 
 body:
   - type: textarea
