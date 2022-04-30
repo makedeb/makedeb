@@ -11,6 +11,10 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 - Added support for custom installing directories during builds (#61).
 
 ## [14.1.1] - 2022-04-30
+### Added
+- Added `--pass-env` option to pass the user's enviroment variables to `sudo` calls.
+- Added `--allow-downgrades` to pass the option to `apt` calls.
+
 ### Fixed
 - Add conffiles to built packages (#168).
 
