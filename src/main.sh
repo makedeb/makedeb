@@ -805,24 +805,25 @@ usage() {
 	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
 	echo
 	printf -- "$(gettext "Options:")\n"
-	printf -- "$(gettext "  -A, --ignore-arch    Ignore errors about mismatching architectures")\n"
-	printf -- "$(gettext "  -d, --no-deps        Skip all dependency checks")\n"
-	printf -- "$(gettext "  -F, --file, -p       Specify a location to the build file (defaults to 'PKGBUILD')")\n"
-	printf -- "$(gettext "  -g, --gen-integ      Generate hashes for source files")\n"
-	printf -- "$(gettext "  -h, --help           Show this help menu and exit")\n"
-	printf -- "$(gettext "  -H, --field          Append the packaged control file with custom control fields")\n"
-	printf -- "$(gettext "  -i, --install        Automatically install the built package(s) after building")\n"
-	printf -- "$(gettext "  -V, --version        Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rm-deps        Remove installed makedepends and checkdepends after building")\n"
-	printf -- "$(gettext "  -s, --sync-deps      Install missing dependencies")\n"
-	printf -- "$(gettext "  --lint               Link the PKGBUILD for conformity requirements")\n"
-	printf -- "$(gettext "  --print-control      Print a generated control file and exit")\n"
-	printf -- "$(gettext "  --print-srcinfo      Print a generated .SRCINFO file and exit")\n"
-	printf -- "$(gettext "  --skip-pgp-check     Do not verify source files against PGP signatures")\n"
+	printf -- "$(gettext "  -A, --ignore-arch     Ignore errors about mismatching architectures")\n"
+	printf -- "$(gettext "  -d, --no-deps         Skip all dependency checks")\n"
+	printf -- "$(gettext "  -F, --file, -p        Specify a location to the build file (defaults to 'PKGBUILD')")\n"
+	printf -- "$(gettext "  -g, --gen-integ       Generate hashes for source files")\n"
+	printf -- "$(gettext "  -h, --help            Show this help menu and exit")\n"
+	printf -- "$(gettext "  -H, --field           Append the packaged control file with custom control fields")\n"
+	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
+	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
+	printf -- "$(gettext "  -r, --rm-deps         Remove installed makedepends and checkdepends after building")\n"
+	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
+	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
+	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
+	printf -- "$(gettext "  --print-srcinfo       Print a generated .SRCINFO file and exit")\n"
+	printf -- "$(gettext "  --skip-pgp-check      Do not verify source files against PGP signatures")\n"
 	echo
 	printf -- "$(gettext "The following options can modify the behavior of APT during package and dependency installation:")\n"
-	printf -- "$(gettext "  --as-deps            Mark built packages as automatically installed")\n"
-	printf -- "$(gettext "  --no-confirm         Don't ask before installing packages")\n"
+	printf -- "$(gettext "  --as-deps             Mark built packages as automatically installed")\n"
+	printf -- "$(gettext "  --allow-downgrades    Allow packages to be downgraded")\n"
+	printf -- "$(gettext "  --no-confirm          Don't ask before installing packages")\n"
 	echo
 	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
 	printf -- "$(gettext "  --pass-env           Pass the current user's environment variables")\n"
@@ -869,7 +870,7 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
 	  'sync-deps' 'print-control' 'print-srcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
 	exit $E_INVALID_OPTION
@@ -898,14 +899,15 @@ while true; do
 		--)                      shift; break ;;
 
 		# APT options.
-		--as-deps)        ASDEPS=1 ;;
-		--no-confirm)     APTARGS+=('-y') ;;
+		--as-deps)               ASDEPS=1 ;;
+		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
+		--no-confirm)            APTARGS+=('-y') ;;
 
 		# Sudo options.
-		--pass-env)      SUDOARGS+=('-E') ;;
+		--pass-env)              SUDOARGS+=('-E') ;;
 
 		# Internal options.
-		--in-fakeroot)    INFAKEROOT=1 ;;
+		--in-fakeroot)           INFAKEROOT=1 ;;
 	esac
 	shift
 done

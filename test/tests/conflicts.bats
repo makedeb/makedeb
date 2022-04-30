@@ -9,7 +9,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array conflicts 'krita>0' 'asciidoctor'
     pkgbuild clean
-    makedeb -s --install --no-confirm
+    makedeb -s --install --no-confirm --allow-downgrades
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Conflicts')" == "Conflicts: krita (>> 0), asciidoctor" ]]
     run ! type make
     run ! type asciidoctor
