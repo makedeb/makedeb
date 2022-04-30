@@ -10,6 +10,10 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Added
 - Added support for custom installing directories during builds (#61).
 
+## [14.1.1] - 2022-04-30
+### Fixed
+- Add conffiles to built packages (#168).
+
 ## [14.1.0] - 2022-04-30
 ### Added
 - Add `build-essential` as a dependency to install makedeb.

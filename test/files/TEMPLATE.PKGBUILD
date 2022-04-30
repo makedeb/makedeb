@@ -15,6 +15,7 @@ conflicts=$${conflicts}
 provides=$${provides}
 replaces=$${replaces}
 install=$${install}
+backup=$${backup}
 url=$${url}
 control_fields=$${control_fields}
 preinst=$${preinst}
