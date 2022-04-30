@@ -504,6 +504,10 @@ create_package() {
 
 	msg2 "$(gettext "Generating %s file...")" "control"
 	write_control_info > "${pkgdir}/DEBIAN/control"
+
+	if in_array backup "${env_keys[@]}"; then
+		printf '%s\n' "${backup[@]}" > "${pkgdir}/DEBIAN/conffiles"
+	fi
 	
 	# Maintainer scripts.
 	for file in preinst postinst prerm postrm; do
