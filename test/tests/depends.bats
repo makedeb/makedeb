@@ -9,6 +9,8 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'bats>0' 'bash'
     pkgbuild clean
+    echo "${PATH}"
+    type makedeb
     makedeb -d
 }
 
@@ -23,6 +25,8 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
+    echo "${PATH}"
+    type makedeb
     makedeb -s --no-confirm
 }
 
@@ -37,6 +41,8 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'awk'
     pkgbuild clean
+    echo "${PATH}"
+    type makedeb
     makedeb
 }
 
@@ -49,6 +55,8 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'p!bats>0' 'bash'
     pkgbuild clean
+    echo "${PATH}"
+    type makedeb
     makedeb -d
 
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Pre-Depends')" == "Pre-Depends: bats (>> 0)" ]]
@@ -64,6 +72,8 @@ load ../util/util
     pkgbuild array arch all
     pkgbuild array depends 'z!bats'
     pkgbuild clean
+    echo "${PATH}"
+    type makedeb
     run makedeb -d
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] depends contains an invalid prefix: 'z!'" ]]
