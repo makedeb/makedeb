@@ -23,7 +23,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array makedepends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
-    makedeb -s --no-confirm
+    makedeb -s --no-confirm --allow-downgrades
 }
 
 @test "correct makedepends - don't add to 'Depends' in control file" {
@@ -51,7 +51,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array makedepends restic
     pkgbuild clean
-    makedeb -sr --no-confirm
+    makedeb -sr --no-confirm --allow-downgrades
 
     run dpkg -s restic
     [[ "${lines[0]}" == "dpkg-query: package 'restic' is not installed and no information is available" ]]

@@ -30,6 +30,8 @@ _makedeb() {
         '--print-pgp-check'
         '--as-deps'
         '--no-confirm'
+	'--pass-env'
+	'--allow-downgrades'
     )
 
     local cur prev words cword
