@@ -10,9 +10,13 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Added
 - Added support for custom installing directories during builds (#61).
 
+## [14.0.5] - 2022-04-29
+### Fixed
+- Add missing '-z' flag to 'tar' commands used to create gz archives in built packages.
+
 ## [14.0.4] - 2022-04-29
 ### Fixed
-- Fix unknown error when checking hashsums with `--skip-pgp-check`
+- Fix unknown error when checking hashsums with `--skip-pgp-check`.
 
 ## [14.0.2] - 2022-04-19
 ### Fixed
