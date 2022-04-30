@@ -95,6 +95,7 @@ SKIPPGPCHECK=0
 SIGNPKG=''
 SPLITPKG=0
 SOURCEONLY=0
+SUDOARGS=()
 SYNCDEPS=1
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
@@ -675,7 +676,7 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 	
-	if ! sudo apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
+	if ! sudo "${SUDOARGS[@]}" -- apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
@@ -683,7 +684,7 @@ install_package() {
 	if (( "${ASDEPS}" )); then
 		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
 
-		if ! sudo apt-mark auto "${pkgname[@]}"; then
+		if ! sudo "${SUDOARGS[@]}" -- apt-mark auto "${pkgname[@]}"; then
 			warning "$(gettext "Failed to mark built package(s) as automatically installed.")"
 		fi
 	fi
@@ -823,6 +824,9 @@ usage() {
 	printf -- "$(gettext "  --as-deps            Mark built packages as automatically installed")\n"
 	printf -- "$(gettext "  --no-confirm         Don't ask before installing packages")\n"
 	echo
+	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
+	printf -- "$(gettext "  --pass-env           Pass the current user's environment variables")\n"
+	echo
 	printf -- "$(gettext "See makedeb(8) for information on available options and links for obtaining support.")\n"
 }
 
@@ -865,7 +869,7 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
 	  'sync-deps' 'print-control' 'print-srcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env')
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
 	exit $E_INVALID_OPTION
@@ -896,6 +900,9 @@ while true; do
 		# APT options.
 		--as-deps)        ASDEPS=1 ;;
 		--no-confirm)     APTARGS+=('-y') ;;
+
+		# Sudo options.
+		--pass-env)      SUDOARGS+=('-E') ;;
 
 		# Internal options.
 		--in-fakeroot)    INFAKEROOT=1 ;;

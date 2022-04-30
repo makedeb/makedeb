@@ -5,7 +5,7 @@ remove_installed_dependencies() {
 
     msg "Removing installed build dependencies..."
 
-    if ! sudo apt-get purge "${APTARGS[@]}" -- "${missing_build_dependencies_no_relations[@]}"; then
+    if ! sudo "${SUDOARGS[@]}" -- apt-get purge "${APTARGS[@]}" -- "${missing_build_dependencies_no_relations[@]}"; then
         error "There was an error removing build dependencies."
         exit 1
     fi

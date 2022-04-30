@@ -5,12 +5,12 @@ install_missing_dependencies() {
 
     msg2 "Installing required build dependencies..."
     
-    if ! sudo apt-get satisfy "${APTARGS[@]}" -- "${missing_dependencies[@]}" "${missing_build_dependencies[@]}"; then
+    if ! sudo "${SUDOARGS[@]}" -- apt-get satisfy "${APTARGS[@]}" -- "${missing_dependencies[@]}" "${missing_build_dependencies[@]}"; then
         error "There was an error installing build dependencies."
         return 1
     fi
 
-    if ! sudo apt-mark auto -- "${missing_dependencies_no_relations[@]}" "${missing_build_dependencies_no_relations[@]}" 1> /dev/null; then
+    if ! sudo "${SUDOARGS[@]}" -- apt-mark auto -- "${missing_dependencies_no_relations[@]}" "${missing_build_dependencies_no_relations[@]}" 1> /dev/null; then
         error "There was an error marking installed build dependencies as automatically installed."
         error "You may need to mark the following packages as automatically installed via 'apt-mark auto':"
 
