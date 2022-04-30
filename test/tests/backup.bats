@@ -16,11 +16,9 @@ package() {
     pkgbuild function package
     pkgbuild clean
     makedeb
-    find ./
-
     mapfile -t conffiles < <(cat pkg/testpkg/DEBIAN/conffiles)
     [[ "${#conffiles[@]}" == 1 ]]
-    [[ "${#conffiles}" == "/etc/hi" ]]
+    [[ "${conffiles}" == "/etc/hi" ]]
 }
 
 @test "incorrect backup - doesn't start with forward slash" {
