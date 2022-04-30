@@ -5,7 +5,7 @@ set -e
 targets=('apt' 'mpr')
 releases=('stable' 'beta' 'alpha')
 
-debian_depends=('apt' 'binutils' 'curl' 'fakeroot'
+debian_depends=('apt' 'binutils' 'build-essential' 'curl' 'fakeroot'
                 'file' 'gettext' 'gawk' 'libarchive-tools'
                 'lsb-release' 'python3' 'python3-apt' 'zstd')
 debian_makedepends=('asciidoctor' 'git' 'make' 'jq')
