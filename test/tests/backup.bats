@@ -16,6 +16,7 @@ package() {
     pkgbuild function package
     pkgbuild clean
     makedeb
+    find ./
 
     mapfile -t conffiles < <(cat pkg/testpkg/DEBIAN/conffiles)
     [[ "${#conffiles[@]}" == 1 ]]
