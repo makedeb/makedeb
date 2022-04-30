@@ -9,7 +9,7 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -i
+    makedeb -i --allow-downgrades
 }
 
 @test "correct epoch - all allowed characters" {
