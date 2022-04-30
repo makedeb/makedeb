@@ -23,7 +23,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array optdepends 'zsh: adding a reason so we can see if makedeb strips it before adding it to the control file' 'yash>=0.0.1'
     pkgbuild clean
-    makedeb -s --no-confirm
+    makedeb -s --no-confirm --allow-downgrades
 }
 
 @test "correct optdepends - valid dependency prefixes" {

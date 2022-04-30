@@ -23,7 +23,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
-    makedeb -s --no-confirm
+    makedeb -s --no-confirm --allow-downgrades
 }
 
 @test "correct depends - satisfy a build dependency via a provided package" {

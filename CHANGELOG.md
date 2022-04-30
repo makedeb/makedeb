@@ -10,6 +10,18 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Added
 - Added support for custom installing directories during builds (#61).
 
+## [14.1.1] - 2022-04-30
+### Added
+- Added `--pass-env` option to pass the user's enviroment variables to `sudo` calls.
+- Added `--allow-downgrades` to pass the option to `apt` calls.
+
+### Fixed
+- Add conffiles to built packages (#168).
+
+## [14.1.0] - 2022-04-30
+### Added
+- Add `build-essential` as a dependency to install makedeb.
+
 ## [14.0.5] - 2022-04-29
 ### Fixed
 - Add missing '-z' flag to 'tar' commands used to create gz archives in built packages.
