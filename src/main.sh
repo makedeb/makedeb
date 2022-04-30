@@ -549,9 +549,9 @@ create_package() {
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
-		tar -cf ./data.tar.gz --files-from /dev/null
+		tar -czf ./data.tar.gz --files-from /dev/null
 	else
-		tar -cf ./data.tar.gz "${package_files[@]}"
+		tar -czf ./data.tar.gz "${package_files[@]}"
 	fi
 	
 	ar -rU "${pkg_file}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
