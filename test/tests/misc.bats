@@ -8,7 +8,7 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -si --no-confirm
+    makedeb -si --no-confirm --allow-downgrades
 }
 
 @test "correct - set dependencies from a distro-dependency variable" {

@@ -23,7 +23,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array checkdepends 'zsh' 'yash>=0.0.1'
     pkgbuild clean
-    makedeb -s --no-confirm
+    makedeb -s --no-confirm --allow-downgrades
 }
 
 @test "correct checkdepends - don't add to 'Depends' in control file" {

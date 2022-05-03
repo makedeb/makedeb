@@ -1,7 +1,7 @@
 ---
 name: Bug report
-description: Issues with makedeb, makepkg, packaging, etc.
-labels: [bug]
+description: Anything related to undesired behavior
+labels: [T-Defect]
 
 body:
   - type: markdown
