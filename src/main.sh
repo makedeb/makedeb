@@ -495,7 +495,7 @@ create_package() {
 
 	cd_safe "$pkgdir"
 	(( NOARCHIVE )) || msg "$(gettext "Creating package \"%s\"...")" "$pkgname"
-	
+
 	# Generate package metadata.
 	pkgarch=$(get_pkg_arch)
 	msg2 "$(gettext "Setting up package metadata...")"
@@ -508,7 +508,7 @@ create_package() {
 	if in_array backup "${env_keys[@]}"; then
 		printf '%s\n' "${backup[@]}" > "${pkgdir}/DEBIAN/conffiles"
 	fi
-	
+
 	# Maintainer scripts.
 	for file in preinst postinst prerm postrm; do
 		if [[ -z "${!file}" ]]; then
@@ -558,7 +558,7 @@ create_package() {
 	else
 		tar -czf ./data.tar.gz "${package_files[@]}"
 	fi
-	
+
 	ar -rU "${pkg_file}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
 	rm debian-binary control.tar.gz data.tar.gz
 }
@@ -662,7 +662,7 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-	
+
 	remove_installed_dependencies
 	RMDEPS=0
 
@@ -679,12 +679,12 @@ install_package() {
 		pkgarch=$(get_pkg_arch $pkg)
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
-	
+
 	if ! sudo "${SUDOARGS[@]}" -- apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
-	
+
 	if (( "${ASDEPS}" )); then
 		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
 
@@ -872,7 +872,7 @@ ARGLIST=("$@")
 OPT_SHORT='AdF:p:ghH:ivrs'
 OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
-	  'sync-deps' 'print-control' 'print-srcinfo'
+	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
 
@@ -898,7 +898,7 @@ while true; do
 		--lint)                  LINTPKGBUILD=1 ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
-		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--print-srcinfo|--printsrcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
 		--)                      shift; break ;;
 
@@ -1241,7 +1241,7 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 else
 	msg "$(gettext "Checking for missing dependencies...")"
 	check_missing_dependencies
-	
+
 	if ! (( "${SYNCDEPS}" )); then
 		verify_no_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
 	else
