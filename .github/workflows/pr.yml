@@ -12,7 +12,10 @@ jobs:
         run: sudo -E apt-get install git -y
 
       - name: Ensure directory permissions are correct
-        run: sudo chown 'makedeb:makedeb' /__w /home -R
+        run: |
+          sudo chown 'makedeb:makedeb' /__w /home -R
+          find ./ -type d -exec sudo chmod u+rwx '{}' +
+          find ./ -type f -exec sudo chmod U+rw '{}' +
 
       - name: Checkout Git repository
         uses: actions/checkout@v3
