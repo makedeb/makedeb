@@ -10,6 +10,10 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Added
 - Added support for custom installing directories during builds (#61).
 
+## [14.1.2] - 2022-05-07
+### Fixed
+- Add compatibility alias for `--print-srcinfo` (#173).
+
 ## [14.1.1] - 2022-04-30
 ### Added
 - Added `--pass-env` option to pass the user's enviroment variables to `sudo` calls.
