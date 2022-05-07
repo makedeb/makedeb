@@ -13,8 +13,6 @@ jobs:
 
       - name: Checkout Git repository
         uses: actions/checkout@v3
-        with:
-          path: /home/makedeb/makedeb
 
       - name: Install needed dependencies
         working-directory: ./makedeb
