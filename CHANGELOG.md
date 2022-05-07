@@ -10,6 +10,38 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Added
 - Added support for custom installing directories during builds (#61).
 
+## [14.1.2] - 2022-05-07
+### Fixed
+- Add compatibility alias for `--print-srcinfo` (#173).
+
+## [14.1.1] - 2022-04-30
+### Added
+- Added `--pass-env` option to pass the user's enviroment variables to `sudo` calls.
+- Added `--allow-downgrades` to pass the option to `apt` calls.
+
+### Fixed
+- Add conffiles to built packages (#168).
+
+## [14.1.0] - 2022-04-30
+### Added
+- Add `build-essential` as a dependency to install makedeb.
+
+## [14.0.5] - 2022-04-29
+### Fixed
+- Add missing '-z' flag to 'tar' commands used to create gz archives in built packages.
+
+## [14.0.4] - 2022-04-29
+### Fixed
+- Fix unknown error when checking hashsums with `--skip-pgp-check`.
+
+## [14.0.2] - 2022-04-19
+### Fixed
+- Revert ZSTD support in built archives, as Debian 11 doesn't support them (#158).
+
+## [14.0.1] - 2022-04-19
+### Fixed
+-  Fix '--no-confirm' not working properly during builds (#157).
+
 ## [14.0.0] - 2022-04-16
 ### Added
 - Added `BUILDING.md`.

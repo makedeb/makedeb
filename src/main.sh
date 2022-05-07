@@ -95,6 +95,7 @@ SKIPPGPCHECK=0
 SIGNPKG=''
 SPLITPKG=0
 SOURCEONLY=0
+SUDOARGS=()
 SYNCDEPS=1
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
@@ -486,9 +487,6 @@ write_control_info() {
 }
 
 create_package() {
-	zstdthreads=0
-	zstdlevel=10
-
 	if [[ ! -d $pkgdir ]]; then
 		error "$(gettext "Missing %s directory.")" "\$pkgdir/"
 		plainerr "$(gettext "Aborting...")"
@@ -497,7 +495,7 @@ create_package() {
 
 	cd_safe "$pkgdir"
 	(( NOARCHIVE )) || msg "$(gettext "Creating package \"%s\"...")" "$pkgname"
-	
+
 	# Generate package metadata.
 	pkgarch=$(get_pkg_arch)
 	msg2 "$(gettext "Setting up package metadata...")"
@@ -506,7 +504,11 @@ create_package() {
 
 	msg2 "$(gettext "Generating %s file...")" "control"
 	write_control_info > "${pkgdir}/DEBIAN/control"
-	
+
+	if in_array backup "${env_keys[@]}"; then
+		printf '%s\n' "${backup[@]}" > "${pkgdir}/DEBIAN/conffiles"
+	fi
+
 	# Maintainer scripts.
 	for file in preinst postinst prerm postrm; do
 		if [[ -z "${!file}" ]]; then
@@ -544,25 +546,21 @@ create_package() {
 
 	cd DEBIAN/
 	mapfile -t control_files < <(find ./ -mindepth 1 -maxdepth 1)
-	tar -cf ./control.tar "${control_files[@]}"
-	mv control.tar ../
+	tar -czf ./control.tar.gz "${control_files[@]}"
+	mv control.tar.gz ../
 	cd ../
 
-	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar')
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
-		tar -cf ./data.tar --files-from /dev/null
+		tar -czf ./data.tar.gz --files-from /dev/null
 	else
-		tar -cf ./data.tar "${package_files[@]}"
+		tar -czf ./data.tar.gz "${package_files[@]}"
 	fi
-	
-	for archive in 'control.tar' 'data.tar'; do
-		zstd "-T${zstdthreads}" "-${zstdlevel}" --rm -q "${archive}"
-	done
 
-	ar -rU "${pkg_file}" debian-binary control.tar.zst data.tar.zst 2> /dev/null
-	rm debian-binary control.tar.zst data.tar.zst
+	ar -rU "${pkg_file}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
+	rm debian-binary control.tar.gz data.tar.gz
 }
 
 create_debug_package() {
@@ -664,7 +662,7 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-	
+
 	remove_installed_dependencies
 	RMDEPS=0
 
@@ -682,15 +680,15 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
-	if ! sudo apt-get reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
+	if ! sudo "${SUDOARGS[@]}" -- apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
-	
+
 	if (( "${ASDEPS}" )); then
 		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
 
-		if ! sudo apt-mark auto "${pkgname[@]}"; then
+		if ! sudo "${SUDOARGS[@]}" -- apt-mark auto "${pkgname[@]}"; then
 			warning "$(gettext "Failed to mark built package(s) as automatically installed.")"
 		fi
 	fi
@@ -811,24 +809,28 @@ usage() {
 	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
 	echo
 	printf -- "$(gettext "Options:")\n"
-	printf -- "$(gettext "  -A, --ignore-arch    Ignore errors about mismatching architectures")\n"
-	printf -- "$(gettext "  -d, --no-deps        Skip all dependency checks")\n"
-	printf -- "$(gettext "  -F, --file, -p       Specify a location to the build file (defaults to 'PKGBUILD')")\n"
-	printf -- "$(gettext "  -g, --gen-integ      Generate hashes for source files")\n"
-	printf -- "$(gettext "  -h, --help           Show this help menu and exit")\n"
-	printf -- "$(gettext "  -H, --field          Append the packaged control file with custom control fields")\n"
-	printf -- "$(gettext "  -i, --install        Automatically install the built package(s) after building")\n"
-	printf -- "$(gettext "  -V, --version        Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rm-deps        Remove installed makedepends and checkdepends after building")\n"
-	printf -- "$(gettext "  -s, --sync-deps      Install missing dependencies")\n"
-	printf -- "$(gettext "  --lint               Link the PKGBUILD for conformity requirements")\n"
-	printf -- "$(gettext "  --print-control      Print a generated control file and exit")\n"
-	printf -- "$(gettext "  --print-srcinfo      Print a generated .SRCINFO file and exit")\n"
-	printf -- "$(gettext "  --skip-pgp-check     Do not verify source files against PGP signatures")\n"
+	printf -- "$(gettext "  -A, --ignore-arch     Ignore errors about mismatching architectures")\n"
+	printf -- "$(gettext "  -d, --no-deps         Skip all dependency checks")\n"
+	printf -- "$(gettext "  -F, --file, -p        Specify a location to the build file (defaults to 'PKGBUILD')")\n"
+	printf -- "$(gettext "  -g, --gen-integ       Generate hashes for source files")\n"
+	printf -- "$(gettext "  -h, --help            Show this help menu and exit")\n"
+	printf -- "$(gettext "  -H, --field           Append the packaged control file with custom control fields")\n"
+	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
+	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
+	printf -- "$(gettext "  -r, --rm-deps         Remove installed makedepends and checkdepends after building")\n"
+	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
+	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
+	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
+	printf -- "$(gettext "  --print-srcinfo       Print a generated .SRCINFO file and exit")\n"
+	printf -- "$(gettext "  --skip-pgp-check      Do not verify source files against PGP signatures")\n"
 	echo
 	printf -- "$(gettext "The following options can modify the behavior of APT during package and dependency installation:")\n"
-	printf -- "$(gettext "  --as-deps            Mark built packages as automatically installed")\n"
-	printf -- "$(gettext "  --no-confirm         Don't ask before installing packages")\n"
+	printf -- "$(gettext "  --as-deps             Mark built packages as automatically installed")\n"
+	printf -- "$(gettext "  --allow-downgrades    Allow packages to be downgraded")\n"
+	printf -- "$(gettext "  --no-confirm          Don't ask before installing packages")\n"
+	echo
+	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
+	printf -- "$(gettext "  --pass-env           Pass the current user's environment variables")\n"
 	echo
 	printf -- "$(gettext "See makedeb(8) for information on available options and links for obtaining support.")\n"
 }
@@ -870,9 +872,9 @@ ARGLIST=("$@")
 OPT_SHORT='AdF:p:ghH:ivrs'
 OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
-	  'sync-deps' 'print-control' 'print-srcinfo'
+	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
 	exit $E_INVALID_OPTION
@@ -897,15 +899,20 @@ while true; do
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
 		--)                      shift; break ;;
 
 		# APT options.
-		--as-deps)        ASDEPS=1 ;;
-		--no-confirm)     APTARGS+=('-y') ;;
+		--as-deps)               ASDEPS=1 ;;
+		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
+		--no-confirm)            APTARGS+=('-y') ;;
+
+		# Sudo options.
+		--pass-env)              SUDOARGS+=('-E') ;;
 
 		# Internal options.
-		--in-fakeroot)    INFAKEROOT=1 ;;
+		--in-fakeroot)           INFAKEROOT=1 ;;
 	esac
 	shift
 done
@@ -1237,7 +1244,7 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 else
 	msg "$(gettext "Checking for missing dependencies...")"
 	check_missing_dependencies
-	
+
 	if ! (( "${SYNCDEPS}" )); then
 		verify_no_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
 	else

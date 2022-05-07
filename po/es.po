@@ -1,0 +1,905 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-25 00:50-0500\n"
+"PO-Revision-Date: 2022-04-26 00:56+0000\n"
+"Last-Translator: Twilight is-the-best <hwengerstickel@protonmail.com>\n"
+"Language-Team: Spanish <https://weblate.makedeb.org/projects/makedeb/makedeb/"
+"es/>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12\n"
+
+#: src/main.sh:160
+msgid "Cleaning up..."
+msgstr ""
+
+#: src/main.sh:198
+msgid "Entering %s environment..."
+msgstr ""
+
+#: src/main.sh:205 src/main.sh:304
+msgid "Starting %s()..."
+msgstr ""
+
+#: src/main.sh:211
+msgid "pkgver() generated an invalid version: %s"
+msgstr ""
+
+#: src/main.sh:221
+msgid "Failed to update %s from %s to %s"
+msgstr ""
+
+#: src/main.sh:227
+msgid "Updated version: %s"
+msgstr ""
+
+#: src/main.sh:229
+msgid "%s is not writeable -- pkgver will not be updated"
+msgstr ""
+
+#: src/main.sh:237
+msgid "Unable to find source file %s."
+msgstr ""
+
+#: src/main.sh:238 src/main.sh:246 src/main.sh:491 src/main.sh:951
+#: src/main.sh:956 src/main.sh:961 src/main.sh:967 src/main.sh:977
+#: src/functions/executable/vcs.sh:46 src/functions/source/file.sh:75
+#: src/functions/source/file.sh:145 src/functions/source/svn.sh:63
+#: src/functions/source/svn.sh:73 src/functions/source/hg.sh:52
+#: src/functions/source/hg.sh:94 src/functions/source/hg.sh:103
+#: src/functions/source/hg.sh:108 src/functions/source/bzr.sh:55
+#: src/functions/source/bzr.sh:86 src/functions/source/bzr.sh:101
+#: src/functions/source/bzr.sh:106 src/functions/source/git.sh:61
+#: src/functions/source/git.sh:71 src/functions/source/git.sh:77
+#: src/functions/source/git.sh:86 src/functions/source/git.sh:115
+#: src/functions/source/git.sh:121 src/functions/source/fossil.sh:52
+#: src/functions/source/fossil.sh:59 src/functions/source/fossil.sh:89
+#: src/functions/source/fossil.sh:95 src/functions/source/fossil.sh:100
+#: src/functions/source/fossil.sh:114 src/functions/source/fossil.sh:121
+#: src/functions/util/source.sh:162 src/functions/util/source.sh:171
+#: src/functions/util/config.sh:42 src/functions/util/util.sh:115
+msgid "Aborting..."
+msgstr ""
+
+#: src/main.sh:245
+msgid "A failure occurred in %s()."
+msgstr ""
+
+#: src/main.sh:361
+msgid "Invalid value for %s: %s"
+msgstr ""
+
+#: src/main.sh:490
+msgid "Missing %s directory."
+msgstr ""
+
+#: src/main.sh:496
+msgid "Creating package \"%s\"..."
+msgstr ""
+
+#: src/main.sh:500
+msgid "Setting up package metadata..."
+msgstr ""
+
+#: src/main.sh:504 src/main.sh:598
+msgid "Generating %s file..."
+msgstr ""
+
+#: src/main.sh:513
+msgid "Adding %s file to package..."
+msgstr ""
+
+#: src/main.sh:516
+msgid "Failed to add %s file to package."
+msgstr ""
+
+#: src/main.sh:531
+msgid "Built package %s exists. Removing..."
+msgstr ""
+
+#: src/main.sh:540
+msgid "Compressing package..."
+msgstr ""
+
+#: src/main.sh:591
+msgid "Creating source package..."
+msgstr ""
+
+#: src/main.sh:595 src/main.sh:608
+msgid "Adding %s..."
+msgstr ""
+
+#: src/main.sh:629
+msgid "Adding %s file (%s)..."
+msgstr ""
+
+#: src/main.sh:640
+msgid "Compressing source package..."
+msgstr ""
+
+#: src/main.sh:650
+msgid "Failed to create source package file."
+msgstr ""
+
+#: src/main.sh:665
+msgid "Installing package %s..."
+msgstr ""
+
+#: src/main.sh:667
+msgid "Installing %s package group..."
+msgstr ""
+
+#: src/main.sh:679
+msgid "Failed to install built package(s)."
+msgstr ""
+
+#: src/main.sh:684
+msgid "Marking built package(s) as automatically installed..."
+msgstr ""
+
+#: src/main.sh:687
+msgid "Failed to mark built package(s) as automatically installed."
+msgstr ""
+
+#: src/main.sh:700
+msgid "A package has already been built, installing existing package..."
+msgstr ""
+
+#: src/main.sh:704
+msgid "A package has already been built. (use %s to overwrite)"
+msgstr ""
+
+#: src/main.sh:723
+msgid ""
+"The package group has already been built, installing existing packages..."
+msgstr ""
+
+#: src/main.sh:727
+msgid "The package group has already been built. (use %s to overwrite)"
+msgstr ""
+
+#: src/main.sh:732
+msgid "Part of the package group has already been built. (use %s to overwrite)"
+msgstr ""
+
+#: src/main.sh:802
+msgid "makedeb takes PKGBUILD files and creates archives installable via APT"
+msgstr ""
+
+#: src/main.sh:804
+msgid "Usage: %s [options]"
+msgstr ""
+
+#: src/main.sh:806
+msgid "Options:"
+msgstr ""
+
+#: src/main.sh:807
+msgid "  -A, --ignore-arch    Ignore errors about mismatching architectures"
+msgstr ""
+
+#: src/main.sh:808
+msgid "  -d, --no-deps        Skip all dependency checks"
+msgstr ""
+
+#: src/main.sh:809
+msgid ""
+"  -F, --file, -p       Specify a location to the build file (defaults to "
+"'PKGBUILD')"
+msgstr ""
+
+#: src/main.sh:810
+msgid "  -g, --gen-integ      Generate hashes for source files"
+msgstr ""
+
+#: src/main.sh:811
+msgid "  -h, --help           Show this help menu and exit"
+msgstr ""
+
+#: src/main.sh:812
+msgid ""
+"  -H, --field          Append the packaged control file with custom control "
+"fields"
+msgstr ""
+
+#: src/main.sh:813
+msgid ""
+"  -i, --install        Automatically install the built package(s) after "
+"building"
+msgstr ""
+
+#: src/main.sh:814
+msgid "  -V, --version        Show version information and exit"
+msgstr ""
+
+#: src/main.sh:815
+msgid ""
+"  -r, --rm-deps        Remove installed makedepends and checkdepends after "
+"building"
+msgstr ""
+
+#: src/main.sh:816
+msgid "  -s, --sync-deps      Install missing dependencies"
+msgstr ""
+
+#: src/main.sh:817
+msgid "  --lint               Link the PKGBUILD for conformity requirements"
+msgstr ""
+
+#: src/main.sh:818
+msgid "  --print-control      Print a generated control file and exit"
+msgstr ""
+
+#: src/main.sh:819
+msgid "  --print-srcinfo      Print a generated .SRCINFO file and exit"
+msgstr ""
+
+#: src/main.sh:820
+msgid ""
+"  --skip-pgp-check     Do not verify source files against PGP signatures"
+msgstr ""
+
+#: src/main.sh:822
+msgid ""
+"The following options can modify the behavior of APT during package and "
+"dependency installation:"
+msgstr ""
+
+#: src/main.sh:823
+msgid "  --as-deps            Mark built packages as automatically installed"
+msgstr ""
+
+#: src/main.sh:824
+msgid "  --no-confirm         Don't ask before installing packages"
+msgstr ""
+
+#: src/main.sh:826
+msgid ""
+"See makedeb(8) for information on available options and links for obtaining "
+"support."
+msgstr ""
+
+#: src/main.sh:919
+msgid "%s signal caught. Exiting..."
+msgstr ""
+
+#: src/main.sh:983
+msgid ""
+"Running %s as root is not allowed as it can cause permanent,\\ncatastrophic "
+"damage to your system."
+msgstr ""
+
+#: src/main.sh:988
+msgid "Do not use the %s option. This option is only for internal use by %s."
+msgstr ""
+
+#: src/main.sh:1019
+msgid "%s does not exist."
+msgstr ""
+
+#: src/main.sh:1024
+msgid "%s contains %s characters and cannot be sourced."
+msgstr ""
+
+#: src/main.sh:1029
+msgid "%s must be in the current working directory."
+msgstr ""
+
+#: src/main.sh:1126
+msgid "The key %s does not exist in your keyring."
+msgstr ""
+
+#: src/main.sh:1128
+msgid "There is no key in your keyring."
+msgstr ""
+
+#: src/main.sh:1170 src/main.sh:1185
+msgid "Leaving %s environment."
+msgstr ""
+
+#: src/main.sh:1189
+msgid "Making package: %s"
+msgstr ""
+
+#: src/main.sh:1195
+msgid "A source package has already been built. (use %s to overwrite)"
+msgstr ""
+
+#: src/main.sh:1215
+msgid "Signing package..."
+msgstr ""
+
+#: src/main.sh:1219
+msgid "Source package created: %s"
+msgstr ""
+
+#: src/main.sh:1226
+msgid "Skipping dependency checks."
+msgstr ""
+
+#: src/main.sh:1229
+msgid "Checking for missing dependencies..."
+msgstr ""
+
+#: src/main.sh:1246
+msgid "Using existing %s tree"
+msgstr ""
+
+#: src/main.sh:1253 src/main.sh:1281
+msgid "Removing existing %s directory..."
+msgstr ""
+
+#: src/main.sh:1276
+msgid "Sources are ready."
+msgstr ""
+
+#: src/main.sh:1303
+msgid "Package directory is ready."
+msgstr ""
+
+#: src/main.sh:1307
+msgid "Finished making: %s"
+msgstr ""
+
+#: src/functions/executable/gzip.sh:34
+msgid "Cannot find the %s binary required for compressing man and info pages."
+msgstr ""
+
+#: src/functions/executable/ccache.sh:34
+msgid "Cannot find the %s binary required for compiler cache usage."
+msgstr ""
+
+#: src/functions/executable/distcc.sh:34
+msgid "Cannot find the %s binary required for distributed compilation."
+msgstr ""
+
+#: src/functions/executable/strip.sh:34
+msgid "Cannot find the %s binary required for object file stripping."
+msgstr ""
+
+#: src/functions/executable/gpg.sh:36
+msgid "Cannot find the %s binary required for signing packages."
+msgstr ""
+
+#: src/functions/executable/gpg.sh:43
+msgid "Cannot find the %s binary required for verifying source files."
+msgstr ""
+
+#: src/functions/executable/sudo.sh:33
+msgid "Cannot find the %s binary. Will use %s to acquire root privileges."
+msgstr ""
+
+#: src/functions/executable/checksum.sh:38
+msgid ""
+"Cannot find the %s binary required for source file checksums operations."
+msgstr ""
+
+#: src/functions/executable/fakeroot.sh:33
+msgid "Cannot find the %s binary."
+msgstr ""
+
+#: src/functions/executable/vcs.sh:45 src/functions/util/source.sh:161
+msgid "Unknown download protocol: %s"
+msgstr ""
+
+#: src/functions/executable/vcs.sh:85
+msgid "Cannot find the %s package needed to handle %s sources."
+msgstr ""
+
+#: src/functions/lint_config/source_date_epoch.sh:33
+msgid "%s contains invalid characters: %s"
+msgstr ""
+
+#: src/functions/lint_config/variable.sh:47
+#: src/functions/lint_pkgbuild/variable.sh:40
+#: src/functions/lint_pkgbuild/variable.sh:52
+#: src/functions/lint_pkgbuild/variable.sh:72
+#: src/functions/lint_pkgbuild/variable.sh:82
+msgid "%s should be an array"
+msgstr ""
+
+#: src/functions/lint_config/variable.sh:57
+#: src/functions/lint_pkgbuild/variable.sh:62
+#: src/functions/lint_pkgbuild/variable.sh:90
+msgid "%s should not be an array"
+msgstr ""
+
+#: src/functions/lint_config/ext.sh:38
+msgid "%s does not contain a valid package suffix (needs '%s', got '%s')"
+msgstr ""
+
+#: src/functions/lint_config/paths.sh:39 src/functions/lint_pkgbuild/arch.sh:47
+#: src/functions/lint_pkgbuild/pkgname.sh:78
+msgid "%s contains invalid characters: '%s'"
+msgstr ""
+
+#: src/functions/source.sh:40
+msgid "Retrieving sources..."
+msgstr ""
+
+#: src/functions/source.sh:73
+msgid "Extracting sources..."
+msgstr ""
+
+#: src/functions/tidy/strip.sh:119
+msgid "Stripping unneeded symbols from binaries and libraries..."
+msgstr ""
+
+#: src/functions/tidy/purge.sh:35
+msgid "Purging unwanted files..."
+msgstr ""
+
+#: src/functions/tidy/libtool.sh:35
+msgid "Removing %s files..."
+msgstr ""
+
+#: src/functions/tidy/emptydirs.sh:35
+msgid "Removing empty directories..."
+msgstr ""
+
+#: src/functions/tidy/docs.sh:34
+msgid "Removing doc files..."
+msgstr ""
+
+#: src/functions/tidy/staticlibs.sh:35
+msgid "Removing static library files..."
+msgstr ""
+
+#: src/functions/tidy/zipman.sh:35
+msgid "Compressing man and info pages..."
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:33
+msgid "Verifying source file signatures with %s..."
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:66
+#: src/functions/integrity/verify_signature.sh:84
+#: src/functions/integrity/verify_signature.sh:87
+#: src/functions/integrity/verify_checksum.sh:75
+msgid "FAILED"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:69
+msgid "unknown public key"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:72
+msgid "public key %s has been revoked"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:75
+msgid "bad signature from public key"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:78
+msgid "error during signature verification"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:84
+msgid "the public key %s is not trusted"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:87
+msgid "invalid public key"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:90
+#: src/functions/integrity/verify_checksum.sh:73
+msgid "Passed"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:93
+#: src/functions/integrity/verify_signature.sh:97
+msgid "WARNING:"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:93
+msgid "the signature has expired."
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:97
+msgid "the key has expired."
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:109
+msgid "One or more PGP signatures could not be verified!"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:114
+msgid "Warnings have occurred while verifying the signatures."
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:115
+msgid "Please make sure you really trust them."
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:131
+#: src/functions/integrity/verify_signature.sh:194
+msgid "SIGNATURE NOT FOUND"
+msgstr ""
+
+#: src/functions/integrity/verify_signature.sh:144
+msgid "SOURCE FILE NOT FOUND"
+msgstr ""
+
+#: src/functions/integrity/generate_checksum.sh:90
+msgid "Generating checksums for source files..."
+msgstr ""
+
+#: src/functions/integrity/generate_checksum.sh:105
+msgid "Invalid integrity algorithm '%s' specified."
+msgstr ""
+
+#: src/functions/integrity/verify_checksum.sh:61
+msgid "Skipped"
+msgstr ""
+
+#: src/functions/integrity/verify_checksum.sh:66
+msgid "NOT FOUND"
+msgstr ""
+
+#: src/functions/integrity/verify_checksum.sh:92
+msgid "Validating %s files with %s..."
+msgstr ""
+
+#: src/functions/integrity/verify_checksum.sh:99
+msgid "One or more files did not pass the validity check!"
+msgstr ""
+
+#: src/functions/integrity/generate_signature.sh:41
+msgid "Created signature file %s."
+msgstr ""
+
+#: src/functions/integrity/generate_signature.sh:43
+msgid "Failed to sign package file %s."
+msgstr ""
+
+#: src/functions/integrity/generate_signature.sh:58
+msgid "Signing package(s)..."
+msgstr ""
+
+#: src/functions/lint_package/file_names.sh:36
+msgid "Package contains paths with newlines"
+msgstr ""
+
+#: src/functions/lint_package/dotfiles.sh:34
+msgid "Dotfile found in package root '%s'"
+msgstr ""
+
+#: src/functions/lint_package/build_references.sh:36
+msgid "Package contains reference to %s"
+msgstr ""
+
+#: src/functions/lint_package/missing_backup.sh:35
+msgid "%s entry file not in package : %s"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgver.sh:36
+#: src/functions/lint_pkgbuild/pkgname.sh:36
+#: src/functions/lint_pkgbuild/pkgname.sh:90
+#: src/functions/lint_pkgbuild/pkgrel.sh:35
+msgid "%s is not allowed to be empty."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgver.sh:43
+msgid "%s contains invalid characters."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/epoch.sh:36
+msgid "%s must be an integer, not %s."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/options.sh:52
+msgid "%s array contains unknown option '%s'"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/source.sh:45
+msgid "Sparse arrays are not allowed for source"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/source.sh:74
+msgid "Sources were listed but no hashes could be found."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/source.sh:105
+msgid "Couldn't find enough hashsums for '%s' under '%s'."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/source.sh:108
+msgid "Found too many hashsums for '%s' under '%s'."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/source.sh:131
+#: src/functions/lint_pkgbuild/source.sh:133
+#: src/functions/lint_pkgbuild/source.sh:135
+#: src/functions/lint_pkgbuild/source.sh:137
+msgid "Found unused hash variable '%s'. Maybe add '%s'?"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgdesc.sh:5
+msgid "pkgdesc must be set."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgdesc.sh:10
+msgid "pkgdesc cannot be empty."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgdesc.sh:15
+msgid "pkgdesc must contain characters other than spaces."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/distro_dependencies.sh:13
+msgid "Variable '%s' is not allowed to appear in PKGBUILDs."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/maintainer.sh:7
+msgid ""
+"A maintainer must be specified. This will be an error in a future release."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/maintainer.sh:9
+msgid ""
+"More than one maintainer was specified. This will be an error in a future "
+"release."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/arch.sh:40
+msgid "Can not use '%s' architecture with other architectures"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/arch.sh:56
+msgid "Detected invalid architecture '%s'. Please use '%s' instead."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/arch.sh:59
+#: src/functions/lint_pkgbuild/arch.sh:68
+msgid "%s is not available for the '%s' architecture."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/arch.sh:78
+msgid "Architecture '%s' cannot contain PKGBUILD variable reference '%s'."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/package_function.sh:38
+msgid "Conflicting %s and %s functions in %s"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/package_function.sh:41
+msgid "Missing %s function in %s"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/package_function.sh:46
+msgid "Extra %s function for split package '%s'"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/package_function.sh:51
+msgid "Missing %s function for split package '%s'"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/util.sh:34
+msgid "%s file (%s) does not exist or is not a regular file."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgname.sh:41
+msgid "%s is not allowed to start with a hyphen."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgname.sh:46
+msgid "%s is not allowed to start with a dot."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgname.sh:51
+msgid "%s may only contain ascii characters."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgname.sh:58
+#: src/functions/lint_pkgbuild/pkgname.sh:65
+msgid "%s contains an invalid prefix: '%s'"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgrel.sh:40
+msgid "Invalid characters in %s."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/provides.sh:46
+msgid "%s array cannot contain comparison (< or >) operators."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/package_function_variable.sh:46
+#: src/functions/lint_pkgbuild/package_function_variable.sh:55
+msgid "%s can not be set inside a package function"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkglist.sh:38
+msgid "Requested package %s is not provided in %s"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/backup.sh:45
+msgid "%s entry should start with a foward slash : %s"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/control_fields.sh:30
+msgid "Control field '%s' was found more than once."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/arch_specific.sh:43
+#: src/functions/lint_pkgbuild/arch_specific.sh:65
+msgid ""
+"Can not provide architecture specific variables for the '%s' architecture: %s"
+msgstr ""
+
+#: src/functions/lint_pkgbuild/arch_specific.sh:53
+#: src/functions/lint_pkgbuild/arch_specific.sh:74
+msgid "%s can not be architecture specific: %s"
+msgstr ""
+
+#: src/functions/tidy.sh:41
+msgid "Tidying install..."
+msgstr ""
+
+#: src/functions/integrity.sh:34
+msgid "Skipping all source file integrity checks."
+msgstr ""
+
+#: src/functions/integrity.sh:36
+msgid "Skipping verification of source file checksums."
+msgstr ""
+
+#: src/functions/integrity.sh:39
+msgid "Skipping verification of source file PGP signatures."
+msgstr ""
+
+#: src/functions/source/file.sh:36 src/functions/source/local.sh:36
+msgid "Found %s"
+msgstr ""
+
+#: src/functions/source/file.sh:55
+msgid "Downloading %s..."
+msgstr ""
+
+#: src/functions/source/file.sh:74
+msgid "Failure while downloading %s"
+msgstr ""
+
+#: src/functions/source/file.sh:136
+msgid "Extracting %s with %s"
+msgstr ""
+
+#: src/functions/source/file.sh:144
+msgid "Failed to extract %s"
+msgstr ""
+
+#: src/functions/source/local.sh:39
+msgid "%s was not found in the build directory and is not a URL."
+msgstr ""
+
+#: src/functions/source/svn.sh:62 src/functions/source/hg.sh:93
+#: src/functions/source/bzr.sh:85 src/functions/source/git.sh:60
+#: src/functions/source/fossil.sh:113
+msgid "Unrecognized reference: %s"
+msgstr ""
+
+#: src/functions/source/svn.sh:69 src/functions/source/hg.sh:49
+#: src/functions/source/git.sh:67 src/functions/source/fossil.sh:49
+msgid "Cloning %s %s repo..."
+msgstr ""
+
+#: src/functions/source/svn.sh:72 src/functions/source/hg.sh:51
+#: src/functions/source/git.sh:70 src/functions/source/git.sh:76
+#: src/functions/source/fossil.sh:51
+msgid "Failure while downloading %s %s repo"
+msgstr ""
+
+#: src/functions/source/svn.sh:77 src/functions/source/hg.sh:56
+#: src/functions/source/git.sh:89 src/functions/source/fossil.sh:62
+msgid "Updating %s %s repo..."
+msgstr ""
+
+#: src/functions/source/svn.sh:81 src/functions/source/hg.sh:60
+#: src/functions/source/git.sh:92 src/functions/source/fossil.sh:65
+msgid "Failure while updating %s %s repo"
+msgstr ""
+
+#: src/functions/source/svn.sh:95 src/functions/source/hg.sh:79
+#: src/functions/source/bzr.sh:94 src/functions/source/git.sh:106
+#: src/functions/source/fossil.sh:81
+msgid "Creating working copy of %s %s repo..."
+msgstr ""
+
+#: src/functions/source/hg.sh:102 src/functions/source/bzr.sh:100
+#: src/functions/source/git.sh:114
+msgid "Failure while updating working copy of %s %s repo"
+msgstr ""
+
+#: src/functions/source/hg.sh:107 src/functions/source/bzr.sh:105
+#: src/functions/source/git.sh:120 src/functions/source/fossil.sh:99
+#: src/functions/source/fossil.sh:120
+msgid "Failure while creating working copy of %s %s repo"
+msgstr ""
+
+#: src/functions/source/bzr.sh:52
+msgid "Branching %s..."
+msgstr ""
+
+#: src/functions/source/bzr.sh:54
+msgid "Failure while branching %s"
+msgstr ""
+
+#: src/functions/source/bzr.sh:59
+msgid "Pulling %s..."
+msgstr ""
+
+#: src/functions/source/bzr.sh:63
+msgid "Failure while pulling %s"
+msgstr ""
+
+#: src/functions/source/git.sh:85 src/functions/source/fossil.sh:58
+msgid "%s is not a clone of %s"
+msgstr ""
+
+#: src/functions/source/fossil.sh:88 src/functions/source/fossil.sh:94
+msgid "%s is not a checkout of %s repo %s"
+msgstr ""
+
+#: src/functions/lint_package.sh:41
+msgid "Checking for packaging issues..."
+msgstr ""
+
+#: src/functions/util/source.sh:170
+msgid "The download program %s is not installed."
+msgstr ""
+
+#: src/functions/util/config.sh:41
+msgid "%s not found."
+msgstr "%s no encontrado."
+
+#: src/functions/util/parseopts.sh:81
+msgid "option '%s' is ambiguous; possibilities:"
+msgstr ""
+
+#: src/functions/util/parseopts.sh:112
+msgid "option requires an argument"
+msgstr ""
+
+#: src/functions/util/parseopts.sh:134 src/functions/util/parseopts.sh:187
+msgid "invalid option"
+msgstr ""
+
+#: src/functions/util/parseopts.sh:148
+msgid "option '%s' does not allow an argument"
+msgstr ""
+
+#: src/functions/util/parseopts.sh:166
+msgid "option '%s' requires an argument"
+msgstr ""
+
+#: src/functions/util/util.sh:114
+msgid "Failed to change to directory %s"
+msgstr ""
+
+#: src/functions/util/util.sh:127
+msgid "Failed to create the directory $%s (%s)."
+msgstr ""
+
+#: src/functions/util/util.sh:130
+msgid "You do not have write permission for the directory $%s (%s)."
+msgstr ""
+
+#: src/functions/util/util.sh:143
+msgid "Failed to source %s"
+msgstr ""
+
+#: src/functions/util/compress.sh:38
+msgid "'%s' is not a valid archive extension."
+msgstr ""
