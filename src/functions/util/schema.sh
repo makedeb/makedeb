@@ -36,9 +36,12 @@ pkgbuild_schema_arrays=(arch backup checkdepends conflicts depends groups
 pkgbuild_schema_strings=(changelog epoch install preinst postinst prerm postrm
                          pkgbase pkgdesc pkgrel pkgver url)
 
+# This actually works for both architecture and dependency variable extensions now - we just haven't renamed it so we can still be compatible with previous code.
 pkgbuild_schema_arch_arrays=(checkdepends conflicts depends makedepends
                              optdepends provides replaces source control_fields
                              "${known_hash_algos[@]/%/sums}")
+
+pkgbuild_schema_arch_strings=(preinst postinst prerm postrm)
 
 pkgbuild_schema_package_overrides=(pkgdesc arch url license groups depends
                                    optdepends provides conflicts replaces
@@ -47,4 +50,4 @@ pkgbuild_schema_package_overrides=(pkgdesc arch url license groups depends
 
 readonly -a known_hash_algos pkgbuild_schema_arrays \
 	pkgbuild_schema_strings pkgbuild_schema_arch_arrays \
-	pkgbuild_schema_package_overrides
+	pkgbuild_schema_package_overrides pkgbuild_schema_arch_strings

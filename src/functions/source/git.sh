@@ -45,6 +45,7 @@ download_git() {
 	url=${url#git+}
 	url=${url%%#*}
 	url=${url%%\?*}
+	local fragment=$(get_uri_fragment "$netfile")
 
 	local ref=origin/HEAD
 	if [[ -n $fragment ]]; then
@@ -65,13 +66,13 @@ download_git() {
 	if [[ ! -d "$dir" ]] || dir_is_empty "$dir" ; then
 		msg2 "$(gettext "Cloning %s %s repo...")" "${repo}" "git"
 		if [[ $ref != "origin/HEAD" ]] || (( updating )) ; then
-			if ! git clone --depth 1 --branch "${ref}" "$url" "$dir"; then
+			if ! git clone --depth 1 --no-single-branch --branch "${ref}" "$url" "$dir"; then
 				error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
 				plainerr "$(gettext "Aborting...")"
 				exit 1
 			fi
 		else
-			if ! git clone --depth 1 "$url" "$dir"; then
+			if ! git clone --depth 1 --no-single-branch "$url" "$dir"; then
 				error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
 				plainerr "$(gettext "Aborting...")"
 				exit 1

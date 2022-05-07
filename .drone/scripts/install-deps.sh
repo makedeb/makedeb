@@ -8,7 +8,34 @@ set -ex
 # script as it makes things easier to manage.
 apt_update_cmd=('apt-get' 'update')
 apt_upgrade_cmd=('apt-get' 'upgrade' '-y')
-apt_install_cmd=('apt-get' 'install' 'asciidoctor' 'bats' 'curl' 'debhelper' 'git' 'gpg' 'jq' 'openssh-client' 'python3' 'python3-pip' 'python3-requests' 'sed' 'sudo' 'tzdata' 'ubuntu-dev-tools' '-y')
+apt_install_cmd=(
+    'apt-get'
+    'install'
+    'asciidoctor'
+    'bats'
+    'curl'
+    'debhelper'
+    'git'
+    'gpg'
+    'jq'
+    'openssh-client'
+    'python3'
+    'python3-pip'
+    'python3-requests'
+    'sed'
+    'sudo'
+    'tzdata'
+    'ubuntu-dev-tools'
+    '-y'
+)
+pip_install_cmd=(
+    'pip'
+    'install'
+    'PyGithub'
+    'beautifulsoup4'
+    'markdown'
+    'requests'
+)
 
 if [[ -z "${NO_SUDO}" ]]; then
     sudo "${apt_update_cmd[@]}"
@@ -19,6 +46,8 @@ else
     "${apt_upgrade_cmd[@]}"
     "${apt_install_cmd[@]}"
 fi
+
+"${pip_install_cmd[@]}"
 
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
 

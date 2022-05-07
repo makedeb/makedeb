@@ -28,52 +28,29 @@ source "$LIBRARY/util/pkgbuild.sh"
 source "$LIBRARY/util/schema.sh"
 
 check_checksums() {
-	local integ a
-	declare -A correlation
 	(( SKIPCHECKSUMS )) && return 0
+	local distro
+	local arch_name
 
-	# Initialize a map which we'll use to verify that every source array has at
-	# least some kind of checksum array associated with it.
-	(( ${#source[*]} )) && correlation['source']=1
-
-	array_build _ "${distro_release_name}_source" && correlation["${distro_release_name}_source"]=1
-
-	case $1 in
-		all)
-			for a in "${arch[@]}"; do
-				array_build _ source_"$a" && correlation["source_$a"]=1
-			done
-			;;
-		*)
-			array_build _ source_"$CARCH" && correlation["source_$CARCH"]=1
-
-			array_build _ "${distro_release_name}_source_${CARCH}" && correlation["${distro_release_name}_source_${CARCH}"]=1
-			;;
-	esac
+	if in_array "${MAKEDEB_DISTRO_CODENAME}_source_${MAKEDEB_DPKG_ARCHITECTURE}" "${env_keys[@]}"; then
+		distro="${MAKEDEB_DISTRO_CODENAME}_"
+		arch_name="_${MAKEDEB_DPKG_ARCH}"
+	elif in_array "${MAKEDEB_DISTRO_CODENAME}_source" "${env_keys[@]}"; then
+		distro="${MAKEDEB_DISTRO_CODENAME}_"
+		arch_name=""
+	elif in_array "source_${MAKEDEB_DPKG_ARCHITECTURE}" "${env_keys[@]}"; then
+		distro=""
+		arch_name="_${MAKEDEB_DPKG_ARCHITECTURE}"
+	else
+		distro=""
+		arch_name=""
+	fi
 
 	for integ in "${known_hash_algos[@]}"; do
-		verify_integrity_sums "$integ" && unset "correlation[source]"
-
-		verify_integrity_sums "$integ" "" "${distro_release_name}" && unset "correlation[${distro_release_name}_source]"
-
-		case $1 in
-			all)
-				for a in "${arch[@]}"; do
-					verify_integrity_sums "$integ" "$a" && unset "correlation[source_$a]"
-				done
-				;;
-			*)
-				verify_integrity_sums "$integ" "$CARCH" && unset "correlation[source_$CARCH]"
-
-				verify_integrity_sums "$integ" "$CARCH" "$distro_release_name" && unset "correlation[${distro_release_name}_source_${CARCH}]"
-				;;
-		esac
+		if in_array "${distro}${integ}sums${arch_name}" "${env_keys[@]}"; then
+			verify_integrity_sums "${distro}source${arch_name}" "${distro}${integ}sums${arch_name}" "${integ}"
+		fi
 	done
-
-	if (( ${#correlation[*]} )); then
-		error "$(gettext "Integrity checks are missing for: %s")" "${!correlation[*]}"
-		exit 1 # TODO: error code
-	fi
 }
 
 verify_integrity_one() {
@@ -105,46 +82,23 @@ verify_integrity_one() {
 }
 
 verify_integrity_sums() {
-	local integ=$1 arch=$2 distro="$3" integrity_sums=() sources=() srcname
+	local srcname="${1}" integvar="${2}" integ="${3}" integrity_sums=() sources=() srcname
 
-	if [[ "${distro}" && "${arch}" ]]; then
-		array_build integrity_sums "${distro}_${integ}sums_${arch}"
-		srcname="${distro}_source_${arch}"
-
-	elif [[ "${distro}" ]]; then
-		array_build integrity_sums "${distro}_${integ}sums"
-		srcname="${distro}_source"
-
-	elif [[ $arch ]]; then
-		array_build integrity_sums "${integ}sums_$arch"
-		srcname=source_$arch
-
-	else
-		array_build integrity_sums "${integ}sums"
-		srcname=source
-
-	fi
+	array_build integrity_sums "${integvar}"
 
 	array_build sources "$srcname"
 	if (( ${#integrity_sums[@]} == 0 && ${#sources[@]} == 0 )); then
 		return 1
 	fi
 
-	if (( ${#integrity_sums[@]} == ${#sources[@]} )); then
-		msg "$(gettext "Validating %s files with %s...")" "$srcname" "${integ}sums"
-		local idx errors=0
-		for (( idx = 0; idx < ${#sources[*]}; idx++ )); do
-			verify_integrity_one "${sources[idx]}" "$integ" "${integrity_sums[idx]}" || errors=1
-		done
+	msg "$(gettext "Validating %s files with %s...")" "${srcname}" "${integvar}"
+	local idx errors=0
+	for (( idx = 0; idx < ${#sources[*]}; idx++ )); do
+		verify_integrity_one "${sources[idx]}" "${integ}" "${integrity_sums[idx]}" || errors=1
+	done
 
-		if (( errors )); then
-			error "$(gettext "One or more files did not pass the validity check!")"
-			exit 1 # TODO: error code
-		fi
-	elif (( ${#integrity_sums[@]} )); then
-		error "$(gettext "Integrity checks (%s) for %s differ in size from the source array.")" "$integ" "${srcname}"
+	if (( errors )); then
+		error "$(gettext "One or more files did not pass the validity check!")"
 		exit 1 # TODO: error code
-	else
-		return 1
 	fi
 }

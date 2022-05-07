@@ -53,6 +53,24 @@ is_array() {
 	return $ret
 }
 
+# Remove an item from an array.
+remove_from_array() {
+	local match="${1}"
+	declare -n "ref=${2}"
+	mapfile -t array_items < <(seq 0 $(( "${#ref[@]}" - 1 )) | sort -r)
+
+	for index in "${array_items[@]}"; do
+		if [[ "${ref[$index]}" == "${match}" ]]; then
+			unset "ref[$index]"
+		fi
+	done
+
+	# Bash indexes don't automatically go down when we remove an item from them, so we need to reset it ourself.
+	ref=("${ref[@]}")
+
+	unset -n ref
+}
+
 # Finds how many occurances of a string are in an array.
 occurances_in_array() {
 	local item="${1}"

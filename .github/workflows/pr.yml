@@ -6,23 +6,28 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
+      options: --user makedeb
     steps:
-      - name: Set directory permissions
-        run: sudo chown 'makedeb:makedeb' ../ /github/home/ -R
-      
       - name: Install CI prerequisites
         run: sudo -E apt-get install git -y
 
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Ensure directory permissions are correct
+        run: |
+          sudo chown 'makedeb:makedeb' /__w /home -R
+          find /__w /home -type d -exec sudo chmod a+rwx '{}' +
+          find /__w /home -type f -exec sudo chmod a+rw '{}' +
+
+      - name: Checkout Git repository
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head_sha }}
+          path: ./makedeb
 
       - name: Install needed dependencies
+        working-directory: ./makedeb
         run: .drone/scripts/install-deps.sh
       
       - name: Run unit tests
+        working-directory: ./makedeb
         run: release_type="${GITHUB_BASE_REF}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2

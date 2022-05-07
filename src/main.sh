@@ -83,6 +83,7 @@ INFAKEROOT=0
 INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
+MPR_CHECK=0
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
@@ -102,6 +103,7 @@ SKIPPGPCHECK=0
 SIGNPKG=''
 SPLITPKG=0
 SOURCEONLY=0
+SUDOARGS=()
 SYNCDEPS=1
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
@@ -438,6 +440,19 @@ write_buildinfo() {
 	write_kv_pair "options" "${OPTIONS[@]}"
 }
 
+write_extra_control_fields() {
+	local control_field
+	local control_key
+	local control_value
+
+	for control_field in "${MERGED_CONTROL_FIELDS[@]}"; do
+		control_key="$(echo "${control_field}" | grep -o '^[^:]*')"
+		control_value="$(echo "${control_field}" | grep -o '[^:]*$' | sed 's|^ ||')"
+
+		write_control_pair "${control_key}" "${control_value}"
+	done
+}
+
 write_control_info() {
 	local fullver=$(get_full_version)
 	local new_predepends
@@ -449,10 +464,13 @@ write_control_info() {
 	local new_replaces
 	local new_breaks
 
+	remove_optdepends_description clean_recommends "${recommends[@]}"
+	remove_optdepends_description clean_suggests "${suggests[@]}"
+
 	convert_relationships new_predepends "${predepends[@]}"
 	convert_relationships new_depends "${depends[@]}"
-	convert_relationships new_recommends "${recommends[@]}"
-	convert_relationships new_suggests "${suggests[@]}"
+	convert_relationships new_recommends "${clean_recommends[@]}"
+	convert_relationships new_suggests "${clean_suggests[@]}"
 	convert_relationships new_conflicts "${conflicts[@]}"
 	convert_relationships new_provides "${provides[@]}"
 	convert_relationships new_replaces "${replaces[@]}"
@@ -460,7 +478,7 @@ write_control_info() {
 
 	write_control_pair "Package" "${pkgname}"
 	write_control_pair "Version" "${fullver}"
-	write_control_pair "Description" "${spd}"
+	write_control_pair "Description" "${pkgdesc}"
 	write_control_pair "Architecture" "${pkgarch}"
 	write_control_pair "License" "${license[@]}"
 	write_control_pair "Maintainer" "${maintainer}"
@@ -473,12 +491,10 @@ write_control_info() {
 	write_control_pair "Provides" "${new_provides[@]}"
 	write_control_pair "Replaces" "${new_replaces[@]}"
 	write_control_pair "Breaks" "${new_breaks[@]}"
+	write_extra_control_fields
 }
 
 create_package() {
-	zstdthreads=0
-	zstdlevel=10
-
 	if [[ ! -d $pkgdir ]]; then
 		error "$(gettext "Missing %s directory.")" "\$pkgdir/"
 		plainerr "$(gettext "Aborting...")"
@@ -487,7 +503,7 @@ create_package() {
 
 	cd_safe "$pkgdir"
 	(( NOARCHIVE )) || msg "$(gettext "Creating package \"%s\"...")" "$pkgname"
-	
+
 	# Generate package metadata.
 	pkgarch=$(get_pkg_arch)
 	msg2 "$(gettext "Setting up package metadata...")"
@@ -496,7 +512,11 @@ create_package() {
 
 	msg2 "$(gettext "Generating %s file...")" "control"
 	write_control_info > "${pkgdir}/DEBIAN/control"
-	
+
+	if in_array backup "${env_keys[@]}"; then
+		printf '%s\n' "${backup[@]}" > "${pkgdir}/DEBIAN/conffiles"
+	fi
+
 	# Maintainer scripts.
 	for file in preinst postinst prerm postrm; do
 		if [[ -z "${!file}" ]]; then
@@ -534,25 +554,21 @@ create_package() {
 
 	cd DEBIAN/
 	mapfile -t control_files < <(find ./ -mindepth 1 -maxdepth 1)
-	tar -cf ./control.tar "${control_files[@]}"
-	mv control.tar ../
+	tar -czf ./control.tar.gz "${control_files[@]}"
+	mv control.tar.gz ../
 	cd ../
 
-	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar')
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
 
 	# Tar doesn't like no files being provided for an archive.
 	if [[ "${#package_files[@]}" == 0 ]]; then
-		tar -cf ./data.tar --files-from /dev/null
+		tar -czf ./data.tar.gz --files-from /dev/null
 	else
-		tar -cf ./data.tar "${package_files[@]}"
+		tar -czf ./data.tar.gz "${package_files[@]}"
 	fi
-	
-	for archive in 'control.tar' 'data.tar'; do
-		zstd "-T${zstdthreads}" "-${zstdlevel}" --rm -q "${archive}"
-	done
 
-	ar -rU "${pkg_file}" debian-binary control.tar.zst data.tar.zst 2> /dev/null
-	rm debian-binary control.tar.zst data.tar.zst
+	ar -rU "${pkg_file}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
+	rm debian-binary control.tar.gz data.tar.gz
 }
 
 create_debug_package() {
@@ -654,7 +670,7 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-	
+
 	remove_installed_dependencies
 	RMDEPS=0
 
@@ -672,15 +688,15 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
-	if ! sudo apt-get reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
+	if ! sudo "${SUDOARGS[@]}" -- apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
-	
+
 	if (( "${ASDEPS}" )); then
 		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
 
-		if ! sudo apt-mark auto "${pkgname[@]}"; then
+		if ! sudo "${SUDOARGS[@]}" -- apt-mark auto "${pkgname[@]}"; then
 			warning "$(gettext "Failed to mark built package(s) as automatically installed.")"
 		fi
 	fi
@@ -801,24 +817,28 @@ usage() {
 	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
 	echo
 	printf -- "$(gettext "Options:")\n"
-	printf -- "$(gettext "  -A, --ignore-arch    Ignore errors about mismatching architectures")\n"
-	printf -- "$(gettext "  -d, --no-deps        Skip all dependency checks")\n"
-	printf -- "$(gettext "  -F, --file, -p       Specify a location to the build file (defaults to 'PKGBUILD')")\n"
-	printf -- "$(gettext "  -g, --gen-integ      Generate hashes for source files")\n"
-	printf -- "$(gettext "  -h, --help           Show this help menu and exit")\n"
-	printf -- "$(gettext "  -H, --field          Append the packaged control file with custom control fields")\n"
-	printf -- "$(gettext "  -i, --install        Automatically install the built package(s) after building")\n"
-	printf -- "$(gettext "  -V, --version        Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rm-deps        Remove installed makedepends and checkdepends after building")\n"
-	printf -- "$(gettext "  -s, --sync-deps      Install missing dependencies")\n"
-	printf -- "$(gettext "  --lint               Link the PKGBUILD for conformity requirements")\n"
-	printf -- "$(gettext "  --print-control      Print a generated control file and exit")\n"
-	printf -- "$(gettext "  --print-srcinfo      Print a generated .SRCINFO file and exit")\n"
-	printf -- "$(gettext "  --skip-pgp-check     Do not verify source files against PGP signatures")\n"
+	printf -- "$(gettext "  -A, --ignore-arch     Ignore errors about mismatching architectures")\n"
+	printf -- "$(gettext "  -d, --no-deps         Skip all dependency checks")\n"
+	printf -- "$(gettext "  -F, --file, -p        Specify a location to the build file (defaults to 'PKGBUILD')")\n"
+	printf -- "$(gettext "  -g, --gen-integ       Generate hashes for source files")\n"
+	printf -- "$(gettext "  -h, --help            Show this help menu and exit")\n"
+	printf -- "$(gettext "  -H, --field           Append the packaged control file with custom control fields")\n"
+	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
+	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
+	printf -- "$(gettext "  -r, --rm-deps         Remove installed makedepends and checkdepends after building")\n"
+	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
+	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
+	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
+	printf -- "$(gettext "  --print-srcinfo       Print a generated .SRCINFO file and exit")\n"
+	printf -- "$(gettext "  --skip-pgp-check      Do not verify source files against PGP signatures")\n"
 	echo
 	printf -- "$(gettext "The following options can modify the behavior of APT during package and dependency installation:")\n"
-	printf -- "$(gettext "  --as-deps            Mark built packages as automatically installed")\n"
-	printf -- "$(gettext "  --no-confirm         Don't ask before installing packages")\n"
+	printf -- "$(gettext "  --as-deps             Mark built packages as automatically installed")\n"
+	printf -- "$(gettext "  --allow-downgrades    Allow packages to be downgraded")\n"
+	printf -- "$(gettext "  --no-confirm          Don't ask before installing packages")\n"
+	echo
+	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
+	printf -- "$(gettext "  --pass-env           Pass the current user's environment variables")\n"
 	echo
 	printf -- "$(gettext "See makedeb(8) for information on available options and links for obtaining support.")\n"
 }
@@ -827,6 +847,17 @@ version() {
 	printf "makedeb ${MAKEDEB_VERSION}\n"
 	printf "${MAKEDEB_RELEASE^} Release\n"
 	printf "Installed from ${MAKEDEB_INSTALLATION_SOURCE^^}\n"
+}
+
+mpr_check() {
+	printf "
+ .--.                  Pacman v6.0.0 - libalpm v13.0.0
+/ _.-' .-.  .-.  .-.   Copyright (C) 2006-2021 Pacman Development Team
+\  '-. '-'  '-'  '-'   Copyright (C) 2002-2006 Judd Vinet
+ '--'
+                       This program may be freely redistributed under
+                       the terms of the GNU General Public License.
+"
 }
 
 ###################
@@ -849,9 +880,9 @@ ARGLIST=("$@")
 OPT_SHORT='AdF:p:ghH:ivrs'
 OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
-	  'sync-deps' 'print-control' 'print-srcinfo'
+	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
 	exit $E_INVALID_OPTION
@@ -862,28 +893,34 @@ unset OPT_SHORT OPT_LONG OPTRET
 while true; do
 	case "$1" in
 		# makedeb options.
-		-A|--ignore-arch) IGNOREARCH=1 ;;
-		-d|--no-deps)     NODEPS=1 ;;
-		-F|-p|--file)     shift; BUILDFILE="${1}" ;;
-		-g|--gen-integ)   BUILDPKG=0 GENINTEG=1 IGNOREARCH=1 ;;
-		-h|--help)        usage; exit $E_OK ;;
-		-H|--field)       shift; CONTROL_FIELDS+=("${1}") ;;
-		-i|--install)     INSTALL=1 ;;
-		-V|--version)     version; exit $E_OK ;;
-		-r|--rm-deps)     RMDEPS=1 ;;
-		-s|--sync-deps)   SYNCDEPS=1 ;;
-		--lint)           LINTPKGBUILD=1 ;;
-		--print-control)  BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
-		--print-srcinfo)  BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
-		--skip-pgp-check) SKIPPGPCHECK=1 ;;
-		--)               shift; break ;;
+		-A|--ignore-arch)        IGNOREARCH=1 ;;
+		-d|--no-deps)            NODEPS=1 ;;
+		-F|-p|--file)            shift; BUILDFILE="${1}" ;;
+		-g|--gen-integ)          BUILDPKG=0 GENINTEG=1 IGNOREARCH=1 ;;
+		-h|--help)               usage; exit $E_OK ;;
+		-H|--field)              shift; CONTROL_FIELDS+=("${1}") ;;
+		-i|--install)            INSTALL=1 ;;
+		-V|--version)            version; exit $E_OK ;;
+		-r|--rm-deps)            RMDEPS=1 ;;
+		-s|--sync-deps)          SYNCDEPS=1 ;;
+		--lint)                  LINTPKGBUILD=1 ;;
+		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
+		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
+		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
+		--)                      shift; break ;;
 
 		# APT options.
-		--as-deps)        ASDEPS=1 ;;
-		--no-confirm)     APTARGS+=('-y') ;;
+		--as-deps)               ASDEPS=1 ;;
+		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
+		--no-confirm)            APTARGS+=('-y') ;;
+
+		# Sudo options.
+		--pass-env)              SUDOARGS+=('-E') ;;
 
 		# Internal options.
-		--in-fakeroot)    INFAKEROOT=1 ;;
+		--in-fakeroot)           INFAKEROOT=1 ;;
 	esac
 	shift
 done
@@ -975,7 +1012,7 @@ else
 	fi
 fi
 
-# Unset variables from a user's environment variables
+# Unset variables from a user's environment variables.
 unset pkgname "${pkgbuild_schema_strings[@]}" "${pkgbuild_schema_arrays[@]}"
 unset "${known_hash_algos[@]/%/sums}"
 unset -f pkgver prepare build check package "${!package_@}"
@@ -984,14 +1021,18 @@ unset "${!optdepends_@}" "${!conflicts_@}" "${!provides_@}" "${!replaces_@}"
 unset "${!cksums_@}" "${!md5sums_@}" "${!sha1sums_@}" "${!sha224sums_@}"
 unset "${!sha256sums_@}" "${!sha384sums_@}" "${!sha512sums_@}" "${!b2sums_@}"
 
-current_environment_variables="$(set | grep '^[^= ]*=')"
+# Read environment variables.
+mapfile -t env_vars < <(set | grep '^[^= ]*=')
+mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*')
 
-# Unset distro-specific environment variables.
+# Unset distro-specific environment variables from a user's environment variables.
 # This processes distro-specific global variables (i.e. 'focal_depends') as well
 # as architecture-specific ones (i.e. 'focal_depends_x86_64').
-for i in makedepends depends source checkdepends optdepends conflicts provides replaces chsums md5sums sha1sums sha224sums sha256sums sha384sums sha512sums b2sums; do
-	for j in $(echo "${current_environment_variables}" | grep -o "^[^=]*_${i}[^=]*=" | sed 's|=$||'); do
-		unset "${j}"
+for a in "${pkgbuild_schema_arch_arrays[@]}"; do
+	mapfile -t matches < <(printf '%s\n' "${env_keys[@]}" | grep -E "^[^_]*_${a}$|^[^_]*_${a}_")
+
+	for match in "${matches[@]}"; do
+		unset "${match}"
 	done
 done
 
@@ -1014,15 +1055,29 @@ else
 	if [[ ${BUILDFILE:0:1} != "/" ]]; then
 		BUILDFILE="$startdir/$BUILDFILE"
 	fi
+
 	source_buildfile "$BUILDFILE"
 fi
 
+# Re-read environment variables.
+mapfile -t env_vars < <(set | grep '^[^= ]*=')
+mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*')
+
+# Set pkgbase variable if the user didn't define it.
+# We don't set to 'pkgbase' yet so that we don't lint that variable when the user didn't set it.
 _pkgbase="${pkgbase:-${pkgname[0]}}"
 
 # check the PKGBUILD for some basic requirements
 lint_pkgbuild || exit $E_PKGBUILD_ERROR
 
+# Now we can set 'pkgbase'.
 pkgbase="${_pkgbase}"
+
+# If 'pkgbase' isn't in env_vars/env_keys, add it now.
+if ! in_array pkgbase "${env_keys[@]}"; then
+	env_vars+=("pkgbase=${pkgbase}")
+	env_keys+=('pkgbase')
+fi
 
 # Exit regardless of sucess status if '--lint' was passed.
 (( "${LINTPKGBUILD}" )) && exit
@@ -1104,9 +1159,15 @@ if (( PACKAGELIST )); then
 fi
 
 if (( PRINTSRCINFO )); then
-	write_srcinfo_content
+	write_srcinfo
 	exit $E_OK
 fi
+
+# Process distro-specific dependencies.
+check_distro_dependencies
+
+# Convert needed dependencies.
+convert_dependencies
 
 if (( PRINTCONTROL )); then
 	output=""
@@ -1123,12 +1184,6 @@ fi
 if (( ! PKGVERFUNC )); then
 	check_build_status
 fi
-
-# Process distro-specific dependencies.
-check_distro_dependencies
-
-# Convert needed dependencies.
-convert_dependencies
 
 # Run the bare minimum in fakeroot
 if (( INFAKEROOT )); then
@@ -1195,7 +1250,7 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 else
 	msg "$(gettext "Checking for missing dependencies...")"
 	check_missing_dependencies
-	
+
 	if ! (( "${SYNCDEPS}" )); then
 		verify_no_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
 	else
