@@ -899,7 +899,7 @@ while true; do
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
-		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO1 IGNOREARCH=1 ;;
+		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
 		--)                      shift; break ;;
 
