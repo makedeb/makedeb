@@ -447,26 +447,6 @@ write_extra_control_fields() {
 
 write_control_info() {
 	local fullver=$(get_full_version)
-	local new_predepends
-	local new_depends
-	local new_recommends
-	local new_suggests
-	local new_conflicts
-	local new_provides
-	local new_replaces
-	local new_breaks
-
-	remove_optdepends_description clean_recommends "${recommends[@]}"
-	remove_optdepends_description clean_suggests "${suggests[@]}"
-
-	convert_relationships new_predepends "${predepends[@]}"
-	convert_relationships new_depends "${depends[@]}"
-	convert_relationships new_recommends "${clean_recommends[@]}"
-	convert_relationships new_suggests "${clean_suggests[@]}"
-	convert_relationships new_conflicts "${conflicts[@]}"
-	convert_relationships new_provides "${provides[@]}"
-	convert_relationships new_replaces "${replaces[@]}"
-	convert_relationships new_breaks "${breaks[@]}"
 
 	write_control_pair "Package" "${pkgname}"
 	write_control_pair "Version" "${fullver}"
@@ -475,14 +455,14 @@ write_control_info() {
 	write_control_pair "License" "${license[@]}"
 	write_control_pair "Maintainer" "${maintainer}"
 	write_control_pair "Homepage" "${url}"
-	write_control_pair "Pre-Depends" "${new_predepends[@]}"
-	write_control_pair "Depends" "${new_depends[@]}"
-	write_control_pair "Recommends" "${new_recommends[@]}"
-	write_control_pair "Suggests" "${new_suggests[@]}"
-	write_control_pair "Conflicts" "${new_conflicts[@]}"
-	write_control_pair "Provides" "${new_provides[@]}"
-	write_control_pair "Replaces" "${new_replaces[@]}"
-	write_control_pair "Breaks" "${new_breaks[@]}"
+	write_control_pair "Pre-Depends" "${predepends[@]}"
+	write_control_pair "Depends" "${depends[@]}"
+	write_control_pair "Recommends" "${recommends[@]}"
+	write_control_pair "Suggests" "${suggests[@]}"
+	write_control_pair "Conflicts" "${conflicts[@]}"
+	write_control_pair "Provides" "${provides[@]}"
+	write_control_pair "Replaces" "${replaces[@]}"
+	write_control_pair "Breaks" "${breaks[@]}"
 	write_extra_control_fields
 }
 
@@ -1163,6 +1143,18 @@ check_distro_dependencies
 # Convert needed dependencies.
 convert_dependencies
 
+remove_optdepends_description recommends "${recommends[@]}"
+remove_optdepends_description suggests "${suggests[@]}"
+
+convert_relationships predepends "${predepends[@]}"
+convert_relationships depends "${depends[@]}"
+convert_relationships recommends "${clean_recommends[@]}"
+convert_relationships suggests "${clean_suggests[@]}"
+convert_relationships conflicts "${conflicts[@]}"
+convert_relationships provides "${provides[@]}"
+convert_relationships replaces "${replaces[@]}"
+convert_relationships breaks "${breaks[@]}"
+
 if (( PRINTCONTROL )); then
 	output=""
 
@@ -1244,6 +1236,8 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 else
 	msg "$(gettext "Checking for missing dependencies...")"
 	check_missing_dependencies
+
+	exit 1
 
 	if ! (( "${SYNCDEPS}" )); then
 		verify_no_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"

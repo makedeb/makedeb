@@ -44,6 +44,7 @@ lint_deps() {
 	local deps
 	local prefix
 	local name
+	local restrictor
 	local ver
 	local i
 	local j
@@ -57,22 +58,42 @@ lint_deps() {
 		depends_list=("${!depends_list}")
 
 		for j in "${depends_list[@]}"; do
+			prefix="$(echo "${j}" | grep '!' | grep -o '^[^!]*')"
+
+			if [[ "$(echo "${j}" | grep -o '!' | wc -l)" -gt 1 ]]; then
+				error "$(gettext "Dependency '%s' under '%s' contains more than one '!'.")" "${j}" "${i}"
+				ret=1
+				continue
+			fi
+			
+			if [[ "${prefix}" != "" ]] && ! in_array "${prefix}" "${valid_prefixes[@]}"; then
+				error "$(gettext "Dependency '%s' under '%s' contains an invalid prefix: '%s'")" "${j}" "${i}" "${prefix}"
+				ret=1
+			fi
+
+			j="$(echo "${j}" | sed 's|^[^!]*!||')"
 			mapfile -t deps < <(split_dep_by_pipe "${j}")
 
 			for k in "${deps[@]}"; do
-				prefix="$(echo "${k}" | grep '!' | grep -o '^[^!]*')"
 				name="$(echo "${k}" | grep -o '^[^<>=]*')"
+				mapfile -t restrictor < <(echo "${k}" | grep -Eo '<=|>=|=|<|>')
 				ver="$(echo "${k}" | grep -o '[<>=].*$' | sed -E 's/<=|>=|=|<|>//')"
 
-				if [[ "${prefix}" != "" ]] && ! in_array "${prefix}" "${valid_prefixes[@]}"; then
-					error "$(gettext "Dependency '%s' under '%s' contains an invalid prefix: '%s'")" "${k}" "${i}" "${prefix}"
+				if [[ "${#restrictor[@]}" == 2 ]]; then
+					error "$(gettext "More than one version restrictor was specified for %s: %s")" "${k@Q}" "${restrictor[*]@Q}"
 					ret=1
+					continue
 				fi
 
-				lint_one_pkgname "${name}" || ret=1
+				lint_one_pkgname "${name}" "${j}" || ret=1
 				
 				if [[ "${ver}"  != "" ]]; then
 					check_pkgver "${ver}" || ret=1
+				fi
+
+				if [[ "${var}" == "provides" ]] && [[ "${restrictor+x}" == "x" ]] && [[ "${restrictor}" != "=" ]]; then
+					error "$(gettext "Version restrictor %s in %s isn't allowed on %s.")" "${restrictor@Q}" "${k@Q}" "${var@Q}"
+					ret=1
 				fi
 			done
 		done
