@@ -12,10 +12,15 @@ jobs:
         run: sudo -E apt-get install git -y
 
       - name: Ensure directory permissions are correct
-        run: sudo chown 'makedeb:makedeb' ../ "${HOME}" -R
+        run: |
+          sudo chown 'makedeb:makedeb' /__w /home -R
+          find /__w /home -type d -exec sudo chmod a+rwx '{}' +
+          find /__w /home -type f -exec sudo chmod a+rw '{}' +
 
       - name: Checkout Git repository
-        run: git clone "${{ github.server_url }}/${{ github.repository }}" -b "${{ github.head_ref }}"
+        uses: actions/checkout@v3
+        with:
+          path: ./makedeb
 
       - name: Install needed dependencies
         working-directory: ./makedeb
