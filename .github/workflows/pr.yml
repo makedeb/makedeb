@@ -13,9 +13,9 @@ jobs:
 
       - name: Ensure directory permissions are correct
         run: |
-          sudo chown 'makedeb:makedeb' /__w /home -R
-          find ./ -type d -exec sudo chmod u+rwx '{}' +
-          find ./ -type f -exec sudo chmod U+rw '{}' +
+          sudo chown 'makedeb:makedeb' /__w /home -Rv
+          find ./ -type d -exec sudo chmod -v a+rwx '{}' +
+          find ./ -type f -exec sudo chmod -v a+rwx '{}' +
 
       - name: Checkout Git repository
         uses: actions/checkout@v3
