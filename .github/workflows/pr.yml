@@ -15,7 +15,7 @@ jobs:
         run: sudo chown 'makedeb:makedeb' ../ "${HOME}" -R
 
       - name: Checkout Git repository
-        run: git clone "${{ github.server_url }}/${{ github.repository }}" -b "${{ github.head_ref }}"
+        uses: actions/checkout@v3
 
       - name: Install needed dependencies
         working-directory: ./makedeb
