@@ -6,7 +6,7 @@ from apt_pkg import CURSTATE_INSTALLED, version_compare
 from operator import lt, le, eq, ge, gt
 
 # Function mappings for relationship operators.
-relation_operators = {"<<": lt, "<=": le, "=": eq, ">=": ge, ">>": gt}
+relation_operators = {"<": lt, "<=": le, "=": eq, ">=": ge, ">": gt}
 
 # Set up APT cache.
 apt_pkg.init()
@@ -15,7 +15,7 @@ cache = apt_pkg.Cache(None)
 # bad_dep keeps track of if any dependency in sys.argv is unable
 # to be satisfied. good_dep (seen later in this script) checks
 # each item in a dependency (i.e. 'pkg1' and 'pkg2' in 'pkg1 | pkg2').
-bad_dep = True
+missing_deps = []
 
 for i in sys.argv[1:]:
     # We only pass in one group of dependencies ('pkg1=1 | pkg2>=2') at a time,
@@ -87,11 +87,9 @@ for i in sys.argv[1:]:
             break
 
     # If good_dep was reached, mark bad_dep as false.
-    if good_dep is True:
-        bad_dep = False
+    if good_dep is not True:
+        missing_deps += [i]
 
-# If a 'bad_dep' was found, exit with 1. Otherwise, all deps could be satisfied.
-if bad_dep is True:
-    exit(1)
-else:
-    exit(0)
+# Show all missing deps.
+for dep in missing_deps:
+    print(dep)

@@ -96,7 +96,7 @@ SIGNPKG=''
 SPLITPKG=0
 SOURCEONLY=0
 SUDOARGS=()
-SYNCDEPS=1
+SYNCDEPS=0
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
 
@@ -508,8 +508,14 @@ create_package() {
 	(( NOARCHIVE )) && return 0
 
 	# Create the archive.
+	# If an argument is passed to this function, create the deb at that location.
 	local fullver=$(NOEPOCH=1 get_full_version)
-	local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.deb"
+	if [[ "${1:+x}" == "x" ]]; then
+		local pkg_file="${1}"
+	else
+		local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.deb"
+	fi
+
 	local ret=0
 
 	if [[ -f $pkg_file ]]; then
@@ -642,9 +648,6 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-
-	remove_installed_dependencies
-	RMDEPS=0
 
 	if (( ! SPLITPKG )); then
 		msg "$(gettext "Installing package %s...")" "$pkgname"
@@ -797,7 +800,7 @@ usage() {
 	printf -- "$(gettext "  -H, --field           Append the packaged control file with custom control fields")\n"
 	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
 	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rm-deps         Remove installed makedepends and checkdepends after building")\n"
+	printf -- "$(gettext "  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build")\n"
 	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
 	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
 	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
@@ -856,7 +859,9 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
 
-if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
+CLI_ARGS=("${@}")
+
+if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "${CLI_ARGS[@]}"; then
 	exit $E_INVALID_OPTION
 fi
 set -- "${OPTRET[@]}"
@@ -1235,15 +1240,37 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 	fi
 else
 	msg "$(gettext "Checking for missing dependencies...")"
-	check_missing_dependencies
-
-	exit 1
-
-	if ! (( "${SYNCDEPS}" )); then
-		verify_no_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
-	else
-		install_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
+	if ! mapfile -t missing_deps < <("${LIBRARY}/dependencies/missing_apt_dependencies.py" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"); then
+		error "$(gettext "Failed to check missing dependencies.")"
+		exit "${E_INSTALL_DEPS_FAILED}"
 	fi
+	
+	if [[ "${#missing_deps[@]}" != 0 ]]; then
+		if (( "${SYNCDEPS}" )); then
+			msg "$(gettext "Installing missing dependencies...")"
+
+			# Create a dummy deb, and install the dependencies from that file.
+			deb_file="$(mktemp /tmp/XXXXXXXXXX.deb)"
+			write_control_info | grep -E '^Package:|^Version:|^Depends'
+			exit
+
+			if ! sudo "${SUDOARGS[@]}" -- apt-get satisfy "${APTARGS[@]}" -- "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"; then
+				error "$(gettext "Failed to install missing dependencies.")"
+				exit "${E_INSTALL_DEPS_FAILED}"
+			fi
+		else
+			error "$(gettext "The following build dependencies are missing:")"
+			for dep in "${missing_deps[@]}"; do
+				error2 "${dep}"
+			done
+
+			args=("${0}" "${CLI_ARGS[@]}" '-s')
+			error "$(gettext "Try running '%s'.")" "${args[*]}"
+			exit "${E_INSTALL_DEPS_FAILED}"
+		fi
+	fi
+
+	unset missing_deps dep
 fi
 
 # Get back to our src directory so we can begin with sources.
@@ -1315,5 +1342,14 @@ if (( NOARCHIVE )); then
 fi
 
 msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
+
+# Remove installed build dependencies.
+if (( "${RMDEPS}" )); then
+	msg "$(gettext "Removing unneeded dependencies...")"
+	if ! sudo "${SUDOARGS[@]}" -- apt-get "${APTARGS[@]}" -- autoremove; then
+		error "$(gettext "Failed to remove dependencies.")"
+		exit "${E_REMOVE_DEPS_FAILED}"
+	fi
+fi
 
 install_package && exit $E_OK || exit $E_INSTALL_FAILED
