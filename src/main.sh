@@ -76,6 +76,8 @@ INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
 MPR_CHECK=0
+MAKEDEB_MESSAGE=''
+MAKEDEB_MESSAGE_TYPE=''
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
@@ -791,7 +793,7 @@ usage() {
 	echo
 	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
 	echo
-	printf -- "$(gettext "Options:")\n"
+	printf -- "$(gettext "Common options:")\n"
 	printf -- "$(gettext "  -A, --ignore-arch     Ignore errors about mismatching architectures")\n"
 	printf -- "$(gettext "  -d, --no-deps         Skip all dependency checks")\n"
 	printf -- "$(gettext "  -F, --file, -p        Specify a location to the build file (defaults to 'PKGBUILD')")\n"
@@ -813,9 +815,17 @@ usage() {
 	printf -- "$(gettext "  --no-confirm          Don't ask before installing packages")\n"
 	echo
 	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
-	printf -- "$(gettext "  --pass-env           Pass the current user's environment variables")\n"
+	printf -- "$(gettext "  --pass-env            Pass the current user's environment variables")\n"
 	echo
-	printf -- "$(gettext "See makedeb(8) for information on available options and links for obtaining support.")\n"
+	printf -- "$(gettext "The following can be used to print makedeb-styled messages:")\n"
+	printf -- "$(gettext "  --msg                 Print a msg message to stdout")\n"
+	printf -- "$(gettext "  --msg2                Print a msg2 message to stdout")\n"
+	printf -- "$(gettext "  --warning             Print a warning message to stderr")\n"
+	printf -- "$(gettext "  --warning2            Print a warning2 message to stderr")\n"
+	printf -- "$(gettext "  --error               Print an error message to stderr")\n"
+	printf -- "$(gettext "  --error2              Print an error2 message to stderr")\n"
+	echo
+	printf -- "$(gettext "See makedeb(8) for information on all available options and links for obtaining support.")\n"
 }
 
 version() {
@@ -857,7 +867,8 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
+  	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir')
 
 CLI_ARGS=("${@}")
 
@@ -883,6 +894,7 @@ while true; do
 		--lint)                  LINTPKGBUILD=1 ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
+		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
@@ -895,6 +907,14 @@ while true; do
 
 		# Sudo options.
 		--pass-env)              SUDOARGS+=('-E') ;;
+
+		# Message options.
+		--msg)                   shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='msg' ;;
+		--msg2)                  shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='msg2' ;;
+		--warning)               shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='warning' ;;
+		--warning2)              shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='warning2' ;;
+		--error)                 shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='error' ;;
+		--error2)                shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='error2' ;;
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
@@ -940,6 +960,12 @@ else
 	unset ALL_OFF BOLD BLUE GREEN RED YELLOW
 fi
 
+
+# If we're to print a message, do that and exit.
+if [[ "${MAKEDEB_MESSAGE_TYPE}" != "" ]]; then
+	"${MAKEDEB_MESSAGE_TYPE}" "${MAKEDEB_MESSAGE}"
+	exit 0
+fi
 
 # check makepkg.conf for some basic requirements
 lint_config || exit $E_CONFIG_ERROR
@@ -1240,7 +1266,8 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 	fi
 else
 	msg "$(gettext "Checking for missing dependencies...")"
-	if ! mapfile -t missing_deps < <("${LIBRARY}/dependencies/missing_apt_dependencies.py" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"); then
+	# We need to tell our call to the Python script where makedeb is located because we might need to call it in order to print messages.
+	if ! mapfile -t missing_deps < <(MAKEDEB="${0}" "${LIBRARY}/dependencies/missing_apt_dependencies.py" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"); then
 		error "$(gettext "Failed to check missing dependencies.")"
 		exit "${E_INSTALL_DEPS_FAILED}"
 	fi
