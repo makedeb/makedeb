@@ -3,7 +3,9 @@ set -e
 
 # Handy env vars.
 hw_url='hunterwittenborn.com'
+makedeb_url='makedeb.org'
 color_normal="$(tput sgr0)"
+color_bold="$(tput bold)"
 color_green="$(tput setaf 77)"
 color_orange="$(tput setaf 214)"
 color_blue="$(tput setaf 14)"
@@ -116,6 +118,13 @@ if ! sudo apt-get install -- "${MAKEDEB_PKG}"; then
     die_cmd "Failed to install package."
 fi
 
-msg "Finished. Enjoy makedeb!"
+msg "Finished! If you need help of any kind, feel free to reach out:"
+echo
+msg "${color_bold}makedeb Homepage:${color_normal}            https://${makedeb_url}"
+msg "${color_bold}makedeb Package Repository:${color_normal}  https://mpr.${makedeb_url}"
+msg "${color_bold}makedeb Documentation:${color_normal}       https://docs.${makedeb_url}"
+msg "${color_bold}makedeb Support:${color_normal}             https://docs.${makedeb_url}/support/obtaining-support"
+echo
+msg "Enjoy makedeb!"
 
 # vim: set sw=4 expandtab:
