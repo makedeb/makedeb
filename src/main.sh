@@ -1274,17 +1274,35 @@ else
 	
 	if [[ "${#missing_deps[@]}" != 0 ]]; then
 		if (( "${SYNCDEPS}" )); then
+			# Get a list of currently installed packages.
+			mapfile -t prev_installed_packages < <(dpkg-query -Wf '${Package}\n' | sort)
+			
+			# Install the missing deps.
 			msg "$(gettext "Installing missing dependencies...")"
-
-			# Create a dummy deb, and install the dependencies from that file.
-			deb_file="$(mktemp /tmp/XXXXXXXXXX.deb)"
-			write_control_info | grep -E '^Package:|^Version:|^Depends'
-			exit
 
 			if ! sudo "${SUDOARGS[@]}" -- apt-get satisfy "${APTARGS[@]}" -- "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"; then
 				error "$(gettext "Failed to install missing dependencies.")"
 				exit "${E_INSTALL_DEPS_FAILED}"
 			fi
+
+			# Get the list of packages that were just installed.
+			mapfile -t cur_installed_packages < <(dpkg-query -Wf '${Package}\n')
+			mapfile -t newly_installed_packages < <(comm -13 --nocheck-order <(printf '%s\n' "${prev_installed_packages[@]}") <(dpkg-query -Wf '${Package}\n' | sort))
+
+			# Mark newly installed packages as automatically installed.
+			msg "$(gettext "Marking newly installed packages as automatically installed...")"
+			if ! sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
+				error "$(gettext "Failed to mark installed dependencies as automatically installed.")"
+				error "$(gettext "You may need to run 'apt-mark auto' with the following packages:")"
+
+				for pkg in "${newly_installed_packages[@]}"; do
+					error2 "${pkg}"
+				done
+
+				exit "${E_INSTALL_DEPS_FAILED}"
+			fi
+
+			unset prev_installed_packages cur_installed_packages newly_installed_packages
 		else
 			error "$(gettext "The following build dependencies are missing:")"
 			for dep in "${missing_deps[@]}"; do
