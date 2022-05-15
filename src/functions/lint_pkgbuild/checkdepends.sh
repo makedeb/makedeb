@@ -33,24 +33,5 @@ lint_pkgbuild_functions+=('lint_checkdepends')
 
 
 lint_checkdepends() {
-	local checkdepends_list checkdepend name ver ret=0
-
-	get_pkgbuild_all_split_attributes checkdepends checkdepends_list
-
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
-
-	for checkdepend in "${checkdepends_list[@]}"; do
-		name=${checkdepend%%@(<|>|=|>=|<=)*}
-		lint_one_pkgname checkdepends "$name" || ret=1
-		if [[ $name != "$checkdepend" ]]; then
-			ver=${checkdepend##$name@(<|>|=|>=|<=)}
-			check_fullpkgver "$ver" checkdepends || ret=1
-		fi
-	done
-
-	eval "$shellopts"
-
-	return $ret
+	lint_deps 'checkdepends' '' || return 1
 }

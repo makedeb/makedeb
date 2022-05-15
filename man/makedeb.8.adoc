@@ -39,7 +39,7 @@ On the other hand, *makedeb* is NOT meant to be a replacement for package manage
   Appends the generated control file with extra fields.
 
 *-i, --install*::
-  Automatically installs the built package(s) after a successful build. This option is not available on the Arch Linux releases.
+  Automatically installs the built package(s) after a successful build.
 
 *-V, --version*::
   Prints version information and quits.
@@ -50,6 +50,9 @@ On the other hand, *makedeb* is NOT meant to be a replacement for package manage
 *-s, --sync-deps*::
   Checks for any missing build dependencies and installs them.
 
+*--lint*::
+  Lint the PKGBUILD for conformity requirements. This checks that things like variables are declared when needed, and contain valid values.
+
 *--print-control*::
   Prints a generated control file and exits.
 
@@ -59,11 +62,35 @@ On the other hand, *makedeb* is NOT meant to be a replacement for package manage
 *--skip-pgp-check*::
   Skips verification of downloaded sources against specified PGP signatures.
 
-*--verbose*::
-  Prints VERY detailed logging.
-
 *--as-deps*::
-  Marks packages installed via the *-i*/*--install* option as automatically installed. This option is not available on the Arch Linux releases.
+  Marks packages installed via the *-i*/*--install* option as automatically installed.
+
+*--allow-downgrades*::
+  Passes the *--allow-downgrades* option to *apt-get*(8) when installing build dependencies and built packages.
+
+*--no-confirm*::
+  Don't prompt before installing build dependencies or built packages. This passes the *-y* flag to *apt-get*(8) calls.
+
+*--pass-env*::
+  Passes the current user's environment variables to *sudo*(8) calls. This is needed for things like dependency installation when you want to pass the *DEBIAN_FRONTEND* environment variable to *apt-get*(8) calls.
+
+*--msg*::
+  Print a message styled in the format of running *msg* from a PKGBUILD.
+
+*--msg2*::
+  Print a message styled in the format of running *msg2* from a PKGBUILD.
+
+*--warning*::
+  Print a message styled in the format of running *warning* from a PKGBUILD.
+
+*--warning2*::
+  Print a message styled in the format of running *warning2* from a PKGBUILD.
+
+*--error*::
+  Print a message styled in the format of running *error* from a PKGBUILD.
+
+*--error2*::
+  Print a message styled in the format of running *error2* from a PKGBUILD.
 
 == EXIT STATUS
 *makedeb* exits with an exit code of 0 on success, and 1 in all other events.

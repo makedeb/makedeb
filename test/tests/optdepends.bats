@@ -52,5 +52,5 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "[!] optdepends contains an invalid prefix: 'z!'" ]]
+    [[ "${output}" == "[!] Dependency 'z!bats' under 'optdepends' contains an invalid prefix: 'z'" ]]
 }

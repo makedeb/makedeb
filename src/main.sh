@@ -84,6 +84,8 @@ INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
 MPR_CHECK=0
+MAKEDEB_MESSAGE=''
+MAKEDEB_MESSAGE_TYPE=''
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
@@ -104,7 +106,7 @@ SIGNPKG=''
 SPLITPKG=0
 SOURCEONLY=0
 SUDOARGS=()
-SYNCDEPS=1
+SYNCDEPS=0
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
 
@@ -455,26 +457,7 @@ write_extra_control_fields() {
 
 write_control_info() {
 	local fullver=$(get_full_version)
-	local new_predepends
-	local new_depends
-	local new_recommends
-	local new_suggests
-	local new_conflicts
-	local new_provides
-	local new_replaces
-	local new_breaks
 
-	remove_optdepends_description clean_recommends "${recommends[@]}"
-	remove_optdepends_description clean_suggests "${suggests[@]}"
-
-	convert_relationships new_predepends "${predepends[@]}"
-	convert_relationships new_depends "${depends[@]}"
-	convert_relationships new_recommends "${clean_recommends[@]}"
-	convert_relationships new_suggests "${clean_suggests[@]}"
-	convert_relationships new_conflicts "${conflicts[@]}"
-	convert_relationships new_provides "${provides[@]}"
-	convert_relationships new_replaces "${replaces[@]}"
-	convert_relationships new_breaks "${breaks[@]}"
 
 	write_control_pair "Package" "${pkgname}"
 	write_control_pair "Version" "${fullver}"
@@ -483,14 +466,14 @@ write_control_info() {
 	write_control_pair "License" "${license[@]}"
 	write_control_pair "Maintainer" "${maintainer}"
 	write_control_pair "Homepage" "${url}"
-	write_control_pair "Pre-Depends" "${new_predepends[@]}"
-	write_control_pair "Depends" "${new_depends[@]}"
-	write_control_pair "Recommends" "${new_recommends[@]}"
-	write_control_pair "Suggests" "${new_suggests[@]}"
-	write_control_pair "Conflicts" "${new_conflicts[@]}"
-	write_control_pair "Provides" "${new_provides[@]}"
-	write_control_pair "Replaces" "${new_replaces[@]}"
-	write_control_pair "Breaks" "${new_breaks[@]}"
+	write_control_pair "Pre-Depends" "${predepends[@]}"
+	write_control_pair "Depends" "${depends[@]}"
+	write_control_pair "Recommends" "${recommends[@]}"
+	write_control_pair "Suggests" "${suggests[@]}"
+	write_control_pair "Conflicts" "${conflicts[@]}"
+	write_control_pair "Provides" "${provides[@]}"
+	write_control_pair "Replaces" "${replaces[@]}"
+	write_control_pair "Breaks" "${breaks[@]}"
 	write_extra_control_fields
 }
 
@@ -536,8 +519,14 @@ create_package() {
 	(( NOARCHIVE )) && return 0
 
 	# Create the archive.
+	# If an argument is passed to this function, create the deb at that location.
 	local fullver=$(NOEPOCH=1 get_full_version)
-	local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.deb"
+	if [[ "${1:+x}" == "x" ]]; then
+		local pkg_file="${1}"
+	else
+		local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.deb"
+	fi
+
 	local ret=0
 
 	if [[ -f $pkg_file ]]; then
@@ -670,9 +659,6 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-
-	remove_installed_dependencies
-	RMDEPS=0
 
 	if (( ! SPLITPKG )); then
 		msg "$(gettext "Installing package %s...")" "$pkgname"
@@ -816,7 +802,7 @@ usage() {
 	echo
 	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
 	echo
-	printf -- "$(gettext "Options:")\n"
+	printf -- "$(gettext "Common options:")\n"
 	printf -- "$(gettext "  -A, --ignore-arch     Ignore errors about mismatching architectures")\n"
 	printf -- "$(gettext "  -d, --no-deps         Skip all dependency checks")\n"
 	printf -- "$(gettext "  -F, --file, -p        Specify a location to the build file (defaults to 'PKGBUILD')")\n"
@@ -825,7 +811,7 @@ usage() {
 	printf -- "$(gettext "  -H, --field           Append the packaged control file with custom control fields")\n"
 	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
 	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rm-deps         Remove installed makedepends and checkdepends after building")\n"
+	printf -- "$(gettext "  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build")\n"
 	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
 	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
 	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
@@ -838,9 +824,17 @@ usage() {
 	printf -- "$(gettext "  --no-confirm          Don't ask before installing packages")\n"
 	echo
 	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
-	printf -- "$(gettext "  --pass-env           Pass the current user's environment variables")\n"
+	printf -- "$(gettext "  --pass-env            Pass the current user's environment variables")\n"
 	echo
-	printf -- "$(gettext "See makedeb(8) for information on available options and links for obtaining support.")\n"
+	printf -- "$(gettext "The following can be used to print makedeb-styled messages:")\n"
+	printf -- "$(gettext "  --msg                 Print a msg message to stdout")\n"
+	printf -- "$(gettext "  --msg2                Print a msg2 message to stdout")\n"
+	printf -- "$(gettext "  --warning             Print a warning message to stderr")\n"
+	printf -- "$(gettext "  --warning2            Print a warning2 message to stderr")\n"
+	printf -- "$(gettext "  --error               Print an error message to stderr")\n"
+	printf -- "$(gettext "  --error2              Print an error2 message to stderr")\n"
+	echo
+	printf -- "$(gettext "See makedeb(8) for information on all available options and links for obtaining support.")\n"
 }
 
 version() {
@@ -882,9 +876,12 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
-	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades')
+	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
+  	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir')
 
-if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "$@"; then
+CLI_ARGS=("${@}")
+
+if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "${CLI_ARGS[@]}"; then
 	exit $E_INVALID_OPTION
 fi
 set -- "${OPTRET[@]}"
@@ -906,6 +903,7 @@ while true; do
 		--lint)                  LINTPKGBUILD=1 ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
+		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
@@ -918,6 +916,14 @@ while true; do
 
 		# Sudo options.
 		--pass-env)              SUDOARGS+=('-E') ;;
+
+		# Message options.
+		--msg)                   shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='msg' ;;
+		--msg2)                  shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='msg2' ;;
+		--warning)               shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='warning' ;;
+		--warning2)              shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='warning2' ;;
+		--error)                 shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='error' ;;
+		--error2)                shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='error2' ;;
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
@@ -963,6 +969,12 @@ else
 	unset ALL_OFF BOLD BLUE GREEN RED YELLOW
 fi
 
+
+# If we're to print a message, do that and exit.
+if [[ "${MAKEDEB_MESSAGE_TYPE}" != "" ]]; then
+	"${MAKEDEB_MESSAGE_TYPE}" "${MAKEDEB_MESSAGE}"
+	exit 0
+fi
 
 # check makepkg.conf for some basic requirements
 lint_config || exit $E_CONFIG_ERROR
@@ -1022,8 +1034,10 @@ unset "${!cksums_@}" "${!md5sums_@}" "${!sha1sums_@}" "${!sha224sums_@}"
 unset "${!sha256sums_@}" "${!sha384sums_@}" "${!sha512sums_@}" "${!b2sums_@}"
 
 # Read environment variables.
-mapfile -t env_vars < <(set | grep '^[^= ]*=')
-mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*')
+# We don't process variables that start with '_', as those are meant for custom
+# user-defined variables.
+mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
+mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
 
 # Unset distro-specific environment variables from a user's environment variables.
 # This processes distro-specific global variables (i.e. 'focal_depends') as well
@@ -1060,8 +1074,8 @@ else
 fi
 
 # Re-read environment variables.
-mapfile -t env_vars < <(set | grep '^[^= ]*=')
-mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*')
+mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
+mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
 
 # Set pkgbase variable if the user didn't define it.
 # We don't set to 'pkgbase' yet so that we don't lint that variable when the user didn't set it.
@@ -1169,6 +1183,18 @@ check_distro_dependencies
 # Convert needed dependencies.
 convert_dependencies
 
+remove_optdepends_description recommends "${recommends[@]}"
+remove_optdepends_description suggests "${suggests[@]}"
+
+convert_relationships predepends "${predepends[@]}"
+convert_relationships depends "${depends[@]}"
+convert_relationships recommends "${recommends[@]}"
+convert_relationships suggests "${suggests[@]}"
+convert_relationships conflicts "${conflicts[@]}"
+convert_relationships provides "${provides[@]}"
+convert_relationships replaces "${replaces[@]}"
+convert_relationships breaks "${breaks[@]}"
+
 if (( PRINTCONTROL )); then
 	output=""
 
@@ -1249,13 +1275,56 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 	fi
 else
 	msg "$(gettext "Checking for missing dependencies...")"
-	check_missing_dependencies
-
-	if ! (( "${SYNCDEPS}" )); then
-		verify_no_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
-	else
-		install_missing_dependencies || exit "${E_INSTALL_DEPS_FAILED}"
+	# We need to tell our call to the Python script where makedeb is located because we might need to call it in order to print messages.
+	if ! mapfile -t missing_deps < <(MAKEDEB="${0}" "${LIBRARY}/dependencies/missing_apt_dependencies.py" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"); then
+		error "$(gettext "Failed to check missing dependencies.")"
+		exit "${E_INSTALL_DEPS_FAILED}"
 	fi
+	
+	if [[ "${#missing_deps[@]}" != 0 ]]; then
+		if (( "${SYNCDEPS}" )); then
+			# Get a list of currently installed packages.
+			mapfile -t prev_installed_packages < <(dpkg-query -Wf '${Package}\n' | sort)
+			
+			# Install the missing deps.
+			msg "$(gettext "Installing missing dependencies...")"
+
+			if ! sudo "${SUDOARGS[@]}" -- apt-get satisfy "${APTARGS[@]}" -- "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"; then
+				error "$(gettext "Failed to install missing dependencies.")"
+				exit "${E_INSTALL_DEPS_FAILED}"
+			fi
+
+			# Get the list of packages that were just installed.
+			mapfile -t cur_installed_packages < <(dpkg-query -Wf '${Package}\n')
+			mapfile -t newly_installed_packages < <(comm -13 --nocheck-order <(printf '%s\n' "${prev_installed_packages[@]}") <(dpkg-query -Wf '${Package}\n' | sort))
+
+			# Mark newly installed packages as automatically installed.
+			msg "$(gettext "Marking newly installed packages as automatically installed...")"
+			if ! sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
+				error "$(gettext "Failed to mark installed dependencies as automatically installed.")"
+				error "$(gettext "You may need to run 'apt-mark auto' with the following packages:")"
+
+				for pkg in "${newly_installed_packages[@]}"; do
+					error2 "${pkg}"
+				done
+
+				exit "${E_INSTALL_DEPS_FAILED}"
+			fi
+
+			unset prev_installed_packages cur_installed_packages newly_installed_packages
+		else
+			error "$(gettext "The following build dependencies are missing:")"
+			for dep in "${missing_deps[@]}"; do
+				error2 "${dep}"
+			done
+
+			args=("${0}" "${CLI_ARGS[@]}" '-s')
+			error "$(gettext "Try running '%s'.")" "${args[*]}"
+			exit "${E_INSTALL_DEPS_FAILED}"
+		fi
+	fi
+
+	unset missing_deps dep
 fi
 
 # Get back to our src directory so we can begin with sources.
@@ -1327,5 +1396,14 @@ if (( NOARCHIVE )); then
 fi
 
 msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
+
+# Remove installed build dependencies.
+if (( "${RMDEPS}" )); then
+	msg "$(gettext "Removing unneeded dependencies...")"
+	if ! sudo "${SUDOARGS[@]}" -- apt-get "${APTARGS[@]}" -- autoremove; then
+		error "$(gettext "Failed to remove dependencies.")"
+		exit "${E_REMOVE_DEPS_FAILED}"
+	fi
+fi
 
 install_package && exit $E_OK || exit $E_INSTALL_FAILED

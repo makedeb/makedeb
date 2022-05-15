@@ -88,3 +88,8 @@ error() {
 	local mesg=$1; shift
 	printf "${RED}[!]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
+
+error2() {
+  local mesg=$1; shift
+  printf "${RED}  [->]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
