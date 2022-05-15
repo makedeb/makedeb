@@ -49,7 +49,6 @@ load ../util/util
     pkgbuild array checkdepends 'z!bats'
     pkgbuild clean
     run makedeb -d
-    echo "${output}" >&3
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "Dependency 'z!bats' under 'checkdepends' contains an invalid prefix: 'z'" ]]
+    [[ "${output}" == "[!] Dependency 'z!bats' under 'checkdepends' contains an invalid prefix: 'z'" ]]
 }
