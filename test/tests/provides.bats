@@ -25,5 +25,5 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "Version restrictor '>=' in 'bats>=0' isn't allowed on 'provides'." ]]
+    [[ "${output}" == "[!] Version restrictor '>=' in 'bats>=0' isn't allowed on 'provides'." ]]
 }
