@@ -33,6 +33,7 @@
 export TEXTDOMAIN='pacman-scripts'
 export TEXTDOMAINDIR='/usr/share/locale'
 
+
 # file -i does not work on Mac OSX unless legacy mode is set
 export COMMAND_MODE='legacy'
 
@@ -47,16 +48,23 @@ declare -r confdir='/etc'
 declare -r BUILDSCRIPT='PKGBUILD'
 declare -r startdir="$(pwd -P)"
 
-declare -r MAKEDEB_VERSION='$${MAKEDEB_VERSION}'
-declare -r MAKEDEB_RELEASE='$${MAKEDEB_RELEASE}'
-declare -r MAKEDEB_INSTALLATION_SOURCE='$${MAKEDEB_INSTALLATION_SOURCE}'
+# Values in the '{}' format here are automatically substituted at build time in the Makefile.
+declare -r MAKEDEB_VERSION='{MAKEDEB_VERSION}'
+declare -r MAKEDEB_RELEASE='{MAKEDEB_RELEASE}'
+declare -r MAKEDEB_INSTALLATION_SOURCE='{MAKEDEB_INSTALLATION_SOURCE}'
 declare -r MAKEDEB_DPKG_ARCHITECTURE="$(dpkg --print-architecture)"
 declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 
-LIBRARY=${LIBRARY:-'$${MAKEDEB_LIBRARY_DIR}'}
+LIBRARY="${LIBRARY:-"{FILESYSTEM_PREFIX}/usr/share/makedeb"}"
+MAKEPKG_CONF="${MAKEPKG_CONF:-"{FILESYSTEM_PREFIX}/etc/makepkg.conf"}"
 
-if [[ "${LIBRARY}" == "\$\${MAKEDEB_LIBRARY_DIR}" ]]; then
+# We use backslashes instead of quotes so the Makefile doesn't overwrite the values here. Otherwise these 'if' statements would still be evaluated as true, as '{FILESYSTEM_PREFIX}' would be changed in the Makefile.
+if [[ "${LIBRARY}" == \{FILESYSTEM_PREFIX\}/usr/share/makedeb ]]; then
 	LIBRARY='./functions'
+fi
+
+if [[ "${MAKEPKG_CONF}" == \{FILESYSTEM_PREFIX\}/etc/makepkg.conf ]]; then
+	MAKEPKG_CONF='./makepkg.conf'
 fi
 
 # Options
@@ -830,7 +838,7 @@ usage() {
 }
 
 version() {
-	printf "makedeb ${makepkg_version}\n"
+	printf "makedeb ${MAKEDEB_VERSION}\n"
 	printf "${MAKEDEB_RELEASE^} Release\n"
 	printf "Installed from ${MAKEDEB_INSTALLATION_SOURCE^^}\n"
 }

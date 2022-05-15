@@ -32,7 +32,7 @@ source "$LIBRARY/util/util.sh"
 source_makepkg_config() {
 	# $1: override system config file
 
-	local MAKEPKG_CONF=${1:-${MAKEPKG_CONF:-/etc/makepkg.conf}}
+	local MAKEPKG_CONF=${1:-${MAKEPKG_CONF}}
 
 	# Source the config file; fail if it is not found
 	if [[ -r $MAKEPKG_CONF ]]; then
