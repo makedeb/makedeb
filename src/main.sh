@@ -450,6 +450,7 @@ write_extra_control_fields() {
 write_control_info() {
 	local fullver=$(get_full_version)
 
+
 	write_control_pair "Package" "${pkgname}"
 	write_control_pair "Version" "${fullver}"
 	write_control_pair "Description" "${pkgdesc}"
@@ -1179,8 +1180,8 @@ remove_optdepends_description suggests "${suggests[@]}"
 
 convert_relationships predepends "${predepends[@]}"
 convert_relationships depends "${depends[@]}"
-convert_relationships recommends "${clean_recommends[@]}"
-convert_relationships suggests "${clean_suggests[@]}"
+convert_relationships recommends "${recommends[@]}"
+convert_relationships suggests "${suggests[@]}"
 convert_relationships conflicts "${conflicts[@]}"
 convert_relationships provides "${provides[@]}"
 convert_relationships replaces "${replaces[@]}"

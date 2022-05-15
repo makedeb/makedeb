@@ -75,6 +75,10 @@ lint_deps() {
 			mapfile -t deps < <(split_dep_by_pipe "${j}")
 
 			for k in "${deps[@]}"; do
+				if [[ "${var}" == "optdepends" ]]; then
+					k="$(echo "${k}" | sed 's|: .*||')"
+				fi
+
 				name="$(echo "${k}" | grep -o '^[^<>=]*')"
 				mapfile -t restrictor < <(echo "${k}" | grep -Eo '<=|>=|=|<|>')
 				ver="$(echo "${k}" | grep -o '[<>=].*$' | sed -E 's/<=|>=|=|<|>//')"
@@ -88,7 +92,7 @@ lint_deps() {
 				lint_one_pkgname "${name}" "${j}" || ret=1
 				
 				if [[ "${ver}"  != "" ]]; then
-					check_pkgver "${ver}" || ret=1
+					check_pkgver "${ver}" "${k}" || ret=1
 				fi
 
 				if [[ "${var}" == "provides" ]] && [[ "${restrictor+x}" == "x" ]] && [[ "${restrictor}" != "=" ]]; then

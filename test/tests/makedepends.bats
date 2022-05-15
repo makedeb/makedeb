@@ -68,5 +68,5 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "[!] makedepends contains invalid characters: '!'" ]]
+    [[ "${output}" == "[!] Dependency 'z!bats' under 'makedepends' contains an invalid prefix: 'z'" ]]
 }
