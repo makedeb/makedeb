@@ -23,7 +23,10 @@ pkgbuild() {
 
     if [[ "${cmd}" == "array" ]]; then
         strings="(${strings[@]@Q})"
-        sed -i "s|\$\${${variable}}|${strings}|" "${PKGBUILD:-PKGBUILD}"
+        # We have to use a character that isn't use by any strings.
+        # For the time being it's a '_', but feel free to change
+        # this if you face issues in tests.
+        sed -i "s_\$\${${variable}}_${strings}_" "${PKGBUILD:-PKGBUILD}"
 
     elif [[ "${cmd}" == "string" ]]; then
         strings="${strings[@]}"
