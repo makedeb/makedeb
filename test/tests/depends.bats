@@ -65,6 +65,7 @@ load ../util/util
     pkgbuild array depends 'pkg1|pkg2' 'pkg3>=2|pkg4=6'
     pkgbuild clean
     run -0 makedeb --print-control
+    echo "${output}" | grep '^Depends:' >&3
     [[ "$(echo "${output}" | grep '^Depends:')" == 'Depends: pkg1 | pkg2, pkg3 (>= 2) | pkg4 (= 6)' ]]
 }
 
