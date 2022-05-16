@@ -28,7 +28,7 @@ load ../util/util
 @test "incorrect pkgver - invalid character" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
-    pkgbuild string pkgver '1.0.0+al%ha'
+    pkgbuild string pkgver '1.0.0+al#ha'
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
