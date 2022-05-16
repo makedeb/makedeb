@@ -1188,6 +1188,8 @@ remove_optdepends_description suggests "${suggests[@]}"
 
 convert_relationships predepends "${predepends[@]}"
 convert_relationships depends "${depends[@]}"
+convert_relationships makedepends "${makedepends[@]}"
+convert_relationships checkdepends "${checkdepends[@]}"
 convert_relationships recommends "${recommends[@]}"
 convert_relationships suggests "${suggests[@]}"
 convert_relationships conflicts "${conflicts[@]}"
