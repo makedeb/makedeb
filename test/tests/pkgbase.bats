@@ -65,7 +65,7 @@ load ../util/util
 
 @test "incorrect pkgbase - invalid character" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
-    pkgbuild string pkgbase 'test-#kg'
+    pkgbuild string pkgbase 'test-%kg'
     pkgbuild string pkgname test-pkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -74,7 +74,7 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "[!] pkgbase contains invalid characters: '#'" ]]
+    [[ "${output}" == "[!] pkgbase contains invalid characters: '%'" ]]
 }
     
 @test "incorrect pkgbase - array" {
