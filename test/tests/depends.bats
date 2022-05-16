@@ -55,6 +55,20 @@ load ../util/util
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Depends:')" == "Depends: bash" ]]
 }
 
+@test "correct depends - separate by pipe" {
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
+    pkgbuild string pkgname testpkg
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
+    pkgbuild array arch any
+    pkgbuild array depends 'pkg1|pkg2' 'pkg3>=2|pkg4=6'
+    pkgbuild clean
+    run makedeb --print-control
+    [[ "${status}" == 0 ]]
+    [[ "$(echo "${output}" | grep '^Depends:')" == 'Depends: pkg1 | pkg2, pkg3 (>= 2) | pkg4 (= 6)' ]]
+}
+
 @test "incorrect depends - invalid dependency prefix" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg

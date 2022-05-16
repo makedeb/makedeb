@@ -44,10 +44,10 @@ convert_relationships() {
         if [[ "${#pkglist[@]}" == 1 ]]; then
             new_values+=("${pkglist[@]}")
         else
-            new_values+="$(printf '%s\n' "${pkglist[@]}" | sed 's/.*/& | /' | tac | rev | sed '1s/ | //' | rev | tac | tr -d '\n')"
+            new_values+=("$(printf '%s\n' "${pkglist[@]}" | sed 's/.*/& | /' | tac | rev | sed '1s/ | //' | rev | tac | tr -d '\n')")
         fi
     done
-    
+
     create_array "${target_var}" "${new_values[@]}"
 }
 
