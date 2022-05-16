@@ -68,7 +68,6 @@ load ../util/util
     [[ "$(echo "${output}" | grep '^Depends:')" == 'Depends: pkg1 | pkg2, pkg3 (>= 2) | pkg4 (= 6)' ]]
 }
 
-
 @test "incorrect depends - invalid dependency prefix" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
