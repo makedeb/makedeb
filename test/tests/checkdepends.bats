@@ -9,20 +9,6 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array checkdepends 'bats>0' 'bash'
     pkgbuild clean
-    makedeb -d
-}
-
-@test "correct checkdepends - install missing dependencies" {
-    skip "THIS IS CURRENTLY FAILING DUE TO A BUG IN MAKEDEB"
-    sudo_check
-    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
-    pkgbuild string pkgname testpkg
-    pkgbuild string pkgver 1.0.0
-    pkgbuild string pkgrel 1
-    pkgbuild string pkgdesc "package description"
-    pkgbuild array arch any
-    pkgbuild array checkdepends 'zsh' 'yash>=0.0.1'
-    pkgbuild clean
     makedeb -s --no-confirm --allow-downgrades
 }
 
@@ -50,5 +36,5 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "[!] checkdepends contains invalid characters: '!'" ]]
+    [[ "${output}" == "[!] Dependency 'z!bats' under 'checkdepends' contains an invalid prefix: 'z'" ]]
 }

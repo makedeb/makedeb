@@ -35,5 +35,5 @@ lint_pkgbase() {
 		return 0
 	fi
 
-	lint_one_pkgname "pkgbase" "$pkgbase"
+	lint_one_pkgname "$pkgbase" 'pkgbase'
 }

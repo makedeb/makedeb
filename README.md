@@ -6,7 +6,15 @@
 makedeb is a packaging tool for Debian and Ubuntu based systems that aims to be simple and easy to use, whilst still remaining just as powerful as standard Debian tooling.
 
 ## Installing
-Full instructions on installation can be found in the [makedeb Docs](https://docs.makedeb.org/installing).
+The recommended way to install makedeb is through the interactive installer. This will set up the needed repositories on your system, allow you to choose which makedeb release you want, as well as provide options for extra utilities for use with makedeb.
+
+You can use the installer by running the following:
+
+```sh
+bash -c "$(wget -qO - 'https://shlink.makedeb.org/install')"
+```
+
+If you'd like to install makedeb in a different manner (such as if you want to install from the MPR or with Docker), you can find instructions for such in [makedeb Docs](https://docs.makedeb.org/installing).
 
 ## Building
 See [BUILDING.md](./BUILDING.md).

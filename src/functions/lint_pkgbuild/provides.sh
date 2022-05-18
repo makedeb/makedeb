@@ -33,29 +33,5 @@ lint_pkgbuild_functions+=('lint_provides')
 
 
 lint_provides() {
-	local provides_list provide name ver ret=0
-
-	get_pkgbuild_all_split_attributes provides provides_list
-
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
-
-	for provide in "${provides_list[@]}"; do
-		if [[ $provide == *['<>']* ]]; then
-			error "$(gettext "%s array cannot contain comparison (< or >) operators.")" "provides"
-			ret=1
-			continue
-		fi
-		name=${provide%=*}
-		lint_one_pkgname provides "$name" || ret=1
-		if [[ $name != "$provide" ]]; then
-			ver=${provide##$name=}
-			check_fullpkgver "$ver" provides || ret=1
-		fi
-	done
-
-	eval "$shellopts"
-
-	return $ret
+	lint_deps 'provides' '' || return 1
 }

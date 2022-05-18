@@ -30,7 +30,9 @@ lint_pkgbuild_functions+=('lint_pkgname')
 
 
 lint_one_pkgname() {
-	local type=$1 name=$2 ret=0 remaining_prefix
+	local name="${1}"
+	local type="${2}"
+	local ret=0
 
 	if [[ -z $name ]]; then
 		error "$(gettext "%s is not allowed to be empty.")" "$type"
@@ -53,14 +55,7 @@ lint_one_pkgname() {
 	fi
 	
 	# These first two need to be put into 'depends.sh' and 'optdepends.sh' respectively.
-	if [[ "${type}" == "depends" ]]; then
-		if ! check_prefix prefix "${name}" 'p!'; then
-			error "$(gettext "%s contains an invalid prefix: '%s'")" "${type}" "${prefix}"
-			return 1
-		fi
-		strip_prefix name "${name}"
-		
-	elif [[ "${type}" == "optdepends" ]]; then
+	if [[ "${type}" == "optdepends" ]]; then
 		if ! check_prefix prefix "${name}" 'r!' 's!'; then
 			error "$(gettext "%s contains an invalid prefix: '%s'")" "${type}" "${prefix}"
 			return 1
@@ -91,7 +86,7 @@ lint_pkgname() {
 		ret=1
 	else
 		for i in "${pkgname[@]}"; do
-			lint_one_pkgname "pkgname" "$i" || ret=1
+			lint_one_pkgname "$i" 'pkgname' || ret=1
 		done
 	fi
 
