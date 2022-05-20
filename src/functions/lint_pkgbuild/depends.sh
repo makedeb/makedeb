@@ -49,6 +49,9 @@ lint_deps() {
 	local i
 	local j
 	local k
+	local pkg_epoch
+	local pkg_pkgver
+	local pkg_pkgrel
 
 	mapfile -t depends_var_list < <(get_extended_variables "${var}")
 	mapfile -t valid_prefixes < <(echo "${2}" | sed 's| |\n|g' | head -c -1)
@@ -92,7 +95,17 @@ lint_deps() {
 				lint_one_pkgname "${name}" "${j}" || ret=1
 				
 				if [[ "${ver}"  != "" ]]; then
-					check_pkgver "${ver}" "${k}" || ret=1
+					split_version "${ver}" pkg_epoch pkg_pkgver pkg_pkgrel
+
+					if [[ "${pkg_epoch:+x}" == "x" ]]; then
+						check_epoch "${pkg_epoch}" "${k}" || ret=1
+					fi
+
+					check_pkgver "${pkg_pkgver}" "${k}" || ret=1
+
+					if [[ "${pkg_pkgrel:+x}" == "x" ]]; then
+						check_pkgrel "${pkg_pkgrel}" "${k}" || ret=1
+					fi
 				fi
 
 				if [[ "${var}" == "provides" ]] && [[ "${restrictor+x}" == "x" ]] && [[ "${restrictor}" != "=" ]]; then
