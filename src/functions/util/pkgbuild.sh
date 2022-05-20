@@ -300,3 +300,15 @@ get_extended_variables() {
 split_dep_by_pipe() {
 	echo "${1}" | sed 's/|/\n/g' | head -c -1
 }
+
+# Split a version into it's parts of 'epoch', 'pkgver', and 'pkgrel'.
+split_version() {
+	local ver="${1}"
+	local -n epoch="${2}"
+	local -n pkgver="${3}"
+	local -n pkgrel="${4}"
+
+	epoch="$(echo "${ver}" | grep ':' | sed 's|:.*||')"
+	pkgver="$(echo "${ver}" | sed 's|^[^:]*:||' | sed 's|-.*||')"
+	pkgrel="$(echo "${ver}" | grep '-' | sed 's|^[^-]*-||')"
+}
