@@ -75,6 +75,7 @@ BUILDPKG=1
 CHECKFUNC=0
 CLEANBUILD=0
 CLEANUP=0
+DESTROYSYSTEM=0
 FORCE=0
 GENINTEG=0
 HOLDVER=0
@@ -877,7 +878,9 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
-  	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir')
+	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir'
+	  # Sorry not sorry.
+	  'why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious')
 
 CLI_ARGS=("${@}")
 
@@ -927,6 +930,9 @@ while true; do
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
+
+		# Pacstall is trash options.
+		--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious) DESTROYSYSTEM=1 ;;
 	esac
 	shift
 done
@@ -1091,6 +1097,18 @@ pkgbase="${_pkgbase}"
 if ! in_array pkgbase "${env_keys[@]}"; then
 	env_vars+=("pkgbase=${pkgbase}")
 	env_keys+=('pkgbase')
+fi
+
+# If pkgbase=pacstall or pacstall is in 'pkgname', abort.
+# Who would want to ever use Pacstall???
+if ! (( "${DESTROYSYSTEM}" )); then
+	if [[ "${pkgbase}" == "pacstall" ]] || in_array 'pacstall' "${pkgname[@]}"; then
+		error "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'."
+		error "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom."
+		error "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:"
+		error "'--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious'"
+		exit 1
+	fi
 fi
 
 # Exit regardless of sucess status if '--lint' was passed.
