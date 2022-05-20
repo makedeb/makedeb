@@ -1,0 +1,17 @@
+image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-focal
+user: makedeb
+location: /home/makedeb/makedeb
+command_prefix: set -e
+tasks:
+  install_dependencies:
+    input_paths:
+      - .drone/scripts/install-deps.sh
+    command: .drone/scripts/install-deps.sh
+
+  run_unit_tests:
+    input_paths:
+      - ./
+    command: |
+      sudo chown 'makedeb:makedeb' "${HOME}/makedeb" -R
+      git remote set-url origin 'https://github.com/makedeb/makedeb'
+      release_type=alpha .drone/scripts/run-unit-tests.sh
