@@ -11,6 +11,10 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 - Add support for custom installing directories during builds (#61).
 - Add support for `|` characters in dependency fields.
 - Add CLI options to print makedeb-styled message (#156).
+- Show error when trying to build Pacstall (#179).
+
+### Fixed
+- Allow epochs and pkgrels in dependency version restrictors (#182).
 
 ## [14.1.2] - 2022-05-07
 ### Fixed
