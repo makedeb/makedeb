@@ -283,3 +283,32 @@ get_integlist() {
 		printf "%s\n" "${INTEGRITY_CHECK[@]}"
 	fi
 }
+
+# Get all occurances of a variable plus it's extensions (i.e. for 'depends',
+# 'depends' and 'focal_depends').
+get_extended_variables() {
+	printf '%s\n' "${env_keys[@]}" | grep -F "_${1}" | head -c -1
+	printf '%s\n' "${env_keys[@]}" | grep -F "${1}_" | head -c -1
+
+	if in_array "${1}" "${env_keys[@]}"; then
+		echo "${1}"
+	fi
+}
+
+# Split a dependency by it's pipe character, i.e.
+# 'hi|me' -> 'hi' and 'me' returned.
+split_dep_by_pipe() {
+	echo "${1}" | sed 's/|/\n/g' | head -c -1
+}
+
+# Split a version into it's parts of 'epoch', 'pkgver', and 'pkgrel'.
+split_version() {
+	local ver="${1}"
+	local -n epoch="${2}"
+	local -n pkgver="${3}"
+	local -n pkgrel="${4}"
+
+	epoch="$(echo "${ver}" | grep ':' | sed 's|:.*||')"
+	pkgver="$(echo "${ver}" | sed 's|^[^:]*:||' | sed 's|-.*||')"
+	pkgrel="$(echo "${ver}" | grep '-' | sed 's|^[^-]*-||')"
+}

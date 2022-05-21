@@ -31,29 +31,90 @@ source "$LIBRARY/util/pkgbuild.sh"
 
 lint_pkgbuild_functions+=('lint_depends')
 
-
 lint_depends() {
-	local depends_list depend name ver ret=0
+	lint_deps 'depends' 'p' || return 1
+}
 
-	get_pkgbuild_all_split_attributes depends depends_list
+lint_deps() {
+	local ret=0
+	local var="${1}"
+	local valid_prefixes
+	local depends_var_list
+	local depends_list
+	local deps
+	local prefix
+	local name
+	local restrictor
+	local ver
+	local i
+	local j
+	local k
+	local pkg_epoch
+	local pkg_pkgver
+	local pkg_pkgrel
 
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
+	mapfile -t depends_var_list < <(get_extended_variables "${var}")
+	mapfile -t valid_prefixes < <(echo "${2}" | sed 's| |\n|g' | head -c -1)
 
-	for depend in "${depends_list[@]}"; do
-		name=${depend%%@(<|>|=|>=|<=)*}
-		lint_one_pkgname depends "$name" || ret=1
-		if [[ $name != "$depend" ]]; then
-			ver=${depend##$name@(<|>|=|>=|<=)}
-			# Don't validate empty version because of https://bugs.archlinux.org/task/58776
-			if [[ -n $ver ]]; then
-				check_fullpkgver "$ver" depends || ret=1
+	for i in "${depends_var_list[@]}"; do
+		depends_list="${i}[@]"
+		depends_list=("${!depends_list}")
+
+		for j in "${depends_list[@]}"; do
+			prefix="$(echo "${j}" | grep '!' | grep -o '^[^!]*')"
+
+			if [[ "$(echo "${j}" | grep -o '!' | wc -l)" -gt 1 ]]; then
+				error "$(gettext "Dependency '%s' under '%s' contains more than one '!'.")" "${j}" "${i}"
+				ret=1
+				continue
 			fi
-		fi
-	done
+			
+			if [[ "${prefix}" != "" ]] && ! in_array "${prefix}" "${valid_prefixes[@]}"; then
+				error "$(gettext "Dependency '%s' under '%s' contains an invalid prefix: '%s'")" "${j}" "${i}" "${prefix}"
+				ret=1
+			fi
 
-	eval "$shellopts"
+			j="$(echo "${j}" | sed 's|^[^!]*!||')"
+			mapfile -t deps < <(split_dep_by_pipe "${j}")
+
+			for k in "${deps[@]}"; do
+				if [[ "${var}" == "optdepends" ]]; then
+					k="$(echo "${k}" | sed 's|: .*||')"
+				fi
+
+				name="$(echo "${k}" | grep -o '^[^<>=]*')"
+				mapfile -t restrictor < <(echo "${k}" | grep -Eo '<=|>=|=|<|>')
+				ver="$(echo "${k}" | grep -o '[<>=].*$' | sed -E 's/<=|>=|=|<|>//')"
+
+				if [[ "${#restrictor[@]}" == 2 ]]; then
+					error "$(gettext "More than one version restrictor was specified for %s: %s")" "${k@Q}" "${restrictor[*]@Q}"
+					ret=1
+					continue
+				fi
+
+				lint_one_pkgname "${name}" "${j}" || ret=1
+				
+				if [[ "${ver}"  != "" ]]; then
+					split_version "${ver}" pkg_epoch pkg_pkgver pkg_pkgrel
+
+					if [[ "${pkg_epoch:+x}" == "x" ]]; then
+						check_epoch "${pkg_epoch}" "${k}" || ret=1
+					fi
+
+					check_pkgver "${pkg_pkgver}" "${k}" || ret=1
+
+					if [[ "${pkg_pkgrel:+x}" == "x" ]]; then
+						check_pkgrel "${pkg_pkgrel}" "${k}" || ret=1
+					fi
+				fi
+
+				if [[ "${var}" == "provides" ]] && [[ "${restrictor+x}" == "x" ]] && [[ "${restrictor}" != "=" ]]; then
+					error "$(gettext "Version restrictor %s in %s isn't allowed on %s.")" "${restrictor@Q}" "${k@Q}" "${var@Q}"
+					ret=1
+				fi
+			done
+		done
+	done
 
 	return $ret
 }

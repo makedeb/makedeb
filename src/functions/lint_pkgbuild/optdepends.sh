@@ -33,22 +33,5 @@ lint_pkgbuild_functions+=('lint_optdepends')
 
 
 lint_optdepends() {
-	local optdepends_list optdepend name ver ret=0
-
-	get_pkgbuild_all_split_attributes optdepends optdepends_list
-
-	# this function requires extglob - save current status to restore later
-	local shellopts=$(shopt -p extglob)
-	shopt -s extglob
-
-	for optdepend in "${optdepends_list[@]%%:[[:space:]]*}"; do
-		name=${optdepend%%@(<|>|=|>=|<=)*}
-		lint_one_pkgname optdepends "$name" || ret=1
-		if [[ $name != "$optdepend" ]]; then
-			ver=${optdepend##$name@(<|>|=|>=|<=)}
-			check_fullpkgver "$ver" optdepends || ret=1
-		fi
-	done
-
-	return $ret
+	lint_deps 'optdepends' 'r s' || return 1
 }

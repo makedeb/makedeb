@@ -25,5 +25,5 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == '[!] provides array cannot contain comparison (< or >) operators.' ]]
+    [[ "${output}" == "[!] Version restrictor '>=' in 'bats>=0' isn't allowed on 'provides'." ]]
 }

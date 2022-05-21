@@ -32,7 +32,7 @@ TARGET=apt RELEASE=stable ./pkgbuild.sh | grep '^depends'
 After you have the needed build dependencies installed, run the following command from the root of your repository:
 
 ```sh
-make prepare PKGVER="{pkgver}" RELEASE="{release}" TARGET="{target}"
+make prepare PKGVER="{pkgver}" RELEASE="{release}" TARGET="{target}" FILESYSTEM_PREFIX="{filesystem_prefix}"
 make package DESTDIR="{pkgdir}" TARGET="{target}"
 ```
 
@@ -42,4 +42,6 @@ make package DESTDIR="{pkgdir}" TARGET="{target}"
 
 `{target}` should always be `apt` - using other values hasen't been tested and may result in a broken install.
 
-Lastly, `{pkgdir}` should be the location you want to install makedeb to. Binaries automatically install into `/usr` after your specified prefix, so don't enter that as part of your directory.
+`{pkgdir}` should be the location you want to install makedeb to. Binaries automatically install into `/usr` after your specified prefix, so don't enter that as part of your directory.
+
+Lastly, `{filesystem_prefix}` should be the location where makedeb looks for the files inside `src/functions/` in the installed instance. Most of the time you won't need this, but you may if you're building in an environment where makedeb won't have the the files available at `/usr/share/makedeb` (see #61). If you use this, you should include a directory without a leading slash at the end (i.e. `FILESYSTEM_PREFIX='/new'` would install the function files at `/new/usr/share/makedeb`). If you don't use it, simply ommit the `FILESYSTEM_PREFIX` variable when calling `make`.

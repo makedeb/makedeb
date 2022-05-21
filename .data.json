@@ -1,8 +1,8 @@
 {
-    "current_pkgver": "14.1.2",
+    "current_pkgver": "14.1.3",
     "current_pkgrel_stable": "stable",
-    "current_pkgrel_beta": "beta",
-    "current_pkgrel_alpha": "alpha",
+    "current_pkgrel_beta": "beta1",
+    "current_pkgrel_alpha": "alpha7",
     "makedeb_man_epoch": "1635393570",
     "pkgbuild_man_epoch": "1649142725"
 }
