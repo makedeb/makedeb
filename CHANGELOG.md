@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Note that the `[Unreleased]` section contains all changes that haven't yet made it to the `stable` branch.
 
 ## [Unreleased]
+
+## [14.1.3] - 2022-05.21
 ### Added
 - Add support for custom installing directories during builds (#61).
 - Add support for `|` characters in dependency fields.
