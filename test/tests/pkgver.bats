@@ -21,7 +21,7 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "1" ]]
-    [[ "${output}" == '[!] pkgver 'alpha1.0.0' is not allowed to start with a digit.' ]]
+    [[ "${output}" == '[!] pkgver doesn't start with a digit.' ]]
 }
 
 @test "incorrect pkgver - invalid character" {

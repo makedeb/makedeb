@@ -32,5 +32,6 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild string preinst './file'
     pkgbuild clean
-    makedeb -d
+    run makedeb -d
+    [[ "${status}" != 0 ]]
 }

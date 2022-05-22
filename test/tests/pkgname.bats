@@ -46,7 +46,7 @@ load ../util/util
 
 @test "incorrect pkgname - capital letters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
-    pkgbuild string pkgname test-pkg
+    pkgbuild string pkgname Test-pkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "package description"
@@ -54,7 +54,7 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "something???" ]]
+    [[ "${output}" == "'pkgname' contains capital letters" ]]
 }
 
 @test "incorrect pkgname - disallowed character" {

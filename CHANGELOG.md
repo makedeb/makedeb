@@ -8,6 +8,10 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ## [Unreleased]
 
+## [15.0.0] - 2022-05-22
+### Changed
+- Require `pkgver` to start with a digit (#186).
+
 ## [14.1.3] - 2022-05.21
 ### Added
 - Add support for custom installing directories during builds (#61).

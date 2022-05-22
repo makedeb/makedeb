@@ -19,7 +19,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    [[ "${output}" == "[!] A maintainer must be specified." ]]
+    [[ "${output}" == "[!] A maintainer must be specified. This will be an error in a future release." ]]
 }
 
 @test "incorrect maintainer - more than one maintainer" {
@@ -32,5 +32,5 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    [[ "${output}" == "[!] More than one maintainer was specified." ]]
+    [[ "${output}" == $'[!] More than one maintainer was specified. This will be an error in a future release.\n[!] Falling back to first maintainer Falling back to first maintainer \'\'Foo Bar <foo@bar.com>\'\'...' ]]
 }

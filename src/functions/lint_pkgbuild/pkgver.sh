@@ -43,6 +43,10 @@ check_pkgver() {
         error "$(gettext "%s contains invalid characters.")" "pkgver${type:+ in $type}"
         return 1
     fi
+
+    if ! echo "${pkgver:0:1}" | grep '[0-9]'; then
+	    error "$(gettext "%s doesn't start with a digit.")" "pkgver${type:+ in $type}"
+    fi
 }
 
 lint_pkgver() {
