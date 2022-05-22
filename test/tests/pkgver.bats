@@ -12,7 +12,6 @@ load ../util/util
 }
 
 @test "incorrect pkgver - starts with a letter" {
-    skip "THIS WON'T RUN CORRECTLY DUE TO A BUG IN MAKEDEB. DISABLE COLOR WHEN USING A NON-TERMINAL PROMPT (AS CAN BE SEEN IN 'src/makepkg/makepkg.sh')"
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver alpha1.0.0

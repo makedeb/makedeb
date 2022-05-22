@@ -45,7 +45,6 @@ load ../util/util
 }
 
 @test "incorrect pkgname - capital letters" {
-    skip "DOESN'T FAIL PROPERLY DUE TO BUG IN MAKEDEB CODE"
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
     pkgbuild string pkgver 1.0.0
