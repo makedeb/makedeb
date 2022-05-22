@@ -13,7 +13,6 @@ load ../util/util
 }
 
 @test "correct depends - install missing dependencies" {
-    skip "THIS IS CURRENTLY NOT WORKING DUE TO A BUG IN MAKEDEB."
     sudo_check
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg

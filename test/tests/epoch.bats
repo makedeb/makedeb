@@ -53,7 +53,6 @@ load ../util/util
 }
 
 @test "incorrect epoch - letter" {
-    skip "THIS IS FAILING DUE TO A BUG IN MAKEDEB."
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
