@@ -20,7 +20,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb -d
-    [[ "${status}" == "1" ]]
+    [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] pkgver doesn't start with a digit." ]]
 }
 
