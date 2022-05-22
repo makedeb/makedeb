@@ -30,7 +30,9 @@ lint_pkgbuild_functions+=('lint_pkgver')
 
 
 check_pkgver() {
-	local ver=$1 type=$2
+	local ret=0
+	local ver=$1
+	local type=$2
 
 	if [[ -z $ver ]]; then
 		error "$(gettext "%s is not allowed to be empty.")" "pkgver${type:+ in $type}"
@@ -40,13 +42,16 @@ check_pkgver() {
     invalid_characters="$(echo "${ver}" | sed 's|[a-z0-9.+~]||g')"
 
     if [[ "${invalid_characters:+x}" == "x" ]]; then
-        error "$(gettext "%s contains invalid characters.")" "pkgver${type:+ in $type}"
-        return 1
+	    error "$(gettext "%s contains invalid characters.")" "pkgver${type:+ in $type}"
+	    ret=1
     fi
 
     if ! echo "${pkgver:0:1}" | grep -q '[0-9]'; then
 	    error "$(gettext "%s doesn't start with a digit.")" "pkgver${type:+ in $type}"
+	    ret=1
     fi
+
+    return "${ret}"
 }
 
 lint_pkgver() {
