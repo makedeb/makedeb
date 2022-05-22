@@ -49,7 +49,6 @@ load ../util/util
 }
 
 @test "incorrect pkgbase - capital letters" {
-    skip "DOESN'T FAIL PROPERLY DUE TO BUG IN MAKEDEB CODE"
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgbase test-Akg
     pkgbuild string pkgname test-pkg
@@ -60,7 +59,7 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "something???" ]]
+    [[ "${output}" == "[!] 'pkgbase' contains capital letters" ]]
 }
 
 @test "incorrect pkgbase - invalid character" {

@@ -29,7 +29,9 @@ Help with available usage can also be found after installation with `makedeb --h
 ## Support
 See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
-## Supporters
+## Donate
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
 [Inedo](https://inedo.com/): For their universal package manager and Docker registry tool, [ProGet](https://inedo.com/proget). ProGet is used in the makedeb project to manage both Debian packages and Docker images. In addition, ProGet also supports private repositories and registries, as well as numerous package formats, including RPM, NuGet, and npm.
+
+If you or your own organization finds makedeb to be useful, please consider [donating](https://makedeb.org/donate).

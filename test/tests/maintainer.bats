@@ -12,7 +12,6 @@ load ../util/util
 }
 
 @test "incorrect maintainer - no maintainer" {
-    skip "Awaiting packaging of Bats and Bats libraries on MPR"
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
@@ -20,11 +19,10 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    [[ "${output}" == "[!] A maintainer must be specified." ]]
+    [[ "${output}" == "[!] A maintainer must be specified. This will be an error in a future release." ]]
 }
 
 @test "incorrect maintainer - more than one maintainer" {
-    skip "Awaiting packaging of Bats and Bats libraries on MPR"
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string maintainer2 'Bar Foo <bar@foo.com>'
     pkgbuild string pkgname testpkg
@@ -34,5 +32,5 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    [[ "${output}" == "[!] More than one maintainer was specified." ]]
+    [[ "${output}" == $'[!] More than one maintainer was specified. This will be an error in a future release.\n[!] Falling back to first maintainer \'\'Foo Bar <foo@bar.com>\'\'...' ]]
 }
