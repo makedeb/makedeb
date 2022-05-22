@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Note that the `[Unreleased]` section contains all changes that haven't yet made it to the `stable` branch.
 
 ## [Unreleased]
+
+## [14.1.3] - 2022-05.21
 ### Added
 - Add support for custom installing directories during builds (#61).
 - Add support for `|` characters in dependency fields.
 - Add CLI options to print makedeb-styled message (#156).
+- Show error when trying to build Pacstall (#179).
+
+### Fixed
+- Allow epochs and pkgrels in dependency version restrictors (#182).
 
 ## [14.1.2] - 2022-05-07
 ### Fixed

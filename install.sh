@@ -2,7 +2,6 @@
 set -e
 
 # Handy env vars.
-hw_url='hunterwittenborn.com'
 makedeb_url='makedeb.org'
 color_normal="$(tput sgr0)"
 color_bold="$(tput bold)"
@@ -94,18 +93,18 @@ if answered_yes "${response}"; then
 fi
 
 msg "Setting up makedeb APT repository..."
-if ! wget -qO - "https://proget.${hw_url}/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null; then
+if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null; then
     die_cmd "Failed to set up makedeb APT repository."
 fi
-echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://proget.${hw_url} makedeb main" | sudo tee /etc/apt/sources.list.d/makedeb.list 1> /dev/null
+echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://proget.${makedeb_url} makedeb main" | sudo tee /etc/apt/sources.list.d/makedeb.list 1> /dev/null
 
 if (( "${SETUP_PREBUILT_MPR}" )); then
     msg "Setting up Prebuilt-MPR APT repository..."
     
-    if ! wget -qO - "https://proget.${hw_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null; then
+    if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null; then
         die_cmd "Failed to set up Prebuilt-MPR APT repository."
     fi
-    echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.${hw_url} prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list 1> /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.${makedeb_url} prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list 1> /dev/null
 fi
 
 msg "Updating APT cache..."

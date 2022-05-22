@@ -72,8 +72,6 @@ for i in sys.argv[1:]:
                 good_dep = True
                 break
 
-            print(repr((pkgver_restrictor, provided_pkgver_restrictor)))
-
             # Else if the provided package's version satisfies the requirements of the version
             # restrictor, it'll satisfy the dep.
             ver_result = version_compare(provided_pkg_object.current_ver.ver_str, pkgver_restrictor)

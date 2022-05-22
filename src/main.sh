@@ -75,6 +75,7 @@ BUILDPKG=1
 CHECKFUNC=0
 CLEANBUILD=0
 CLEANUP=0
+DESTROYSYSTEM=0
 FORCE=0
 GENINTEG=0
 HOLDVER=0
@@ -877,7 +878,9 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
-  	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir')
+	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir'
+	  # Sorry not sorry.
+	  'why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious')
 
 CLI_ARGS=("${@}")
 
@@ -927,6 +930,9 @@ while true; do
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
+
+		# Pacstall is trash options.
+		--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious) DESTROYSYSTEM=1 ;;
 	esac
 	shift
 done
@@ -1091,6 +1097,18 @@ pkgbase="${_pkgbase}"
 if ! in_array pkgbase "${env_keys[@]}"; then
 	env_vars+=("pkgbase=${pkgbase}")
 	env_keys+=('pkgbase')
+fi
+
+# If pkgbase=pacstall or pacstall is in 'pkgname', abort.
+# Who would want to ever use Pacstall???
+if ! (( "${DESTROYSYSTEM}" )); then
+	if [[ "${pkgbase}" == "pacstall" ]] || in_array 'pacstall' "${pkgname[@]}"; then
+		error "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'."
+		error "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom."
+		error "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:"
+		error "'--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious'"
+		exit 1
+	fi
 fi
 
 # Exit regardless of sucess status if '--lint' was passed.
@@ -1278,6 +1296,14 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 else
 	msg "$(gettext "Checking for missing dependencies...")"
 	# We need to tell our call to the Python script where makedeb is located because we might need to call it in order to print messages.
+	#
+	# TODO: I'm suspecting there's some kind of bug in the Python APT library. This is being suspected due to the following:
+	# On Ubuntu 20.04, do *not* have libgcc1 installed, but *do* have libgcc-s1 installed.
+	# Running 'apt-get satisfy libgcc1' works as expected, as libgcc-s1 provides libgcc1.
+	# On the other hand, attempting to view the provided package list for libgcc1 isn't showing
+	# libgcc-s1 anywhere. On that note, we gotta be a bit more cautious with the results of our
+	# script, and put more checks into place, such as checking if we actually installed any new
+	# packages before running 'apt-mark auto'.
 	if ! mapfile -t missing_deps < <(MAKEDEB="${0}" "${LIBRARY}/dependencies/missing_apt_dependencies.py" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"); then
 		error "$(gettext "Failed to check missing dependencies.")"
 		exit "${E_INSTALL_DEPS_FAILED}"
@@ -1301,16 +1327,19 @@ else
 			mapfile -t newly_installed_packages < <(comm -13 --nocheck-order <(printf '%s\n' "${prev_installed_packages[@]}") <(dpkg-query -Wf '${Package}\n' | sort))
 
 			# Mark newly installed packages as automatically installed.
+			# We have to make sure 'newly_installed_packages' isn't empty due to the aformentioned bug above the Python script call.
 			msg "$(gettext "Marking newly installed packages as automatically installed...")"
-			if ! sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
-				error "$(gettext "Failed to mark installed dependencies as automatically installed.")"
-				error "$(gettext "You may need to run 'apt-mark auto' with the following packages:")"
+			if [[ "${#newly_installed_packages[@]}" != 0 ]]; then
+				if ! return sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
+					error "$(gettext "Failed to mark installed dependencies as automatically installed.")"
+					error "$(gettext "You may need to run 'apt-mark auto' with the following packages:")"
 
-				for pkg in "${newly_installed_packages[@]}"; do
-					error2 "${pkg}"
-				done
+					for pkg in "${newly_installed_packages[@]}"; do
+						error2 "${pkg}"
+					done
 
-				exit "${E_INSTALL_DEPS_FAILED}"
+					exit "${E_INSTALL_DEPS_FAILED}"
+				fi
 			fi
 
 			unset prev_installed_packages cur_installed_packages newly_installed_packages
