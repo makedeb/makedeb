@@ -1330,7 +1330,7 @@ else
 			# We have to make sure 'newly_installed_packages' isn't empty due to the aformentioned bug above the Python script call.
 			msg "$(gettext "Marking newly installed packages as automatically installed...")"
 			if [[ "${#newly_installed_packages[@]}" != 0 ]]; then
-				if ! return sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
+				if ! sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
 					error "$(gettext "Failed to mark installed dependencies as automatically installed.")"
 					error "$(gettext "You may need to run 'apt-mark auto' with the following packages:")"
 

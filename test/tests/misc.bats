@@ -38,7 +38,6 @@ load ../util/util
 }
 
 @test "incorrect - set distro-specific sources without distro-specific hashsums" {
-    skip "THIS ISN'T WORKING DUE TO AN ISSUE IN MAKEDEB."
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
