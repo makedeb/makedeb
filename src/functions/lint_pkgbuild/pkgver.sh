@@ -44,7 +44,7 @@ check_pkgver() {
         return 1
     fi
 
-    if ! echo "${pkgver:0:1}" | grep '[0-9]'; then
+    if ! echo "${pkgver:0:1}" | grep -q '[0-9]'; then
 	    error "$(gettext "%s doesn't start with a digit.")" "pkgver${type:+ in $type}"
     fi
 }
