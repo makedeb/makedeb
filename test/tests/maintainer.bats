@@ -32,5 +32,5 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild clean
     run makedeb --lint
-    [[ "${output}" == $'[!] More than one maintainer was specified. This will be an error in a future release.\n[!] Falling back to first maintainer Falling back to first maintainer \'\'Foo Bar <foo@bar.com>\'\'...' ]]
+    [[ "${output}" == $'[!] More than one maintainer was specified. This will be an error in a future release.\n[!] Falling back to first maintainer \'\'Foo Bar <foo@bar.com>\'\'...' ]]
 }

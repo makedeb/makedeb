@@ -54,7 +54,7 @@ load ../util/util
     pkgbuild clean
     run makedeb -d
     [[ "${status}" == "12" ]]
-    [[ "${output}" == "'pkgname' contains capital letters" ]]
+    [[ "${output}" == "[!] 'pkgname' contains capital letters" ]]
 }
 
 @test "incorrect pkgname - disallowed character" {
