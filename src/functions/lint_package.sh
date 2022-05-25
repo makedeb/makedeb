@@ -27,7 +27,13 @@ source "$LIBRARY/util/message.sh"
 source "$LIBRARY/util/util.sh"
 
 
-lint_package_functions=('lint_control_fields') # We want to make sure any control fields specified in a package() function are still valid.
+lint_package_functions=(
+	'lint_control_fields'
+	'lint_depends'
+	'lint_optdepends'
+	'lint_conflicts'
+	'lint_provides'
+)
 
 for lib in "$LIBRARY/lint_package/"*.sh; do
 	source "$lib"
