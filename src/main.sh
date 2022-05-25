@@ -757,6 +757,8 @@ restore_package_variables() {
 }
 
 run_single_packaging() {
+	backup_package_variables
+
 	local pkgdir="$pkgdirbase/$pkgname"
 	mkdir "$pkgdir"
 	if [[ -n $1 ]] || (( PKGFUNC )); then
@@ -764,18 +766,66 @@ run_single_packaging() {
 	fi
 	tidy_install
 
+	# If the package didn't overwrite dependency arrays, we need to format
+	# the dependencies back to makedeb-styled ones, as they've already been formatted
+	# for control files before now.
+	if [[ "${depends[*]}" == "${depends_backup[*]}" ]]; then
+		mapfile -t depends < <(
+			debian_to_makedeb_deps '' "${depends[@]}"
+			debian_to_makedeb_deps 'p!' "${predepends[@]}"
+		)
+	fi
+	predepends=()
+
+	if [[ "${#optdepends[@]}" -eq 0 ]]; then
+		mapfile -t optdepends < <(
+			debian_to_makedeb_deps 'r!' "${recommends[@]}"
+			debian_to_makedeb_deps 's!' "${suggests[@]}"
+		)
+	fi
+	recommends=()
+	suggests=()
+
+	if [[ "${conflicts[*]}" == "${conflicts_backup[*]}" ]]; then
+		mapfile -t conflicts < <(debian_to_makedeb_deps '' "${conflicts[@]}")
+	fi
+
+	if [[ "${provides[*]}" == "${provides_backup[*]}" ]]; then
+		mapfile -t provides < <(debian_to_makedeb_deps '' "${provides[@]}")
+	fi
+	
+	if [[ "${replaces[*]}" == "${replaces_backup[*]}" ]]; then
+		mapfile -t replaces < <(debian_to_makedeb_deps '' "${replaces[@]}")
+	fi
+
+	# Lint, convert deps, and make the package.
 	lint_package || exit $E_PACKAGE_FAILED
+
+	convert_dependencies
+
+	remove_optdepends_description recommends "${recommends[@]}"
+	remove_optdepends_description suggests "${suggests[@]}"
+
+	convert_relationships predepends "${predepends[@]}"
+	convert_relationships depends "${depends[@]}"
+	convert_relationships makedepends "${makedepends[@]}"
+	convert_relationships checkdepends "${checkdepends[@]}"
+	convert_relationships recommends "${recommends[@]}"
+	convert_relationships suggests "${suggests[@]}"
+	convert_relationships conflicts "${conflicts[@]}"
+	convert_relationships provides "${provides[@]}"
+	convert_relationships replaces "${replaces[@]}"
+	convert_relationships breaks "${breaks[@]}"
+
 	create_package
+
+	restore_package_variables
 }
 
 run_split_packaging() {
-	local pkgname_backup=("${pkgname[@]}")
-	backup_package_variables
-	for pkgname in ${pkgname_backup[@]}; do
+	for pkgname in ${pkgname[@]}; do
 		run_single_packaging $pkgname
-		restore_package_variables
 	done
-	pkgname=("${pkgname_backup[@]}")
 }
 
 check_distro_variables() {

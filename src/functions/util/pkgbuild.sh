@@ -312,3 +312,15 @@ split_version() {
 	pkgver="$(echo "${ver}" | sed 's|^[^:]*:||' | sed 's|-.*||')"
 	pkgrel="$(echo "${ver}" | grep '-' | sed 's|^[^-]*-||')"
 }
+
+# Convert Debian styled dependencies ('pkg (>> 1)') into makedeb styled ones ('pkg>1').
+# This doesn't validate that passed in arguments are syntactically correct, make sure
+# this is called from somewhere where sources have already been validated.
+debian_to_makedeb_deps() {
+	local prefix="${1}"
+	local packages=("${@:2}")
+
+	for pkg in "${packages[@]}"; do
+		echo "${prefix}$(echo "${pkg}" | sed -e 's|[ ()]||g' -e 's|<<|<|g' -e 's|>>|>|g')"
+	done
+}
