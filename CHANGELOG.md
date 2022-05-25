@@ -10,7 +10,7 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ## [15.0.1] - 2022-05-25
 ### Fixed
-- Convert relationship operators for dependencies defined in `package()`.
+- Convert relationship operators for dependencies defined in `package()` (#191).
 
 ## [15.0.0] - 2022-05-22
 ### Changed
