@@ -54,6 +54,26 @@ load ../util/util
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Depends:')" == "Depends: bash" ]]
 }
 
+@test "correct depends - valid dependency prefixes in package()" {
+    package() {
+        depends=('bats2>0' 'p!bash2')
+    }
+
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
+    pkgbuild string pkgname testpkg
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
+    pkgbuild array arch any
+    pkgbuild array depends 'p!bats>0' 'bash'
+    pkgbuild function package
+    pkgbuild clean
+    makedeb -d
+
+    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Pre-Depends')" == "Pre-Depends: bash2" ]]
+    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Depends:')" == "Depends: bats2 (>> 0)" ]]
+}
+
 @test "correct depends - separate by pipe" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
