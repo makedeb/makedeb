@@ -775,15 +775,16 @@ run_single_packaging() {
 			debian_to_makedeb_deps 'p!' "${predepends[@]}"
 		)
 	fi
+	predepends=()
 
 	if [[ "${#optdepends[@]}" -eq 0 ]]; then
-		suggests=()
-		recommends=()
 		mapfile -t optdepends < <(
 			debian_to_makedeb_deps 'r!' "${recommends[@]}"
 			debian_to_makedeb_deps 's!' "${suggests[@]}"
 		)
 	fi
+	recommends=()
+	suggests=()
 
 	if [[ "${conflicts[*]}" == "${conflicts_backup[*]}" ]]; then
 		mapfile -t conflicts < <(debian_to_makedeb_deps '' "${conflicts[@]}")
