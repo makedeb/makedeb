@@ -58,16 +58,23 @@ If preferred, you can also first run unit tests before pushing your changes thou
 To run unit tests, you'll need [Toast](https://github.com/stepchowfun/toast) installed.
 
 #### MPR
-Toast is available on the [MPR](https://mpr.makedeb.org/packages/toast) if you'd prefer that:
+Toast is available on the [MPR](https://mpr.makedeb.org/packages/toast) if you'd prefer that. You'll likely also need the latest version of the Rust compiler toolchain, which is also available on the [MPR](https://mpr.makedeb.org/rustc).
 
 ```sh
+# Rust toolchain.
+# Note that this may take several hours to build.
+git clone 'https://mpr.makedeb.org/rustc'
+cd rustc/
+makedeb -si
+
+# Toast.
 git clone 'https://mpr.makedeb.org/toast'
 cd toast/
 makedeb -si
 ```
 
 #### Prebuilt-MPR
-Depending on your system, Toast may take a while to compile. If you'd prefer to have a prebuilt package, you can obtain Toast from the [Prebuilt-MPR](https://docs.makedeb.org/prebuilt-mpr). After setting up the Prebuilt-MPR, just run the following to install Toast:
+Depending on your system, Toast/Rust may take a while to compile. If you'd prefer to have a prebuilt package, you can obtain Toast from the [Prebuilt-MPR](https://docs.makedeb.org/prebuilt-mpr). After setting up the Prebuilt-MPR, just run the following to install Toast:
 
 ```sh
 sudo apt install toast
