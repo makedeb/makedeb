@@ -793,9 +793,9 @@ run_single_packaging() {
 	if [[ "${provides[*]}" == "${provides_backup[*]}" ]]; then
 		mapfile -t provides < <(debian_to_makedeb_deps '' "${provides[@]}")
 	fi
-
+	
 	if [[ "${replaces[*]}" == "${replaces_backup[*]}" ]]; then
-		mapfile -t provides < <(debian_to_makedeb_deps '' "${provides[@]}")
+		mapfile -t replaces < <(debian_to_makedeb_deps '' "${replaces[@]}")
 	fi
 
 	# Lint, convert deps, and make the package.
