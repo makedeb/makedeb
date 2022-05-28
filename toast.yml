@@ -4,11 +4,15 @@ location: /home/makedeb/makedeb
 command_prefix: set -e
 tasks:
   install_dependencies:
+    description: Install needed dependencies.
     input_paths:
       - .drone/scripts/install-deps.sh
     command: .drone/scripts/install-deps.sh
 
   run_unit_tests:
+    description: Run unit tests.
+    environment:
+      TESTS: "./"
     input_paths:
       - ./
     command: |

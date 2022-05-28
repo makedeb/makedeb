@@ -69,24 +69,15 @@ executable_vcs() {
 
 	get_all_sources_for_arch 'all_sources'
 	for netfile in ${all_sources[@]}; do
-		local proto=$(get_protocol "$netfile")
+		local proto=$(get_protocol "$netfile" | sed 's|\+.*||')
 
 		case $proto in
-			bzr*|fossil*|git*|hg*|svn*)
+			bzr|fossil|git|hg|svn)
 				if ! type -p ${proto%%+*} > /dev/null; then
 					local client
 					client=$(get_vcsclient "$proto") || exit $?
-					# ensure specified program is installed
-					local uninstalled
-					uninstalled=$(check_deps "$client") || exit $E_INSTALL_DEPS_FAILED
-					# if not installed, check presence in depends or makedepends
-					if [[ -n "$uninstalled" ]] && (( ! NODEPS || ( VERIFYSOURCE && !DEP_BIN ) )); then
-						if ! in_array "$client" ${all_deps[@]}; then
-							error "$(gettext "Cannot find the %s package needed to handle %s sources.")" \
-									"$client" "${proto%%+*}"
-							ret=1
-						fi
-					fi
+					error "Couldn't find the '%s' package needed to handle '%s' sources." "${client}" "${proto}"
+					exit "${E_INSTALL_DEPS_FAILED}"
 				fi
 				;;
 			*)
