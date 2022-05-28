@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Note that the `[Unreleased]` section contains all changes that haven't yet made it to the `stable` branch.
 
 ## [Unreleased]
+### Fixed
+- Error properly when a needed VCS package isn't installed (#197).
 
 ## [15.0.1] - 2022-05-25
 ### Fixed
