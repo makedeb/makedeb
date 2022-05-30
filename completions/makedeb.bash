@@ -14,7 +14,7 @@ _makedeb() {
     )
 
     longopts=(
-	'--allow-downgrades'
+        '--allow-downgrades'
         '--as-deps'
         '--field'
         '--file'
@@ -23,10 +23,10 @@ _makedeb() {
         '--ignore-arch'
         '--install'
         '--lint'
-	'--no-color'
+        '--no-color'
         '--no-confirm'
         '--no-deps'
-	'--pass-env'
+        '--pass-env'
         '--print-control'
         '--print-srcinfo'
         '--print-pgp-check'
@@ -37,7 +37,7 @@ _makedeb() {
 
     local cur prev words cword
     _init_completion || return
-    
+
     # We only want to show long options when '--' is provided.
     if [[ "${cur:0:2}" == "--" ]]; then
         mapfile -t COMPREPLY < <(compgen -W '${longopts[@]}' -- "${cur}")
@@ -48,4 +48,4 @@ _makedeb() {
 
 complete -F _makedeb makedeb
 
-# vim: set sw=4 expandtab
+# vim: set sw=4 expandtab:
