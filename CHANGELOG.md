@@ -9,6 +9,7 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ## [Unreleased]
 ### Fixed
 - Error properly when a needed VCS package isn't installed (#197).
+- Add `--no-color` option to disable colored output from makedeb (#200).
 
 ## [15.0.1] - 2022-05-25
 ### Fixed
