@@ -90,6 +90,7 @@ MAKEDEB_MESSAGE_TYPE=''
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
+NOCOLOR=0
 NOCONFIRM=0
 NODEPS=0
 NOEXTRACT=0
@@ -865,6 +866,7 @@ usage() {
 	printf -- "$(gettext "  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build")\n"
 	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
 	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
+	printf -- "$(gettext "  --no-color            Disable colored output")\n"
 	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
 	printf -- "$(gettext "  --print-srcinfo       Print a generated .SRCINFO file and exit")\n"
 	printf -- "$(gettext "  --skip-pgp-check      Do not verify source files against PGP signatures")\n"
@@ -929,6 +931,7 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'skip-pgp-check' 'as-deps' 'no-confirm'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
 	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir'
+	  'no-color'
 	  # Sorry not sorry.
 	  'why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious')
 
@@ -955,6 +958,7 @@ while true; do
 		-s|--sync-deps)          SYNCDEPS=1 ;;
 		--lint)                  LINTPKGBUILD=1 ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
+		--no-color)              NOCOLOR=1 ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
@@ -1019,7 +1023,7 @@ done
 unset var
 
 # check if messages are to be printed using color
-if [[ -t 2 && $USE_COLOR != "n" ]] && check_buildenv "color" "y"; then
+if [[ -t 2 ]] && ! (( "${NOCOLOR}" )) && check_buildenv "color" "y"; then
 	colorize
 else
 	unset ALL_OFF BOLD BLUE GREEN RED YELLOW
