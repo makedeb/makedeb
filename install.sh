@@ -12,7 +12,6 @@ color_red="$(tput setaf 202)"
 color_purple="$(tput setaf 135)"
 
 # Answer vars.
-SETUP_PREBUILT_MPR=0
 MAKEDEB_PKG='makedeb'
 
 # Handy functions.
@@ -57,7 +56,7 @@ if ! sudo apt-get update; then
     die_cmd "Failed to update APT cache."
 fi
 
-if ! sudo apt-get install gpg lsb-release wget; then
+if ! sudo apt-get install gpg wget; then
     die_cmd "Failed to check if needed packages are installed."
 fi
 
@@ -80,32 +79,11 @@ done
 
 MAKEDEB_PKG="${response}"
 
-echo
-msg "The makedeb Package Repository (MPR) contains access to a wide variety of"
-msg "packages for use with makedeb."
-msg "The Prebuilt-MPR offers a platform for prebuilt packages from the MPR, and"
-msg "can aid in installing packages from the MPR in a quicker manner than"
-msg "building from source."
-read -p "$(question "Would you like to set up the Prebuilt-MPR APT repository in addition to the"; question "standard makedeb APT repository? [Y/n] ")" response
-
-if answered_yes "${response}"; then
-    SETUP_PREBUILT_MPR=1
-fi
-
 msg "Setting up makedeb APT repository..."
 if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null; then
     die_cmd "Failed to set up makedeb APT repository."
 fi
 echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://proget.${makedeb_url} makedeb main" | sudo tee /etc/apt/sources.list.d/makedeb.list 1> /dev/null
-
-if (( "${SETUP_PREBUILT_MPR}" )); then
-    msg "Setting up Prebuilt-MPR APT repository..."
-    
-    if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null; then
-        die_cmd "Failed to set up Prebuilt-MPR APT repository."
-    fi
-    echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.${makedeb_url} prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list 1> /dev/null
-fi
 
 msg "Updating APT cache..."
 if ! sudo apt-get update; then
