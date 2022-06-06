@@ -904,6 +904,7 @@ mpr_check() {
  '--'
                        This program may be freely redistributed under
                        the terms of the GNU General Public License.
+
 "
 }
 
