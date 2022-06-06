@@ -53,6 +53,9 @@ On the other hand, *makedeb* is NOT meant to be a replacement for package manage
 *--lint*::
   Lint the PKGBUILD for conformity requirements. This checks that things like variables are declared when needed, and contain valid values.
 
+*--no-color*::
+  Disable colored output from makedeb. Programs called in the PKGBUILD may still display color though.
+
 *--print-control*::
   Prints a generated control file and exits.
 

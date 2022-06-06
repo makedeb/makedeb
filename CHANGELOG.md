@@ -8,6 +8,12 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ## [Unreleased]
 
+## [15.0.2] - 2022-06-05
+### Fixed
+- Error properly when a needed VCS package isn't installed (#197).
+- Add `--no-color` option to disable colored output from makedeb (#200).
+- Add missing newline in `makedeb --mpr-check` output.
+
 ## [15.0.1] - 2022-05-25
 ### Fixed
 - Convert relationship operators for dependencies defined in `package()` (#191).

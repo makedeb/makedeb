@@ -48,3 +48,34 @@ done
 
 ### Indentation
 For indentation, we use four spaces, formatted as space characters. Not all code currently follows this guideline, though all new code needs to follow such.
+
+## Running unit tests
+All PRs on GitHub automatically run through GitHub Actions to ensure that your code is working properly.
+
+If preferred, you can also first run unit tests before pushing your changes.
+
+### Needed packages
+To run unit tests, you'll need [Toast](https://github.com/stepchowfun/toast) installed.
+
+#### MPR
+[Toast is available on the MPR](https://mpr.makedeb.org/packages/toast) if you want to install Toast with makedeb. You'll likely also need the latest version of the Rust compiler toolchain, which is [also available on the MPR](https://mpr.makedeb.org/packages/rustc).
+
+```sh
+# Rust toolchain.
+# Note that this may take several hours to build.
+git clone 'https://mpr.makedeb.org/rustc'
+cd rustc/
+makedeb -si
+
+# Toast.
+git clone 'https://mpr.makedeb.org/toast'
+cd toast/
+makedeb -si
+```
+
+#### Prebuilt-MPR
+Rust and Toast can take a while to build, which some users may wish to avoid. If you'd prefer to have a prebuilt package, which remediates this issue, you can obtain Toast from the [Prebuilt-MPR](https://docs.makedeb.org/prebuilt-mpr). After setting up the Prebuilt-MPR, just run the following to install Toast:
+
+```sh
+sudo apt install toast
+```
