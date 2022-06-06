@@ -903,7 +903,7 @@ mpr_check() {
 \  '-. '-'  '-'  '-'   Copyright (C) 2002-2006 Judd Vinet
  '--'
                        This program may be freely redistributed under
-                       the terms of the GNU General Public License.
+                       the terms of the GNU General Public License.\n
 
 "
 }
