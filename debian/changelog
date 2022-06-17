@@ -1,4 +1,3 @@
-
 makedeb ($${pkgver}) unstable; urgency=medium
 
   * Initial release (Closes: #998039).
