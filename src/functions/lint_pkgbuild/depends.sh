@@ -36,6 +36,7 @@ lint_depends() {
 }
 
 lint_deps() {
+	local multiarch_vars=('depends' 'makedepends' 'checkdepends' 'optdepends' 'provides')
 	local ret=0
 	local var="${1}"
 	local valid_prefixes
@@ -44,6 +45,7 @@ lint_deps() {
 	local deps
 	local prefix
 	local name
+	local name_no_arch
 	local restrictor
 	local ver
 	local i
@@ -83,6 +85,7 @@ lint_deps() {
 				fi
 
 				name="$(echo "${k}" | grep -o '^[^<>=]*')"
+				name_no_arch="$(echo "${name}" | sed 's|:.*||')"
 				mapfile -t restrictor < <(echo "${k}" | grep -Eo '<=|>=|=|<|>')
 				ver="$(echo "${k}" | grep -o '[<>=].*$' | sed -E 's/<=|>=|=|<|>//')"
 
@@ -91,8 +94,17 @@ lint_deps() {
 					ret=1
 					continue
 				fi
+				
+				if in_array "${var}" "${multiarch_vars[@]}"; then
+					if [[ "$(echo "${name}" | grep -o ':' | wc -l)" -gt 1 ]]; then
+						error "$(gettext "Package dependency '%s' contains more than one ':'.")" "${name}"
+						ret=1
+					fi
 
-				lint_one_pkgname "${name}" "${j}" || ret=1
+					lint_one_pkgname "${name_no_arch}" "${j}" || ret=1
+				else
+					lint_one_pkgname "${name}" "${j}" || ret=1
+				fi
 				
 				if [[ "${ver}"  != "" ]]; then
 					split_version "${ver}" pkg_epoch pkg_pkgver pkg_pkgrel
