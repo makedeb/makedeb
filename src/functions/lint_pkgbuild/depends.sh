@@ -36,7 +36,7 @@ lint_depends() {
 }
 
 lint_deps() {
-	local multiarch_vars=('depends' 'makedepends' 'checkdepends' 'optdepends')
+	local multiarch_vars=('depends' 'makedepends' 'checkdepends' 'optdepends' 'provides')
 	local ret=0
 	local var="${1}"
 	local valid_prefixes
