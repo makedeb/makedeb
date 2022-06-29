@@ -22,10 +22,9 @@ echo "${github_api_key}" | gh auth login --with-token
 
 if [[ "${DRONE_COMMIT_BRANCH}" == 'stable' ]]; then
     release_notes="$(parse-changelog CHANGELOG.md "${pkgver}")"
+    gh release create "v${pkgver}-${pkgrel}" --title "v${pkgver}-${pkgrel}" --target "${DRONE_COMMIT_SHA}" -n "${release_notes}"
 else
-    release_notes="This is a **prerelease**\! Things may be broken, and you should avoid this release if you're expecting stability."
+    gh release create "v${pkgver}-${pkgrel}" --title "v${pkgver}-${pkgrel}" --target "${DRONE_COMMIT_SHA}" -n "This is a **prerelease**\! Things may be broken, and you should avoid this release if you're expecting stability." --prerelease
 fi
-
-gh release create "v${pkgver}-${pkgrel}" --title "v${pkgver}-${pkgrel}" --target "${DRONE_COMMIT_SHA}" -n "${release_notes}"
 
 # vim: set sw=4 expandtab:
