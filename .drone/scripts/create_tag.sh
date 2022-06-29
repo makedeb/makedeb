@@ -3,7 +3,7 @@ set -ex
 
 # Install prerequisites.
 apt update
-apt install curl jq -y
+apt install curl jq lsb-release gpg -y
 
 # Set up the Prebuilt-MPR.
 curl -q "https://proget.${makedeb_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
