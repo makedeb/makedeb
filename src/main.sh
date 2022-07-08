@@ -90,6 +90,7 @@ MAKEDEB_MESSAGE_TYPE=''
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
+NOCHECK=0
 NOCOLOR=0
 NOCONFIRM=0
 NODEPS=0
@@ -354,11 +355,19 @@ run_prepare() {
 }
 
 run_build() {
-	run_function_safe "build"
+	if (( "${NOBUILD}" )); then
+		warning 'Skipping execution of build() function.'
+	else
+		run_function_safe "build"
+	fi
 }
 
 run_check() {
-	run_function_safe "check"
+	if (( "${NOCHECK}" )); then
+		warning 'Skipping execution of check() function.'
+	else
+		run_function_safe "check"
+	fi
 }
 
 run_package() {
@@ -696,7 +705,7 @@ check_build_status() {
 		fullver=$(get_full_version)
 		pkgarch=$(get_pkg_arch)
 		if [[ -f $PKGDEST/${pkgname}-${fullver}-${pkgarch}${PKGEXT} ]] \
-				 && ! (( FORCE || SOURCEONLY || NOBUILD || NOARCHIVE)); then
+				 && ! (( FORCE || SOURCEONLY || NOARCHIVE)); then
 			if (( INSTALL )); then
 				warning "$(gettext "A package has already been built, installing existing package...")"
 				install_package
@@ -718,7 +727,7 @@ check_build_status() {
 				allpkgbuilt=0
 			fi
 		done
-		if ! (( FORCE || SOURCEONLY || NOBUILD || NOARCHIVE)); then
+		if ! (( FORCE || SOURCEONLY || NOARCHIVE)); then
 			if (( allpkgbuilt )); then
 				if (( INSTALL )); then
 					warning "$(gettext "The package group has already been built, installing existing packages...")"
@@ -866,6 +875,8 @@ usage() {
 	printf -- "$(gettext "  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build")\n"
 	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
 	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
+	printf -- "$(gettext "  --no-build            Skip running of the 'build()' function in the PKGBUILD")\n"
+	printf -- "$(gettext "  --no-check            Skip running of the 'check()' function in the PKGBUILD")\n"
 	printf -- "$(gettext "  --no-color            Disable colored output")\n"
 	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
 	printf -- "$(gettext "  --print-srcinfo       Print a generated .SRCINFO file and exit")\n"
@@ -929,7 +940,7 @@ OPT_SHORT='AdF:p:ghH:ivrs'
 OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'help' 'field:' 'install' 'version' 'rm-deps'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
-	  'skip-pgp-check' 'as-deps' 'no-confirm'
+	  'skip-pgp-check' 'as-deps' 'no-confirm' 'no-build' 'no-check'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
 	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir'
 	  'no-color'
@@ -959,6 +970,8 @@ while true; do
 		-s|--sync-deps)          SYNCDEPS=1 ;;
 		--lint)                  LINTPKGBUILD=1 ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
+		--no-build)              NOBUILD=1 ;;
+		--no-check)              NOCHECK=1 ;;
 		--no-color)              NOCOLOR=1 ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
@@ -1047,7 +1060,7 @@ if ! ensure_writable_dir "BUILDDIR" "$BUILDDIR"; then
 	exit $E_FS_PERMISSIONS
 fi
 
-if (( ! (NOBUILD || GENINTEG) )) && ! ensure_writable_dir "PKGDEST" "$PKGDEST"; then
+if (( ! (GENINTEG) )) && ! ensure_writable_dir "PKGDEST" "$PKGDEST"; then
 	plainerr "$(gettext "Aborting...")"
 	exit $E_FS_PERMISSIONS
 fi
@@ -1449,31 +1462,26 @@ if (( !REPKG )); then
 	fi
 fi
 
-if (( NOBUILD )); then
-	msg "$(gettext "Sources are ready.")"
-	exit $E_OK
-else
-	# clean existing pkg directory
-	if [[ -d $pkgdirbase ]]; then
-		msg "$(gettext "Removing existing %s directory...")" "\$pkgdir/"
-		rm -rf "$pkgdirbase"
-	fi
-	mkdir -p "$pkgdirbase"
-	chmod a-srw "$pkgdirbase"
-	cd_safe "$startdir"
-
-	prepare_buildenv
-
-	if (( ! REPKG )); then
-		(( BUILDFUNC )) && run_build
-		(( CHECKFUNC )) && run_check
-		cd_safe "$startdir"
-	fi
-
-	enter_fakeroot
-
-	create_package_signatures || exit $E_PRETTY_BAD_PRIVACY
+# clean existing pkg directory
+if [[ -d $pkgdirbase ]]; then
+	msg "$(gettext "Removing existing %s directory...")" "\$pkgdir/"
+	rm -rf "$pkgdirbase"
 fi
+mkdir -p "$pkgdirbase"
+chmod a-srw "$pkgdirbase"
+cd_safe "$startdir"
+
+prepare_buildenv
+
+if (( ! REPKG )); then
+	(( BUILDFUNC )) && run_build
+	(( CHECKFUNC )) && run_check
+	cd_safe "$startdir"
+fi
+
+enter_fakeroot
+
+create_package_signatures || exit $E_PRETTY_BAD_PRIVACY
 
 # if inhibiting archive creation, go no further
 if (( NOARCHIVE )); then

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-15 16:08-0500\n"
+"POT-Creation-Date: 2022-07-08 16:49-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,107 +17,123 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main.sh:815
+#: src/main.sh:887
 msgid "  --allow-downgrades    Allow packages to be downgraded"
 msgstr ""
 
-#: src/main.sh:814
+#: src/main.sh:886
 msgid "  --as-deps             Mark built packages as automatically installed"
 msgstr ""
 
-#: src/main.sh:826
+#: src/main.sh:898
 msgid "  --error               Print an error message to stderr"
 msgstr ""
 
-#: src/main.sh:827
+#: src/main.sh:899
 msgid "  --error2              Print an error2 message to stderr"
 msgstr ""
 
-#: src/main.sh:808
+#: src/main.sh:877
 msgid "  --lint                Link the PKGBUILD for conformity requirements"
 msgstr ""
 
-#: src/main.sh:822
+#: src/main.sh:894
 msgid "  --msg                 Print a msg message to stdout"
 msgstr ""
 
-#: src/main.sh:823
+#: src/main.sh:895
 msgid "  --msg2                Print a msg2 message to stdout"
 msgstr ""
 
-#: src/main.sh:816
+#: src/main.sh:878
+msgid ""
+"  --no-build            Skip running of the 'build()' function in the "
+"PKGBUILD"
+msgstr ""
+
+#: src/main.sh:879
+msgid ""
+"  --no-check            Skip running of the 'check()' function in the "
+"PKGBUILD"
+msgstr ""
+
+#: src/main.sh:880
+msgid "  --no-color            Disable colored output"
+msgstr ""
+
+#: src/main.sh:888
 msgid "  --no-confirm          Don't ask before installing packages"
 msgstr ""
 
-#: src/main.sh:819
+#: src/main.sh:891
 msgid "  --pass-env            Pass the current user's environment variables"
 msgstr ""
 
-#: src/main.sh:809
+#: src/main.sh:881
 msgid "  --print-control       Print a generated control file and exit"
 msgstr ""
 
-#: src/main.sh:810
+#: src/main.sh:882
 msgid "  --print-srcinfo       Print a generated .SRCINFO file and exit"
 msgstr ""
 
-#: src/main.sh:811
+#: src/main.sh:883
 msgid ""
 "  --skip-pgp-check      Do not verify source files against PGP signatures"
 msgstr ""
 
-#: src/main.sh:824
+#: src/main.sh:896
 msgid "  --warning             Print a warning message to stderr"
 msgstr ""
 
-#: src/main.sh:825
+#: src/main.sh:897
 msgid "  --warning2            Print a warning2 message to stderr"
 msgstr ""
 
-#: src/main.sh:798
+#: src/main.sh:867
 msgid "  -A, --ignore-arch     Ignore errors about mismatching architectures"
 msgstr ""
 
-#: src/main.sh:800
+#: src/main.sh:869
 msgid ""
 "  -F, --file, -p        Specify a location to the build file (defaults to "
 "'PKGBUILD')"
 msgstr ""
 
-#: src/main.sh:803
+#: src/main.sh:872
 msgid ""
 "  -H, --field           Append the packaged control file with custom control "
 "fields"
 msgstr ""
 
-#: src/main.sh:805
+#: src/main.sh:874
 msgid "  -V, --version         Show version information and exit"
 msgstr ""
 
-#: src/main.sh:799
+#: src/main.sh:868
 msgid "  -d, --no-deps         Skip all dependency checks"
 msgstr ""
 
-#: src/main.sh:801
+#: src/main.sh:870
 msgid "  -g, --gen-integ       Generate hashes for source files"
 msgstr ""
 
-#: src/main.sh:802
+#: src/main.sh:871
 msgid "  -h, --help            Show this help menu and exit"
 msgstr ""
 
-#: src/main.sh:804
+#: src/main.sh:873
 msgid ""
 "  -i, --install         Automatically install the built package(s) after "
 "building"
 msgstr ""
 
-#: src/main.sh:806
+#: src/main.sh:875
 msgid ""
 "  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build"
 msgstr ""
 
-#: src/main.sh:807
+#: src/main.sh:876
 msgid "  -s, --sync-deps       Install missing dependencies"
 msgstr ""
 
@@ -135,7 +151,7 @@ msgstr ""
 msgid "%s can not be set inside a package function"
 msgstr ""
 
-#: src/main.sh:1052
+#: src/main.sh:1134
 msgid "%s contains %s characters and cannot be sourced."
 msgstr ""
 
@@ -143,7 +159,7 @@ msgstr ""
 msgid "%s contains an invalid prefix: '%s'"
 msgstr ""
 
-#: src/functions/lint_pkgbuild/pkgver.sh:43
+#: src/functions/lint_pkgbuild/pkgver.sh:45
 msgid "%s contains invalid characters."
 msgstr ""
 
@@ -151,8 +167,9 @@ msgstr ""
 msgid "%s contains invalid characters: %s"
 msgstr ""
 
-#: src/functions/lint_config/paths.sh:39 src/functions/lint_pkgbuild/arch.sh:47
+#: src/functions/lint_pkgbuild/arch.sh:47
 #: src/functions/lint_pkgbuild/pkgname.sh:73
+#: src/functions/lint_config/paths.sh:39
 msgid "%s contains invalid characters: '%s'"
 msgstr ""
 
@@ -160,8 +177,12 @@ msgstr ""
 msgid "%s does not contain a valid package suffix (needs '%s', got '%s')"
 msgstr ""
 
-#: src/main.sh:1047
+#: src/main.sh:1129
 msgid "%s does not exist."
+msgstr ""
+
+#: src/functions/lint_pkgbuild/pkgver.sh:50
+msgid "%s doesn't start with a digit."
 msgstr ""
 
 #: src/functions/lint_package/missing_backup.sh:35
@@ -176,15 +197,11 @@ msgstr ""
 msgid "%s file (%s) does not exist or is not a regular file."
 msgstr ""
 
-#: src/functions/source/fossil.sh:88 src/functions/source/fossil.sh:94
-msgid "%s is not a checkout of %s repo %s"
-msgstr ""
-
-#: src/functions/source/git.sh:85 src/functions/source/fossil.sh:58
+#: src/functions/source/git.sh:85
 msgid "%s is not a clone of %s"
 msgstr ""
 
-#: src/functions/lint_pkgbuild/pkgver.sh:36
+#: src/functions/lint_pkgbuild/pkgver.sh:38
 #: src/functions/lint_pkgbuild/pkgname.sh:38
 #: src/functions/lint_pkgbuild/pkgname.sh:85
 #: src/functions/lint_pkgbuild/pkgrel.sh:35
@@ -204,7 +221,7 @@ msgstr ""
 msgid "%s is not available for the '%s' architecture."
 msgstr ""
 
-#: src/main.sh:232
+#: src/main.sh:243
 msgid "%s is not writeable -- pkgver will not be updated"
 msgstr ""
 
@@ -216,7 +233,7 @@ msgstr ""
 msgid "%s must be an integer, not %s."
 msgstr ""
 
-#: src/main.sh:1057
+#: src/main.sh:1139
 msgid "%s must be in the current working directory."
 msgstr ""
 
@@ -224,21 +241,21 @@ msgstr ""
 msgid "%s not found."
 msgstr ""
 
-#: src/functions/lint_config/variable.sh:47
 #: src/functions/lint_pkgbuild/variable.sh:40
 #: src/functions/lint_pkgbuild/variable.sh:52
 #: src/functions/lint_pkgbuild/variable.sh:72
 #: src/functions/lint_pkgbuild/variable.sh:82
+#: src/functions/lint_config/variable.sh:47
 msgid "%s should be an array"
 msgstr ""
 
-#: src/functions/lint_config/variable.sh:57
 #: src/functions/lint_pkgbuild/variable.sh:62
 #: src/functions/lint_pkgbuild/variable.sh:90
+#: src/functions/lint_config/variable.sh:57
 msgid "%s should not be an array"
 msgstr ""
 
-#: src/main.sh:939
+#: src/main.sh:1021
 msgid "%s signal caught. Exiting..."
 msgstr ""
 
@@ -250,7 +267,7 @@ msgstr ""
 msgid "'%s' is not a valid archive extension."
 msgstr ""
 
-#: src/main.sh:248
+#: src/main.sh:259
 msgid "A failure occurred in %s()."
 msgstr ""
 
@@ -259,47 +276,40 @@ msgid ""
 "A maintainer must be specified. This will be an error in a future release."
 msgstr ""
 
-#: src/main.sh:691
+#: src/main.sh:710
 msgid "A package has already been built, installing existing package..."
 msgstr ""
 
-#: src/main.sh:695
+#: src/main.sh:714
 msgid "A package has already been built. (use %s to overwrite)"
 msgstr ""
 
-#: src/main.sh:1235
+#: src/main.sh:1331
 msgid "A source package has already been built. (use %s to overwrite)"
 msgstr ""
 
-#: src/main.sh:241 src/main.sh:249 src/main.sh:475 src/main.sh:977
-#: src/main.sh:982 src/main.sh:987 src/main.sh:993 src/main.sh:1003
-#: src/functions/executable/vcs.sh:46 src/functions/source/file.sh:75
-#: src/functions/source/file.sh:145 src/functions/source/svn.sh:63
-#: src/functions/source/svn.sh:73 src/functions/source/hg.sh:52
-#: src/functions/source/hg.sh:94 src/functions/source/hg.sh:103
-#: src/functions/source/hg.sh:108 src/functions/source/bzr.sh:55
-#: src/functions/source/bzr.sh:86 src/functions/source/bzr.sh:101
-#: src/functions/source/bzr.sh:106 src/functions/source/git.sh:61
+#: src/main.sh:252 src/main.sh:260 src/main.sh:494 src/main.sh:1059
+#: src/main.sh:1064 src/main.sh:1069 src/main.sh:1075 src/main.sh:1085
+#: src/functions/executable/vcs.sh:46 src/functions/source/git.sh:61
 #: src/functions/source/git.sh:71 src/functions/source/git.sh:77
 #: src/functions/source/git.sh:86 src/functions/source/git.sh:115
-#: src/functions/source/git.sh:121 src/functions/source/fossil.sh:52
-#: src/functions/source/fossil.sh:59 src/functions/source/fossil.sh:89
-#: src/functions/source/fossil.sh:95 src/functions/source/fossil.sh:100
-#: src/functions/source/fossil.sh:114 src/functions/source/fossil.sh:121
-#: src/functions/util/source.sh:162 src/functions/util/source.sh:171
-#: src/functions/util/config.sh:42 src/functions/util/util.sh:115
+#: src/functions/source/git.sh:121 src/functions/source/svn.sh:63
+#: src/functions/source/svn.sh:73 src/functions/source/file.sh:75
+#: src/functions/source/file.sh:145 src/functions/util/source.sh:156
+#: src/functions/util/source.sh:165 src/functions/util/util.sh:115
+#: src/functions/util/config.sh:42
 msgid "Aborting..."
 msgstr ""
 
-#: src/main.sh:623
+#: src/main.sh:642
 msgid "Adding %s file (%s)..."
 msgstr ""
 
-#: src/main.sh:501
+#: src/main.sh:520
 msgid "Adding %s file to package..."
 msgstr ""
 
-#: src/main.sh:589 src/main.sh:602
+#: src/main.sh:608 src/main.sh:621
 msgid "Adding %s..."
 msgstr ""
 
@@ -307,11 +317,7 @@ msgstr ""
 msgid "Architecture '%s' cannot contain PKGBUILD variable reference '%s'."
 msgstr ""
 
-#: src/functions/source/bzr.sh:52
-msgid "Branching %s..."
-msgstr ""
-
-#: src/main.sh:525
+#: src/main.sh:544
 msgid "Built package %s exists. Removing..."
 msgstr ""
 
@@ -362,29 +368,24 @@ msgstr ""
 msgid "Cannot find the %s binary. Will use %s to acquire root privileges."
 msgstr ""
 
-#: src/functions/executable/vcs.sh:85
-msgid "Cannot find the %s package needed to handle %s sources."
-msgstr ""
-
-#: src/main.sh:1269
+#: src/main.sh:1365
 msgid "Checking for missing dependencies..."
 msgstr ""
 
-#: src/functions/lint_package.sh:41
+#: src/functions/lint_package.sh:47
 msgid "Checking for packaging issues..."
 msgstr ""
 
 #. If it's a clean exit and -c/--clean has been passed...
-#: src/main.sh:163
+#: src/main.sh:174
 msgid "Cleaning up..."
 msgstr ""
 
-#: src/functions/source/svn.sh:69 src/functions/source/hg.sh:49
-#: src/functions/source/git.sh:67 src/functions/source/fossil.sh:49
+#: src/functions/source/git.sh:67 src/functions/source/svn.sh:69
 msgid "Cloning %s %s repo..."
 msgstr ""
 
-#: src/main.sh:797
+#: src/main.sh:866
 msgid "Common options:"
 msgstr ""
 
@@ -392,12 +393,12 @@ msgstr ""
 msgid "Compressing man and info pages..."
 msgstr ""
 
-#: src/main.sh:534
+#: src/main.sh:553
 msgid "Compressing package..."
 msgstr ""
 
 #. tar it up
-#: src/main.sh:634
+#: src/main.sh:653
 msgid "Compressing source package..."
 msgstr ""
 
@@ -417,25 +418,23 @@ msgstr ""
 msgid "Created signature file %s."
 msgstr ""
 
-#: src/main.sh:480
+#: src/main.sh:499
 msgid "Creating package \"%s\"..."
 msgstr ""
 
-#: src/main.sh:585
+#: src/main.sh:604
 msgid "Creating source package..."
 msgstr ""
 
-#: src/functions/source/svn.sh:95 src/functions/source/hg.sh:79
-#: src/functions/source/bzr.sh:94 src/functions/source/git.sh:106
-#: src/functions/source/fossil.sh:81
+#: src/functions/source/git.sh:106 src/functions/source/svn.sh:95
 msgid "Creating working copy of %s %s repo..."
 msgstr ""
 
-#: src/functions/lint_pkgbuild/depends.sh:70
+#: src/functions/lint_pkgbuild/depends.sh:75
 msgid "Dependency '%s' under '%s' contains an invalid prefix: '%s'"
 msgstr ""
 
-#: src/functions/lint_pkgbuild/depends.sh:64
+#: src/functions/lint_pkgbuild/depends.sh:69
 msgid "Dependency '%s' under '%s' contains more than one '!'."
 msgstr ""
 
@@ -443,7 +442,7 @@ msgstr ""
 msgid "Detected invalid architecture '%s'. Please use '%s' instead."
 msgstr ""
 
-#: src/main.sh:1014
+#: src/main.sh:1096
 msgid "Do not use the %s option. This option is only for internal use by %s."
 msgstr ""
 
@@ -455,7 +454,7 @@ msgstr ""
 msgid "Downloading %s..."
 msgstr ""
 
-#: src/main.sh:201
+#: src/main.sh:212
 msgid "Entering %s environment..."
 msgstr ""
 
@@ -471,14 +470,14 @@ msgstr ""
 msgid "Extracting sources..."
 msgstr ""
 
+#: src/functions/integrity/verify_checksum.sh:77
 #: src/functions/integrity/verify_signature.sh:66
 #: src/functions/integrity/verify_signature.sh:84
 #: src/functions/integrity/verify_signature.sh:87
-#: src/functions/integrity/verify_checksum.sh:77
 msgid "FAILED"
 msgstr ""
 
-#: src/main.sh:504
+#: src/main.sh:523
 msgid "Failed to add %s file to package."
 msgstr ""
 
@@ -486,11 +485,11 @@ msgstr ""
 msgid "Failed to change to directory %s"
 msgstr ""
 
-#: src/main.sh:1272
+#: src/main.sh:1376
 msgid "Failed to check missing dependencies."
 msgstr ""
 
-#: src/main.sh:644
+#: src/main.sh:663
 msgid "Failed to create source package file."
 msgstr ""
 
@@ -502,23 +501,23 @@ msgstr ""
 msgid "Failed to extract %s"
 msgstr ""
 
-#: src/main.sh:670
+#: src/main.sh:689
 msgid "Failed to install built package(s)."
 msgstr ""
 
-#: src/main.sh:1285
+#: src/main.sh:1389
 msgid "Failed to install missing dependencies."
 msgstr ""
 
-#: src/main.sh:678
+#: src/main.sh:697
 msgid "Failed to mark built package(s) as automatically installed."
 msgstr ""
 
-#: src/main.sh:1296
+#: src/main.sh:1402
 msgid "Failed to mark installed dependencies as automatically installed."
 msgstr ""
 
-#: src/main.sh:1396
+#: src/main.sh:1498
 msgid "Failed to remove dependencies."
 msgstr ""
 
@@ -530,17 +529,11 @@ msgstr ""
 msgid "Failed to source %s"
 msgstr ""
 
-#: src/main.sh:224
+#: src/main.sh:235
 msgid "Failed to update %s from %s to %s"
 msgstr ""
 
-#: src/functions/source/bzr.sh:54
-msgid "Failure while branching %s"
-msgstr ""
-
-#: src/functions/source/hg.sh:107 src/functions/source/bzr.sh:105
-#: src/functions/source/git.sh:120 src/functions/source/fossil.sh:99
-#: src/functions/source/fossil.sh:120
+#: src/functions/source/git.sh:120
 msgid "Failure while creating working copy of %s %s repo"
 msgstr ""
 
@@ -548,29 +541,21 @@ msgstr ""
 msgid "Failure while downloading %s"
 msgstr ""
 
-#: src/functions/source/svn.sh:72 src/functions/source/hg.sh:51
 #: src/functions/source/git.sh:70 src/functions/source/git.sh:76
-#: src/functions/source/fossil.sh:51
+#: src/functions/source/svn.sh:72
 msgid "Failure while downloading %s %s repo"
 msgstr ""
 
 #. only warn on failure to allow offline builds
-#: src/functions/source/bzr.sh:63
-msgid "Failure while pulling %s"
-msgstr ""
-
-#. only warn on failure to allow offline builds
-#: src/functions/source/svn.sh:81 src/functions/source/hg.sh:60
-#: src/functions/source/git.sh:92 src/functions/source/fossil.sh:65
+#: src/functions/source/git.sh:92 src/functions/source/svn.sh:81
 msgid "Failure while updating %s %s repo"
 msgstr ""
 
-#: src/functions/source/hg.sh:102 src/functions/source/bzr.sh:100
 #: src/functions/source/git.sh:114
 msgid "Failure while updating working copy of %s %s repo"
 msgstr ""
 
-#: src/main.sh:1390
+#: src/main.sh:1492
 msgid "Finished making: %s"
 msgstr ""
 
@@ -589,7 +574,7 @@ msgstr ""
 msgid "Found unused hash variable '%s'. Maybe add '%s'?"
 msgstr ""
 
-#: src/main.sh:488 src/main.sh:592
+#: src/main.sh:507 src/main.sh:611
 msgid "Generating %s file..."
 msgstr ""
 
@@ -597,16 +582,16 @@ msgstr ""
 msgid "Generating checksums for source files..."
 msgstr ""
 
-#: src/main.sh:658
+#: src/main.sh:677
 msgid "Installing %s package group..."
 msgstr ""
 
 #. Install the missing deps.
-#: src/main.sh:1282
+#: src/main.sh:1386
 msgid "Installing missing dependencies..."
 msgstr ""
 
-#: src/main.sh:656
+#: src/main.sh:675
 msgid "Installing package %s..."
 msgstr ""
 
@@ -618,28 +603,29 @@ msgstr ""
 msgid "Invalid integrity algorithm '%s' specified."
 msgstr ""
 
-#: src/main.sh:364
+#: src/main.sh:383
 msgid "Invalid value for %s: %s"
 msgstr ""
 
-#: src/main.sh:1210 src/main.sh:1225
+#: src/main.sh:1306 src/main.sh:1321
 msgid "Leaving %s environment."
 msgstr ""
 
-#: src/main.sh:1229
+#: src/main.sh:1325
 msgid "Making package: %s"
 msgstr ""
 
-#: src/main.sh:675
+#: src/main.sh:694
 msgid "Marking built package(s) as automatically installed..."
 msgstr ""
 
 #. Mark newly installed packages as automatically installed.
-#: src/main.sh:1294
+#. We have to make sure 'newly_installed_packages' isn't empty due to the aformentioned bug above the Python script call.
+#: src/main.sh:1399
 msgid "Marking newly installed packages as automatically installed..."
 msgstr ""
 
-#: src/main.sh:474
+#: src/main.sh:493
 msgid "Missing %s directory."
 msgstr ""
 
@@ -657,7 +643,7 @@ msgid ""
 "release."
 msgstr ""
 
-#: src/functions/lint_pkgbuild/depends.sh:87
+#: src/functions/lint_pkgbuild/depends.sh:93
 msgid "More than one version restrictor was specified for %s: %s"
 msgstr ""
 
@@ -681,25 +667,25 @@ msgstr ""
 msgid "Package contains reference to %s"
 msgstr ""
 
-#: src/main.sh:1386
+#: src/functions/lint_pkgbuild/depends.sh:100
+msgid "Package dependency '%s' contains more than one ':'."
+msgstr ""
+
+#: src/main.sh:1488
 msgid "Package directory is ready."
 msgstr ""
 
-#: src/main.sh:723
+#: src/main.sh:742
 msgid "Part of the package group has already been built. (use %s to overwrite)"
 msgstr ""
 
-#: src/functions/integrity/verify_signature.sh:90
 #: src/functions/integrity/verify_checksum.sh:75
+#: src/functions/integrity/verify_signature.sh:90
 msgid "Passed"
 msgstr ""
 
 #: src/functions/integrity/verify_signature.sh:115
 msgid "Please make sure you really trust them."
-msgstr ""
-
-#: src/functions/source/bzr.sh:59
-msgid "Pulling %s..."
 msgstr ""
 
 #: src/functions/tidy/purge.sh:35
@@ -718,7 +704,7 @@ msgstr ""
 msgid "Removing empty directories..."
 msgstr ""
 
-#: src/main.sh:1336 src/main.sh:1364
+#: src/main.sh:1443 src/main.sh:1467
 msgid "Removing existing %s directory..."
 msgstr ""
 
@@ -726,7 +712,7 @@ msgstr ""
 msgid "Removing static library files..."
 msgstr ""
 
-#: src/main.sh:1394
+#: src/main.sh:1496
 msgid "Removing unneeded dependencies..."
 msgstr ""
 
@@ -738,7 +724,7 @@ msgstr ""
 msgid "Retrieving sources..."
 msgstr ""
 
-#: src/main.sh:1009
+#: src/main.sh:1091
 msgid ""
 "Running %s as root is not allowed as it can cause permanent,\\ncatastrophic "
 "damage to your system."
@@ -753,13 +739,13 @@ msgstr ""
 msgid "SOURCE FILE NOT FOUND"
 msgstr ""
 
-#: src/main.sh:829
+#: src/main.sh:901
 msgid ""
 "See makedeb(8) for information on all available options and links for "
 "obtaining support."
 msgstr ""
 
-#: src/main.sh:484
+#: src/main.sh:503
 msgid "Setting up package metadata..."
 msgstr ""
 
@@ -767,7 +753,7 @@ msgstr ""
 msgid "Signing package(s)..."
 msgstr ""
 
-#: src/main.sh:1255
+#: src/main.sh:1351
 msgid "Signing package..."
 msgstr ""
 
@@ -779,7 +765,7 @@ msgstr ""
 msgid "Skipping all source file integrity checks."
 msgstr ""
 
-#: src/main.sh:1266
+#: src/main.sh:1362
 msgid "Skipping dependency checks."
 msgstr ""
 
@@ -791,12 +777,8 @@ msgstr ""
 msgid "Skipping verification of source file checksums."
 msgstr ""
 
-#: src/main.sh:1259
+#: src/main.sh:1355
 msgid "Source package created: %s"
-msgstr ""
-
-#: src/main.sh:1359
-msgid "Sources are ready."
 msgstr ""
 
 #: src/functions/lint_pkgbuild/source.sh:74
@@ -807,7 +789,7 @@ msgstr ""
 msgid "Sparse arrays are not allowed for source"
 msgstr ""
 
-#: src/main.sh:208 src/main.sh:307
+#: src/main.sh:219 src/main.sh:318
 msgid "Starting %s()..."
 msgstr ""
 
@@ -815,43 +797,43 @@ msgstr ""
 msgid "Stripping unneeded symbols from binaries and libraries..."
 msgstr ""
 
-#: src/functions/util/source.sh:170
+#: src/functions/util/source.sh:164
 msgid "The download program %s is not installed."
 msgstr ""
 
-#: src/main.sh:1308
+#: src/main.sh:1415
 msgid "The following build dependencies are missing:"
 msgstr ""
 
-#: src/main.sh:821
+#: src/main.sh:893
 msgid "The following can be used to print makedeb-styled messages:"
 msgstr ""
 
-#: src/main.sh:818
+#: src/main.sh:890
 msgid ""
 "The following options can modify the behavior of 'sudo' when it is called:"
 msgstr ""
 
-#: src/main.sh:813
+#: src/main.sh:885
 msgid ""
 "The following options can modify the behavior of APT during package and "
 "dependency installation:"
 msgstr ""
 
-#: src/main.sh:1154
+#: src/main.sh:1248
 msgid "The key %s does not exist in your keyring."
 msgstr ""
 
-#: src/main.sh:714
+#: src/main.sh:733
 msgid ""
 "The package group has already been built, installing existing packages..."
 msgstr ""
 
-#: src/main.sh:718
+#: src/main.sh:737
 msgid "The package group has already been built. (use %s to overwrite)"
 msgstr ""
 
-#: src/main.sh:1156
+#: src/main.sh:1250
 msgid "There is no key in your keyring."
 msgstr ""
 
@@ -859,38 +841,35 @@ msgstr ""
 msgid "Tidying install..."
 msgstr ""
 
-#: src/main.sh:1314
+#: src/main.sh:1421
 msgid "Try running '%s'."
 msgstr ""
 
-#: src/main.sh:240
+#: src/main.sh:251
 msgid "Unable to find source file %s."
 msgstr ""
 
-#: src/functions/executable/vcs.sh:45 src/functions/util/source.sh:161
+#: src/functions/executable/vcs.sh:45 src/functions/util/source.sh:155
 msgid "Unknown download protocol: %s"
 msgstr ""
 
-#: src/functions/source/svn.sh:62 src/functions/source/hg.sh:93
-#: src/functions/source/bzr.sh:85 src/functions/source/git.sh:60
-#: src/functions/source/fossil.sh:113
+#: src/functions/source/git.sh:60 src/functions/source/svn.sh:62
 msgid "Unrecognized reference: %s"
 msgstr ""
 
-#: src/main.sh:230
+#: src/main.sh:241
 msgid "Updated version: %s"
 msgstr ""
 
-#: src/functions/source/svn.sh:77 src/functions/source/hg.sh:56
-#: src/functions/source/git.sh:89 src/functions/source/fossil.sh:62
+#: src/functions/source/git.sh:89 src/functions/source/svn.sh:77
 msgid "Updating %s %s repo..."
 msgstr ""
 
-#: src/main.sh:795
+#: src/main.sh:864
 msgid "Usage: %s [options]"
 msgstr ""
 
-#: src/main.sh:1329
+#: src/main.sh:1436
 msgid "Using existing %s tree"
 msgstr ""
 
@@ -906,7 +885,7 @@ msgstr ""
 msgid "Verifying source file signatures with %s..."
 msgstr ""
 
-#: src/functions/lint_pkgbuild/depends.sh:99
+#: src/functions/lint_pkgbuild/depends.sh:124
 msgid "Version restrictor %s in %s isn't allowed on %s."
 msgstr ""
 
@@ -923,7 +902,7 @@ msgstr ""
 msgid "You do not have write permission for the directory $%s (%s)."
 msgstr ""
 
-#: src/main.sh:1297
+#: src/main.sh:1403
 msgid "You may need to run 'apt-mark auto' with the following packages:"
 msgstr ""
 
@@ -944,7 +923,7 @@ msgstr ""
 msgid "invalid public key"
 msgstr ""
 
-#: src/main.sh:793
+#: src/main.sh:862
 msgid "makedeb takes PKGBUILD files and creates archives installable via APT"
 msgstr ""
 
@@ -977,7 +956,7 @@ msgstr ""
 msgid "pkgdesc must contain characters other than spaces."
 msgstr ""
 
-#: src/main.sh:214
+#: src/main.sh:225
 msgid "pkgver() generated an invalid version: %s"
 msgstr ""
 
