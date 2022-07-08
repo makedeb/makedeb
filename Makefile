@@ -1,7 +1,7 @@
 CONFIG_FILE = $(shell cat .data.json)
 MAKEDEB_MAN_EPOCH = $(shell echo '$(CONFIG_FILE)' | jq -r '.makedeb_man_epoch')
 PKGBUILD_MAN_EPOCH = $(shell echo '$(CONFIG_FILE)' | jq -r '.pkgbuild_man_epoch')
-CURRENT_VERSION = $(shell echo '$(CONFIG_FILE)'  | jq -r -r '. | .current_pkgver + "-" + .current_pkgrel')
+CURRENT_VERSION = $(shell echo '$(CONFIG_FILE)'  | jq -r -r '. | .current_pkgver + "-" + .current_pkgrel_$(RELEASE)')
 FILESYTEM_PREFIX ?=
 
 .ONESHELL:

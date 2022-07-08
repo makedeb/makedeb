@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Note that the `[Unreleased]` section contains all changes that haven't yet made it to the `stable` branch.
 
 ## [Unreleased]
+### Added
+- Added `--no-build` and `--no-check` options (#211).
+
 ### Removed
 - Dropped support for VCS systems besides Git and SVN (#210).
 
