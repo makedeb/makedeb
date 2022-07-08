@@ -178,11 +178,27 @@ You can also prefix the source with *name::*, which allows you to specify where 
 *noextract (optional, nofunction, array)*::
 A list of archive files from *source* which should not be automatically extracted by makedeb. This can be useful when you can't/don't want to use makedeb's automatic extraction features or you need to install an archive as-is onto a system. The items in this list should point to the **filename** of downloaded files, not the full URL (i.e. that being *${pkgname}-${pkgver}.tar.gz* in our previous example).
 
+=== USING VCS SOURCES
+makedeb currently has native support for building from Git and SVN sources. While you could pull such sources manually in a function such as *prepare()*, makedeb provides utilities to do such automatically.
+
+To use these kind of sources, add your source URLs in the *source* array, and prepend the source name with either *git+* or *svn+*, for Git and SVN respectively. If using a *name::* prefix, place the VCS prefix after it. For example: ::
++
+*source=('git+https://github.com/makedeb/makedeb')*
+*source=('makedeb-src::git+https://github.com/makedeb/makedeb')*
+
+When using the Git VCS, you can also specify a *#key=value* parameter, where *key* is one of the following: ::
+*branch*: A Git branch to checkout to.
+*commit*: A Git commit to checkout to.
+*tag*: A Git tag to checkout to.
+
+For example: ::
++
+*source=('git+https://github.com/makedeb/makedeb#tag=v15.0.2-stable')*
+
 === INTEGRITY
 An array of checksums for files in the *source* array. The number of items in this array **must** match that in *source*, with each item corresponding to that in *source* in the order they appear. The checksums in this array should always be those provided by the upstream program/distributor.
 
 The following checksum types are supported, and should be entered in the format *{checksum}sums* (i.e. *sha256sums*): ::
-+
 *md5*
 *sha1*
 *sha224*

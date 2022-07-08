@@ -65,17 +65,11 @@ get_filename() {
 	local proto=$(get_protocol "$netfile")
 
 	case $proto in
-		bzr|fossil|git|hg|svn)
+		git|svn)
 			filename=${netfile%%#*}
 			filename=${filename%%\?*}
 			filename=${filename%/}
 			filename=${filename##*/}
-			if [[ $proto = bzr ]]; then
-				filename=${filename#*lp:}
-			fi
-			if [[ $proto = fossil ]]; then
-				filename=$filename.fossil
-			fi
 			if [[ $proto = git ]]; then
 				filename=${filename%%.git*}
 			fi
@@ -94,7 +88,7 @@ get_filepath() {
 	local proto="$(get_protocol "$1")"
 
 	case $proto in
-		bzr|git|hg|svn)
+		git|svn)
 			if [[ -d "$startdir/$file" ]]; then
 				file="$startdir/$file"
 			elif [[ -d "$SRCDEST/$file" ]]; then
