@@ -72,7 +72,7 @@ executable_vcs() {
 		local proto=$(get_protocol "$netfile" | sed 's|\+.*||')
 
 		case $proto in
-			bzr|fossil|git|hg|svn)
+			git|svn)
 				if ! type -p ${proto%%+*} > /dev/null; then
 					local client
 					client=$(get_vcsclient "$proto") || exit $?
