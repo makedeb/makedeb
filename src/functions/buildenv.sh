@@ -35,6 +35,9 @@ prepare_buildenv() {
 		$func
 	done
 
-	# ensure all necessary build variables are exported
+	# Ensure all necessary build variables are exported.
 	export CPPFLAGS CFLAGS CXXFLAGS LDFLAGS RUSTFLAGS MAKEFLAGS CHOST
+
+	# Load extensions.
+	load_extensions
 }

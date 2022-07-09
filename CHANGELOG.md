@@ -9,6 +9,7 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ## [Unreleased]
 ### Added
 - Added `--no-build` and `--no-check` options (#211).
+- Added extension support (#212).
 
 ### Removed
 - Dropped support for VCS systems besides Git and SVN (#210).
