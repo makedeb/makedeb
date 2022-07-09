@@ -29,9 +29,12 @@ source "$LIBRARY/util/pkgbuild.sh"
 
 lint_pkgbuild_functions+=('lint_options')
 
-
 lint_options() {
 	local ret=0 list name kopt options_list
+	
+	if [[ "${#options[@]}" -gt 0 ]]; then
+		warning "$(gettext "'%s' has been deprecated, and will no longer function. Please use the '%s' variable (PKGBUILD(5)) instead.")" 'options' 'extensions'
+	fi
 
 	options_list=("${options[@]}")
 	for name in "${pkgname[@]}"; do
