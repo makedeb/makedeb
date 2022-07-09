@@ -57,6 +57,7 @@ declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
 
 LIBRARY="${LIBRARY:-"{FILESYSTEM_PREFIX}/usr/share/makedeb"}"
 MAKEPKG_CONF="${MAKEPKG_CONF:-"{FILESYSTEM_PREFIX}/etc/makepkg.conf"}"
+EXTENSIONS_DIR='{FILESYSTEM_PREFIX}/usr/lib/makedeb'
 
 # We use backslashes instead of quotes so the Makefile doesn't overwrite the values here. Otherwise these 'if' statements would still be evaluated as true, as '{FILESYSTEM_PREFIX}' would be changed in the Makefile.
 if [[ "${LIBRARY}" == \{FILESYSTEM_PREFIX\}/usr/share/makedeb ]]; then
@@ -65,6 +66,10 @@ fi
 
 if [[ "${MAKEPKG_CONF}" == \{FILESYSTEM_PREFIX\}/etc/makepkg.conf ]]; then
 	MAKEPKG_CONF='./makepkg.conf'
+fi
+
+if [[ "${EXTENSIONS_DIR}" == \{FILESYSTEM_PREFIX\}/usr/lib/makedeb ]]; then
+	EXTENSIONS_DIR="${PWD}/extensions"
 fi
 
 # Options
@@ -112,6 +117,12 @@ SUDOARGS=()
 SYNCDEPS=0
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
+
+# A default list of extensions to load, these extensions are included with makedeb. This is a publically-exposed variable for PKGBUILDs that can be overwritten.
+extensions=(
+	'strip'
+	'zipman'
+)
 
 if [[ -n $SOURCE_DATE_EPOCH ]]; then
 	REPRODUCIBLE=1
@@ -317,37 +328,9 @@ run_function() {
 	if (( ! BASH_SUBSHELL )); then
 		msg "$(gettext "Starting %s()...")" "$pkgfunc"
 	fi
+
 	cd_safe "$srcdir"
-
-	local ret=0
-	if (( LOGGING )); then
-		local fullver=$(get_full_version)
-		local BUILDLOG="$LOGDEST/${pkgbase}-${fullver}-${CARCH}-$pkgfunc.log"
-		if [[ -f $BUILDLOG ]]; then
-			local i=1
-			while true; do
-				if [[ -f $BUILDLOG.$i ]]; then
-					i=$(($i +1))
-				else
-					break
-				fi
-			done
-			mv "$BUILDLOG" "$BUILDLOG.$i"
-		fi
-
-		# ensure overridden package variables survive tee with split packages
-		logpipe=$(mktemp -u "$LOGDEST/logpipe.XXXXXXXX")
-		mkfifo "$logpipe"
-		tee "$BUILDLOG" < "$logpipe" &
-		local teepid=$!
-
-		$pkgfunc &>"$logpipe"
-
-		wait -f $teepid
-		rm "$logpipe"
-	else
-		"$pkgfunc"
-	fi
+	MSG_PREFIX=" ${pkgfunc}()" "$pkgfunc"
 }
 
 run_prepare() {
@@ -372,6 +355,21 @@ run_check() {
 
 run_package() {
 	run_function_safe "package${1:+_$1}"
+}
+
+write_control_pair() {
+    local target_var="${1}"
+    local values=()
+
+    for value in "${@:2}"; do
+        values+=("${value},")
+    done
+
+    if [[ "${#values[@]}" == 0 ]] || [[ "${#values[@]}" == 1 && "${values}" == "," ]]; then
+        return
+    fi
+
+    echo "${target_var}: ${values[@]}" | sed 's|,$||'
 }
 
 write_kv_pair() {
@@ -498,6 +496,18 @@ create_package() {
 	cd_safe "$pkgdir"
 	(( NOARCHIVE )) || msg "$(gettext "Creating package \"%s\"...")" "$pkgname"
 
+	# Run any requested extensions.
+	# post_package extensions are to be run from '${pkgdir}'.
+	local extension
+
+	if [[ "${#post_package_extensions[@]}" -gt 0 ]]; then
+		msg2 "$(gettext "Running post-packaging hooks...")"
+
+		for extension in "${post_package_extensions[@]}"; do
+			MAKEDEB_POST_PACKAGE=true "_${extension}"
+		done
+	fi
+
 	# Generate package metadata.
 	pkgarch=$(get_pkg_arch)
 	msg2 "$(gettext "Setting up package metadata...")"
@@ -541,7 +551,7 @@ create_package() {
 	local ret=0
 
 	if [[ -f $pkg_file ]]; then
-		warning "$(gettext "Built package %s exists. Removing...")" "$(basename "${pkg_file}")"
+		warning2 "$(gettext "Built package %s exists. Removing...")" "$(basename "${pkg_file}")"
 		rm "${pkg_file}"
 	fi
 
@@ -768,13 +778,13 @@ restore_package_variables() {
 
 run_single_packaging() {
 	backup_package_variables
-
+	
+	# Run the 'package()/package_{pkgname}()' function for this pkgname.
 	local pkgdir="$pkgdirbase/$pkgname"
 	mkdir "$pkgdir"
 	if [[ -n $1 ]] || (( PKGFUNC )); then
 		run_package $1
 	fi
-	tidy_install
 
 	# If the package didn't overwrite dependency arrays, we need to format
 	# the dependencies back to makedeb-styled ones, as they've already been formatted
@@ -1110,8 +1120,7 @@ unset "${!sha256sums_@}" "${!sha384sums_@}" "${!sha512sums_@}" "${!b2sums_@}"
 # Read environment variables.
 # We don't process variables that start with '_', as those are meant for custom
 # user-defined variables.
-mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
-mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
+read_env
 
 # Unset distro-specific environment variables from a user's environment variables.
 # This processes distro-specific global variables (i.e. 'focal_depends') as well
@@ -1148,8 +1157,7 @@ else
 fi
 
 # Re-read environment variables.
-mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
-mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
+read_env
 
 # Set pkgbase variable if the user didn't define it.
 # We don't set to 'pkgbase' yet so that we don't lint that variable when the user didn't set it.
@@ -1171,9 +1179,9 @@ fi
 # Who would want to ever use Pacstall???
 if ! (( "${DESTROYSYSTEM}" )); then
 	if [[ "${pkgbase}" == "pacstall" ]] || in_array 'pacstall' "${pkgname[@]}"; then
-		error "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'."
-		error "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom."
-		error "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:"
+		error "$(gettext "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'.")"
+		error "$(gettext "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom.")"
+		error "$(gettext "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:")"
 		error "'--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious'"
 		exit 1
 	fi
@@ -1306,8 +1314,9 @@ if (( INFAKEROOT )); then
 		msg "$(gettext "Leaving %s environment.")" "fakeroot"
 		exit $E_OK
 	fi
-
-	prepare_buildenv
+	
+	# Load up extensions for use by 'package()' and post-install scripts.
+	load_extensions
 
 	chmod 755 "$pkgdirbase"
 	if (( ! SPLITPKG )); then
@@ -1425,6 +1434,10 @@ else
 
 	unset missing_deps dep
 fi
+
+# Load up extensions for use by 'build()'.
+msg "$(gettext "Loading extensions...")"
+load_extensions
 
 # Get back to our src directory so we can begin with sources.
 mkdir -p "$srcdir"

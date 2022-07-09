@@ -155,13 +155,8 @@ A string that specifies the path to a script to execute before a package is remo
 A string that specifies the path to a script to execute after a package is removed from a user's system.
 
 === OTHER
-*options (optional, function, array)*::
-Allows overriding some of makedeb's default behavior. To set an option, include it in the array. To disable an option, prefix the option with a *!*. The following options may be specified:
-+
-*strip*: Strip symbols from binaries.
-*emptydirs*: Leave empty directories in packages.
-*zipman*: Comprezz man and info pages with gzip.
-*lto*: Enable building packages using link time optimization. Adds *-flto* to both *CFLAGS* and *CXXFLAGS*.
+*extensions (optional, nofunction, array)*::
+A list of extensions to be called during execution. This defaults to *extensions=('strip' 'zipman')* if not set. See *makedeb-extension*(5) for information on the directory structure and file formats for extensions.
 
 === SOURCES
 *source (optional, nofunction, array)*::
