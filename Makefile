@@ -32,6 +32,10 @@ package:
 	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb/{}' \;
 	cd ../
 	
+	cd ../extensions/
+	find ./ -type f -exec install -Dm 644 '{}' '$(DESTDIR)/usr/lib/makedeb/{}' \;
+	cd ../
+	
 	install -Dm 644 ./makepkg.conf '$(DESTDIR)/etc/makepkg.conf'
 	install -Dm 755 ./makepkg-template '$(DESTDIR)/usr/bin/makepkg-template'
 	
