@@ -357,6 +357,21 @@ run_package() {
 	run_function_safe "package${1:+_$1}"
 }
 
+write_control_pair() {
+    local target_var="${1}"
+    local values=()
+
+    for value in "${@:2}"; do
+        values+=("${value},")
+    done
+
+    if [[ "${#values[@]}" == 0 ]] || [[ "${#values[@]}" == 1 && "${values}" == "," ]]; then
+        return
+    fi
+
+    echo "${target_var}: ${values[@]}" | sed 's|,$||'
+}
+
 write_kv_pair() {
 	local key="$1"
 	shift
