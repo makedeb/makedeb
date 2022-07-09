@@ -1315,8 +1315,7 @@ if (( INFAKEROOT )); then
 		exit $E_OK
 	fi
 	
-	# Load up extensions.
-	msg "$(gettext "Loading extensions...")"
+	# Load up extensions for use by 'package()' and post-install scripts.
 	load_extensions
 
 	chmod 755 "$pkgdirbase"
@@ -1435,6 +1434,10 @@ else
 
 	unset missing_deps dep
 fi
+
+# Load up extensions for use by 'build()'.
+msg "$(gettext "Loading extensions...")"
+load_extensions
 
 # Get back to our src directory so we can begin with sources.
 mkdir -p "$srcdir"

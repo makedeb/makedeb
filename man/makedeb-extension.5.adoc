@@ -1,0 +1,46 @@
+= MAKEDEB(8)
+:doctype: manpage
+:hardbreaks:
+:manmanual: makedeb manual pages
+:mansource: MAKEDEB $${MAKEDEB_VERSION}
+
+== NAME
+makedeb-extension - extension format for PKGBUILD(5) files
+
+== DESCRIPTION
+makedeb extensions, as the name implies, extend the functionality of makedeb. Currently, extensions can do the following:
+
+`-` Provide extra helper functions for use in *build()* and *package()*.
+`-` Provide hooks to run after certain functions are completed (currently, this is limited to after *package()* is ran).
+
+== FILES
+Users declare what extensions they'd like to use with the *extensions* variable in a PKGBUILD. Consider the following:
+
+*extensions=('strip' 'zipman')*
+
+Here the 'strip' and 'zipman' extensions are active.
+
+== LAYOUT STRUCTURE
+All makedeb extensions are stored in a central location on the system, that being */usr/lib/makedeb* on a standard installation. Each extension takes its own subdirectory in this directory (i.e. */usr/lib/makedeb/strip*).
+
+`NOTE:` makedeb extension names must consist of only alphanumerical characters and hyphens.
+
+Each extension should have a script titled *init.sh* in its directory (i.e. */usr/lib/makedeb/strip/init.sh*). Inside this script there must be a function defined titled *_{extension}* (where *{extension}* is the name of the extension). This is the public command, if any, that users can use to call the function inside of their PKGBUILDs. It is also used as the entrypoint for any hooks.
+
+To capture the post-packaging build hook described at the top of this page, add the *post_package=true* variable to the top of the init script, above any defined functions. The extension can then tell that makedeb itself called it as a post-packaging hook via the presence of the *MAKEDEB_POST_PACKAGING* variable, which will be set to the value of *true*. The extension can also use this to only run itself when ran as a hook, by erroring out when the function is called without it being set.
+
+== BEST PRACTICES
+// Double dollar signs appear to be fixing double underscore issues for us. Not sure how $$ functions yet (TODO: Figure out how they function).
+// https://github.com/asciidoctor/asciidoctor/issues/625#issuecomment-24224899.
+If any additional functions are set in the extension, prefix them with *$$_$${extension}$$_$$*, similar to how it's done for the extension name itself. This serves to avoid function naming conflicts with anything the user might have set in their PKGBUILD, as well as with other extensions. Or if suitable, use the extension directory and create additional scripts, thus avoiding the need to define any extra functions at all.
+
+== ENVIRONMENT
+makedeb will wrap an extension's *_{extension}* function with some extra environment variables:
+
+*MAKEDEB_EXTENSION_NAME*: The name of the currently called extension (i.e. *strip*).
+*MAKEDEB_EXTENSION_PATH*: The path to the extension's directory (i.e. */usr/lib/makedeb/strip*).
+
+Some other variables are also set, but these are for internal use, and they may be removed at any moment, so don't rely on them being available for use.
+
+== SEE ALSO
+*makedeb*(8) *PKGBUILD*(5)

@@ -14,7 +14,7 @@ lint_extensions() {
 	local ret=0
 
 	for extension in "${extensions[@]}"; do
-		invalid_characters="$(echo "${extension}" | grep -o '[^a-z-]' | sort -u | tr -d '\n')"
+		invalid_characters="$(echo "${extension}" | grep -o '[^a-zA-Z0-9-]' | sort -u | tr -d '\n')"
 
 		if [[ "${#invalid_characters}" -gt 0 ]]; then
 			error "$(gettext "'%s' under '%s' contains invalid characters: '%s'.")" "${extension}" 'extensions' "${invalid_characters}"
