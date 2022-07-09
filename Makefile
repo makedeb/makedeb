@@ -32,7 +32,7 @@ package:
 	find ./ -type f -exec install -Dm 755 '{}' '$(DESTDIR)/usr/share/makedeb/{}' \;
 	cd ../
 	
-	cd ../extensions/
+	cd extensions/
 	find ./ -type f -exec install -Dm 644 '{}' '$(DESTDIR)/usr/lib/makedeb/{}' \;
 	cd ../
 	
