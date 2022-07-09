@@ -68,7 +68,7 @@ if [[ "${MAKEPKG_CONF}" == \{FILESYSTEM_PREFIX\}/etc/makepkg.conf ]]; then
 	MAKEPKG_CONF='./makepkg.conf'
 fi
 
-if [[ "${EXTENSIONS_DIR}" == \{FILESYSTEM_PREFIX}/usr/lib/makedeb ]]; then
+if [[ "${EXTENSIONS_DIR}" == \{FILESYSTEM_PREFIX\}/usr/lib/makedeb ]]; then
 	EXTENSIONS_DIR="${PWD}/extensions"
 fi
 
