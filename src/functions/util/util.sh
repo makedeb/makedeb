@@ -158,3 +158,10 @@ create_array() {
   declare -g "${target_variable}"
   unset -n var_ref
 }
+
+# Read environment variables and functions.
+read_env() {
+	mapfile -t env_vars < <(set | grep '^[^= ]*=' | grep '^[^_]')
+	mapfile -t env_keys < <(printf '%s\n' "${env_vars[@]}" | grep -o '^[^=]*' | grep '^[^_]')
+	mapfile -t env_funcs < <(set | grep '^[a-zA-Z_-]* () $' | sed 's| () ||')
+}

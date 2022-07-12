@@ -8,6 +8,15 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ## [Unreleased]
 ### Added
+- Added `--no-build` and `--no-check` options (#211).
+- Added extension support (#212).
+- Format makedeb-styled message calls (`msg`, `msg2`, `warning`, etc.) in PKGBUILD functions with a prefix (#212).
+
+### Removed
+- Dropped support for VCS systems besides Git and SVN (#210).
+
+## [15.1.0] - 2022-06-29
+### Added
 - Add support for `:` characters in dependencies (#202).
 
 ## [15.0.2] - 2022-06-05

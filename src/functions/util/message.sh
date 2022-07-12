@@ -57,39 +57,39 @@ plainerr() {
 	plain "$@" >&2
 }
 
+# Pass in the 'MSG_PREFIX' variable when calling these functions to get a prefix on your text. I.e:
+# MSG_PREFIX=' gimp' msg hi
+#     [# gimp] hi
+#
+# Please put a space before your prefix.
 msg() {
 	(( QUIET )) && return
 	local mesg=$1; shift
-	printf "${GREEN}[#]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@"
+	printf "${GREEN}[#${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@"
 }
 
 msg2() {
 	(( QUIET )) && return
 	local mesg=$1; shift
-	printf "${BLUE}  [->]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@"
-}
-
-ask() {
-	local mesg=$1; shift
-	printf "${BLUE}::${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}" "$@"
+	printf "${BLUE}  [->${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@"
 }
 
 warning() {
 	local mesg=$1; shift
-	printf "${YELLOW}[!]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+	printf "${YELLOW}[!${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
 warning2() {
-  local mesg=$1; shift
-  printf "${YELLOW}  [->]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+	local mesg=$1; shift
+  	printf "${YELLOW}  [->${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
 error() {
 	local mesg=$1; shift
-	printf "${RED}[!]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+	printf "${RED}[!${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
 error2() {
   local mesg=$1; shift
-  printf "${RED}  [->]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+  printf "${RED}  [->${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }

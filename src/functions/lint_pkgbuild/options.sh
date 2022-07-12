@@ -29,29 +29,8 @@ source "$LIBRARY/util/pkgbuild.sh"
 
 lint_pkgbuild_functions+=('lint_options')
 
-
 lint_options() {
-	local ret=0 list name kopt options_list
-
-	options_list=("${options[@]}")
-	for name in "${pkgname[@]}"; do
-		if extract_function_variable "package_$name" options 1 list; then
-			options_list+=("${list[@]}")
-		fi
-	done
-
-	for i in "${options_list[@]}"; do
-		# check if option matches a known option or its inverse
-		for kopt in "${packaging_options[@]}" "${build_options[@]}"; do
-			if [[ $i = "$kopt" || $i = "!$kopt" ]]; then
-				# continue to the next $i
-				continue 2
-			fi
-		done
-
-		error "$(gettext "%s array contains unknown option '%s'")" "options" "$i"
-		ret=1
-	done
-
-	return $ret
+	if [[ "${#options[@]}" -gt 0 ]]; then
+		warning "$(gettext "'%s' has been deprecated, and will no longer function. Please use the '%s' variable (PKGBUILD(5)) instead.")" 'options' 'extensions'
+	fi
 }

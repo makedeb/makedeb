@@ -27,13 +27,12 @@ local createTag(tag) = {
     depends_on: ["run-unit-tests-" + tag],
     steps: [{
         name: tag,
-        image: "python:3",
+        image: "ubuntu:20.04",
         environment: {
             github_api_key: {from_secret: "github_api_key"}
         },
         commands: [
-            "NO_SUDO=1 .drone/scripts/install-deps.sh",
-            ".drone/scripts/create_tag.py"
+            ".drone/scripts/create_tag.sh"
         ]
     }]
 };
