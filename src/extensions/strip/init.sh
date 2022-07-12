@@ -13,8 +13,8 @@ _strip() {
     mapfile -t files < <(find "${pkgdir}" -type f)
 
     for file_iter in "${files[@]}"; do
-        if file "${file_iter}" | grep 'executable'; then
-            strip "${file}"
+        if file "${file_iter}" | grep -q 'executable'; then
+            strip "${file_iter}"
         fi
     done
 }
