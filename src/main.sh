@@ -96,7 +96,6 @@ NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
 NOCHECK=0
-NOCOLOR=0
 NOCONFIRM=0
 NODEPS=0
 NOEXTRACT=0
@@ -982,7 +981,7 @@ while true; do
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--no-build)              NOBUILD=1 ;;
 		--no-check)              NOCHECK=1 ;;
-		--no-color)              NOCOLOR=1 ;;
+		--no-color)              NO_COLOR=1 ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
@@ -1047,7 +1046,7 @@ done
 unset var
 
 # check if messages are to be printed using color
-if [[ -t 2 ]] && ! (( "${NOCOLOR}" )) && check_buildenv "color" "y"; then
+if [[ -t 2 ]] && ! (( "${NO_COLOR}" )) && check_buildenv "color" "y"; then
 	colorize
 else
 	unset ALL_OFF BOLD BLUE GREEN RED YELLOW
