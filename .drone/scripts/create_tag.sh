@@ -26,7 +26,13 @@ gh_cli_args=()
 if [[ "${branch}" == 'stable' ]]; then
     release_notes+="$(parse-changelog CHANGELOG.md "${pkgver}")"
 else
-    release_notes+=$'> The following contains the list of changes since the last stable release.\n\n'
+    case "${branch}" in
+        'beta') article='a' ;;
+        'alpha') article='an' ;;
+    esac
+
+    release_notes+="> The following contains the list of changes since the last **stable** release. This is ${article} **${branch}** release, and future changes will be appended to the below list until a new stable release is made."
+    release_notes+=$'\n\n'
     release_notes+="$(parse-changelog CHANGELOG.md 'Unreleased')"
     gh_cli_args+=('--prerelease')
 fi
