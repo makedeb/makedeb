@@ -22,6 +22,7 @@ load ../util/util
     pkgbuild array focal_depends 'krita'
     pkgbuild clean
     makedeb -d
+    echo "|$(bash -c 'lsb_release -cs')|" >&3
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep 'Depends:')" == "Depends: krita" ]]
 }
 
