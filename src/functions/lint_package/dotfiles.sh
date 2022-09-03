@@ -29,8 +29,7 @@ lint_package_functions+=('check_dotfiles')
 
 check_dotfiles() {
 	local ret=0
-	for f in "$pkgdir"/.*; do
-		[[ ${f##*/} == . || ${f##*/} == .. ]] && continue
+  for f in $(ls -Ad "$pkgdir"/.*); do
 		error "$(gettext "Dotfile found in package root '%s'")" "$f"
 		ret=1
 	done
