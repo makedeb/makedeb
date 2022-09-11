@@ -52,8 +52,8 @@ declare -r startdir="$(pwd -P)"
 declare -r MAKEDEB_VERSION='{MAKEDEB_VERSION}'
 declare -r MAKEDEB_RELEASE='{MAKEDEB_RELEASE}'
 declare -r MAKEDEB_INSTALLATION_SOURCE='{MAKEDEB_INSTALLATION_SOURCE}'
-declare -r MAKEDEB_DPKG_ARCHITECTURE="$(dpkg --print-architecture)"
-declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
+declare -r MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-"$(dpkg --print-architecture)"}"
+declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-"$(lsb_release -cs)"}"
 
 LIBRARY="${LIBRARY:-"{FILESYSTEM_PREFIX}/usr/share/makedeb"}"
 MAKEPKG_CONF="${MAKEPKG_CONF:-"{FILESYSTEM_PREFIX}/etc/makepkg.conf"}"
