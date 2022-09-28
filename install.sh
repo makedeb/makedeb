@@ -76,7 +76,7 @@ echo
 if (( "${noninteractive_mode}" )) && [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
     error "The script was ran in noninteractive mode, but no makedeb package was specified to install."
     die_cmd "Please specify a package to install via the 'MAKEDEB_RELEASE' environment variable."
-else if [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
+elif [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
     msg "Multiple releases of makedeb are available for installation."
     msg "Currently, you can install one of 'makedeb', 'makedeb-beta', or"
     msg "'makedeb-alpha'."
