@@ -91,6 +91,8 @@ elif [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
 
         break
     done
+    
+    echo
 fi
 
 case "${MAKEDEB_RELEASE}" in
@@ -102,7 +104,6 @@ case "${MAKEDEB_RELEASE}" in
         exit 1 ;;
 esac
 
-echo
 msg "Proceeding to install '${MAKEDEB_RELEASE}'..."
 
 msg "Setting up makedeb APT repository..."
