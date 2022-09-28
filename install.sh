@@ -60,7 +60,7 @@ missing_dependencies=()
 dpkg-query -W 'wget' > /dev/null 2>&1 || missing_dependencies+=('wget')
 dpkg-query -W 'gpg' > /dev/null 2>&1 || missing_dependencies+=('gpg')
 
-if ! ( test -z "${missing_dependencies[*]}" || sudo apt-get install --mark-auto "${missing_dependencies[*]}" ); then
+if ! ( test -z "${missing_dependencies[*]}" || sudo apt-get install --mark-auto "${missing_dependencies[@]}" ); then
     die_cmd "Failed to install needed packages."
 fi
 
