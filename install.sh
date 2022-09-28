@@ -84,8 +84,8 @@ elif [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
     while true; do
         read -p "$(question "Which release would you like? ")" MAKEDEB_RELEASE
 
-        if echo "${MAKEDEB_RELEASE}" | grep -qE '^makedeb$|^makedeb-beta$|^makedeb-alpha$'; then
-            error "Invalid response: ${response}"
+        if ! echo "${MAKEDEB_RELEASE}" | grep -qE '^makedeb$|^makedeb-beta$|^makedeb-alpha$'; then
+            error "Invalid response: ${MAKEDEB_RELEASE}"
             continue
         fi
 
