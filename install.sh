@@ -51,7 +51,7 @@ echo "${color_green}[#]${color_normal} ${color_orange}makedeb Installer${color_n
 echo "-------------------------"
 echo
 
-if echo "${-}" | grep -q i; then
+if ! echo "${-}" | grep -q i; then
     msg "Running in noninteractive mode."
     noninteractive_mode=1
     export DEBIAN_FRONTEND=noninteractive
