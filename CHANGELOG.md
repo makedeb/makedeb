@@ -17,6 +17,9 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 ### Removed
 - Dropped support for VCS systems besides Git and SVN (#210).
 
+### Fixed
+- Fixed bug where dotfiles are found in the package root (#229).
+
 ## [15.1.0] - 2022-06-29
 ### Added
 - Add support for `:` characters in dependencies (#202).

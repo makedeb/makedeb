@@ -28,11 +28,12 @@ source "$LIBRARY/util/message.sh"
 lint_package_functions+=('check_dotfiles')
 
 check_dotfiles() {
-	local ret=0
-	for f in "$pkgdir"/.*; do
-		[[ ${f##*/} == . || ${f##*/} == .. ]] && continue
-		error "$(gettext "Dotfile found in package root '%s'")" "$f"
-		ret=1
-	done
-	return $ret
+    local ret=0
+    local dotfiles
+    mapfile -t dotfiles < <(find -mindepth 1 -maxdepth 1 -name '.*' | sed 's|^\./||' | grep '^\.')
+    for f in "${dotfiles[@]}"; do
+        error "$(gettext "Dotfile found in package root '%s'")" "$f"
+        ret=1
+    done
+    return $ret
 }
