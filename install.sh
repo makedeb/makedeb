@@ -104,8 +104,6 @@ case "${MAKEDEB_RELEASE}" in
         exit 1 ;;
 esac
 
-msg "Proceeding to install '${MAKEDEB_RELEASE}'..."
-
 msg "Setting up makedeb APT repository..."
 if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null; then
     die_cmd "Failed to set up makedeb APT repository."
@@ -117,6 +115,7 @@ if ! sudo apt-get update "${apt_args[@]}"; then
     die_cmd "Failed to update APT cache."
 fi
 
+echo
 msg "Installing '${MAKEDEB_RELEASE}'..."
 if ! sudo apt-get install "${apt_args[@]}" -- "${MAKEDEB_RELEASE}"; then
     die_cmd "Failed to install package."
