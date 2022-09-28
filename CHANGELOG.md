@@ -12,6 +12,7 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 - Added extension support (#212).
 - Format makedeb-styled message calls (`msg`, `msg2`, `warning`, etc.) in PKGBUILD functions with a prefix (#212).
 - Added support for the `NO_COLOR` environment variable (#188).
+- Allow `MAKEDEB_DPKG_ARCHITECTURE` and `MAKEDEB_DISTRO_CODENAME` to be overwritten by the user (#227).
 
 ### Removed
 - Dropped support for VCS systems besides Git and SVN (#210).
