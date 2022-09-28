@@ -2,6 +2,7 @@
 set -e
 
 # Handy env vars.
+MAKEDEB_RELEASE="${MAKEDEB_RELEASE:-}"
 makedeb_url='makedeb.org'
 color_normal="$(tput sgr0)"
 color_bold="$(tput bold)"
@@ -10,9 +11,8 @@ color_orange="$(tput setaf 214)"
 color_blue="$(tput setaf 14)"
 color_red="$(tput setaf 202)"
 color_purple="$(tput setaf 135)"
-
-# Answer vars.
-MAKEDEB_PKG='makedeb'
+noninteractive_mode=0
+apt_args=()
 
 # Handy functions.
 msg() {
@@ -49,10 +49,17 @@ fi
 echo "-------------------------"
 echo "${color_green}[#]${color_normal} ${color_orange}makedeb Installer${color_normal} ${color_green}[#]${color_normal}"
 echo "-------------------------"
-
 echo
+
+if ! echo "${-}" | grep -q i; then
+    msg "Running in noninteractive mode."
+    noninteractive_mode=1
+    export DEBIAN_FRONTEND=noninteractive
+    apt_args+=('-y')
+fi
+
 msg "Ensuring needed packages are installed..."
-if ! sudo apt-get update; then
+if ! sudo apt-get update "${apt_args[@]}"; then
     die_cmd "Failed to update APT cache."
 fi
 
@@ -60,28 +67,42 @@ missing_dependencies=()
 dpkg-query -W 'wget' > /dev/null 2>&1 || missing_dependencies+=('wget')
 dpkg-query -W 'gpg' > /dev/null 2>&1 || missing_dependencies+=('gpg')
 
-if ! ( test -z "${missing_dependencies[*]}" || sudo apt-get install --mark-auto "${missing_dependencies[@]}" ); then
+if ! ( test -z "${missing_dependencies[*]}" || sudo apt-get install "${apt_args[@]}" --mark-auto "${missing_dependencies[@]}" ); then
     die_cmd "Failed to install needed packages."
 fi
 
 echo
-msg "Multiple releases of makedeb are available for installation."
-msg "Currently, you can install one of 'makedeb', 'makedeb-beta', or"
-msg "'makedeb-alpha'."
-msg "If you're not sure which one to choose, pick 'makedeb'."
 
-while true; do
-    read -p "$(question "Which release would you like? ")" response
+if (( "${noninteractive_mode}" )) && [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
+    error "The script was ran in noninteractive mode, but no makedeb package was specified to install."
+    die_cmd "Please specify a package to install via the 'MAKEDEB_RELEASE' environment variable."
+elif [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
+    msg "Multiple releases of makedeb are available for installation."
+    msg "Currently, you can install one of 'makedeb', 'makedeb-beta', or"
+    msg "'makedeb-alpha'."
+    
+    while true; do
+        read -p "$(question "Which release would you like? ")" MAKEDEB_RELEASE
 
-    if [[ "${response}" != 'makedeb' && "${response}" != 'makedeb-beta' && "${response}" != 'makedeb-alpha' ]]; then
-        error "Invalid response: ${response}"
-        continue
-    fi
+        if ! echo "${MAKEDEB_RELEASE}" | grep -qE '^makedeb$|^makedeb-beta$|^makedeb-alpha$'; then
+            error "Invalid response: ${MAKEDEB_RELEASE}"
+            continue
+        fi
 
-    break
-done
+        break
+    done
+    
+    echo
+fi
 
-MAKEDEB_PKG="${response}"
+case "${MAKEDEB_RELEASE}" in
+    makedeb|makedeb-alpha|makedeb-beta)
+        ;;
+    *)
+        echo
+        error "Invalid \$MAKEDEB_RELEASE: '${MAKEDEB_RELEASE}'"
+        exit 1 ;;
+esac
 
 msg "Setting up makedeb APT repository..."
 if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null; then
@@ -90,12 +111,13 @@ fi
 echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] https://proget.${makedeb_url} makedeb main" | sudo tee /etc/apt/sources.list.d/makedeb.list 1> /dev/null
 
 msg "Updating APT cache..."
-if ! sudo apt-get update; then
+if ! sudo apt-get update "${apt_args[@]}"; then
     die_cmd "Failed to update APT cache."
 fi
 
-msg "Installing '${MAKEDEB_PKG}'..."
-if ! sudo apt-get install -- "${MAKEDEB_PKG}"; then
+echo
+msg "Installing '${MAKEDEB_RELEASE}'..."
+if ! sudo apt-get install "${apt_args[@]}" -- "${MAKEDEB_RELEASE}"; then
     die_cmd "Failed to install package."
 fi
 
