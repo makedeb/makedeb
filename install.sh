@@ -2,6 +2,7 @@
 set -e
 
 # Handy env vars.
+MAKEDEB_RELEASE="${MAKEDEB_RELEASE:-}"
 makedeb_url='makedeb.org'
 color_normal="$(tput sgr0)"
 color_bold="$(tput bold)"
@@ -10,6 +11,8 @@ color_orange="$(tput setaf 214)"
 color_blue="$(tput setaf 14)"
 color_red="$(tput setaf 202)"
 color_purple="$(tput setaf 135)"
+noninteractive_mode=0
+apt_args=()
 
 # Handy functions.
 msg() {
@@ -48,11 +51,11 @@ echo "${color_green}[#]${color_normal} ${color_orange}makedeb Installer${color_n
 echo "-------------------------"
 echo
 
-if [[ "${DEBIAN_FRONTEND}" == 'noninteractive' || "${NONINTERACTIVE:+x}" != '' || "${CI:+x}" != '' ]]; then
+if echo "${-}" | grep -q i; then
+    msg "Running in noninteractive mode."
     noninteractive_mode=1
     export DEBIAN_FRONTEND=noninteractive
-    apt_args=('-y')
-    msg "Enabled noninteractive mode."
+    apt_args+=('-y')
 fi
 
 msg "Ensuring needed packages are installed..."
@@ -69,16 +72,28 @@ if ! ( test -z "${missing_dependencies[*]}" || sudo apt-get install "${apt_args[
 fi
 
 echo
-msg "Multiple releases of makedeb are available for installation."
-msg "Currently, you can install one of 'makedeb', 'makedeb-beta', or"
-msg "'makedeb-alpha' by passing the \$MAKEDEB_RELEASE environment variable."
 
-if [[ ! $noninteractive_mode && "${MAKEDEB_RELEASE:+x}" == '' ]]; then
-    msg "No release was passed, applying default."
-    MAKEDEB_RELEASE=makedeb
+if (( "${noninteractive_mode}" )) && [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
+    error "The script was ran in noninteractive mode, but no makedeb package was specified to install."
+    die_cmd "Please specify a package to install via the 'MAKEDEB_RELEASE' environment variable."
+else if [[ "${MAKEDEB_RELEASE:+x}" == '' ]]; then
+    msg "Multiple releases of makedeb are available for installation."
+    msg "Currently, you can install one of 'makedeb', 'makedeb-beta', or"
+    msg "'makedeb-alpha'."
+    
+    while true; do
+        read -p "$(question "Which release would you like? ")" MAKEDEB_RELEASE
+
+        if echo "${MAKEDEB_RELEASE}" | grep -qE '^makedeb$|^makedeb-beta$|^makedeb-alpha$'; then
+            error "Invalid response: ${response}"
+            continue
+        fi
+
+        break
+    done
 fi
 
-case "$MAKEDEB_RELEASE" in
+case "${MAKEDEB_RELEASE}" in
     makedeb|makedeb-alpha|makedeb-beta)
         ;;
     *)
@@ -88,7 +103,7 @@ case "$MAKEDEB_RELEASE" in
 esac
 
 echo
-msg "Proceeding to install '${MAKEDEB_RELEASE}' package..."
+msg "Proceeding to install '${MAKEDEB_RELEASE}'..."
 
 msg "Setting up makedeb APT repository..."
 if ! wget -qO - "https://proget.${makedeb_url}/debian-feeds/makedeb.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/makedeb-archive-keyring.gpg 1> /dev/null; then
