@@ -31,7 +31,7 @@ check_dotfiles() {
     local ret=0
     local dotfiles
     mapfile -t dotfiles < <(find -mindepth 1 -maxdepth 1 -name '.*' | sed 's|^\./||' | grep '^\.')
-    for f in $(ls -Ad "$pkgdir"/.*); do
+    for f in "${dotfiles[@]}"; do
         error "$(gettext "Dotfile found in package root '%s'")" "$f"
         ret=1
     done
