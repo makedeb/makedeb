@@ -1,8 +1,8 @@
-name: Build makedeb
+name: run-unit-tests
 on: {"pull_request"}
 env: {"DEBIAN_FRONTEND": "noninteractive"}
 jobs:
-  build:
+  ubuntu:
     runs-on: ubuntu-latest
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
@@ -21,6 +21,29 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: ./makedeb
+
+      - name: Install needed dependencies
+        working-directory: ./makedeb
+        run: .drone/scripts/install-deps.sh
+      
+      - name: Run unit tests
+        working-directory: ./makedeb
+        run: release_type="${GITHUB_BASE_REF}" .drone/scripts/run-unit-tests.sh
+
+  debian:
+    runs-on: ubuntu-latest
+    container:
+      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:debian-bullseye
+      options: --user makedeb
+    steps:
+      - name: Install CI prerequisites
+        run: sudo -E apt-get install git -y
+
+      - name: Ensure directory permissions are correct
+        run: sudo chown 'makedeb:makedeb' ../ "${HOME}" -R
+
+      - name: Checkout Git repository
+        run: git clone "${{ github.server_url }}/${{ github.repository }}" -b "${{ github.head_ref }}"
 
       - name: Install needed dependencies
         working-directory: ./makedeb
