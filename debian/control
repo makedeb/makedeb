@@ -1,16 +1,17 @@
-Source: makedeb
+Source: {{ pkgname }}
 Section: utils
 Priority: optional
-Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Maintainer: makedeb Development Team <contact@makedeb.org>
 Uploaders: Leo Puvilland <leo@craftcat.dev>
-Build-Depends: debhelper-compat (= 12), asciidoctor, git, jq
+Build-Depends: debhelper-compat (= 12), {{ makedepends }}
 Standards-Version: 4.6.0.1
-Homepage: https://makedeb.hunterwittenborn.com
+Homepage: https://makedeb.org
 Vcs-Browser: https://github.com/makedeb/makedeb
 Vcs-Git: https://github.com/makedeb/makedeb.git -b stable
 
-Package: $${pkgname}
+Package: {{ pkgname }}
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, apt, binutils, build-essential, curl, fakeroot, file, libarchive-tools, lsb-release, python3, python3-apt, zstd
-Conflicts: makedeb-makepkg, makedeb-makepkg-beta, makedeb-makepkg-alpha, $${conflicts}
+Depends: ${shlibs:Depends}, ${misc:Depends}, {{ depends }}
+Conflicts: makedeb
+Provides: makedeb (= {{ pkgver }} )
 Description: A simplicity-focused packaging tool for Debian archives

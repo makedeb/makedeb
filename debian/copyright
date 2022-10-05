@@ -1,10 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: makedeb
-Upstream-Contact: Hunter Wittenborn <hunter@hunterwittenborn.com>
+Upstream-Contact: makedeb Development Team <contact@makedeb.org>
 Source: https://github.com/makedeb/makedeb
 
 Files: *
-Copyright: 2021 Hunter Wittenborn <hunter@hunterwittenborn.com>
+Copyright: 2022 makedeb Development Team <contact@makedeb.org>
 License: GPL-2.0+
 
 Files: debian/*

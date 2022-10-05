@@ -37,8 +37,6 @@ local createTag(tag) = {
     }]
 };
 
-
-
 local buildAndPublish(pkgname, tag) = {
     name: "build-and-publish-" + tag,
     kind: "pipeline",
@@ -56,7 +54,7 @@ local buildAndPublish(pkgname, tag) = {
             commands: [
                 ".drone/scripts/install-deps.sh",
                 "sudo chown 'makedeb:makedeb' ../ -R",
-                ".drone/scripts/build-native.sh"
+                ".drone/scripts/build.sh"
             ]
         },
 

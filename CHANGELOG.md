@@ -8,6 +8,7 @@ Note that the `[Unreleased]` section contains all changes that haven't yet made 
 
 ## [Unreleased]
 ### Added
+- Added `CURRENT_VERSION` variable in Makefile to specify version during builds.
 - Added `--no-build` and `--no-check` options (#211).
 - Added extension support (#212).
 - Format makedeb-styled message calls (`msg`, `msg2`, `warning`, etc.) in PKGBUILD functions with a prefix (#212).

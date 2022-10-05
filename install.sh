@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# The installation script for makedeb. This is the script that's shown and gets ran from https://makedeb.org.
 set -e
 
 # Handy env vars.

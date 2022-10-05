@@ -1,5 +1,5 @@
 CONFIG_FILE = $(shell cat .data.json)
-CURRENT_VERSION = $(shell echo '$(CONFIG_FILE)'  | jq -r -r '. | .current_pkgver + "-" + .current_pkgrel_$(RELEASE)')
+CURRENT_VERSION = ?= git
 FILESYTEM_PREFIX ?=
 
 .ONESHELL:
