@@ -157,6 +157,8 @@ A string that specifies the path to a script to execute after a package is remov
 === OTHER
 *extensions (optional, nofunction, array)*::
 A list of extensions to be called during execution. This defaults to *extensions=('strip' 'zipman')* if not set. See *makedeb-extension*(5) for information on the directory structure and file formats for extensions.
++
+Note that makedeb reserves the extension all command names starting with *makedeb-{extension}* (where *{extension}* is the extension name). Declaring any functions with such a name in your PKGBUILD may result in naming conflicts with extensions, and is undefined behavior.
 
 === SOURCES
 *source (optional, nofunction, array)*::

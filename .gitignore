@@ -5,3 +5,5 @@ debian/makedeb
 debian/makedeb.substvars
 test/tests/test_dir
 src/PKGBUILD
+src/src/
+src/pkg/

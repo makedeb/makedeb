@@ -1,107 +1,87 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-# Bases.
-targets=('apt' 'mpr')
-releases=('stable' 'beta' 'alpha')
+depends=(
+	'apt'
+	'binutils'
+	'build-essential'
+	'curl'
+	'fakeroot'
+	'file'
+	'gettext'
+	'gawk'
+	'libarchive-tools'
+	'lsb-release'
+	'python3'
+	'python3-apt'
+	'zstd'
+)
+error() {
+	echo "ERROR: ${*}"
+}
 
-debian_depends=('apt' 'binutils' 'build-essential' 'curl' 'fakeroot'
-                'file' 'gettext' 'gawk' 'libarchive-tools'
-                'lsb-release' 'python3' 'python3-apt' 'zstd')
-debian_makedepends=('asciidoctor' 'git' 'make' 'jq')
-debian_conflicts=('makedeb-makepkg' 'makedeb-makepkg-beta' 'makedeb-makepkg-alpha')
-debian_provides=("${debian_conflicts[@]}")
-debian_replaces=("${debian_conflicts[@]}")
+# BEGIN PROGRAM
+cd "$(git rev-parse --show-toplevel)"
 
-# Variable checks.
-for i in 'TARGET' 'RELEASE'; do
-	if [[ "${!i+x}" != "x" ]]; then
-		echo "${i} isn't set."
-		missing_var="x"
+# Make sure needed variables are set.
+failed_checks=0
+
+for var in TARGET RELEASE; do
+	if [[ "${!var:+x}" == '' ]]; then
+		error "Variable '${var}' isn't set."
+		failed_checks=1
 	fi
 done
 
-if [[ "${missing_var+x}" == "x" ]]; then
+# Make sure needed software is installed.
+for prgm in jq; do
+	if ! type -t "${prgm}" 1> /dev/null; then
+		error "Program '${prgm}' isn't installed."
+		failed_checks=1
+	fi
+done
+
+if (( "${failed_checks}" )); then
 	exit 1
 fi
 
-for i in "${targets[@]}"; do
-	if [[ "${TARGET}" == "$i" ]]; then
-		good_target="x"
-	fi
-done
+# Get needed variables.
+new_pkgver="$(cat .data.json | jq -r '.current_pkgver')"
 
-for i in "${releases[@]}"; do
-	if [[ "${RELEASE}" == "$i" ]]; then
-		good_release="x"
-	fi
-done
+case "${RELEASE}" in
+	stable)     pkgname='makedeb' ;;
+	beta|alpha) pkgname="makedeb-${RELEASE}" ;;
+	*)          error "Invalid release '${RELEASE}'."; exit 1 ;;
+esac
 
-for i in 'TARGET' 'RELEASE'; do
-	var="good_${i,,}"
+# Get the pkgver by checking the current latest pkgver for this release, and bumping it as necesary.
+current_pkgver="$(apt list "${pkgname}" 2> /dev/null | grep "^${pkgname}/" | awk '{print $2}' | grep -o '^[^-]*')"
+current_pkgrel="$(apt list "${pkgname}" 2> /dev/null | grep "^${pkgname}/" | awk '{print $2}' | grep -o '[^-]*$')"
 
-	if [[ "${!var+x}" != "x" ]]; then
-		echo "${i} isn't set to a valid value."
-		bad_var="x"
-	fi
-done
-
-if [[ "${bad_var+x}" == "x" ]]; then
-	exit 1
-fi
-
-# Get needed info.
-config_file="$(cat "$(git rev-parse --show-toplevel)"/.data.json)"
-pkgver="$(echo "${config_file}" | jq -r '.current_pkgver')"
-pkgrel="$(echo "${config_file}" | jq -r ".current_pkgrel_${RELEASE}")"
-
-if [[ "${RELEASE}" == "stable" ]]; then
-    pkgname="makedeb"
+if [[ "${new_pkgver}" != "${current_pkgver}" ]]; then
+	new_pkgrel="${RELEASE}"
 else
-    pkgname="makedeb-${RELEASE}"
+	declare -i pkgrel_norelease="$(echo "${current_pkgrel}" | grep -o '[0-9]*$')"
+	pkgrel_norelease+=1
+	new_pkgrel="${RELEASE}${pkgrel_norelease}"
 fi
 
-if [[ "${TARGET}" == "apt" || "${TARGET}" == "mpr" ]]; then
-    var_prefix="debian"
-else
-    TARGET="arch"
-    var_prefix="arch"
-fi
-
-depends_var="${var_prefix}_depends[@]"
-makedepends_var="${var_prefix}_makedepends[@]"
-conflicts_var="${var_prefix}_conflicts[@]"
-provides_var="${var_prefix}_provides[@]"
-replaces_var="${var_prefix}_replaces[@]"
-
-depends=("${!depends_var}")
-makedepends=("${!makedepends_var}")
-conflicts=("${!conflicts_var}")
-provides=("${!provides_var}")
-replaces=("${!replaces_var}")
-
-depends="${depends[@]@Q}"
-makedepends="${makedepends[@]@Q}"
-conflicts="${conflicts[@]@Q}"
-provides="${provides[@]@Q}"
-replaces="${replaces[@]@Q}"
-
-# Generate the PKGBUILD file.
-if [[ "${TARGET}" == "apt" ]]; then
-	extra_sed_args=('-e' "s|git+\${url}|git+file://$(git rev-parse --show-toplevel)|")
-fi
-
-template="$(cat TEMPLATE.PKGBUILD)"
-
-echo "${template}" | sed -e "s|\$\${pkgname}|${pkgname}|" \
-			 -e "s|\$\${pkgver}|${pkgver}|" \
-			 -e "s|\$\${pkgrel}|${pkgrel}|" \
-			 -e "s|\$\${release}|${RELEASE}|" \
-			 -e "s|\$\${target}|${TARGET}|" \
-			 -e "s|\$\${depends}|${depends}|" \
-			 -e "s|\$\${makedepends}|${makedepends}|" \
-			 -e "s|\$\${conflicts}|${conflicts}|" \
-			 -e "s|\$\${provides}|${provides}|" \
-			 -e "s|\$\${replaces}|${replaces}|" \
-			 -e "s|\$\${url}|${url}|" \
-			 "${extra_sed_args[@]}"
+# Print out the generated PKGBUILD.
+cat PKGBUILD/TEMPLATE.PKGBUILD | sed \
+	-e "s|{{ release }}|${RELEASE}|g" \
+	-e "s|{{ target }}|${TARGET}|g" \
+	-e "s|{{ pkgname }}|${pkgname}|g" \
+	-e "s|{{ pkgver }}|${new_pkgver}|g" \
+	-e "s|{{ pkgrel }}|${new_pkgrel}|g" | {
+		if [[ "${RELEASE}" == 'stable' ]]; then
+			grep -Ev '^conflicts=|^provides='
+		else
+			cat
+		fi
+	} | {
+		if [[ "${LOCAL:+x}" == '' ]]; then
+			sed 's|{{ source }}|makedeb::git+${url}/#tag=v${pkgver}-${pkgrel}|g'
+		else
+			sed 's|{{ source }}|makedeb::git+file://$(git rev-parse --show-toplevel)|'
+		fi
+	}

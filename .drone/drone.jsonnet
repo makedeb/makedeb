@@ -37,8 +37,6 @@ local createTag(tag) = {
     }]
 };
 
-
-
 local buildAndPublish(pkgname, tag) = {
     name: "build-and-publish-" + tag,
     kind: "pipeline",
@@ -56,7 +54,7 @@ local buildAndPublish(pkgname, tag) = {
             commands: [
                 ".drone/scripts/install-deps.sh",
                 "sudo chown 'makedeb:makedeb' ../ -R",
-                ".drone/scripts/build-native.sh"
+                ".drone/scripts/build.sh"
             ]
         },
 
@@ -118,27 +116,6 @@ local sendBuildNotification(tag) = {
     }]
 };
 
-local buildForMentors(pkgname, tag) = {
-    name: "build-for-mentors-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {branch: [tag]},
-    depends_on: ["create-tag-" + tag],
-    steps: [{
-        name: "publish-mentors",
-        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
-        environment: {
-            debian_packaging_key: {from_secret: "debian_packaging_key"},
-            pkgname: pkgname
-        },
-        when: {branch: ["stable"]},
-        commands: [
-            ".drone/scripts/install-deps.sh",
-            ".drone/scripts/mentors.sh"
-        ]
-    }]
-};
-
 [
     runUnitTests("makedeb", "stable"),
     runUnitTests("makedeb-beta", "beta"),
@@ -158,9 +135,7 @@ local buildForMentors(pkgname, tag) = {
 
     sendBuildNotification("stable"),
     sendBuildNotification("beta"),
-    sendBuildNotification("alpha"),
-    
-    buildForMentors("makedeb", "stable")
+    sendBuildNotification("alpha")
 ]
 
 // vim: set syntax=typescript ts=4 sw=4 expandtab:

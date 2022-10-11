@@ -503,7 +503,7 @@ create_package() {
 		msg2 "$(gettext "Running post-packaging hooks...")"
 
 		for extension in "${post_package_extensions[@]}"; do
-			MAKEDEB_POST_PACKAGE=true "_${extension}"
+			MAKEDEB_POST_PACKAGE=true "${extension}"
 		done
 	fi
 
