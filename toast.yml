@@ -1,4 +1,4 @@
-image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-focal
+image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-jammy
 user: makedeb
 location: /home/makedeb/makedeb
 command_prefix: set -e
