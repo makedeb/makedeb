@@ -8,58 +8,36 @@ mkdir -p "/${HOME}/.ssh"
 
 # Get current SSH fingerprint.
 mpr_fingerprint="$(curl "https://${mpr_url}/api/meta" | jq -r '.ssh_key_fingerprints.ECDSA')"
-aur_fingerprint='SHA256:RFzBCUItH9LZS0cKB5UE6ceAYhBD5C8GeOBip8Z11+4'
-current_fingerprint="${target_repo}_fingerprint"
-current_fingerprint="${!current_fingerprint}"
 
 # Set up SSH.
 echo "${ssh_key}" | tee "/${HOME}/.ssh/ssh_key"
 
-SSH_HOST="${target_repo}_url"
-SSH_HOST="${!SSH_HOST}" \
-SSH_EXPECTED_FINGERPRINT="${current_fingerprint}" \
+SSH_HOST="${mpr_url}" \
+SSH_EXPECTED_FINGERPRINT="${mpr_fingerprint}" \
 SET_PERMS="true" \
 get-ssh-key
 
-if [[ "${target_repo}" == "mpr" ]]; then
-	echo "Host ${mpr_url}" | tee "/${HOME}/.ssh/config"
-	echo "  Hostname ${mpr_url}" | tee -a "/${HOME}/.ssh/config"
-	echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
-
-else
-	echo "Host ${aur_url}" | tee "/${HOME}/.ssh/config"
-	echo "  Hostname ${aur_url}" | tee -a "/${HOME}/.ssh/config"
-	echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
-
-fi
+echo "Host ${mpr_url}" | tee "/${HOME}/.ssh/config"
+echo "  Hostname ${mpr_url}" | tee -a "/${HOME}/.ssh/config"
+echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
 chmod 500 "/${HOME}/.ssh/"* -R
 
 # Clone AUR/MPR Package.
-if [[ "${target_repo}" == "mpr" ]]; then
-	git clone "ssh://mpr@${mpr_url}/${package_name}.git" "${package_name}_${target_repo}"
-else
-	git clone "ssh://aur@${aur_url}/${package_name}.git" "${package_name}_${target_repo}"
-fi
+git clone "ssh://mpr@${mpr_url}/${package_name}.git" "${package_name}"
 
 # Copy PKGBUILD to user repo.
-export TARGET="${target_repo}"
+export TARGET='mpr'
 export RELEASE="${release_type}"
 
-rm "${package_name}_${target_repo}/PKGBUILD"
+rm "${package_name}/PKGBUILD"
 cd PKGBUILD/
-./pkgbuild.sh > "../${package_name}_${target_repo}/PKGBUILD"
+./pkgbuild.sh > "../${package_name}/PKGBUILD"
 
 # Create .SRCINFO file
-cd "../${package_name}_${target_repo}"
+cd "../${package_name}"
 
-PACMAN='/usr/bin/true' makedeb --print-srcinfo | tee .SRCINFO
-
-# Remove 'generated-by' line when using AUR deployments.
-if [[ "${target_repo}" == "aur" ]]; then
-	sed -i '1,2d' .SRCINFO
-	cat .SRCINFO
-fi
+makedeb --print-srcinfo | tee .SRCINFO
 
 # Check if changes have been made
 if [[ "$(git diff)" == "" ]]; then
@@ -72,8 +50,8 @@ git config user.name "Kavplex Bot"
 git config user.email "kavplex@hunterwittenborn.com"
 
 # Get current version info.
-config="$(cat ../.data.json)"
-pkgver="$(echo "${config}" | jq -r ".current_pkgver + \"-\" + .current_pkgrel_${release_type}")"
+pkgver="$(source PKGBUILD; echo "${pkgver}")"
+pkgrel="$(source PKGBUILD; echo "${pkgrel}")"
 
 # Commit changes and push
 git add PKGBUILD .SRCINFO
