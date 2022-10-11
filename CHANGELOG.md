@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Note that the `[Unreleased]` section contains all changes that haven't yet made it to the `stable` branch.
 
 ## [Unreleased]
+### Added
+- Added `CURRENT_VERSION` variable in Makefile to specify version during builds.
+- Added `--no-build` and `--no-check` options (#211).
+- Added extension support (#212).
+- Format makedeb-styled message calls (`msg`, `msg2`, `warning`, etc.) in PKGBUILD functions with a prefix (#212).
+- Added support for the `NO_COLOR` environment variable (#188).
+- Allow `MAKEDEB_DPKG_ARCHITECTURE` and `MAKEDEB_DISTRO_CODENAME` to be overwritten by the user (#227).
+
+### Removed
+- Dropped support for VCS systems besides Git and SVN (#210).
+
+### Fixed
+- Fixed bug where dotfiles are found in the package root (#229).
+
+## [15.1.0] - 2022-06-29
+### Added
+- Add support for `:` characters in dependencies (#202).
 
 ## [15.0.2] - 2022-06-05
 ### Fixed

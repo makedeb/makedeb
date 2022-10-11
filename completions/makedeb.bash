@@ -23,6 +23,8 @@ _makedeb() {
         '--ignore-arch'
         '--install'
         '--lint'
+        '--no-build'
+        '--no-check'
         '--no-color'
         '--no-confirm'
         '--no-deps'

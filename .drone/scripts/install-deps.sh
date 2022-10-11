@@ -38,9 +38,9 @@ pip_install_cmd=(
 )
 
 if [[ -z "${NO_SUDO}" ]]; then
-    sudo "${apt_update_cmd[@]}"
-    sudo "${apt_upgrade_cmd[@]}"
-    sudo "${apt_install_cmd[@]}"
+    sudo -E "${apt_update_cmd[@]}"
+    sudo -E "${apt_upgrade_cmd[@]}"
+    sudo -E "${apt_install_cmd[@]}"
 else
     "${apt_update_cmd[@]}"
     "${apt_upgrade_cmd[@]}"

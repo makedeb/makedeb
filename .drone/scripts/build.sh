@@ -5,10 +5,7 @@ git fetch
 sudo chown 'makedeb:makedeb' ./ -R
 
 # Build makedeb.
-export TARGET=apt
-export RELEASE="${release_type}"
-
-cd PKGBUILD/
-./pkgbuild.sh > PKGBUILD
-
-PACMAN='/usr/bin/true' makedeb -s --no-confirm
+TARGET=apt RELEASE="${release_type}" LOCAL=1 PKGBUILD/pkgbuild.sh > src/PKGBUILD
+cd src
+./main.sh -s --no-confirm
+mv makedeb*.deb ../

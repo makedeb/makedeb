@@ -32,7 +32,7 @@ TARGET=apt RELEASE=stable ./pkgbuild.sh | grep '^depends'
 After you have the needed build dependencies installed, run the following command from the root of your repository:
 
 ```sh
-make prepare PKGVER="{pkgver}" RELEASE="{release}" TARGET="{target}" FILESYSTEM_PREFIX="{filesystem_prefix}"
+make prepare PKGVER="{pkgver}" RELEASE="{release}" TARGET="{target}" FILESYSTEM_PREFIX="{filesystem_prefix}" CURRENT_VERSION="{version}"
 make package DESTDIR="{pkgdir}" TARGET="{target}"
 ```
 
@@ -41,6 +41,8 @@ make package DESTDIR="{pkgdir}" TARGET="{target}"
 `{release}` should be the branch you cloned (which should be `stable` if you checked out the `stable` branch previously in these instructions).
 
 `{target}` should always be `apt` - using other values hasen't been tested and may result in a broken install.
+
+`{version}` is the current version of makedeb being packaged. It's used in the output of things such as `makedeb -v`.
 
 `{pkgdir}` should be the location you want to install makedeb to. Binaries automatically install into `/usr` after your specified prefix, so don't enter that as part of your directory.
 

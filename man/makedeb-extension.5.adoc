@@ -1,0 +1,46 @@
+= MAKEDEB(8)
+:doctype: manpage
+:hardbreaks:
+:manmanual: makedeb manual pages
+:mansource: MAKEDEB $${MAKEDEB_VERSION}
+
+== NAME
+makedeb-extension - extension format for PKGBUILD(5) files
+
+== DESCRIPTION
+makedeb extensions, as the name implies, extend the functionality of makedeb. Currently, extensions can do the following:
+
+`-` Provide extra helper functions for use in *build()* and *package()*.
+`-` Provide hooks to run after certain functions are completed (currently, this is limited to after *package()* is ran).
+
+== FILES
+Users declare what extensions they'd like to use with the *extensions* variable in a PKGBUILD. Consider the following:
+
+*extensions=('strip' 'zipman')*
+
+Here the 'strip' and 'zipman' extensions are active.
+
+== LAYOUT STRUCTURE
+All makedeb extensions are stored in a central location on the system, that being */usr/lib/makedeb* on a standard installation. Each extension takes its own subdirectory in this directory (i.e. */usr/lib/makedeb/strip*).
+
+`NOTE:` makedeb extension names must consist of only alphanumerical characters and hyphens.
+
+Each extension should have a script titled *main.sh* in its directory (i.e. */usr/lib/makedeb/strip/init.sh*), inside of which there must be a function defined titled *main*. makedeb converts this function to be called *makedeb-{extension_name}* (where *{extension_name}* is the name of the extension, i.e. *makedeb-strip*), and the result is the public command, if any, that users can use to call the function inside of their PKGBUILDs. It is also used as the entrypoint for any hooks.
+
+To capture the post-packaging build hook described at the top of this page, add the *post_package=1* variable to the top of the init script, above any defined functions. The extension can then tell that makedeb itself called it as a post-packaging hook via the presence of the *MAKEDEB_POST_PACKAGING* variable, which will be set to the value of *1*. The extension can also use this to only run itself when ran as a hook, by erroring out when the function is called without it being set.
+
+== ENVIRONMENT
+makedeb will expose an extension's *main* function with some extra environment variables:
+
+*MAKEDEB_EXTENSION_NAME*: The name of the currently called extension (i.e. *strip*).
+*MAKEDEB_EXTENSION_PATH*: The path to the extension's directory (i.e. */usr/lib/makedeb/strip*).
+
+Other variables may also set, but any present are for internal use and may be removed at any moment, so don't rely on them being available.
+
+== FUNCTION AVAILABILITY
+Extensions may wish to expose more than one function to the end user - these may be defined inside of the *main.sh* script and will be loaded alongside the *main* function. Besides *main*, all functions in *main.sh* much start with *{extension_name}-* in order to be exposed to the user. These functions will also be prefixed with *makedeb-* when exposed to the user (i.e. *strip-debug* in *main.sh* would be exposed as *makedeb-strip-debug*).
+
+Any other functions defined will not be available for use in the PKGBUILD. If for whatever reason you do need them, you can manually execute the extension's *main.sh* script and run it via that manner. Note that you also shouldn't source the extension's *main.sh* (or any other files) when your extension executes though, as it may cause internal issues with conflicting function or variable names used by makedeb or PKGBUILDs.
+
+== SEE ALSO
+*makedeb*(8) *PKGBUILD*(5)
