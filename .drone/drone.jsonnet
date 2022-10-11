@@ -6,7 +6,7 @@ local runUnitTests(pkgname, tag) = {
 
     steps: [{
         name: "run-unit-tests",
-        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
         environment: {
             release_type: tag,
             pkgname: pkgname
@@ -27,7 +27,7 @@ local createTag(tag) = {
     depends_on: ["run-unit-tests-" + tag],
     steps: [{
         name: tag,
-        image: "ubuntu:20.04",
+        image: "proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-jammy",
         environment: {
             github_api_key: {from_secret: "github_api_key"}
         },
@@ -37,50 +37,15 @@ local createTag(tag) = {
     }]
 };
 
-
-
-local buildAndPublish(pkgname, tag) = {
-    name: "build-and-publish-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {branch: [tag]},
-    depends_on: ["create-tag-" + tag],
-    steps: [
-        {
-            name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
-            environment: {
-                release_type: tag,
-                pkgname: pkgname
-            },
-            commands: [
-                ".drone/scripts/install-deps.sh",
-                "sudo chown 'makedeb:makedeb' ../ -R",
-                ".drone/scripts/build-native.sh"
-            ]
-        },
-
-        {
-            name: "publish-proget",
-            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
-            environment: {proget_api_key: {from_secret: "proget_api_key"}},
-            commands: [
-                ".drone/scripts/install-deps.sh",
-                ".drone/scripts/publish.py"
-            ]
-        }
-    ]
-};
-
 local userRepoPublish(pkgname, tag, user_repo) = {
     name: user_repo + "-publish-" + tag,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
-    depends_on: ["create-tag-" + tag, "build-and-publish-" + tag],
+    depends_on: ["create-tag-" + tag],
     steps: [{
         name: pkgname,
-        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
+        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
         environment: {
             ssh_key: {from_secret: "ssh_key"},
             package_name: pkgname,
@@ -94,6 +59,40 @@ local userRepoPublish(pkgname, tag, user_repo) = {
     }]
 };
 
+local buildAndPublish(pkgname, tag) = {
+    name: "build-and-publish-" + tag,
+    kind: "pipeline",
+    type: "docker",
+    trigger: {branch: [tag]},
+    depends_on: ["mpr-publish-" + tag],
+    steps: [
+        {
+            name: "build-debian-package",
+            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
+            environment: {
+                release_type: tag,
+                pkgname: pkgname
+            },
+            commands: [
+                ".drone/scripts/install-deps.sh",
+                "sudo chown 'makedeb:makedeb' ../ -R",
+                ".drone/scripts/build.sh"
+            ]
+        },
+
+        {
+            name: "publish-proget",
+            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
+            environment: {proget_api_key: {from_secret: "proget_api_key"}},
+            commands: [
+                ".drone/scripts/install-deps.sh",
+                ".drone/scripts/publish.py"
+            ]
+        }
+    ]
+};
+
+
 local sendBuildNotification(tag) = {
     name: "send-build-notification-" + tag,
     kind: "pipeline",
@@ -102,10 +101,7 @@ local sendBuildNotification(tag) = {
         branch: [tag],
         status: ["success", "failure"]
     },
-    depends_on: [
-        "build-and-publish-" + tag,
-        "mpr-publish-" + tag
-    ],
+    depends_on: ["build-and-publish-" + tag],
     steps: [{
         name: "send-notification",
         image: "proget.hunterwittenborn.com/docker/hwittenborn/drone-matrix",
@@ -118,27 +114,6 @@ local sendBuildNotification(tag) = {
     }]
 };
 
-local buildForMentors(pkgname, tag) = {
-    name: "build-for-mentors-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {branch: [tag]},
-    depends_on: ["create-tag-" + tag],
-    steps: [{
-        name: "publish-mentors",
-        image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-focal",
-        environment: {
-            debian_packaging_key: {from_secret: "debian_packaging_key"},
-            pkgname: pkgname
-        },
-        when: {branch: ["stable"]},
-        commands: [
-            ".drone/scripts/install-deps.sh",
-            ".drone/scripts/mentors.sh"
-        ]
-    }]
-};
-
 [
     runUnitTests("makedeb", "stable"),
     runUnitTests("makedeb-beta", "beta"),
@@ -148,19 +123,17 @@ local buildForMentors(pkgname, tag) = {
     createTag("beta"),
     createTag("alpha"),
 
-    buildAndPublish("makedeb", "stable"),
-    buildAndPublish("makedeb-beta", "beta"),
-    buildAndPublish("makedeb-alpha", "alpha"),
-
     userRepoPublish("makedeb", "stable", "mpr"),
     userRepoPublish("makedeb-beta", "beta", "mpr"),
     userRepoPublish("makedeb-alpha", "alpha", "mpr"),
 
+    buildAndPublish("makedeb", "stable"),
+    buildAndPublish("makedeb-beta", "beta"),
+    buildAndPublish("makedeb-alpha", "alpha"),
+
     sendBuildNotification("stable"),
     sendBuildNotification("beta"),
-    sendBuildNotification("alpha"),
-    
-    buildForMentors("makedeb", "stable")
+    sendBuildNotification("alpha")
 ]
 
 // vim: set syntax=typescript ts=4 sw=4 expandtab:

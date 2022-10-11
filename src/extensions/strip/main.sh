@@ -1,6 +1,6 @@
 post_package=true
 
-_strip() {
+main() {
     local file_iter
     local files
 
@@ -13,7 +13,7 @@ _strip() {
     mapfile -t files < <(find "${pkgdir}" -type f)
 
     for file_iter in "${files[@]}"; do
-        if file "${file_iter}" | grep -q 'executable'; then
+        if file "${file_iter}" | grep -q 'ELF'; then
             strip "${file_iter}"
         fi
     done

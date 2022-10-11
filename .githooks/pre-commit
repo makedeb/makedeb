@@ -78,7 +78,7 @@ def main():
                 "-D",
                 "unstable",
                 "-v",
-                "$${pkgver}",
+                repo_data["current_pkgver"] + "-" + repo_data["current_pkgrel"],
                 "Initial release (Closes: #998039).",
             ]
         )

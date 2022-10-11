@@ -52,8 +52,8 @@ declare -r startdir="$(pwd -P)"
 declare -r MAKEDEB_VERSION='{MAKEDEB_VERSION}'
 declare -r MAKEDEB_RELEASE='{MAKEDEB_RELEASE}'
 declare -r MAKEDEB_INSTALLATION_SOURCE='{MAKEDEB_INSTALLATION_SOURCE}'
-declare -r MAKEDEB_DPKG_ARCHITECTURE="$(dpkg --print-architecture)"
-declare -r MAKEDEB_DISTRO_CODENAME="$(lsb_release -cs)"
+declare -r MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-"$(dpkg --print-architecture)"}"
+declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-"$(lsb_release -cs)"}"
 
 LIBRARY="${LIBRARY:-"{FILESYSTEM_PREFIX}/usr/share/makedeb"}"
 MAKEPKG_CONF="${MAKEPKG_CONF:-"{FILESYSTEM_PREFIX}/etc/makepkg.conf"}"
@@ -96,7 +96,6 @@ NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
 NOCHECK=0
-NOCOLOR=0
 NOCONFIRM=0
 NODEPS=0
 NOEXTRACT=0
@@ -504,7 +503,7 @@ create_package() {
 		msg2 "$(gettext "Running post-packaging hooks...")"
 
 		for extension in "${post_package_extensions[@]}"; do
-			MAKEDEB_POST_PACKAGE=true "_${extension}"
+			MAKEDEB_POST_PACKAGE=true "${extension}"
 		done
 	fi
 
@@ -982,7 +981,7 @@ while true; do
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
 		--no-build)              NOBUILD=1 ;;
 		--no-check)              NOCHECK=1 ;;
-		--no-color)              NOCOLOR=1 ;;
+		--no-color)              NO_COLOR=1 ;;
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
@@ -1047,7 +1046,7 @@ done
 unset var
 
 # check if messages are to be printed using color
-if [[ -t 2 ]] && ! (( "${NOCOLOR}" )) && check_buildenv "color" "y"; then
+if [[ -t 2 ]] && ! (( "${NO_COLOR}" )) && check_buildenv "color" "y"; then
 	colorize
 else
 	unset ALL_OFF BOLD BLUE GREEN RED YELLOW

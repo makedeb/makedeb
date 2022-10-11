@@ -1,6 +1,6 @@
 post_package=true
 
-_zipman() {
+main() {
     local manpage
     local manpages
 
