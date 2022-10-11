@@ -19,7 +19,7 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild array depends 'gimp'
-    pkgbuild array focal_depends 'krita'
+    pkgbuild array jammy_depends 'krita'
     pkgbuild clean
     makedeb -d
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep 'Depends:')" == "Depends: krita" ]]
