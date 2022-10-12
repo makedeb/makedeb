@@ -33,6 +33,7 @@ After you have the needed build dependencies installed, run the following comman
 
 ```sh
 make prepare PKGVER="{pkgver}" RELEASE="{release}" TARGET="{target}" FILESYSTEM_PREFIX="{filesystem_prefix}" CURRENT_VERSION="{version}"
+make build
 make package DESTDIR="{pkgdir}" TARGET="{target}"
 ```
 

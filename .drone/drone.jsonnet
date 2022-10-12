@@ -135,5 +135,3 @@ local sendBuildNotification(tag) = {
     sendBuildNotification("beta"),
     sendBuildNotification("alpha")
 ]
-
-// vim: set syntax=typescript ts=4 sw=4 expandtab:

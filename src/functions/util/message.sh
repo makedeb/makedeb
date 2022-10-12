@@ -32,6 +32,7 @@ colorize() {
 		GREEN="${BOLD}$(tput setaf 2)"
 		RED="${BOLD}$(tput setaf 1)"
 		YELLOW="${BOLD}$(tput setaf 3)"
+		PURPLE="${BOLD}$(tput setaf 5)"
 	else
 		ALL_OFF="\e[0m"
 		BOLD="\e[1m"
@@ -39,6 +40,7 @@ colorize() {
 		GREEN="${BOLD}\e[32m"
 		RED="${BOLD}\e[31m"
 		YELLOW="${BOLD}\e[33m"
+		PURPLE="${BOLD}\e[35m"
 	fi
 	readonly ALL_OFF BOLD BLUE GREEN RED YELLOW
 }
@@ -92,4 +94,9 @@ error() {
 error2() {
   local mesg=$1; shift
   printf "${RED}  [->${MSG_PREFIX}]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
+
+question() {
+	local mesg=$1; shift
+	printf "${PURPLE}[?]${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}" "${@}"
 }
