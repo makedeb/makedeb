@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.0.12", features = ["derive"] }
+colored = "2.0.0"
 exitcode = "1.1.2"
 quit = "1.1.4"
 # Cache marking functionality isn't working on the latest commit, so target a specific one for the time being.

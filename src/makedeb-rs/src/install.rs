@@ -145,6 +145,11 @@ pub(crate) fn install(
         }
     }
 
+    to_install.sort();
+    to_remove.sort();
+    to_upgrade.sort();
+    to_downgrade.sort();
+
     if to_install.is_empty()
         && to_remove.is_empty()
         && to_upgrade.is_empty()
@@ -210,15 +215,15 @@ pub(crate) fn install(
 
     if !to_install.is_empty() {
         msg = msg.msg("The following packages will be installed:");
-        msg = add_pkgs(msg, &mut to_install);
+        msg = msg.no_style(util::format_apt_pkglist(&to_install));
     }
     if !to_remove.is_empty() {
         msg = msg.msg("The following packages will be removed:");
-        msg = add_pkgs(msg, &mut to_remove);
+        msg = msg.no_style(util::format_apt_pkglist(&to_remove));
     }
     if !to_upgrade.is_empty() {
         msg = msg.msg("The following packages will be upgraded:");
-        msg = add_pkgs(msg, &mut to_upgrade);
+        msg = msg.no_style(util::format_apt_pkglist(&to_upgrade));
     }
     if !to_downgrade.is_empty() {
         if !allow_downgrades {
@@ -229,7 +234,7 @@ pub(crate) fn install(
         }
 
         msg = msg.msg("The following packages will be DOWNGRADED:");
-        msg = add_pkgs(msg, &mut to_downgrade);
+        msg = msg.no_style(util::format_apt_pkglist(&to_downgrade));
     }
 
     if !no_confirm {
