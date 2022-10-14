@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
-mod message;
 mod install;
+mod message;
 mod util;
 
 #[derive(Parser)]
@@ -37,8 +37,7 @@ enum Commands {
 
         /// Mark built '.deb' packages as automatically installed.
         #[arg(long, conflicts_with("deps_only"))]
-        as_deps: bool
-
+        as_deps: bool,
     },
 }
 
@@ -54,6 +53,13 @@ fn main() {
             fail_on_change,
             deps_only,
             as_deps,
-        } => install::install(pkgs, allow_downgrades, no_confirm, fail_on_change, deps_only, as_deps),
+        } => install::install(
+            pkgs,
+            allow_downgrades,
+            no_confirm,
+            fail_on_change,
+            deps_only,
+            as_deps,
+        ),
     }
 }

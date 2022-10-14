@@ -2,7 +2,7 @@ use std::{env, process::Command};
 
 #[must_use]
 pub struct Message {
-    args: Vec<String>
+    args: Vec<String>,
 }
 
 impl Message {

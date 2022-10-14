@@ -7,7 +7,7 @@ use std::{io, process::Command};
 
 struct Package {
     pkgname: String,
-    version: String
+    version: String,
 }
 
 impl PartialEq for Package {
@@ -22,10 +22,12 @@ pub(crate) fn install(
     no_confirm: bool,
     fail_on_change: bool,
     deps_only: bool,
-    as_deps: bool
+    as_deps: bool,
 ) {
     if users::get_effective_uid() != 0 {
-        Message::new().error("Dependency resolver was ran under a non-root user.").send();
+        Message::new()
+            .error("Dependency resolver was ran under a non-root user.")
+            .send();
         quit::with_code(exitcode::USAGE);
     }
 
@@ -35,20 +37,40 @@ pub(crate) fn install(
 
     for deb in &deblist {
         let args = ["-f", deb.as_str()];
-        let pkgname = std::str::from_utf8(&Command::new("dpkg-deb").args(&args).arg("Package").output().unwrap().stdout).unwrap().trim().to_string();
-        let version = std::str::from_utf8(&Command::new("dpkg-deb").args(&args).arg("Version").output().unwrap().stdout).unwrap().trim().to_string();
+        let pkgname = std::str::from_utf8(
+            &Command::new("dpkg-deb")
+                .args(&args)
+                .arg("Package")
+                .output()
+                .unwrap()
+                .stdout,
+        )
+        .unwrap()
+        .trim()
+        .to_string();
+        let version = std::str::from_utf8(
+            &Command::new("dpkg-deb")
+                .args(&args)
+                .arg("Version")
+                .output()
+                .unwrap()
+                .stdout,
+        )
+        .unwrap()
+        .trim()
+        .to_string();
         pkgnames.push(pkgname.clone());
         pkgs.push(Package { pkgname, version });
         debs.push(deb);
     }
 
-
     let mut cache = Cache::debs(&debs).unwrap_or_else(|err| {
         util::handle_errors(err);
-        Message::new().error("Unable to open cache in dependency resolver").send();
+        Message::new()
+            .error("Unable to open cache in dependency resolver")
+            .send();
         quit::with_code(exitcode::UNAVAILABLE);
     });
-
 
     // Mark debs for installation and resolve their deps.
     for pkg in &pkgs {
@@ -62,7 +84,9 @@ pub(crate) fn install(
 
     if let Err(err) = cache.resolve(false) {
         util::handle_errors(err);
-        Message::new().error("An issue was encountered while resolving deps.").send();
+        Message::new()
+            .error("An issue was encountered while resolving deps.")
+            .send();
         quit::with_code(exitcode::UNAVAILABLE);
     }
 
@@ -76,7 +100,7 @@ pub(crate) fn install(
             let version = pkg.candidate().unwrap().version();
 
             if pkgnames.contains(&pkgname) {
-                continue
+                continue;
             }
 
             let new_pkg = new_cache.get(&pkgname).unwrap();
@@ -140,11 +164,21 @@ pub(crate) fn install(
         let mut direct_deps = vec![];
 
         for pkg in pkgs {
-            let version = deb_cache.get(&pkg.pkgname).unwrap().get_version(&pkg.version).unwrap();
+            let version = deb_cache
+                .get(&pkg.pkgname)
+                .unwrap()
+                .get_version(&pkg.version)
+                .unwrap();
 
             if let Some(apt_deps) = version.dependencies() {
                 for dep in apt_deps {
-                    direct_deps.append(&mut dep.base_deps.iter().map(|dep| dep.name().to_string()).collect::<Vec<String>>());
+                    direct_deps.append(
+                        &mut dep
+                            .base_deps
+                            .iter()
+                            .map(|dep| dep.name().to_string())
+                            .collect::<Vec<String>>(),
+                    );
                 }
             }
         }
@@ -179,7 +213,6 @@ pub(crate) fn install(
         msg = add_pkgs(msg, &mut to_install);
     }
     if !to_remove.is_empty() {
-
         msg = msg.msg("The following packages will be removed:");
         msg = add_pkgs(msg, &mut to_remove);
     }
@@ -189,7 +222,9 @@ pub(crate) fn install(
     }
     if !to_downgrade.is_empty() {
         if !allow_downgrades {
-            Message::new().error("Package downgrades are required but '--allow-downgrades' wasn't passed.").send();
+            Message::new()
+                .error("Package downgrades are required but '--allow-downgrades' wasn't passed.")
+                .send();
             quit::with_code(exitcode::USAGE);
         }
 
@@ -198,7 +233,9 @@ pub(crate) fn install(
     }
 
     if !no_confirm {
-        msg.no_style("").question("Would you like to continue? [Y/n] ").send();
+        msg.no_style("")
+            .question("Would you like to continue? [Y/n] ")
+            .send();
         let mut response = String::new();
         io::stdin().read_line(&mut response).unwrap();
 
@@ -208,11 +245,12 @@ pub(crate) fn install(
         }
     };
 
-
     let mut acquire_progress = AptAcquireProgress::new_box();
     if let Err(err) = cache.get_archives(&mut acquire_progress) {
         util::handle_errors(err);
-        Message::new().error("Failed to fetch needed archives.").send();
+        Message::new()
+            .error("Failed to fetch needed archives.")
+            .send();
         quit::with_code(exitcode::UNAVAILABLE);
     }
 

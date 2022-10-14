@@ -13,6 +13,7 @@ apt_install_cmd=(
     'install'
     'asciidoctor'
     'bats'
+    'cargo'
     'curl'
     'debhelper'
     'git'
