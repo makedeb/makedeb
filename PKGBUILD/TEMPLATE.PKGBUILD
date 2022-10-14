@@ -19,8 +19,6 @@ depends=(
 	'gawk'
 	'libarchive-tools'
 	'lsb-release'
-	'python3'
-	'python3-apt'
 	'zstd'
 )
 makedepends=(
