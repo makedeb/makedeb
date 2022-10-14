@@ -284,7 +284,7 @@ dependencies = [
 [[package]]
 name = "rust-apt"
 version = "0.4.1"
-source = "git+https://gitlab.com/volian/rust-apt#d782cb01814c747c3dde82b23a8d4eac200bbff8"
+source = "git+https://gitlab.com/volian/rust-apt?branch=fix/deb-installation#2f1633d26c9dee69d5852d1fcbf84b2586876555"
 dependencies = [
  "cxx",
  "cxx-build",

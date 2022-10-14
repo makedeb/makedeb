@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 mod message;
-mod resolve;
+mod install;
 mod util;
 
 #[derive(Parser)]
@@ -14,9 +14,8 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     /// Resolve the deps for local '.deb' packages
-    Resolve {
-        /// The '.deb' packages to install. Separated into pkgname/version/deb pairs, separated by a '!' (i.e. 'cf983547f2d5a73c539ee62504552081!1.0.0!cf983547f2d5a73c539ee62504552081.deb').
-        /// These package names should be random and not a package that normally exists in the cache, as the package itself will not be marked for installation.
+    Install {
+        /// The '.deb' packages to install.
         #[arg(required = true)]
         pkgs: Vec<String>,
 
@@ -29,8 +28,17 @@ enum Commands {
         no_confirm: bool,
 
         /// Fail if changes to the cache would be made
-        #[arg(long)]
+        #[arg(long, requires("deps_only"))]
         fail_on_change: bool,
+
+        /// Only install the deps of this package
+        #[arg(long)]
+        deps_only: bool,
+
+        /// Mark built '.deb' packages as automatically installed.
+        #[arg(long, conflicts_with("deps_only"))]
+        as_deps: bool
+
     },
 }
 
@@ -39,11 +47,13 @@ fn main() {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Resolve {
+        Commands::Install {
             pkgs,
             allow_downgrades,
             no_confirm,
             fail_on_change,
-        } => resolve::resolve(pkgs, allow_downgrades, no_confirm, fail_on_change),
+            deps_only,
+            as_deps,
+        } => install::install(pkgs, allow_downgrades, no_confirm, fail_on_change, deps_only, as_deps),
     }
 }

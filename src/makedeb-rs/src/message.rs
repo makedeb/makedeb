@@ -1,22 +1,64 @@
-macro_rules! msg_fn {
-    ($fn:ident) => {
-        pub fn $fn<T: AsRef<str>>(args: &[T]) {
-            let str_args = args.iter().map(|string| string.as_ref()).collect::<Vec<&str>>();
-            let mut _cmd = std::process::Command::new(std::env::var("MAKEDEB_BINARY").unwrap());
-            let mut cmd = &mut _cmd;
+use std::{env, process::Command};
 
-            for arg in str_args {
-                cmd = cmd.args(["--".to_string() + stringify!($fn), arg.to_string()]);
-            }
-
-            cmd.spawn().unwrap().wait().unwrap();
-        }
-    }
+#[must_use]
+pub struct Message {
+    args: Vec<String>
 }
 
-msg_fn!(msg);
-msg_fn!(msg2);
-msg_fn!(warning);
-msg_fn!(error);
-msg_fn!(error2);
-msg_fn!(question);
+impl Message {
+    pub fn new() -> Self {
+        Self { args: vec![] }
+    }
+
+    pub fn msg<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--msg".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn msg2<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--msg2".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn warning<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--warning".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn error<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--error".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn error2<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--error2".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn question<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--question".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn no_style<T: ToString>(mut self, msg: T) -> Self {
+        self.args.push("--no-style".to_string());
+        self.args.push(msg.to_string());
+        self
+    }
+
+    pub fn send(self) {
+        let mut _cmd = Command::new(env::var("MAKEDEB_BINARY").unwrap());
+        let mut cmd = &mut _cmd;
+        cmd = cmd.env("IN_MAKEDEB_RS", "1");
+
+        cmd = cmd.args(self.args);
+
+        cmd.spawn().unwrap().wait().unwrap();
+    }
+}

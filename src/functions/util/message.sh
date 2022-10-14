@@ -59,6 +59,12 @@ plainerr() {
 	plain "$@" >&2
 }
 
+# Print a line with no styling; Useful when running multiple message calls from the CLI and you need an empty newline.
+no-style() {
+	local mesg="${1}"; shift
+	printf "${mesg}\n" "${@}"
+}
+
 # Pass in the 'MSG_PREFIX' variable when calling these functions to get a prefix on your text. I.e:
 # MSG_PREFIX=' gimp' msg hi
 #     [# gimp] hi

@@ -96,7 +96,7 @@ LOGGING=0
 LINTPKGBUILD=0
 MPR_CHECK=0
 MAKEDEB_MESSAGES=()
-MAKEDEB_MESSAGE_TYPE=''
+MAKEDEB_MESSAGE_TYPES=()
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
@@ -712,7 +712,7 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
-	if ! sudo "${SUDOARGS[@]}" -- apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
+	if ! SUDO=1 makedeb_rs install "${APTARGS[@]}" "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
@@ -969,7 +969,7 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm' 'no-build' 'no-check'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
-	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'question:' 'print-function-dir'
+	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'question:' 'no-style:' 'print-function-dir'
 	  'no-color'
 	  # Sorry not sorry.
 	  'why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious')
@@ -1010,19 +1010,20 @@ while true; do
 		# APT options.
 		--as-deps)               ASDEPS=1 ;;
 		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
-		--no-confirm)            APTARGS+=('-y') ;;
+		--no-confirm)            APTARGS+=('--no-confirm') ;;
 
 		# Sudo options.
 		--pass-env)              SUDOARGS+=('-E') ;;
 
 		# Message options.
-		--msg)                   shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='msg' ;;
-		--msg2)                  shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='msg2' ;;
-		--warning)               shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='warning' ;;
-		--warning2)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='warning2' ;;
-		--error)                 shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='error' ;;
-		--error2)                shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='error2' ;;
-		--question)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPE='question' ;;
+		--msg)                   shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('msg') ;;
+		--msg2)                  shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('msg2') ;;
+		--warning)               shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('warning') ;;
+		--warning2)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('warning2') ;;
+		--error)                 shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('error') ;;
+		--error2)                shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('error2') ;;
+		--question)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('question') ;;
+		--no-style)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('no-style') ;;
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
@@ -1073,9 +1074,11 @@ fi
 
 
 # If we're to print a message, do that and exit.
-if [[ "${MAKEDEB_MESSAGE_TYPE}" != "" ]]; then
-	for msg in "${MAKEDEB_MESSAGES[@]}"; do
-		"${MAKEDEB_MESSAGE_TYPE}" "${msg}"
+if [[ "${#MAKEDEB_MESSAGE_TYPES[@]}" -gt "0" ]]; then
+	mapfile -t nums < <(seq 0 "$(( "${#MAKEDEB_MESSAGE_TYPES[@]}" - 1 ))")
+
+	for num in "${nums[@]}"; do
+		"${MAKEDEB_MESSAGE_TYPES[$num]}" "${MAKEDEB_MESSAGES[$num]}"
 	done
 	exit 0
 fi
@@ -1410,7 +1413,7 @@ else
 
 	# We only care about the dependencies of the package, so include the bare minimum to generate a dep with only dependencies listed.
 	if ! (
-		options=()
+		options=('--deps-only')
 
 		for arg in '--allow-downgrades' '--no-confirm'; do
 			if in_array "${arg}" "${APTARGS[@]}"; then
@@ -1422,7 +1425,7 @@ else
 			options+=('--fail-on-change')
 		fi
 
-		SUDO=1 makedeb_rs resolve "${dummy_deb_name}!${dummy_deb_name}.deb" "${options[@]}"
+		SUDO=1 makedeb_rs install "${dummy_deb_name}.deb" "${options[@]}"
 	); then
 		exit "${E_INSTALL_DEPS_FAILED}"
 	fi
