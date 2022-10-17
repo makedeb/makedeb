@@ -6,7 +6,6 @@ jobs:
     container:
       image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
       options: --user root
-      PATH: /root/.cargo/bin:/github/home/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     env:
       DEBIAN_FRONTEND: "noninteractive"
       makedeb_url: "makedeb.org"
@@ -34,6 +33,7 @@ jobs:
       - name: Run unit tests
         working-directory: ./makedeb
         run: |
+          export PATH='/github/home/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
           sudo -Eu makedeb PATH="${PATH}" release_type="${GITHUB_BASE_REF}" makedeb_url="${makedeb_url}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2
