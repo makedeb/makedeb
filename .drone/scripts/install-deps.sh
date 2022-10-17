@@ -13,7 +13,6 @@ apt_install_cmd=(
     'install'
     'asciidoctor'
     'bats'
-    'cargo'
     'curl'
     'debhelper'
     'git'
@@ -50,6 +49,7 @@ else
     "${apt_install_cmd[@]}"
 fi
 
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 "${pip_install_cmd[@]}"
 
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
