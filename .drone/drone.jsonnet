@@ -13,6 +13,7 @@ local runUnitTests(pkgname, tag) = {
         },
         commands: [
             ".drone/scripts/install-deps.sh",
+            "source \"$HOME/.cargo/env\"",
             "sudo chown 'makedeb:makedeb' ../ -R",
             ".drone/scripts/run-unit-tests.sh"
         ]
@@ -54,6 +55,7 @@ local userRepoPublish(pkgname, tag, user_repo) = {
         },
         commands: [
             ".drone/scripts/install-deps.sh",
+            "source \"$HOME/.cargo/env\"",
             ".drone/scripts/user-repo.sh"
         ]
     }]
@@ -77,6 +79,7 @@ local buildAndPublish(pkgname, tag, image, distro, architecture) = {
             },
             commands: [
                 ".drone/scripts/install-deps.sh",
+                "source \"$HOME/.cargo/env\"",
                 "sudo chown 'makedeb:makedeb' ../ -R",
                 ".drone/scripts/build.sh"
             ]

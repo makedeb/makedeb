@@ -32,6 +32,8 @@ jobs:
       
       - name: Run unit tests
         working-directory: ./makedeb
-        run: sudo -u makedeb release_type="${GITHUB_BASE_REF}" makedeb_url="${makedeb_url}" .drone/scripts/run-unit-tests.sh
+        run: |
+        source "$HOME/.cargo/env"
+        sudo -u makedeb release_type="${GITHUB_BASE_REF}" makedeb_url="${makedeb_url}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2
