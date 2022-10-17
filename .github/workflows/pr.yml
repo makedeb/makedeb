@@ -1,6 +1,9 @@
 name: Build makedeb
 on: {"pull_request"}
-env: {"DEBIAN_FRONTEND": "noninteractive"}
+env: {
+  "DEBIAN_FRONTEND": "noninteractive",
+  "makedeb_url", "makedeb.org"
+}
 jobs:
   build:
     runs-on: ubuntu-latest

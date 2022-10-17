@@ -9,5 +9,5 @@ colored = "2.0.0"
 exitcode = "1.1.2"
 quit = "1.1.4"
 # Cache marking functionality isn't working on the latest commit, so target a specific one for the time being.
-rust-apt = { git = "https://gitlab.com/volian/rust-apt", branch = "fix/deb-installation" }
+rust-apt = { git = "https://gitlab.com/volian/rust-apt" }
 users = "0.11.0"
