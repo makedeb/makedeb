@@ -65,6 +65,7 @@ MAKEDEB_BINARY="${0}"
 MAKEDEB_PACKAGED=0
 
 if (( !MAKEDEB_PACKAGED )); then
+	set -e
 	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
 		cargo build
 		export IN_MAKEDEB_RS=1
@@ -75,6 +76,7 @@ if (( !MAKEDEB_PACKAGED )); then
 	MAKEPKG_CONF="$(git rev-parse --show-toplevel)/src/makepkg.conf"
 	EXTENSIONS_DIR="$(git rev-parse --show-toplevel)/src/extensions"
 	MAKEDEB_BINARY="$(git rev-parse --show-toplevel)/src/main.sh"
+	set +e
 fi
 
 # Options

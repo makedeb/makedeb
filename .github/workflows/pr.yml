@@ -34,6 +34,10 @@ jobs:
         working-directory: ./makedeb
         run: |
           . "$HOME/.cargo/env"
+
+          # REMOVE BEFORE MERGING!!!
+          echo "${PATH}" &> /dev/stderr
+
           sudo -Eu makedeb release_type="${GITHUB_BASE_REF}" makedeb_url="${makedeb_url}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2
