@@ -64,7 +64,7 @@ MAKEDEB_BINARY="${0}"
 # This is used to set up makedeb to be able to run from the local files when needed.
 MAKEDEB_PACKAGED=0
 
-if (( !MAKEDEB_PACKAGED )); then
+if ! (( MAKEDEB_PACKAGED )); then
 	set -e
 	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
 		cargo build
