@@ -18,18 +18,17 @@ jobs:
         with:
           path: ./makedeb
 
+      - name: Install needed dependencies
+        working-directory: ./makedeb
+        # For some reason we need to include this 'makedeb_url=' declaration, not sure why yet.
+        run: makedeb_url="${makedeb_url}" .drone/scripts/install-deps.sh
+      
       - name: Ensure directory permissions are correct
         run: |
           chown 'makedeb:makedeb' /__w /home /github /root -R
           find /__w /home /github /root -type d -exec chmod a+rwx '{}' +
           find /__w /home /github /root -type f -exec chmod a+rw '{}' +
 
-
-      - name: Install needed dependencies
-        working-directory: ./makedeb
-        # For some reason we need to include this 'makedeb_url=' declaration, not sure why yet.
-        run: makedeb_url="${makedeb_url}" .drone/scripts/install-deps.sh
-      
       - name: Run unit tests
         working-directory: ./makedeb
         run: |
