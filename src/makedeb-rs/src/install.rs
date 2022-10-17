@@ -1,10 +1,10 @@
 use crate::{message::Message, util};
+use colored::Colorize;
 use rust_apt::{
     cache::{Cache, PackageSort},
     progress::{AptAcquireProgress, AptInstallProgress},
 };
 use std::{io, process::Command};
-
 struct Package {
     pkgname: String,
     version: String,
@@ -78,11 +78,12 @@ pub(crate) fn install(
         let ver = apt_pkg.get_version(&pkg.version).unwrap();
         ver.set_candidate();
 
-        apt_pkg.mark_install(false, !as_deps).then_some(()).unwrap();
+        // For some reason this first argument, `auto_inst` (https://docs.rs/rust-apt/latest/rust_apt/package/struct.Package.html#auto_inst) needs to be set to `true` for removal of packages to work. Need to find out why.
+        apt_pkg.mark_install(true, !as_deps).then_some(()).unwrap();
         apt_pkg.protect();
     }
 
-    if let Err(err) = cache.resolve(false) {
+    if let Err(err) = cache.resolve(true) {
         util::handle_errors(err);
         Message::new()
             .error("An issue was encountered while resolving deps.")
@@ -203,27 +204,23 @@ pub(crate) fn install(
 
     let mut msg = Message::new();
 
-    let add_pkgs = |mut msg: Message, pkgs: &mut Vec<String>| -> Message {
-        pkgs.sort();
-
-        for pkg in pkgs {
-            msg = msg.msg2(pkg);
-        }
-
-        msg
-    };
-
     if !to_install.is_empty() {
         msg = msg.msg("The following packages will be installed:");
-        msg = msg.no_style(util::format_apt_pkglist(&to_install));
+        msg = msg
+            .no_style(util::format_apt_pkglist(&to_install))
+            .no_style("");
     }
     if !to_remove.is_empty() {
         msg = msg.msg("The following packages will be removed:");
-        msg = msg.no_style(util::format_apt_pkglist(&to_remove));
+        msg = msg
+            .no_style(util::format_apt_pkglist(&to_remove))
+            .no_style("");
     }
     if !to_upgrade.is_empty() {
         msg = msg.msg("The following packages will be upgraded:");
-        msg = msg.no_style(util::format_apt_pkglist(&to_upgrade));
+        msg = msg
+            .no_style(util::format_apt_pkglist(&to_upgrade))
+            .no_style("");
     }
     if !to_downgrade.is_empty() {
         if !allow_downgrades {
@@ -234,13 +231,29 @@ pub(crate) fn install(
         }
 
         msg = msg.msg("The following packages will be DOWNGRADED:");
-        msg = msg.no_style(util::format_apt_pkglist(&to_downgrade));
+        msg = msg
+            .no_style(util::format_apt_pkglist(&to_downgrade))
+            .no_style("");
     }
+    msg = msg.msg(
+        format!(
+            "{} upgraded, {} newly installed, {} to remove and {} not upgraded.",
+            to_upgrade.len().to_string().blue().bold(),
+            to_install.len().to_string().blue().bold(),
+            match to_remove.len() {
+                0 => 0.to_string().blue().bold(),
+                _ => to_remove.len().to_string().red().bold(),
+            },
+            match to_downgrade.len() {
+                0 => 0.to_string().blue().bold(),
+                _ => to_downgrade.len().to_string().red().bold(),
+            } // For some reason we have to bold this manually, even though makedeb bolds all messages. Not sure why yet.
+        )
+        .bold(),
+    );
 
     if !no_confirm {
-        msg.no_style("")
-            .question("Would you like to continue? [Y/n] ")
-            .send();
+        msg.question("Would you like to continue? [Y/n] ").send();
         let mut response = String::new();
         io::stdin().read_line(&mut response).unwrap();
 

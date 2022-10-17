@@ -16,12 +16,6 @@ impl Message {
         self
     }
 
-    pub fn msg2<T: ToString>(mut self, msg: T) -> Self {
-        self.args.push("--msg2".to_string());
-        self.args.push(msg.to_string());
-        self
-    }
-
     pub fn warning<T: ToString>(mut self, msg: T) -> Self {
         self.args.push("--warning".to_string());
         self.args.push(msg.to_string());

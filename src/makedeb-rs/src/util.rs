@@ -1,6 +1,6 @@
 use crate::message::Message;
-use rust_apt::util::{self as apt_util, Exception};
 use colored::{ColoredString, Colorize};
+use rust_apt::util::{self as apt_util, Exception};
 
 /// Handle CXX errors.
 pub fn handle_errors(err_str: Exception) {
@@ -17,21 +17,23 @@ pub fn handle_errors(err_str: Exception) {
     makedeb_msg.send();
 }
 
-pub fn format_apt_pkglist<T: AsRef<str>>(pkgnames: &Vec<T>) -> ColoredString {
+pub fn format_apt_pkglist<T: AsRef<str>>(pkgnames: &[T]) -> ColoredString {
     // All package lines always start with two spaces, so pretend like we have two
     // less characters.
     let term_width = apt_util::terminal_width() - 2;
+
     let mut output = String::from("  ");
     let mut current_width = 0;
 
-    for (index, _pkgname) in pkgnames.iter().enumerate() {
-        let pkgname = _pkgname.as_ref();
+    for (index, pkgname_ref) in pkgnames.iter().enumerate() {
+        let pkgname = pkgname_ref.as_ref();
         output.push_str(pkgname);
-        current_width += pkgname.len();
+        // Add 1 for the space that'll appear if we add another package on this line.
+        current_width += pkgname.len() + 1;
 
         let next_pkgname = match pkgnames.get(index + 1) {
             Some(string) => string.as_ref(),
-            None => ""
+            None => "",
         };
 
         if current_width + next_pkgname.len() > term_width {
