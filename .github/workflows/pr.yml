@@ -20,9 +20,9 @@ jobs:
 
       - name: Ensure directory permissions are correct
         run: |
-          chown 'makedeb:makedeb' /__w /home -R
-          find /__w /home -type d -exec chmod a+rwx '{}' +
-          find /__w /home -type f -exec chmod a+rw '{}' +
+          chown 'makedeb:makedeb' /__w /home /github /root -R
+          find /__w /home /github /root -type d -exec chmod a+rwx '{}' +
+          find /__w /home /github /root -type f -exec chmod a+rw '{}' +
 
 
       - name: Install needed dependencies
