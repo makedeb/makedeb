@@ -59,19 +59,21 @@ local userRepoPublish(pkgname, tag, user_repo) = {
     }]
 };
 
-local buildAndPublish(pkgname, tag) = {
-    name: "build-and-publish-" + tag,
+local buildAndPublish(pkgname, tag, image, distro, architecture) = {
+    name: "build-and-publish-" + tag + "-" + distro + "-" + architecture,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
     depends_on: ["mpr-publish-" + tag],
     steps: [
         {
-            name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
+            name: "build",
+            image: image,
             environment: {
                 release_type: tag,
-                pkgname: pkgname
+                pkgname: pkgname,
+                distro: distro,
+                architecture: architecture
             },
             commands: [
                 ".drone/scripts/install-deps.sh",
@@ -81,9 +83,13 @@ local buildAndPublish(pkgname, tag) = {
         },
 
         {
-            name: "publish-proget",
+            name: "publish",
             image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
-            environment: {proget_api_key: {from_secret: "proget_api_key"}},
+            environment: {
+                proget_api_key: {from_secret: "proget_api_key"},
+                dpkg_distro: distro,
+                dpkg_architecture: architecture
+            },
             commands: [
                 ".drone/scripts/install-deps.sh",
                 ".drone/scripts/publish.py"
@@ -92,46 +98,48 @@ local buildAndPublish(pkgname, tag) = {
     ]
 };
 
+local buildAndPublishLists(pkgname, tag) = [
+    // APT amd64.
+    buildAndPublish(pkgname, tag, "ubuntu:18.04", "bionic", "amd64"),
+    buildAndPublish(pkgname, tag, "ubuntu:20.04", "focal", "amd64"),
+    buildAndPublish(pkgname, tag, "ubuntu:22.04", "jammy", "amd64"),
+    buildAndPublish(pkgname, tag, "debian:11", "bullseye", "amd64"),
 
-local sendBuildNotification(tag) = {
-    name: "send-build-notification-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {
-        branch: [tag],
-        status: ["success", "failure"]
-    },
-    depends_on: ["build-and-publish-" + tag],
-    steps: [{
-        name: "send-notification",
-        image: "proget.hunterwittenborn.com/docker/hwittenborn/drone-matrix",
-        settings: {
-            username: "drone",
-            password: {from_secret: "matrix_api_key"},
-            homeserver: "https://matrix.hunterwittenborn.com",
-            room: "#makedeb-ci-logs:hunterwittenborn.com"
-        }
-    }]
-};
+    // APT arm64.
+    buildAndPublish(pkgname, tag, "arm64v8/ubuntu:18.04", "bionic", "arm64"),
+    buildAndPublish(pkgname, tag, "arm64v8/ubuntu:20.04", "focal", "arm64"),
+    buildAndPublish(pkgname, tag, "arm64v8/ubuntu:22.04", "jammy", "arm64"),
+    buildAndPublish(pkgname, tag, "arm64v8/debian:11", "bullseye", "arm64"),
+
+    // APT armhf.
+    buildAndPublish(pkgname, tag, "arm32v7/ubuntu:18.04", "bionic", "armhf"),
+    buildAndPublish(pkgname, tag, "arm32v7/ubuntu:20.04", "focal", "armhf"),
+    buildAndPublish(pkgname, tag, "arm32v7/ubuntu:22.04", "jammy", "armhf"),
+    buildAndPublish(pkgname, tag, "arm32v7/debian:11", "bullseye", "armhf"),
+
+    // APT i386.
+    // TODO: Ubuntu doesn't publish recent images for this architecture, need to find out why before the Rust changes can make it into stable.
+    // See https://bugs.launchpad.net/cloud-images/+bug/1993102.
+    buildAndPublish("makedeb", "stable", "i386/ubuntu:18.04", "bionic", "i386"),
+    buildAndPublish("makedeb", "stable", "i386/debian:11", "bullseye", "i386"),
+];
 
 [
+    // Unit tests.
     runUnitTests("makedeb", "stable"),
     runUnitTests("makedeb-beta", "beta"),
     runUnitTests("makedeb-alpha", "alpha"),
 
+    // Tags.
     createTag("stable"),
     createTag("beta"),
     createTag("alpha"),
 
+    // MPR.
     userRepoPublish("makedeb", "stable", "mpr"),
     userRepoPublish("makedeb-beta", "beta", "mpr"),
     userRepoPublish("makedeb-alpha", "alpha", "mpr"),
-
-    buildAndPublish("makedeb", "stable"),
-    buildAndPublish("makedeb-beta", "beta"),
-    buildAndPublish("makedeb-alpha", "alpha"),
-
-    sendBuildNotification("stable"),
-    sendBuildNotification("beta"),
-    sendBuildNotification("alpha")
 ]
++ buildAndPublishLists("makedeb", "stable")
++ buildAndPublishLists("makedeb-beta", "beta")
++ buildAndPublishLists("makedeb-alpha", "alpha")

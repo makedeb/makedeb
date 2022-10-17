@@ -27,6 +27,7 @@ apt_install_cmd=(
     'sudo'
     'tzdata'
     'ubuntu-dev-tools'
+    'wget'
     '-y'
 )
 pip_install_cmd=(
