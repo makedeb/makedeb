@@ -19,6 +19,7 @@ apt_install_cmd=(
     'git'
     'gpg'
     'jq'
+    'libapt-pkg-dev'
     'openssh-client'
     'python3'
     'python3-pip'
