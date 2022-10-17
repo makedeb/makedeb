@@ -50,6 +50,9 @@ else
 fi
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+export PATH
+
 "${pip_install_cmd[@]}"
 
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
