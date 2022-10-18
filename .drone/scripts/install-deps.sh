@@ -19,6 +19,7 @@ apt_install_cmd=(
     'gpg'
     'jq'
     'libapt-pkg-dev'
+    'lsb-release'
     'openssh-client'
     'python3'
     'python3-pip'
@@ -31,13 +32,14 @@ apt_install_cmd=(
     '-y'
 )
 pip_install_cmd=(
-    'pip'
+    'pip3'
     'install'
     'PyGithub'
     'beautifulsoup4'
     'markdown'
     'requests'
 )
+pbmpr_install_cmd=('sudo' 'apt-get' 'install' 'gh' 'parse-changelog')
 
 if [[ -z "${NO_SUDO}" ]]; then
     sudo -E "${apt_update_cmd[@]}"
@@ -46,14 +48,20 @@ if [[ -z "${NO_SUDO}" ]]; then
 else
     "${apt_update_cmd[@]}"
     "${apt_upgrade_cmd[@]}"
-    "${apt_install_cmd[@]}"
+    "${apt_install_cmd[@]}" sudo
 fi
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Set up the Prebuilt-MPR.
+curl -q "https://proget.${makedeb_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
+echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.${makedeb_url} prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
+sudo apt-get update
+
+# Install needed packages from the PBMPR and Pip.
+"${pbmpr_install_cmd[@]}"
 "${pip_install_cmd[@]}"
 
-curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-pip install PyGithub
+curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
 
 # vim: set syntax=bash ts=4 sw=4 expandtab:

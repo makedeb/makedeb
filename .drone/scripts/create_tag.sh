@@ -2,19 +2,7 @@
 set -ex
 sudo chown 'makedeb:makedeb' ../ -R
 
-# Install prerequisites.
-sudo apt-get update
-sudo -E apt install curl jq lsb-release gpg -y
-
-# Set up the Prebuilt-MPR.
-curl -q "https://proget.${makedeb_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
-echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.${makedeb_url} prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
-
-# Install needed packages from PBMPR.
-sudo apt-get update
-sudo -E apt-get install gh parse-changelog -y
-
-TARGET=apt RELEASE="${DRONE_COMMIT_BRANCH}" PKGBUILD/pkgbuild.sh > MAKEDEB.PKGBUILD
+TARGET=apt RELEASE="${DRONE_COMMIT_BRANCH}" BUMP_PKGREL=1 PKGBUILD/pkgbuild.sh > MAKEDEB.PKGBUILD
 
 branch="${DRONE_COMMIT_BRANCH}"
 pkgver="$(source MAKEDEB.PKGBUILD; echo "${pkgver}")"
