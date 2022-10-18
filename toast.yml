@@ -5,17 +5,51 @@ command_prefix: set -e
 tasks:
   install_dependencies:
     description: Install needed dependencies.
+    environment:
+      hw_url: hunterwittenborn.com
     input_paths:
       - .drone/scripts/install-deps.sh
-    command: .drone/scripts/install-deps.sh
+    command: DEBIAN_FRONTEND=noninteractive .drone/scripts/install-deps.sh
 
   run_unit_tests:
     description: Run unit tests.
     environment:
       TESTS: "./"
+      DEBIAN_FONTEND: noninterative
+      hw_url: hunterwittenborn.com
+      makedeb_url: makedeb.org
+      PATH: 
     input_paths:
-      - ./
+      - .drone/scripts/
+      - .git/
+      - completions/
+      - man/
+      - PKGBUILD/
+      - po/
+      - src/extensions/
+      - src/functions/
+      - src/makedeb-rs/
+      - src/main.sh
+      - src/makepkg.conf
+      - test/
+      - .data.json
+      - Cargo.lock
+      - Cargo.toml
+      - Makefile
+
     command: |
+      # Set up the Git user.
+      git config --global user.email 'makedeb@example.com'
+      git config --global user.name 'makedeb User'
+
+      # Chown the current directory to the 'makedeb' user.
+      sudo chown 'makedeb:makedeb' . -R
+
+      # Commit everything in case the user has stuff they didn't commit. Otherwise those changes won't be picked up when building makedeb.
+      git add .
+      git commit -m "Include any remaining changes" --allow-empty
+
+      . "${HOME}/.cargo/env"
       sudo chown 'makedeb:makedeb' "${HOME}/makedeb" -R
       git remote set-url origin 'https://github.com/makedeb/makedeb'
       release_type=alpha .drone/scripts/run-unit-tests.sh

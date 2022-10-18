@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
 
+mod autoremove;
+mod cache;
 mod install;
 mod message;
 mod util;
@@ -39,6 +41,16 @@ enum Commands {
         #[arg(long, conflicts_with("deps_only"))]
         as_deps: bool,
     },
+
+    Autoremove {
+        /// Don't ask before removing packages
+        #[arg(long)]
+        no_confirm: bool,
+
+        /// Dummy argument for compatibility with makedeb.
+        #[arg(long)]
+        allow_downgrades: bool,
+    },
 }
 
 #[quit::main]
@@ -61,5 +73,9 @@ fn main() {
             deps_only,
             as_deps,
         ),
+        Commands::Autoremove {
+            no_confirm,
+            allow_downgrades: _,
+        } => autoremove::autoremove(no_confirm),
     }
 }

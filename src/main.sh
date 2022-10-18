@@ -1505,7 +1505,7 @@ msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
 # Remove installed build dependencies.
 if (( "${RMDEPS}" )); then
 	msg "$(gettext "Removing unneeded dependencies...")"
-	if ! sudo "${SUDOARGS[@]}" -- apt-get "${APTARGS[@]}" -- autoremove; then
+	if ! SUDO=1 makedeb_rs autoremove "${APTARGS[@]}"; then
 		error "$(gettext "Failed to remove dependencies.")"
 		exit "${E_REMOVE_DEPS_FAILED}"
 	fi
