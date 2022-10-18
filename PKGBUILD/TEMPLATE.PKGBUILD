@@ -19,12 +19,11 @@ depends=(
 	'gawk'
 	'libarchive-tools'
 	'lsb-release'
-	'python3'
-	'python3-apt'
 	'zstd'
 )
 makedepends=(
 	'asciidoctor'
+	'cargo'
 	'git'
 	'make'
 	'jq'
@@ -39,6 +38,11 @@ sha256sums=('SKIP')
 prepare() {
 	cd makedeb/
 	make prepare PKGVER="${pkgver}" RELEASE="${_release}" TARGET="${_target}" CURRENT_VERSION="${pkgver}-${pkgrel}"
+}
+
+build() {
+	cd makedeb/
+	make build
 }
 
 package() {

@@ -18,6 +18,7 @@ apt_install_cmd=(
     'git'
     'gpg'
     'jq'
+    'libapt-pkg-dev'
     'openssh-client'
     'python3'
     'python3-pip'
@@ -26,6 +27,7 @@ apt_install_cmd=(
     'sudo'
     'tzdata'
     'ubuntu-dev-tools'
+    'wget'
     '-y'
 )
 pip_install_cmd=(
@@ -47,6 +49,7 @@ else
     "${apt_install_cmd[@]}"
 fi
 
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 "${pip_install_cmd[@]}"
 
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -

@@ -58,18 +58,25 @@ declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-"$(lsb_release -c
 LIBRARY="${LIBRARY:-"{FILESYSTEM_PREFIX}/usr/share/makedeb"}"
 MAKEPKG_CONF="${MAKEPKG_CONF:-"{FILESYSTEM_PREFIX}/etc/makepkg.conf"}"
 EXTENSIONS_DIR='{FILESYSTEM_PREFIX}/usr/lib/makedeb'
+MAKEDEB_BINARY="${0}"
 
-# We use backslashes instead of quotes so the Makefile doesn't overwrite the values here. Otherwise these 'if' statements would still be evaluated as true, as '{FILESYSTEM_PREFIX}' would be changed in the Makefile.
-if [[ "${LIBRARY}" == \{FILESYSTEM_PREFIX\}/usr/share/makedeb ]]; then
-	LIBRARY='./functions'
-fi
+# A variable declaring if makedeb is being ran from a packaged release or directly from the Git repository.
+# This is used to set up makedeb to be able to run from the local files when needed.
+MAKEDEB_PACKAGED=0
 
-if [[ "${MAKEPKG_CONF}" == \{FILESYSTEM_PREFIX\}/etc/makepkg.conf ]]; then
-	MAKEPKG_CONF='./makepkg.conf'
-fi
+if ! (( MAKEDEB_PACKAGED )); then
+	set -e
+	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
+		cargo build
+		export IN_MAKEDEB_RS=1
+	fi
 
-if [[ "${EXTENSIONS_DIR}" == \{FILESYSTEM_PREFIX\}/usr/lib/makedeb ]]; then
-	EXTENSIONS_DIR="${PWD}/extensions"
+	cd "$(dirname "${MAKEDEB_BINARY}")"
+	LIBRARY="$(git rev-parse --show-toplevel)/src/functions"
+	MAKEPKG_CONF="$(git rev-parse --show-toplevel)/src/makepkg.conf"
+	EXTENSIONS_DIR="$(git rev-parse --show-toplevel)/src/extensions"
+	MAKEDEB_BINARY="$(git rev-parse --show-toplevel)/src/main.sh"
+	set +e
 fi
 
 # Options
@@ -90,8 +97,8 @@ INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
 MPR_CHECK=0
-MAKEDEB_MESSAGE=''
-MAKEDEB_MESSAGE_TYPE=''
+MAKEDEB_MESSAGES=()
+MAKEDEB_MESSAGE_TYPES=()
 NEEDED=0
 NOARCHIVE=0
 NOBUILD=0
@@ -221,6 +228,17 @@ clean_up() {
 enter_fakeroot() {
 	msg "$(gettext "Entering %s environment...")" "fakeroot"
 	fakeroot -- bash -$- "${BASH_SOURCE[0]}" --in-fakeroot "${ARGLIST[@]}" || exit $?
+}
+
+# Run a makedeb-rs command.
+makedeb_rs() {
+	local args=()
+
+	if (( SUDO )); then
+		sudo MAKEDEB_BINARY="${MAKEDEB_BINARY}" "${LIBRARY}/makedeb-rs" "${@}"
+	else
+		MAKEDEB_BINARY="${MAKEDEB_BINARY}" "${LIBRARY}/makedeb-rs" "${@}"
+	fi
 }
 
 # Automatically update pkgver variable if a pkgver() function is provided
@@ -466,7 +484,6 @@ write_extra_control_fields() {
 write_control_info() {
 	local fullver=$(get_full_version)
 
-
 	write_control_pair "Package" "${pkgname}"
 	write_control_pair "Version" "${fullver}"
 	write_control_pair "Description" "${pkgdesc}"
@@ -483,6 +500,27 @@ write_control_info() {
 	write_control_pair "Replaces" "${replaces[@]}"
 	write_control_pair "Breaks" "${breaks[@]}"
 	write_extra_control_fields
+}
+
+create_deb() {
+	echo '2.0' > ./debian-binary
+	cd DEBIAN/
+	mapfile -t control_files < <(find ./ -mindepth 1 -maxdepth 1)
+	tar -czf ./control.tar.gz "${control_files[@]}"
+	mv control.tar.gz ../
+	cd ../
+
+	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
+
+	# Tar doesn't like no files being provided for an archive.
+	if [[ "${#package_files[@]}" == 0 ]]; then
+		tar -czf ./data.tar.gz --files-from /dev/null
+	else
+		tar -czf ./data.tar.gz "${package_files[@]}"
+	fi
+
+	ar -rU "${1}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
+	rm debian-binary control.tar.gz data.tar.gz
 }
 
 create_package() {
@@ -511,7 +549,6 @@ create_package() {
 	pkgarch=$(get_pkg_arch)
 	msg2 "$(gettext "Setting up package metadata...")"
 	mkdir "${pkgdir}/DEBIAN/"
-	echo "2.0" > "${pkgdir}/debian-binary"
 
 	msg2 "$(gettext "Generating %s file...")" "control"
 	write_control_info > "${pkgdir}/DEBIAN/control"
@@ -560,24 +597,7 @@ create_package() {
 	find . -exec touch -h -d @$SOURCE_DATE_EPOCH {} +
 
 	msg2 "$(gettext "Compressing package...")"
-
-	cd DEBIAN/
-	mapfile -t control_files < <(find ./ -mindepth 1 -maxdepth 1)
-	tar -czf ./control.tar.gz "${control_files[@]}"
-	mv control.tar.gz ../
-	cd ../
-
-	mapfile -t package_files < <(find ./ -mindepth 1 -maxdepth 1 -not -path "./DEBIAN" -not -path './debian-binary' -not -path './control.tar.gz')
-
-	# Tar doesn't like no files being provided for an archive.
-	if [[ "${#package_files[@]}" == 0 ]]; then
-		tar -czf ./data.tar.gz --files-from /dev/null
-	else
-		tar -czf ./data.tar.gz "${package_files[@]}"
-	fi
-
-	ar -rU "${pkg_file}" debian-binary control.tar.gz data.tar.gz 2> /dev/null
-	rm debian-binary control.tar.gz data.tar.gz
+	create_deb "${pkg_file}"
 }
 
 create_debug_package() {
@@ -694,7 +714,7 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
-	if ! sudo "${SUDOARGS[@]}" -- apt-get install --reinstall "${APTARGS[@]}" -- "${pkglist[@]}"; then
+	if ! SUDO=1 makedeb_rs install "${APTARGS[@]}" "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
@@ -951,7 +971,7 @@ OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
 	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
 	  'skip-pgp-check' 'as-deps' 'no-confirm' 'no-build' 'no-check'
 	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
-	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'print-function-dir'
+	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'question:' 'no-style:' 'print-function-dir'
 	  'no-color'
 	  # Sorry not sorry.
 	  'why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious')
@@ -992,18 +1012,20 @@ while true; do
 		# APT options.
 		--as-deps)               ASDEPS=1 ;;
 		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
-		--no-confirm)            APTARGS+=('-y') ;;
+		--no-confirm)            APTARGS+=('--no-confirm') ;;
 
 		# Sudo options.
 		--pass-env)              SUDOARGS+=('-E') ;;
 
 		# Message options.
-		--msg)                   shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='msg' ;;
-		--msg2)                  shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='msg2' ;;
-		--warning)               shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='warning' ;;
-		--warning2)              shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='warning2' ;;
-		--error)                 shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='error' ;;
-		--error2)                shift; MAKEDEB_MESSAGE="${1}"; MAKEDEB_MESSAGE_TYPE='error2' ;;
+		--msg)                   shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('msg') ;;
+		--msg2)                  shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('msg2') ;;
+		--warning)               shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('warning') ;;
+		--warning2)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('warning2') ;;
+		--error)                 shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('error') ;;
+		--error2)                shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('error2') ;;
+		--question)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('question') ;;
+		--no-style)              shift; MAKEDEB_MESSAGES+=("${1}"); MAKEDEB_MESSAGE_TYPES+=('no-style') ;;
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
@@ -1054,8 +1076,12 @@ fi
 
 
 # If we're to print a message, do that and exit.
-if [[ "${MAKEDEB_MESSAGE_TYPE}" != "" ]]; then
-	"${MAKEDEB_MESSAGE_TYPE}" "${MAKEDEB_MESSAGE}"
+if [[ "${#MAKEDEB_MESSAGE_TYPES[@]}" -gt "0" ]]; then
+	mapfile -t nums < <(seq 0 "$(( "${#MAKEDEB_MESSAGE_TYPES[@]}" - 1 ))")
+
+	for num in "${nums[@]}"; do
+		"${MAKEDEB_MESSAGE_TYPES[$num]}" "${MAKEDEB_MESSAGES[$num]}"
+	done
 	exit 0
 fi
 
@@ -1122,8 +1148,8 @@ unset "${!sha256sums_@}" "${!sha384sums_@}" "${!sha512sums_@}" "${!b2sums_@}"
 read_env
 
 # Unset distro-specific environment variables from a user's environment variables.
-# This processes distro-specific global variables (i.e. 'focal_depends') as well
-# as architecture-specific ones (i.e. 'focal_depends_x86_64').
+# This processes distro-specific global variables (i.e. 'jammy_depends') as well
+# as architecture-specific ones (i.e. 'jammy_depends_x86_64').
 for a in "${pkgbuild_schema_arch_arrays[@]}"; do
 	mapfile -t matches < <(printf '%s\n' "${env_keys[@]}" | grep -E "^[^_]*_${a}$|^[^_]*_${a}_")
 
@@ -1371,67 +1397,40 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 	fi
 else
 	msg "$(gettext "Checking for missing dependencies...")"
-	# We need to tell our call to the Python script where makedeb is located because we might need to call it in order to print messages.
-	#
-	# TODO: I'm suspecting there's some kind of bug in the Python APT library. This is being suspected due to the following:
-	# On Ubuntu 20.04, do *not* have libgcc1 installed, but *do* have libgcc-s1 installed.
-	# Running 'apt-get satisfy libgcc1' works as expected, as libgcc-s1 provides libgcc1.
-	# On the other hand, attempting to view the provided package list for libgcc1 isn't showing
-	# libgcc-s1 anywhere. On that note, we gotta be a bit more cautious with the results of our
-	# script, and put more checks into place, such as checking if we actually installed any new
-	# packages before running 'apt-mark auto'.
-	if ! mapfile -t missing_deps < <(MAKEDEB="${0}" "${LIBRARY}/dependencies/missing_apt_dependencies.py" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"); then
-		error "$(gettext "Failed to check missing dependencies.")"
+
+	# Build a dummy deb to resolve the debs with makedeb-rs.
+	tmpdir="$(mktemp -d)"
+	cd "${tmpdir}"
+	dummy_deb_name="$(openssl rand -hex 8)"
+
+	while apt_cache show "${dummy_deb_name}" &> /dev/null; do
+		dummy_deb_name="$(openssl rand -hex 8)"
+	done
+
+	mkdir -p "${dummy_deb_name}/DEBIAN"
+	pkgname="${dummy_deb_name}" pkgarch="$(get_pkg_arch)" write_control_info | grep -E '^Package:|^Version:|^Architecture:|^Description:|^Depends:|^Pre-Depends:' > "${dummy_deb_name}/DEBIAN/control"
+	cd "${dummy_deb_name}"
+	create_deb "../${dummy_deb_name}.deb"
+	cd ../
+
+	# We only care about the dependencies of the package, so include the bare minimum to generate a dep with only dependencies listed.
+	if ! (
+		options=('--deps-only')
+
+		for arg in '--allow-downgrades' '--no-confirm'; do
+			if in_array "${arg}" "${APTARGS[@]}"; then
+				options+=("${arg}")
+			fi
+		done
+
+		if (( !SYNCDEPS )); then
+			options+=('--fail-on-change')
+		fi
+
+		SUDO=1 makedeb_rs install "${dummy_deb_name}.deb" "${options[@]}"
+	); then
 		exit "${E_INSTALL_DEPS_FAILED}"
 	fi
-	
-	if [[ "${#missing_deps[@]}" != 0 ]]; then
-		if (( "${SYNCDEPS}" )); then
-			# Get a list of currently installed packages.
-			mapfile -t prev_installed_packages < <(dpkg-query -Wf '${Package}\n' | sort)
-			
-			# Install the missing deps.
-			msg "$(gettext "Installing missing dependencies...")"
-
-			if ! sudo "${SUDOARGS[@]}" -- apt-get satisfy "${APTARGS[@]}" -- "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"; then
-				error "$(gettext "Failed to install missing dependencies.")"
-				exit "${E_INSTALL_DEPS_FAILED}"
-			fi
-
-			# Get the list of packages that were just installed.
-			mapfile -t cur_installed_packages < <(dpkg-query -Wf '${Package}\n')
-			mapfile -t newly_installed_packages < <(comm -13 --nocheck-order <(printf '%s\n' "${prev_installed_packages[@]}") <(dpkg-query -Wf '${Package}\n' | sort))
-
-			# Mark newly installed packages as automatically installed.
-			# We have to make sure 'newly_installed_packages' isn't empty due to the aformentioned bug above the Python script call.
-			msg "$(gettext "Marking newly installed packages as automatically installed...")"
-			if [[ "${#newly_installed_packages[@]}" != 0 ]]; then
-				if ! sudo apt-mark auto "${newly_installed_packages[@]}" 1> /dev/null; then
-					error "$(gettext "Failed to mark installed dependencies as automatically installed.")"
-					error "$(gettext "You may need to run 'apt-mark auto' with the following packages:")"
-
-					for pkg in "${newly_installed_packages[@]}"; do
-						error2 "${pkg}"
-					done
-
-					exit "${E_INSTALL_DEPS_FAILED}"
-				fi
-			fi
-
-			unset prev_installed_packages cur_installed_packages newly_installed_packages
-		else
-			error "$(gettext "The following build dependencies are missing:")"
-			for dep in "${missing_deps[@]}"; do
-				error2 "${dep}"
-			done
-
-			args=("${0}" "${CLI_ARGS[@]}" '-s')
-			error "$(gettext "Try running '%s'.")" "${args[*]}"
-			exit "${E_INSTALL_DEPS_FAILED}"
-		fi
-	fi
-
-	unset missing_deps dep
 fi
 
 # Load up extensions for use by 'build()'.
@@ -1506,7 +1505,7 @@ msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
 # Remove installed build dependencies.
 if (( "${RMDEPS}" )); then
 	msg "$(gettext "Removing unneeded dependencies...")"
-	if ! sudo "${SUDOARGS[@]}" -- apt-get "${APTARGS[@]}" -- autoremove; then
+	if ! SUDO=1 makedeb_rs autoremove "${APTARGS[@]}"; then
 		error "$(gettext "Failed to remove dependencies.")"
 		exit "${E_REMOVE_DEPS_FAILED}"
 	fi

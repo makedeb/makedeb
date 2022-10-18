@@ -9,7 +9,7 @@ setup() {
     cd test_dir/
 
     lsb_release() {
-        echo "focal"
+        echo "jammy"
     }
 
     export -f lsb_release

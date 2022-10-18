@@ -1,0 +1,3 @@
+# A dummy Cargo workspace so we can build the Rust code from anywhere in this repo.
+[workspace]
+members = ["src/makedeb-rs"]

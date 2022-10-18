@@ -1,21 +1,17 @@
 name: Build makedeb
 on: {"pull_request"}
-env: {"DEBIAN_FRONTEND": "noninteractive"}
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
-      options: --user makedeb
+      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-jammy
+      options: --user root
+    env:
+      DEBIAN_FRONTEND: "noninteractive"
+      makedeb_url: "makedeb.org"
     steps:
       - name: Install CI prerequisites
-        run: sudo -E apt-get install git -y
-
-      - name: Ensure directory permissions are correct
-        run: |
-          sudo chown 'makedeb:makedeb' /__w /home -R
-          find /__w /home -type d -exec sudo chmod a+rwx '{}' +
-          find /__w /home -type f -exec sudo chmod a+rw '{}' +
+        run: apt-get install git -y
 
       - name: Checkout Git repository
         uses: actions/checkout@v3
@@ -24,10 +20,19 @@ jobs:
 
       - name: Install needed dependencies
         working-directory: ./makedeb
-        run: .drone/scripts/install-deps.sh
+        # For some reason we need to include this 'makedeb_url=' declaration, not sure why yet.
+        run: makedeb_url="${makedeb_url}" .drone/scripts/install-deps.sh
       
+      - name: Ensure directory permissions are correct
+        run: |
+          chown 'makedeb:makedeb' /__w /home /github /root -R
+          find /__w /home /github /root -type d -exec chmod a+rwx '{}' +
+          find /__w /home /github /root -type f -exec chmod a+rw '{}' +
+
       - name: Run unit tests
         working-directory: ./makedeb
-        run: release_type="${GITHUB_BASE_REF}" .drone/scripts/run-unit-tests.sh
+        run: |
+          export PATH='/github/home/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+          sudo -Eu makedeb PATH="${PATH}" release_type="${GITHUB_BASE_REF}" makedeb_url="${makedeb_url}" .drone/scripts/run-unit-tests.sh
 
 # vim: expandtab ts=2 sw=2
