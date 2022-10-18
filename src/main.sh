@@ -67,7 +67,8 @@ MAKEDEB_PACKAGED=0
 if ! (( MAKEDEB_PACKAGED )); then
 	set -e
 	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
-		cargo build
+		# Cargo appears to be leaking memory when using the libgit2 library, so use the Git CLI for registry updates.
+		cargo --config net.git-fetch-with-cli=true build
 		export IN_MAKEDEB_RS=1
 	fi
 
