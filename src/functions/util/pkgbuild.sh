@@ -264,12 +264,12 @@ get_integlist() {
 			fi
 		done
 
-		# check for e.g. 'focal_sha256sums'.
+		# check for e.g. 'jammy_sha256sums'.
 		for d in $(printf '%s\n' "${env_keys[@]}" | grep ".*_${integ}sums\$"); do
 			integlist+=("${integ}")
 		done
 
-		# check for e.g. 'focal_sha256sums_amd64'.
+		# check for e.g. 'jammy_sha256sums_amd64'.
 		for a in "${arch[@]}"; do
 			for d in $(printf '%s\n' "${env_keys[@]}" | grep ".*_${integ}sums_${a}"); do
 				integlist+=("${integ}")
@@ -285,7 +285,7 @@ get_integlist() {
 }
 
 # Get all occurances of a variable plus it's extensions (i.e. for 'depends',
-# 'depends' and 'focal_depends').
+# 'depends' and 'jammy_depends').
 get_extended_variables() {
 	printf '%s\n' "${env_keys[@]}" | grep -F "_${1}" | head -c -1
 	printf '%s\n' "${env_keys[@]}" | grep -F "${1}_" | head -c -1

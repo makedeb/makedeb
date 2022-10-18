@@ -1148,8 +1148,8 @@ unset "${!sha256sums_@}" "${!sha384sums_@}" "${!sha512sums_@}" "${!b2sums_@}"
 read_env
 
 # Unset distro-specific environment variables from a user's environment variables.
-# This processes distro-specific global variables (i.e. 'focal_depends') as well
-# as architecture-specific ones (i.e. 'focal_depends_x86_64').
+# This processes distro-specific global variables (i.e. 'jammy_depends') as well
+# as architecture-specific ones (i.e. 'jammy_depends_x86_64').
 for a in "${pkgbuild_schema_arch_arrays[@]}"; do
 	mapfile -t matches < <(printf '%s\n' "${env_keys[@]}" | grep -E "^[^_]*_${a}$|^[^_]*_${a}_")
 

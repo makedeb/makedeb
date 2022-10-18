@@ -218,7 +218,7 @@ Some variables that makedeb uses can be optionally prefixed with distro codename
 For example, if you wanted to have a global list of dependencies, and then a specific list of dependencies when the user is running Ubuntu 20.04 Focal Fossa, you could use the following: ::
 +
 *depends=('pkg1' 'pkg2')*
-*focal_depends=('pkg3' 'pkg4')*
+*jammy_depends=('pkg3' 'pkg4')*
 
 As another example, if you wanted to have a global list of dependencies, and then a different list when the user's system architecture is *amd64*, you could do the following: ::
 +
@@ -228,7 +228,7 @@ As another example, if you wanted to have a global list of dependencies, and the
 Furthermore, you may also combine these values to create a specificity that requires both a certain distro and a certain architecture: ::
 +
 *depends=('pkg1' 'pkg2')*
-*focal_depends_amd64=('pkg1' 'pkg2')*
+*jammy_depends_amd64=('pkg1' 'pkg2')*
 
 When more than one of these variables are present (say you had all four options), makedeb uses the following lookup order to decide which variable to use (with the first being of highest priority): ::
 +
@@ -240,7 +240,7 @@ When more than one of these variables are present (say you had all four options)
 
 This logic also applies to all other variables supporting prefixes and suffixes.
 
-Note that when using this functionality under the *source* variable, one or more matching hashsum variables must also be present containing the same distro codename and system architecture (i.e. if *focal_source_amd64* is present, a hashsum such as *focal_sha256sums_amd64* and/or *focal_sha512sums_amd64* must also be present).
+Note that when using this functionality under the *source* variable, one or more matching hashsum variables must also be present containing the same distro codename and system architecture (i.e. if *jammy_source_amd64* is present, a hashsum such as *jammy_sha256sums_amd64* and/or *jammy_sha512sums_amd64* must also be present).
 
 == FUNCTIONS
 When building a package, *makedeb*(8) will call the following five functions if they have been defined in the PKGBUILD. The *package()* function must always be present; omitting any of the rest will simply cause makedeb to skip running it.

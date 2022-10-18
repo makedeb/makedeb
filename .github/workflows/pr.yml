@@ -4,7 +4,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-focal
+      image: proget.hunterwittenborn.com/docker/makedeb/makedeb-alpha:ubuntu-jammy
       options: --user root
     env:
       DEBIAN_FRONTEND: "noninteractive"
