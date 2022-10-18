@@ -34,7 +34,7 @@ for var in TARGET RELEASE; do
 done
 
 # Make sure needed software is installed.
-for prgm in jq; do
+for prgm in curl jq; do
 	if ! type -t "${prgm}" 1> /dev/null; then
 		error "Program '${prgm}' isn't installed."
 		failed_checks=1
@@ -47,23 +47,43 @@ fi
 
 # Get needed variables.
 new_pkgver="$(cat .data.json | jq -r '.current_pkgver')"
+releases="$(curl 'https://api.github.com/repos/makedeb/makedeb/releases?per_page=100' | jq -r '.[].name')"
 
 case "${RELEASE}" in
-	stable)     pkgname='makedeb' ;;
-	beta|alpha) pkgname="makedeb-${RELEASE}" ;;
-	*)          error "Invalid release '${RELEASE}'."; exit 1 ;;
+	stable)
+		pkgname='makedeb'
+		release="$(echo "${releases}" | grep 'v[0-9.-]*$')"
+		;;
+	beta|alpha)
+		pkgname="makedeb-${RELEASE}"
+		release="$(echo "${releases}" | grep "v[0-9.]*-${RELEASE}[0-9]*\$")"
+		;;
+	*)
+		error "Invalid release '${RELEASE}'.";
+		exit 1
+		;;
 esac
 
+release="$(echo "${release}" | head -n 1 | sed 's|^v||')"
+
 # Get the pkgver by checking the current latest pkgver for this release, and bumping it as necesary.
-current_pkgver="$(apt list "${pkgname}" 2> /dev/null | grep "^${pkgname}/" | awk '{print $2}' | grep -o '^[^-]*')"
-current_pkgrel="$(apt list "${pkgname}" 2> /dev/null | grep "^${pkgname}/" | awk '{print $2}' | grep -o '[^-]*$')"
+current_pkgver="$(echo "${release}" | grep -o '^[^-]*')"
+current_pkgrel="$(echo "${release}" | grep -o '[^-]*$')"
 
 if [[ "${new_pkgver}" != "${current_pkgver}" ]]; then
 	new_pkgrel="${RELEASE}"
 else
 	declare -i pkgrel_norelease="$(echo "${current_pkgrel}" | grep -o '[0-9]*$')"
-	pkgrel_norelease+=1
-	new_pkgrel="${RELEASE}${pkgrel_norelease}"
+	if [[ "${BUMP_PKGREL:+x}" == 'x' ]]; then
+		pkgrel_norelease+=1
+	fi
+
+	# We don't want `pkgrel`s such as 'alpha0', we want just 'alpha' in those situations.
+	if [[ "${pkgrel_norelease}" == '0' ]]; then
+		new_pkgrel="${RELEASE}"
+	else
+		new_pkgrel="${RELEASE}${pkgrel_norelease}"
+	fi
 fi
 
 # Print out the generated PKGBUILD.
