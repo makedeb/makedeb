@@ -12,8 +12,6 @@ local runUnitTests(pkgname, tag) = {
             pkgname: pkgname
         },
         commands: [
-            ".drone/scripts/install-deps.sh",
-            ". \"$HOME/.cargo/env\"",
             "sudo chown 'makedeb:makedeb' ../ -R",
             ".drone/scripts/run-unit-tests.sh"
         ]
@@ -33,6 +31,7 @@ local createTag(tag) = {
             github_api_key: {from_secret: "github_api_key"}
         },
         commands: [
+            ".drone/scripts/install-deps.sh",
             ".drone/scripts/create_tag.sh"
         ]
     }]
@@ -79,9 +78,10 @@ local buildAndPublish(pkgname, tag, image, distro, architecture) = {
             },
             commands: [
                 "NO_SUDO=1 .drone/scripts/install-deps.sh",
-                ". \"$HOME/.cargo/env\"",
-                "sudo chown 'makedeb:makedeb' ../ -R",
-                ".drone/scripts/build.sh"
+                "useradd -m makedeb",
+                "echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers",
+                "sudo chown 'makedeb:makedeb' ../ /root -R",
+                "sudo -Eu makedeb .drone/scripts/build.sh"
             ]
         },
 

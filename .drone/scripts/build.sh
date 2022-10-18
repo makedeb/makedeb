@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+source "$HOME/.cargo/env"
 git fetch
 sudo chown 'makedeb:makedeb' ./ -R
 
