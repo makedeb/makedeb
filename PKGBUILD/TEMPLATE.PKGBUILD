@@ -6,7 +6,7 @@ pkgname={{ pkgname }}
 pkgver={{ pkgver }}
 pkgrel={{ pkgrel }}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
-arch=('all')
+arch=('any')
 license=('GPL3')
 depends=(
 	'apt'

@@ -19,10 +19,13 @@ apt_install_cmd=(
     'gpg'
     'jq'
     'libapt-pkg-dev'
+    'libffi-dev'
+    'lsb-release'
     'openssh-client'
     'python3'
     'python3-pip'
     'python3-requests'
+    'python3-wrapt'
     'sed'
     'sudo'
     'tzdata'
@@ -31,7 +34,7 @@ apt_install_cmd=(
     '-y'
 )
 pip_install_cmd=(
-    'pip'
+    'pip3'
     'install'
     'PyGithub'
     'beautifulsoup4'
@@ -46,14 +49,14 @@ if [[ -z "${NO_SUDO}" ]]; then
 else
     "${apt_update_cmd[@]}"
     "${apt_upgrade_cmd[@]}"
-    "${apt_install_cmd[@]}"
+    "${apt_install_cmd[@]}" sudo
 fi
 
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Install needed packages from Pip.
 "${pip_install_cmd[@]}"
 
-curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-pip install PyGithub
+curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
 
 # vim: set syntax=bash ts=4 sw=4 expandtab:
