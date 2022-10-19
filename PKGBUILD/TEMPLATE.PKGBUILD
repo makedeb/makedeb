@@ -7,7 +7,6 @@ pkgver={{ pkgver }}
 pkgrel={{ pkgrel }}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
 arch=('any')
-license=('GPL3')
 depends=(
 	'apt'
 	'binutils'
@@ -30,6 +29,8 @@ makedepends=(
 )
 conflicts=('makedeb')
 provides=("makedeb=${pkgver}")
+license=('GPL3')
+backup=('/etc/makepkg.conf')
 url="https://github.com/makedeb/makedeb"
 
 source=("{{ source }}")
