@@ -1,6 +1,4 @@
-image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-jammy
-user: makedeb
-location: /home/makedeb/makedeb
+image: ubuntu:22.04
 command_prefix: set -e
 tasks:
   install_dependencies:
@@ -9,7 +7,10 @@ tasks:
       hw_url: hunterwittenborn.com
     input_paths:
       - .drone/scripts/install-deps.sh
-    command: DEBIAN_FRONTEND=noninteractive .drone/scripts/install-deps.sh
+    command: |
+      DEBIAN_FRONTEND=noninteractive NO_SUDO=1 .drone/scripts/install-deps.sh
+      useradd -m makedeb
+      echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
   run_unit_tests:
     description: Run unit tests.
@@ -18,7 +19,6 @@ tasks:
       DEBIAN_FONTEND: noninterative
       hw_url: hunterwittenborn.com
       makedeb_url: makedeb.org
-      PATH: 
     input_paths:
       - .drone/scripts/
       - .git/
@@ -42,14 +42,11 @@ tasks:
       git config --global user.email 'makedeb@example.com'
       git config --global user.name 'makedeb User'
 
-      # Chown the current directory to the 'makedeb' user.
-      sudo chown 'makedeb:makedeb' . -R
-
       # Commit everything in case the user has stuff they didn't commit. Otherwise those changes won't be picked up when building makedeb.
       git add .
       git commit -m "Include any remaining changes" --allow-empty
 
       . "${HOME}/.cargo/env"
-      sudo chown 'makedeb:makedeb' "${HOME}/makedeb" -R
       git remote set-url origin 'https://github.com/makedeb/makedeb'
-      release_type=alpha .drone/scripts/run-unit-tests.sh
+      sudo chown 'makedeb:makedeb' ./ /root -R
+      sudo -Eu makedeb release_type=alpha .drone/scripts/run-unit-tests.sh
