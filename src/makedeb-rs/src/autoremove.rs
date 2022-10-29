@@ -11,7 +11,7 @@ pub fn autoremove(no_confirm: bool) {
         }
     }
 
-    if let Err(err) = apt_cache.resolve(true) {
+    if let Err(err) = apt_cache.resolve() {
         util::handle_errors(err);
         Message::new()
             .error("An issue was encountered while resolving deps.")

@@ -29,14 +29,15 @@ pub fn run_transaction<T: ToString>(
     let mut to_downgrade = vec![];
 
     for pkg in cache.packages(&PackageSort::default()) {
+        let pkgname = pkg.fullname(true);
         if pkg.marked_install() {
-            to_install.push(pkg.name().to_string());
+            to_install.push(pkgname);
         } else if pkg.marked_delete() {
-            to_remove.push(pkg.name().to_string());
+            to_remove.push(pkgname);
         } else if pkg.marked_upgrade() {
-            to_upgrade.push(pkg.name().to_string());
+            to_upgrade.push(pkgname);
         } else if pkg.marked_downgrade() {
-            to_downgrade.push(pkg.name().to_string());
+            to_downgrade.push(pkgname);
         } else if pkg.marked_keep() {
         } else {
             unreachable!();
@@ -90,8 +91,20 @@ pub fn run_transaction<T: ToString>(
             .unwrap()
             .trim()
             .to_string();
+            let architecture = std::str::from_utf8(
+                &Command::new("dpkg-deb")
+                    .args(&args)
+                    .arg("Architecture")
+                    .output()
+                    .unwrap()
+                    .stdout,
+            )
+            .unwrap()
+            .trim()
+            .to_string();
+
             let apt_version = deb_cache
-                .get(&pkgname)
+                .get(&format!("{}:{}", pkgname, architecture))
                 .unwrap()
                 .get_version(&version)
                 .unwrap();
@@ -126,21 +139,15 @@ pub fn run_transaction<T: ToString>(
 
     if !to_install.is_empty() {
         msg = msg.msg("The following packages will be installed:");
-        msg = msg
-            .no_style(util::format_apt_pkglist(&to_install))
-            .no_style("");
+        msg = msg.no_style(util::format_apt_pkglist(&to_install));
     }
     if !to_remove.is_empty() {
         msg = msg.msg("The following packages will be removed:");
-        msg = msg
-            .no_style(util::format_apt_pkglist(&to_remove))
-            .no_style("");
+        msg = msg.no_style(util::format_apt_pkglist(&to_remove));
     }
     if !to_upgrade.is_empty() {
         msg = msg.msg("The following packages will be upgraded:");
-        msg = msg
-            .no_style(util::format_apt_pkglist(&to_upgrade))
-            .no_style("");
+        msg = msg.no_style(util::format_apt_pkglist(&to_upgrade));
     }
     if !to_downgrade.is_empty() {
         if !allow_downgrades {
@@ -151,9 +158,7 @@ pub fn run_transaction<T: ToString>(
         }
 
         msg = msg.msg("The following packages will be DOWNGRADED:");
-        msg = msg
-            .no_style(util::format_apt_pkglist(&to_downgrade))
-            .no_style("");
+        msg = msg.no_style(util::format_apt_pkglist(&to_downgrade));
     }
     msg = msg.msg(
         format!(
@@ -167,8 +172,9 @@ pub fn run_transaction<T: ToString>(
             match to_downgrade.len() {
                 0 => 0.to_string().blue().bold(),
                 _ => to_downgrade.len().to_string().red().bold(),
-            } // For some reason we have to bold this manually, even though makedeb bolds all messages. Not sure why yet.
+            }
         )
+        // For some reason we have to bold this manually, even though makedeb bolds all messages. Not sure why yet.
         .bold(),
     );
 

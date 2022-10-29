@@ -302,7 +302,7 @@ dependencies = [
 [[package]]
 name = "rust-apt"
 version = "0.4.1"
-source = "git+https://gitlab.com/volian/rust-apt#2f1633d26c9dee69d5852d1fcbf84b2586876555"
+source = "git+https://gitlab.com/volian/rust-apt?branch=feat/resolve-by-keep#cfb253ee13bf1f47255a27ae35175b44dec58a11"
 dependencies = [
  "cxx",
  "cxx-build",

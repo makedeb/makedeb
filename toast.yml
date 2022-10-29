@@ -23,6 +23,7 @@ tasks:
       - .drone/scripts/
       - .git/
       - completions/
+      - justfile
       - man/
       - PKGBUILD/
       - po/

@@ -11,7 +11,17 @@ echo "deb [signed-by=/usr/share/keyrings/makedeb-archive-keyring.gpg arch=all] h
 sudo apt-get update
 
 # Build makedeb.
-TARGET=apt RELEASE="${release_type}" LOCAL=1 PKGBUILD/pkgbuild.sh > src/PKGBUILD
-cd src
-./main.sh -s --no-confirm
+cd src/
+TARGET=apt RELEASE="${release_type}" LOCAL=1 ../PKGBUILD/pkgbuild.sh > PKGBUILD
+
+if [[ "${BUILD_ARCH:+x}" == 'x' ]]; then
+    build_archs=("${BUILD_ARCH}")
+else
+    build_archs=('amd64' 'i386' 'arm64' 'armhf')
+fi
+
+for arch in "${build_archs[@]}"; do
+    MAKEDEB_DPKG_ARCHITECTURE="${arch}" ./main.sh -s --no-confirm 1>&3 2>&3
+done
+
 mv makedeb*.deb ../

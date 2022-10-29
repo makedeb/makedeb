@@ -1,6 +1,7 @@
 CONFIG_FILE = $(shell cat .data.json)
 CURRENT_VERSION = ?= git
 FILESYTEM_PREFIX ?=
+DPKG_ARCHITECTURE =
 
 .ONESHELL:
 
@@ -23,7 +24,15 @@ prepare:
 	sed -i 's|$$$${pkgver}|$(CURRENT_VERSION)|' man/pkgbuild.5.adoc
 
 build:
-	cargo build --release
+	case "${DPKG_ARCHITECTURE}" in
+		amd64) target='x86_64-unknown-linux-gnu' ;;
+		i386)  target='i686-unknown-linux-gnu' ;;
+		arm64) target='aarch64-unknown-linux-gnu' ;;
+		armhf) target='armv7-unknown-linux-gnueabihf' ;;
+		*)     echo "Error: invalid architecture '${DPKG_ARCHITECTURE}'."; exit 1 ;;
+	esac
+	
+	cargo build --target "${target}" --release
 
 package:
 	# makedeb.

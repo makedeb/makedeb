@@ -1,6 +1,6 @@
 use crate::{cache, message::Message, util};
 use rust_apt::cache::Cache;
-use std::process::Command;
+use std::{process::Command, sync::Arc};
 struct Package {
     pkgname: String,
     version: String,
@@ -33,7 +33,7 @@ pub(crate) fn install(
 
     for deb in &deblist {
         let args = ["-f", deb.as_str()];
-        let pkgname = std::str::from_utf8(
+        let pkgname_bare = std::str::from_utf8(
             &Command::new("dpkg-deb")
                 .args(&args)
                 .arg("Package")
@@ -55,6 +55,18 @@ pub(crate) fn install(
         .unwrap()
         .trim()
         .to_string();
+        let architecture = std::str::from_utf8(
+            &Command::new("dpkg-deb")
+                .args(&args)
+                .arg("Architecture")
+                .output()
+                .unwrap()
+                .stdout
+        )
+        .unwrap()
+        .trim()
+        .to_string();
+        let pkgname = format!("{}:{}", pkgname_bare, architecture);
         pkgnames.push(pkgname.clone());
         pkgs.push(Package { pkgname, version });
         debs.push(deb);
@@ -75,11 +87,11 @@ pub(crate) fn install(
         ver.set_candidate();
 
         // For some reason this first argument, `auto_inst` (https://docs.rs/rust-apt/latest/rust_apt/package/struct.Package.html#auto_inst) needs to be set to `true` for removal of packages to work. Need to find out why.
-        apt_pkg.mark_install(true, !as_deps).then_some(()).unwrap();
+        apt_pkg.mark_install(false, !as_deps).then_some(()).unwrap();
         apt_pkg.protect();
     }
 
-    if let Err(err) = apt_cache.resolve(true) {
+    if let Err(err) = apt_cache.resolve() {
         util::handle_errors(err);
         Message::new()
             .error("An issue was encountered while resolving deps.")
@@ -93,7 +105,7 @@ pub(crate) fn install(
         let new_cache = Cache::new();
 
         for pkg in apt_cache.get_changes(false) {
-            let pkgname = pkg.name();
+            let pkgname = pkg.fullname(false);
             let version = pkg.candidate().unwrap().version();
 
             if pkgnames.contains(&pkgname) {

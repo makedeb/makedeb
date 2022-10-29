@@ -6,6 +6,8 @@ setup() {
 @test "build makedeb" {
     cd ../../
     .drone/scripts/build.sh
+    
+    BUILD_ARCH="$(dpkg --print-architecture)" .drone/scripts/build.sh
 }
 
 @test "install makedeb" {
