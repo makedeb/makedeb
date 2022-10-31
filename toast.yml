@@ -20,9 +20,11 @@ tasks:
       hw_url: hunterwittenborn.com
       makedeb_url: makedeb.org
     input_paths:
+      - .cargo/
       - .drone/scripts/
       - .git/
       - completions/
+      - justfile
       - man/
       - PKGBUILD/
       - po/

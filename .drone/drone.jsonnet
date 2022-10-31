@@ -13,7 +13,7 @@ local runUnitTests(pkgname, tag) = {
         },
         commands: [
             "sudo chown 'makedeb:makedeb' ../ -R",
-            ".drone/scripts/run-unit-tests.sh"
+            ".drone/scripts/run-unit-tests-drone.sh"
         ]
     }]
 };
@@ -60,8 +60,8 @@ local userRepoPublish(pkgname, tag, user_repo) = {
     }]
 };
 
-local buildAndPublish(pkgname, tag, image, distro, architecture) = {
-    name: "build-and-publish-" + tag + "-" + distro + "-" + architecture,
+local buildAndPublish(pkgname, tag, image, distro) = {
+    name: "build-and-publish-" + tag + "-" + distro,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
@@ -73,8 +73,7 @@ local buildAndPublish(pkgname, tag, image, distro, architecture) = {
             environment: {
                 release_type: tag,
                 pkgname: pkgname,
-                distro: distro,
-                architecture: architecture
+                distro: distro
             },
             commands: [
                 "NO_SUDO=1 .drone/scripts/install-deps.sh",
@@ -90,8 +89,7 @@ local buildAndPublish(pkgname, tag, image, distro, architecture) = {
             image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
             environment: {
                 proget_api_key: {from_secret: "proget_api_key"},
-                dpkg_distro: distro,
-                dpkg_architecture: architecture
+                dpkg_distro: distro
             },
             commands: [
                 ".drone/scripts/install-deps.sh",
@@ -102,29 +100,10 @@ local buildAndPublish(pkgname, tag, image, distro, architecture) = {
 };
 
 local buildAndPublishLists(pkgname, tag) = [
-    // APT amd64.
-    buildAndPublish(pkgname, tag, "ubuntu:18.04", "bionic", "amd64"),
-    buildAndPublish(pkgname, tag, "ubuntu:20.04", "focal", "amd64"),
-    buildAndPublish(pkgname, tag, "ubuntu:22.04", "jammy", "amd64"),
-    buildAndPublish(pkgname, tag, "debian:11", "bullseye", "amd64"),
-
-    // APT arm64.
-    buildAndPublish(pkgname, tag, "arm64v8/ubuntu:18.04", "bionic", "arm64"),
-    buildAndPublish(pkgname, tag, "arm64v8/ubuntu:20.04", "focal", "arm64"),
-    buildAndPublish(pkgname, tag, "arm64v8/ubuntu:22.04", "jammy", "arm64"),
-    buildAndPublish(pkgname, tag, "arm64v8/debian:11", "bullseye", "arm64"),
-
-    // APT armhf.
-    buildAndPublish(pkgname, tag, "arm32v7/ubuntu:18.04", "bionic", "armhf"),
-    buildAndPublish(pkgname, tag, "arm32v7/ubuntu:20.04", "focal", "armhf"),
-    buildAndPublish(pkgname, tag, "arm32v7/ubuntu:22.04", "jammy", "armhf"),
-    buildAndPublish(pkgname, tag, "arm32v7/debian:11", "bullseye", "armhf"),
-
-    // APT i386.
-    // TODO: Ubuntu doesn't publish recent images for this architecture, need to find out why before the Rust changes can make it into stable.
-    // See https://bugs.launchpad.net/cloud-images/+bug/1993102.
-    buildAndPublish(pkgname, tag, "i386/ubuntu:18.04", "bionic", "i386"),
-    buildAndPublish(pkgname, tag, "i386/debian:11", "bullseye", "i386"),
+    buildAndPublish(pkgname, tag, "ubuntu:18.04", "bionic"),
+    buildAndPublish(pkgname, tag, "ubuntu:20.04", "focal"),
+    buildAndPublish(pkgname, tag, "ubuntu:22.04", "jammy"),
+    buildAndPublish(pkgname, tag, "debian:11", "bullseye"),
 ];
 
 [

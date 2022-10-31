@@ -42,6 +42,7 @@ enum Commands {
         as_deps: bool,
     },
 
+    /// Remove all automatically installed package that isn't needed by any other packages
     Autoremove {
         /// Don't ask before removing packages
         #[arg(long)]

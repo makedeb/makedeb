@@ -48,7 +48,7 @@ declare -r confdir='/etc'
 declare -r BUILDSCRIPT='PKGBUILD'
 declare -r startdir="$(pwd -P)"
 
-# Values in the '{}' format here are automatically substituted at build time in the Makefile.
+# Values in the '{}' format here are automatically substituted at build time in 'justfile'.
 declare -r MAKEDEB_VERSION='{MAKEDEB_VERSION}'
 declare -r MAKEDEB_RELEASE='{MAKEDEB_RELEASE}'
 declare -r MAKEDEB_INSTALLATION_SOURCE='{MAKEDEB_INSTALLATION_SOURCE}'
@@ -68,7 +68,7 @@ if ! (( MAKEDEB_PACKAGED )); then
 	set -e
 	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
 		# Cargo appears to be leaking memory when using the libgit2 library, so use the Git CLI for registry updates.
-		cargo --config net.git-fetch-with-cli=true build
+		cargo build
 		export IN_MAKEDEB_RS=1
 	fi
 

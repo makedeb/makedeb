@@ -38,15 +38,20 @@ sha256sums=('SKIP')
 
 prepare() {
 	cd makedeb/
-	make prepare PKGVER="${pkgver}" RELEASE="${_release}" TARGET="${_target}" CURRENT_VERSION="${pkgver}-${pkgrel}"
+	VERSION="${pkgver}-${pkgrel}" \
+		RELEASE="${_release}" \
+		TARGET="${_target}" \
+		just prepare
 }
 
 build() {
 	cd makedeb/
-	make build
+	DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE}" \
+		just build
 }
 
 package() {
 	cd makedeb/
-	make package DESTDIR="${pkgdir}" TARGET="${_target}"
+	DESTDIR="${pkgdir}" \
+		just package
 }
