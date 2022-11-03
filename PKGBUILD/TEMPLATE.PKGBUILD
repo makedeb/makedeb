@@ -46,8 +46,14 @@ prepare() {
 
 build() {
 	cd makedeb/
-	DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE}" \
-		just build
+	local no_worker_sizes_distros=('bionic')
+	export DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE}"
+
+	if in_array "${MAKEDEB_DISTRO_CODENAME}" "${no_worker_sizes_distros[@]}"; then
+		export RUST_APT_WORKER_SIZES=1
+	fi
+
+	just build
 }
 
 package() {
@@ -55,3 +61,5 @@ package() {
 	DESTDIR="${pkgdir}" \
 		just package
 }
+
+# vim: set syntax=bash sw=4 expandtab:

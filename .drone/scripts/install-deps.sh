@@ -23,10 +23,14 @@ done
 
 # Set up APT repos for mutliarch support.
 release="$(source /etc/os-release; echo "${VERSION_CODENAME}")"
-sudo sed -i 's|^deb |deb [arch=amd64,i386] |' /etc/apt/sources.list
-echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ ${release} main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list 1> /dev/null
-echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ ${release}-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list 1> /dev/null
-echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ ${release}-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list 1> /dev/null
+os_id="$(source /etc/os-release; echo "${ID}")"
+
+if [[ "${os_id}" != 'debian' ]]; then
+    sudo sed -i 's|^deb |deb [arch=amd64,i386] |' /etc/apt/sources.list
+    echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ ${release} main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list 1> /dev/null
+    echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ ${release}-updates main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list 1> /dev/null
+    echo "deb [arch=arm64,armhf] http://ports.ubuntu.com/ ${release}-security main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list 1> /dev/null
+fi
 sudo apt-get update
 
 # Install needed APT packages.
