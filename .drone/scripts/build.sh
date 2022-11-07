@@ -22,8 +22,19 @@ else
     build_archs=('amd64' 'i386' 'arm64' 'armhf')
 fi
 
+# Deps that need to be installed for each architecture. Some of these packages conflict with each other so we do it before the build for each architecture.
+amd64_deps=()
+i386_deps=('gcc-multilib' 'g++-multilib')
+arm64_deps=('gcc-aarch64-linux-gnu' 'g++-aarch64-linux-gnu')
+armhf_deps=('gcc-arm-linux-gnueabihf' 'g++-arm-linux-gnueabihf')
+
 for index in "${!build_archs[@]}"; do
     arch="${build_archs[$index]}"
+
+    deps_var="${arch}_deps[@]"
+    deps=("${!deps_var}")
+    sudo apt-get install "${deps[@]}" -y
+
     # Ubuntu dropped support for i386 after 18.04.
     if [[ "${arch}" == 'i386' ]] && [[ "$(source /etc/os-release; echo "${ID}")" == 'ubuntu' ]] && [[ "$(source /etc/os-release; echo "${VERSION_ID}" | sed 's|\.||g')" -gt 1804 ]]; then
         continue

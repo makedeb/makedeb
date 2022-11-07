@@ -58,8 +58,6 @@ sudo -E apt-get install \
     'tzdata' \
     'ubuntu-dev-tools' \
     'wget' \
-    'g++-arm-linux-gnueabihf' \
-    'g++-aarch64-linux-gnu' \
     -y
 
 # Install needed packages from Pip.

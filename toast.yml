@@ -37,7 +37,6 @@ tasks:
       - .data.json
       - Cargo.lock
       - Cargo.toml
-      - Makefile
 
     command: |
       # Set up the Git user.
@@ -50,5 +49,7 @@ tasks:
 
       . "${HOME}/.cargo/env"
       git remote set-url origin 'https://github.com/makedeb/makedeb'
-      sudo chown 'makedeb:makedeb' ./ /root -R
+      # It takes a lot longer to run these two commands if we recursively chown '/root', so only target the needed directories.
+      sudo chown 'makedeb:makedeb' /root
+      sudo chown 'makedeb:makedeb' ./ /root/.cargo -R
       sudo -Eu makedeb release_type=alpha .drone/scripts/run-unit-tests.sh

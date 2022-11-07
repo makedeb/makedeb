@@ -71,7 +71,7 @@ pub fn run_transaction<T: ToString>(
             let args = ["-f", deb.as_str()];
             let pkgname = std::str::from_utf8(
                 &Command::new("dpkg-deb")
-                    .args(&args)
+                    .args(args)
                     .arg("Package")
                     .output()
                     .unwrap()
@@ -82,7 +82,7 @@ pub fn run_transaction<T: ToString>(
             .to_string();
             let version = std::str::from_utf8(
                 &Command::new("dpkg-deb")
-                    .args(&args)
+                    .args(args)
                     .arg("Version")
                     .output()
                     .unwrap()
@@ -93,7 +93,7 @@ pub fn run_transaction<T: ToString>(
             .to_string();
             let architecture = std::str::from_utf8(
                 &Command::new("dpkg-deb")
-                    .args(&args)
+                    .args(args)
                     .arg("Architecture")
                     .output()
                     .unwrap()

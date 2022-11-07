@@ -20,12 +20,7 @@ pub(crate) fn install(
     deps_only: bool,
     as_deps: bool,
 ) {
-    if users::get_effective_uid() != 0 {
-        Message::new()
-            .error("Dependency resolver was ran under a non-root user.")
-            .send();
-        quit::with_code(exitcode::USAGE);
-    }
+    util::lock_cache();
 
     let mut pkgs = vec![];
     let mut pkgnames = vec![];
@@ -35,7 +30,7 @@ pub(crate) fn install(
         let args = ["-f", deb.as_str()];
         let pkgname_bare = std::str::from_utf8(
             &Command::new("dpkg-deb")
-                .args(&args)
+                .args(args)
                 .arg("Package")
                 .output()
                 .unwrap()
@@ -46,7 +41,7 @@ pub(crate) fn install(
         .to_string();
         let version = std::str::from_utf8(
             &Command::new("dpkg-deb")
-                .args(&args)
+                .args(args)
                 .arg("Version")
                 .output()
                 .unwrap()
@@ -57,7 +52,7 @@ pub(crate) fn install(
         .to_string();
         let architecture = std::str::from_utf8(
             &Command::new("dpkg-deb")
-                .args(&args)
+                .args(args)
                 .arg("Architecture")
                 .output()
                 .unwrap()
@@ -134,6 +129,7 @@ pub(crate) fn install(
         apt_cache = new_cache;
     }
 
+    util::unlock_cache();
     cache::run_transaction(
         &apt_cache,
         &debs,

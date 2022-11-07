@@ -33,9 +33,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "clap"
-version = "4.0.18"
+version = "4.0.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "335867764ed2de42325fafe6d18b8af74ba97ee0c590fa016f157535b42ab04b"
+checksum = "91b9970d7505127a162fdaa9b96428d28a479ba78c9ec7550a63a5d9863db682"
 dependencies = [
  "atty",
  "bitflags",
@@ -48,9 +48,9 @@ dependencies = [
 
 [[package]]
 name = "clap_derive"
-version = "4.0.18"
+version = "4.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "16a1b0f6422af32d5da0c58e2703320f379216ee70198241c84173a8c5ac28f3"
+checksum = "0177313f9f02afc995627906bbd8967e2be069f5261954222dac78290c2b9014"
 dependencies = [
  "heck",
  "proc-macro-error",
@@ -302,7 +302,7 @@ dependencies = [
 [[package]]
 name = "rust-apt"
 version = "0.4.1"
-source = "git+https://gitlab.com/volian/rust-apt?branch=feat/worker-sizes#937b8b182a08cc6b37a4ec56b85425485ceb5bbf"
+source = "git+https://gitlab.com/volian/rust-apt?branch=fix/no-debfile-headers#af147a39313311367098468d90aab1799dad144b"
 dependencies = [
  "cxx",
  "cxx-build",

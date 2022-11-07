@@ -2,6 +2,7 @@ use crate::{cache, message::Message, util};
 use rust_apt::cache::{Cache, PackageSort};
 
 pub fn autoremove(no_confirm: bool) {
+    util::lock_cache();
     let apt_cache = Cache::new();
 
     for pkg in apt_cache.packages(&PackageSort::default()) {
@@ -18,5 +19,7 @@ pub fn autoremove(no_confirm: bool) {
             .send();
         quit::with_code(exitcode::UNAVAILABLE);
     }
+
+    util::unlock_cache();
     cache::run_transaction::<String>(&apt_cache, &[], false, false, no_confirm);
 }

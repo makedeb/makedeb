@@ -46,3 +46,20 @@ pub fn format_apt_pkglist<T: AsRef<str>>(pkgnames: &[T]) -> ColoredString {
 
     output.bold()
 }
+
+/// Lock the cache.
+pub fn lock_cache() {
+    if let Err(err) = apt_util::apt_lock() {
+        handle_errors(err);
+        Message::new().error("Couldn't lock the APT cache.").send();
+    } else if let Err(err) = apt_util::apt_lock_inner() {
+        handle_errors(err);
+        Message::new().error("Couldn't lock the APT cache.").send();
+    }
+}
+
+/// Unlock the cache.
+pub fn unlock_cache() {
+    apt_util::apt_unlock();
+    apt_util::apt_unlock_inner();
+}
