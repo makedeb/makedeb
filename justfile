@@ -20,7 +20,7 @@ prepare:
             -e "s|{{'{{'}}MAKEDEB_RELEASE}}|${RELEASE}|" \
             -e "s|{{'{{'}}MAKEDEB_INSTALLATION_SOURCE}}|${TARGET}|" \
             -e "s|{{'{{'}}FILESYSTEM_PREFIX}}|${FILESYSTEM_PREFIX}|" \
-            -e 's|MAKEDEB_PACKAGED=0$|MAKEDEB_PACKAGED=1|' \
+            -e 's|^MAKEDEB_PACKAGED=0$|MAKEDEB_PACKAGED=1|' \
             main.sh
     )
 
