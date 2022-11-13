@@ -58,7 +58,12 @@ fi
 for deb in makedeb*.deb; do
     if [[ "${PUBLISH_GH:+x}" == 'x' ]]; then
         no_deb_suffix="$(echo "${deb}" | sed 's|\.deb$||')"
-        gh release upload "v${pkgver}-${pkgrel}" "${deb}#${no_deb_suffix}_$(lsb_release -cs)"
+        debname="${no_deb_suffix}_$(lsb_release -cs).deb"
+
+        # Move the deb to the new location so it has a proper name in GitHub release asset names, and then move it back for ProGet publishing in the nest Drone CI step.
+        mv "${deb}" "${debname}"
+        gh release upload "v${pkgver}-${pkgrel}" "${debname}"
+        mv "${debname}" "${deb}"
     fi
 
     mv "${deb}" ../
