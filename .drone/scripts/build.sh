@@ -50,6 +50,11 @@ for index in "${!build_archs[@]}"; do
     fi
 done
 
+# Log into GitHub CLI if running in Drone.
+if [[ "${PUBLISH_GH:+x}" == 'x' ]]; then
+    echo "${github_api_key}" | gh auth login --with-token
+fi
+
 for deb in makedeb*.deb; do
     if [[ "${PUBLISH_GH:+x}" == 'x' ]]; then
         no_deb_suffix="$(echo "${deb}" | sed 's|\.deb$||')"

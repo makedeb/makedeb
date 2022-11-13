@@ -73,7 +73,8 @@ local buildAndPublish(pkgname, tag, image, distro) = {
             environment: {
                 release_type: tag,
                 pkgname: pkgname,
-                distro: distro
+                distro: distro,
+                github_api_key: {from_secret: "github_api_key"}
             },
             commands: [
                 "NO_SUDO=1 .drone/scripts/install-deps.sh",
