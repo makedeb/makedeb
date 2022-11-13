@@ -8,7 +8,7 @@ TARGET=apt RELEASE="${DRONE_COMMIT_BRANCH}" BUMP_PKGREL=1 PKGBUILD/pkgbuild.sh >
 curl -q "https://proget.${makedeb_url}/debian-feeds/prebuilt-mpr.pub" | gpg --dearmor | sudo tee /usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg 1> /dev/null
 echo "deb [signed-by=/usr/share/keyrings/prebuilt-mpr-archive-keyring.gpg] https://proget.${makedeb_url} prebuilt-mpr $(lsb_release -cs)" | sudo tee /etc/apt/sources.list.d/prebuilt-mpr.list
 sudo apt-get update
-sudo apt-get install gh parse-changelog
+sudo apt-get install parse-changelog
 
 branch="${DRONE_COMMIT_BRANCH}"
 pkgver="$(source MAKEDEB.PKGBUILD; echo "${pkgver}")"

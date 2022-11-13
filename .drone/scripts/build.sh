@@ -15,6 +15,8 @@ sudo apt-get update
 # Build makedeb.
 cd src/
 TARGET=apt RELEASE="${release_type}" LOCAL=1 ../PKGBUILD/pkgbuild.sh > PKGBUILD
+pkgver="$(source PKGBUILD; echo "${pkgver}")"
+pkgrel="$(source PKGBUILD; echo "${pkgrel}")"
 
 if [[ "${BUILD_ARCH:+x}" == 'x' ]]; then
     build_archs=("${BUILD_ARCH}")
@@ -48,4 +50,11 @@ for index in "${!build_archs[@]}"; do
     fi
 done
 
-mv makedeb*.deb ../
+for deb in makedeb*.deb; do
+    if [[ "${PUBLISH_GH:+x}" == 'x' ]]; then
+        no_deb_suffix="$(echo "${deb}" | sed 's|\.deb$||')"
+        gh release upload "v${pkgver}-${pkgrel}" "${deb}#${no_deb_suffix}_$(lsb_release -cs)"
+    fi
+
+    mv "${deb}" ../
+done

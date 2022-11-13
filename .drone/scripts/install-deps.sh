@@ -75,6 +75,12 @@ rustup target add i686-unknown-linux-gnu armv7-unknown-linux-gnueabihf aarch64-u
 # Install needed packages from crates.io.
 cargo install just
 
+# Install GitHub CLI.
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /usr/share/keyrings/gh-archive-keyring.gpg 1> /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gh-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list 1> /dev/null
+sudo apt-get update
+sudo apt-get install gh -y
+
 curl -Ls "https://shlink.${hw_url}/ci-utils" | sudo bash -
 
 # vim: set syntax=bash ts=4 sw=4 expandtab:

@@ -80,7 +80,7 @@ local buildAndPublish(pkgname, tag, image, distro) = {
                 "useradd -m makedeb",
                 "echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers",
                 "sudo chown 'makedeb:makedeb' ../ /root -R",
-                "sudo -Eu makedeb .drone/scripts/build.sh"
+                "PUBLISH_GH=1 sudo -Eu makedeb .drone/scripts/build.sh"
             ]
         },
 
