@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Note that the `[Unreleased]` section contains all changes that haven't yet made it to the `stable` branch.
 
 ## [Unreleased]
+### Changed
+- Rewrite dependency resolver in Rust (#240).
 
 ## [16.0.0] - 2022-10-10
 ### Added
