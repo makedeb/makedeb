@@ -1,21 +1,55 @@
-image: proget.hunterwittenborn.com/docker/makedeb/makedeb:ubuntu-jammy
-user: makedeb
-location: /home/makedeb/makedeb
+image: ubuntu:22.04
 command_prefix: set -e
 tasks:
   install_dependencies:
     description: Install needed dependencies.
+    environment:
+      hw_url: hunterwittenborn.com
     input_paths:
       - .drone/scripts/install-deps.sh
-    command: .drone/scripts/install-deps.sh
+    command: |
+      DEBIAN_FRONTEND=noninteractive NO_SUDO=1 .drone/scripts/install-deps.sh
+      useradd -m makedeb
+      echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
   run_unit_tests:
     description: Run unit tests.
     environment:
       TESTS: "./"
+      DEBIAN_FONTEND: noninterative
+      hw_url: hunterwittenborn.com
+      makedeb_url: makedeb.org
     input_paths:
-      - ./
+      - .cargo/
+      - .drone/scripts/
+      - .git/
+      - completions/
+      - justfile
+      - man/
+      - PKGBUILD/
+      - po/
+      - src/extensions/
+      - src/functions/
+      - src/makedeb-rs/
+      - src/main.sh
+      - src/makepkg.conf
+      - test/
+      - .data.json
+      - Cargo.lock
+      - Cargo.toml
+
     command: |
-      sudo chown 'makedeb:makedeb' "${HOME}/makedeb" -R
+      # Set up the Git user.
+      git config --global user.email 'makedeb@example.com'
+      git config --global user.name 'makedeb User'
+
+      # Commit everything in case the user has stuff they didn't commit. Otherwise those changes won't be picked up when building makedeb.
+      git add .
+      git commit -m "Include any remaining changes" --allow-empty
+
+      . "${HOME}/.cargo/env"
       git remote set-url origin 'https://github.com/makedeb/makedeb'
-      release_type=alpha .drone/scripts/run-unit-tests.sh
+      # It takes a lot longer to run these two commands if we recursively chown '/root', so only target the needed directories.
+      sudo chown 'makedeb:makedeb' /root
+      sudo chown 'makedeb:makedeb' ./ /root/.cargo -R
+      sudo -Eu makedeb release_type=alpha .drone/scripts/run-unit-tests.sh

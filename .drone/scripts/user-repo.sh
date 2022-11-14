@@ -23,7 +23,7 @@ echo "  IdentityFile /${HOME}/.ssh/ssh_key" | tee -a "/${HOME}/.ssh/config"
 
 chmod 500 "/${HOME}/.ssh/"* -R
 
-# Clone AUR/MPR Package.
+# Clone MPR Package.
 git clone "ssh://mpr@${mpr_url}/${package_name}.git" "${package_name}"
 
 # Copy PKGBUILD to user repo.

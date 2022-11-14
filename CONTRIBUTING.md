@@ -7,9 +7,8 @@ If you'd like to help with translations for the makedeb project, visit the [Webl
 [![Translation status](https://weblate.makedeb.org/widgets/makedeb/-/makedeb/multi-auto.svg)](https://weblate.makedeb.org/projects/makedeb/makedeb)
 
 ## Code contributions
-
 ### Setting up your local system
-You'll first need to have forked and cloned the repository of course. Instructions for doing such are plethorous on the internet, but if you find yourself still needing help, feel free to hop into [#makedeb-contributing:hunterwittenborn.com](https://matrix.to/#/#makedeb-contributing:hunterwittenborn.com) on Matrix or the `makedeb-contributing` room on [Discord](https://docs.makedeb.org/support/obtaining-support/#discord).
+You'll first need to have forked and cloned the repository of course. Instructions for doing such are plethorous on the internet, but if you find yourself still needing help, feel free to hop into [#makedeb-project:hunterwittenborn.com](https://matrix.to/#/#makedeb-project:hunterwittenborn.com) on Matrix or the `makedeb` room on [Discord](https://docs.makedeb.org/support/obtaining-support/#discord).
 
 ### Setting up Git hooks
 The project utilizes a few Git hooks to help make things a bit easier when changing certain files, with those notably being man pages at current.

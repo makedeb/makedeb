@@ -1,10 +1,8 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 set -e
 
-if (git log -1 --pretty='%s' | grep '\[TEST SKIP\]$') || ([[ "${TEST_SKIP:+x}" == 'x' ]]); then
-    echo "Skipping unit tests..."
-    exit 0
-fi
+# Make sure Git is installed.
+source "$HOME/.cargo/env"
 
 set -x
 cd test/

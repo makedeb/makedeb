@@ -12,9 +12,8 @@ local runUnitTests(pkgname, tag) = {
             pkgname: pkgname
         },
         commands: [
-            ".drone/scripts/install-deps.sh",
             "sudo chown 'makedeb:makedeb' ../ -R",
-            ".drone/scripts/run-unit-tests.sh"
+            ".drone/scripts/run-unit-tests-drone.sh"
         ]
     }]
 };
@@ -32,6 +31,7 @@ local createTag(tag) = {
             github_api_key: {from_secret: "github_api_key"}
         },
         commands: [
+            ".drone/scripts/install-deps.sh",
             ".drone/scripts/create_tag.sh"
         ]
     }]
@@ -54,36 +54,44 @@ local userRepoPublish(pkgname, tag, user_repo) = {
         },
         commands: [
             ".drone/scripts/install-deps.sh",
+            ". \"$HOME/.cargo/env\"",
             ".drone/scripts/user-repo.sh"
         ]
     }]
 };
 
-local buildAndPublish(pkgname, tag) = {
-    name: "build-and-publish-" + tag,
+local buildAndPublish(pkgname, tag, image, distro) = {
+    name: "build-and-publish-" + tag + "-" + distro,
     kind: "pipeline",
     type: "docker",
     trigger: {branch: [tag]},
     depends_on: ["mpr-publish-" + tag],
     steps: [
         {
-            name: "build-debian-package",
-            image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
+            name: "build",
+            image: image,
             environment: {
                 release_type: tag,
-                pkgname: pkgname
+                pkgname: pkgname,
+                distro: distro,
+                github_api_key: {from_secret: "github_api_key"}
             },
             commands: [
-                ".drone/scripts/install-deps.sh",
-                "sudo chown 'makedeb:makedeb' ../ -R",
-                ".drone/scripts/build.sh"
+                "NO_SUDO=1 .drone/scripts/install-deps.sh",
+                "useradd -m makedeb",
+                "echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers",
+                "sudo chown 'makedeb:makedeb' ../ /root -R",
+                "PUBLISH_GH=1 sudo -Eu makedeb .drone/scripts/build.sh"
             ]
         },
 
         {
-            name: "publish-proget",
+            name: "publish",
             image: "proget.hunterwittenborn.com/docker/makedeb/" + pkgname + ":ubuntu-jammy",
-            environment: {proget_api_key: {from_secret: "proget_api_key"}},
+            environment: {
+                proget_api_key: {from_secret: "proget_api_key"},
+                dpkg_distro: distro
+            },
             commands: [
                 ".drone/scripts/install-deps.sh",
                 ".drone/scripts/publish.py"
@@ -92,48 +100,29 @@ local buildAndPublish(pkgname, tag) = {
     ]
 };
 
-
-local sendBuildNotification(tag) = {
-    name: "send-build-notification-" + tag,
-    kind: "pipeline",
-    type: "docker",
-    trigger: {
-        branch: [tag],
-        status: ["success", "failure"]
-    },
-    depends_on: ["build-and-publish-" + tag],
-    steps: [{
-        name: "send-notification",
-        image: "proget.hunterwittenborn.com/docker/hwittenborn/drone-matrix",
-        settings: {
-            username: "drone",
-            password: {from_secret: "matrix_api_key"},
-            homeserver: "https://matrix.hunterwittenborn.com",
-            room: "#makedeb-ci-logs:hunterwittenborn.com"
-        }
-    }]
-};
+local buildAndPublishLists(pkgname, tag) = [
+    buildAndPublish(pkgname, tag, "ubuntu:18.04", "bionic"),
+    buildAndPublish(pkgname, tag, "ubuntu:20.04", "focal"),
+    buildAndPublish(pkgname, tag, "ubuntu:22.04", "jammy"),
+    buildAndPublish(pkgname, tag, "debian:11", "bullseye"),
+];
 
 [
+    // Unit tests.
     runUnitTests("makedeb", "stable"),
     runUnitTests("makedeb-beta", "beta"),
     runUnitTests("makedeb-alpha", "alpha"),
 
+    // Tags.
     createTag("stable"),
     createTag("beta"),
     createTag("alpha"),
 
+    // MPR.
     userRepoPublish("makedeb", "stable", "mpr"),
     userRepoPublish("makedeb-beta", "beta", "mpr"),
     userRepoPublish("makedeb-alpha", "alpha", "mpr"),
-
-    buildAndPublish("makedeb", "stable"),
-    buildAndPublish("makedeb-beta", "beta"),
-    buildAndPublish("makedeb-alpha", "alpha"),
-
-    sendBuildNotification("stable"),
-    sendBuildNotification("beta"),
-    sendBuildNotification("alpha")
 ]
-
-// vim: set syntax=typescript ts=4 sw=4 expandtab:
++ buildAndPublishLists("makedeb", "stable")
++ buildAndPublishLists("makedeb-beta", "beta")
++ buildAndPublishLists("makedeb-alpha", "alpha")

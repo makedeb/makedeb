@@ -6,8 +6,7 @@ pkgname={{ pkgname }}
 pkgver={{ pkgver }}
 pkgrel={{ pkgrel }}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
-arch=('all')
-license=('GPL3')
+arch=('any')
 depends=(
 	'apt'
 	'binutils'
@@ -19,18 +18,19 @@ depends=(
 	'gawk'
 	'libarchive-tools'
 	'lsb-release'
-	'python3'
-	'python3-apt'
 	'zstd'
 )
 makedepends=(
 	'asciidoctor'
+	'cargo'
 	'git'
 	'make'
 	'jq'
 )
 conflicts=('makedeb')
 provides=("makedeb=${pkgver}")
+license=('GPL3')
+backup=('/etc/makepkg.conf')
 url="https://github.com/makedeb/makedeb"
 
 source=("{{ source }}")
@@ -38,10 +38,28 @@ sha256sums=('SKIP')
 
 prepare() {
 	cd makedeb/
-	make prepare PKGVER="${pkgver}" RELEASE="${_release}" TARGET="${_target}" CURRENT_VERSION="${pkgver}-${pkgrel}"
+	VERSION="${pkgver}-${pkgrel}" \
+		RELEASE="${_release}" \
+		TARGET="${_target}" \
+		just prepare
+}
+
+build() {
+	cd makedeb/
+	local no_worker_sizes_distros=('bionic')
+	export DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE}"
+
+	if ! in_array "${MAKEDEB_DISTRO_CODENAME}" "${no_worker_sizes_distros[@]}"; then
+		export RUST_APT_WORKER_SIZES=1
+	fi
+
+	just build
 }
 
 package() {
 	cd makedeb/
-	make package DESTDIR="${pkgdir}" TARGET="${_target}"
+	DESTDIR="${pkgdir}" \
+		just package
 }
+
+# vim: set syntax=bash sw=4 expandtab:
