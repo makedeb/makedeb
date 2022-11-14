@@ -41,6 +41,7 @@ prepare() {
 	VERSION="${pkgver}-${pkgrel}" \
 		RELEASE="${_release}" \
 		TARGET="${_target}" \
+		BUILD_COMMIT="$(git rev-parse HEAD)" \
 		just prepare
 }
 

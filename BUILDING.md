@@ -34,7 +34,7 @@ TARGET=apt RELEASE=stable ./pkgbuild.sh | grep '^depends'
 After you have the needed build dependencies installed, run the following command from the root of your repository:
 
 ```sh
-VERSION='{version}' RELEASE='{release}' TARGET='{target}' FILESYSTEM_PREFIX='{filesystem_prefix}' just prepare
+VERSION='{version}' RELEASE='{release}' TARGET='{target}' FILESYSTEM_PREFIX='{filesystem_prefix}' BUILD_COMMIT='{build_commit}' just prepare
 DPKG_ARCHITECTURE='{arch}' just build
 DESTDIR='{destdir}' just package
 ```
@@ -54,6 +54,9 @@ DESTDIR='{destdir}' just package
 I.e. if all files for makedeb were located under `/container/makedeb` (so you'd have locations like `/container/makedeb/usr/bin/makedeb`), then you need to set this value. If ommitted, it defaults to being blank.
 
 In most cases you don't need to set this.
+
+#### `{build_commit}`
+`{build_commit}` is the commit that the built package is marked as being built from. In most cases you can just set this to the output of `$(git rev-parse HEAD)`.
 
 #### `{arch}`
 The architecture (it being one from the output of `dpkg --print-architecture`) to build makedeb for. Currently supported values are `amd64`, `i386`, `arm64`, and `armhf`. If you need to build makedeb for an architecture outside of those, please open an issue.

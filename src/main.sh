@@ -54,10 +54,12 @@ declare -r MAKEDEB_RELEASE='{{MAKEDEB_RELEASE}}'
 declare -r MAKEDEB_INSTALLATION_SOURCE='{{MAKEDEB_INSTALLATION_SOURCE}}'
 declare -r MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-"$(dpkg --print-architecture)"}"
 declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-"$(lsb_release -cs)"}"
+declare -r MAKEDEB_BUILD_COMMIT='{{MAKEDEB_BUILD_COMMIT}}'
 
 LIBRARY="${LIBRARY:-"{{FILESYSTEM_PREFIX}}/usr/share/makedeb"}"
 MAKEPKG_CONF="${MAKEPKG_CONF:-"{{FILESYSTEM_PREFIX}}/etc/makepkg.conf"}"
 EXTENSIONS_DIR='{{FILESYSTEM_PREFIX}}/usr/lib/makedeb'
+
 MAKEDEB_BINARY="${0}"
 
 # A variable declaring if makedeb is being ran from a packaged release or directly from the Git repository.
@@ -935,6 +937,7 @@ version() {
 	printf "makedeb ${MAKEDEB_VERSION}\n"
 	printf "${MAKEDEB_RELEASE^} Release\n"
 	printf "Installed from ${MAKEDEB_INSTALLATION_SOURCE^^}\n"
+	printf "Built from ${MAKEDEB_BUILD_COMMIT}\n"
 }
 
 mpr_check() {
