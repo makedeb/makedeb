@@ -104,6 +104,7 @@ local buildAndPublishLists(pkgname, tag) = [
     buildAndPublish(pkgname, tag, "ubuntu:18.04", "bionic"),
     buildAndPublish(pkgname, tag, "ubuntu:20.04", "focal"),
     buildAndPublish(pkgname, tag, "ubuntu:22.04", "jammy"),
+    buildAndPublish(pkgname, tag, "ubuntu:22.10", "kinetic"),
     buildAndPublish(pkgname, tag, "debian:11", "bullseye"),
 ];
 
