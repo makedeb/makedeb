@@ -11,7 +11,8 @@ The recommended way to install makedeb is through the interactive installer. Thi
 You can use the installer by running the following:
 
 ```sh
-bash -c "$(wget -qO - 'https://shlink.makedeb.org/install')"
+# If you're running in a noninteractive environment (such as in CI or on a server), change `-ci` to `-c`.
+bash -ci "$(wget -qO - 'https://shlink.makedeb.org/install')"
 ```
 
 If you'd like to install makedeb in a different manner (such as if you want to install from the MPR or with Docker), you can find instructions for such in [makedeb Docs](https://docs.makedeb.org/installing).
