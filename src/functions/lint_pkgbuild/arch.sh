@@ -63,7 +63,7 @@ lint_arch() {
 
 	for name in "${pkgname[@]}"; do
 		get_pkgbuild_attribute "$name" 'arch' 1 list
-		if [[ $list && $list != 'any' ]] && ! in_array "${MAKEDEB_DPKG_ARCHITECTURE}" "${list[@]}"; then
+		if [[ $list && $list != 'any' && $list != 'all' ]] && ! in_array "${MAKEDEB_DPKG_ARCHITECTURE}" "${list[@]}"; then
 			if (( ! IGNOREARCH )); then
 				error "$(gettext "%s is not available for the '%s' architecture.")" "$name" "${MAKEDEB_DPKG_ARCHITECTURE}"
 				ret=1

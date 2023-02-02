@@ -36,3 +36,23 @@ load ../util/util
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] testpkg is not available for the 'amd64' architecture." ]]
 }
+@test "allow arch all in sub packages" {
+    package_testpkg-doc() {
+      arch=('all')
+    }
+
+    package_testpkg() {
+      echo ''
+    }
+
+    pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
+    pkgbuild array pkgname testpkg testpkg-doc
+    pkgbuild string pkgver 1.0.0
+    pkgbuild string pkgrel 1
+    pkgbuild string pkgdesc "package description"
+    pkgbuild array arch amd64
+    pkgbuild function package_testpkg
+    pkgbuild function package_testpkg-doc
+    pkgbuild clean
+    makedeb --lint
+}
