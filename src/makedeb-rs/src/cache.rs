@@ -104,7 +104,7 @@ pub fn run_transaction<T: ToString>(
             .to_string();
 
             let apt_version = deb_cache
-                .get(&format!("{}:{}", pkgname, architecture))
+                .get(&format!("{pkgname}:{architecture}"))
                 .unwrap()
                 .get_version(&version)
                 .unwrap();

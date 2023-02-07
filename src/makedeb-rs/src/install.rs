@@ -61,7 +61,7 @@ pub(crate) fn install(
         .unwrap()
         .trim()
         .to_string();
-        let pkgname = format!("{}:{}", pkgname_bare, architecture);
+        let pkgname = format!("{pkgname_bare}:{architecture}");
         pkgnames.push(pkgname.clone());
         pkgs.push(Package { pkgname, version });
         debs.push(deb);
