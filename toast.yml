@@ -1,3 +1,4 @@
+---
 image: ubuntu:22.04
 command_prefix: set -e
 tasks:
@@ -8,7 +9,7 @@ tasks:
     input_paths:
       - .drone/scripts/install-deps.sh
     command: |
-      DEBIAN_FRONTEND=noninteractive NO_SUDO=1 .drone/scripts/install-deps.sh
+      DEBIAN_FRONTEND=noninteractive .drone/scripts/install-deps.sh
       useradd -m makedeb
       echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
