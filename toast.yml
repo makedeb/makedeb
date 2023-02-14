@@ -31,6 +31,10 @@ tasks:
       apt-get update
       apt-get install -y curl rsync bats ${depends[*]} ${makedepends[*]}
 
+      git clone --depth 1 --branch v1.9.0 https://github.com/bats-core/bats-core.git
+      pushd bats-core
+      ./install.sh /usr/local
+
   setup_user:
     description: Install needed dependencies
     user: root
