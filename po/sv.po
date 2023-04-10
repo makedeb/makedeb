@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-09 14:50-0500\n"
-"PO-Revision-Date: 2023-02-14 21:02+0000\n"
+"PO-Revision-Date: 2023-04-11 02:02+0000\n"
 "Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
 "Language-Team: Swedish <https://weblate.makedeb.org/projects/makedeb/makedeb/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: src/main.sh:882
 msgid "  --allow-downgrades    Allow packages to be downgraded"
@@ -155,7 +155,7 @@ msgstr "%s kan inte ställas in inuti i en paketfunktion"
 
 #: src/main.sh:1128
 msgid "%s contains %s characters and cannot be sourced."
-msgstr ""
+msgstr "%s innehåller %s tecken och kan inte skaffas."
 
 #: src/functions/lint_pkgbuild/pkgname.sh:60
 msgid "%s contains an invalid prefix: '%s'"
@@ -189,11 +189,11 @@ msgstr "%s börjar inte med en siffra."
 
 #: src/functions/lint_package/missing_backup.sh:35
 msgid "%s entry file not in package : %s"
-msgstr ""
+msgstr "%s-ingångsfilen finns inte i paketet: %s"
 
 #: src/functions/lint_pkgbuild/backup.sh:45
 msgid "%s entry should start with a foward slash : %s"
-msgstr ""
+msgstr "%s-ingång bör börja med ett snedstreck : %s"
 
 #: src/functions/lint_pkgbuild/util.sh:34
 msgid "%s file (%s) does not exist or is not a regular file."
@@ -367,6 +367,7 @@ msgstr ""
 #: src/functions/executable/strip.sh:34
 msgid "Cannot find the %s binary required for object file stripping."
 msgstr ""
+"Kan inte hitta den binära filen %s som krävs för borttagning av objektfil."
 
 #: src/functions/executable/gpg.sh:36
 msgid "Cannot find the %s binary required for signing packages."
@@ -572,7 +573,7 @@ msgstr "Misslyckades att signera paketfil %s."
 
 #: src/functions/util/util.sh:143
 msgid "Failed to source %s"
-msgstr ""
+msgstr "Det gick inte att källa %s"
 
 #: src/main.sh:246
 msgid "Failed to update %s from %s to %s"
@@ -602,7 +603,7 @@ msgstr "Misslyckades vid uppdatering av arbetskopia av %s %s arkiv"
 
 #: src/main.sh:1487
 msgid "Finished making: %s"
-msgstr ""
+msgstr "Byggt färdigt: %s"
 
 #: src/functions/source/file.sh:36 src/functions/source/local.sh:36
 msgid "Found %s"
