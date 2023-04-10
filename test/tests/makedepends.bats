@@ -42,6 +42,7 @@ load ../util/util
     [[ "${lines[0]}" == "dpkg-query: package 'restic' is not installed and no information is available" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect makedepends - invalid dependency prefix" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -51,7 +52,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array makedepends 'z!bats'
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] Dependency 'z!bats' under 'makedepends' contains an invalid prefix: 'z'" ]]
 }

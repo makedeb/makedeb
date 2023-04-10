@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct depends - all valid characters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -9,7 +10,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'bats>0' 'bash'
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
 @test "correct depends - install missing dependencies" {
@@ -39,6 +40,7 @@ load ../util/util
     makedeb
 }
 
+# bats test_tags=lint
 @test "correct depends - valid dependency prefixes" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -48,10 +50,10 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array depends 'p!bats>0' 'bash'
     pkgbuild clean
-    makedeb -d
+    run makedeb --print-control
 
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Pre-Depends')" == "Pre-Depends: bats (>> 0)" ]]
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Depends:')" == "Depends: bash" ]]
+    [[ "$(echo "${output}" | grep '^Pre-Depends')" == "Pre-Depends: bats (>> 0)" ]]
+    [[ "$(echo "${output}" | grep '^Depends:')" == "Depends: bash" ]]
 }
 
 @test "correct depends - valid dependency prefixes in package()" {
@@ -74,6 +76,7 @@ load ../util/util
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Depends:')" == "Depends: bats2 (>> 0)" ]]
 }
 
+# bats test_tags=lint
 @test "correct depends - separate by pipe" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -88,6 +91,7 @@ load ../util/util
     [[ "$(echo "${output}" | grep '^Depends:')" == 'Depends: pkg1 | pkg2, pkg3 (>= 2) | pkg4 (= 6)' ]]
 }
 
+# bats test_tags=lint
 @test "correct depends - epoch and pkgrel as version specifier" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -100,6 +104,7 @@ load ../util/util
     makedeb --lint
 }
 
+# bats test_tags=lint
 @test "incorrect depends - invalid dependency prefix" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -109,7 +114,7 @@ load ../util/util
     pkgbuild array arch all
     pkgbuild array depends 'z!bats'
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] Dependency 'z!bats' under 'depends' contains an invalid prefix: 'z'" ]]
 }

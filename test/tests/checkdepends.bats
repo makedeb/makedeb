@@ -25,6 +25,7 @@ load ../util/util
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep 'Depends:')" == "" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect checkdepends - invalid dependency prefix" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -34,7 +35,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array checkdepends 'z!bats'
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] Dependency 'z!bats' under 'checkdepends' contains an invalid prefix: 'z'" ]]
 }

@@ -29,7 +29,7 @@ tasks:
       source PKGBUILD/PKGBUILD
 
       apt-get update
-      apt-get install -y curl rsync bats ${depends[*]} ${makedepends[*]}
+      apt-get install -y curl rsync bats make apt-utils ${depends[*]} ${makedepends[*]}
 
       git clone --depth 1 --branch v1.9.0 https://github.com/bats-core/bats-core.git
       pushd bats-core
@@ -125,7 +125,7 @@ tasks:
       DPKG_ARCHITECTURE: amd64
       DESTDIR: /scratch/pkg
     command: |
-      sudo apt install -y rsync
+      sudo apt-get install -y rsync
       git config --global --add safe.directory /scratch
       export VERSION=$(git describe)
       export BUILD_COMMIT=$(git rev-parse HEAD)
@@ -142,8 +142,6 @@ tasks:
     environment:
       TESTS: "./"
     cache: false
-    mount_paths:
-      - .
     input_paths:
       - test
     command: |

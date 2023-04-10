@@ -9,7 +9,7 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array replaces 'bats>=0' 'bash'
     pkgbuild clean
-    makedeb -d
+    run makedeb --print-control
 
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Replaces:')" == "Replaces: bats (>= 0), bash" ]]
+    [[ "$(echo "${output}" | grep '^Replaces:')" == "Replaces: bats (>= 0), bash" ]]
 }

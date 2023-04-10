@@ -25,6 +25,7 @@ load ../util/util
     [[ "$(cat pkg/testpkg/DEBIAN/control | grep 'Depends:')" == "Depends: krita" ]]
 }
 
+# bats test_tags=lint
 @test "correct - generate SRCINFO and control files" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -37,6 +38,7 @@ load ../util/util
     makedeb --print-control
 }
 
+# bats test_tags=lint
 @test "incorrect - set distro-specific sources without distro-specific hashsums" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -48,5 +50,5 @@ load ../util/util
     pkgbuild array focal_source 'https://proget.hunterwittenborn.com'
     pkgbuild array sha256sums 'SKIP'
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }

@@ -1,12 +1,17 @@
+# shellcheck shell=bash
+bats_require_minimum_version 1.9.0
+
+apt-get () {
+    echo "apt-get $*"
+}
+
 # Setup function run before each test.
 setup() {
-    cd "${BATS_TEST_DIRNAME}"
+    cd "${BATS_TEST_DIRNAME}" || exit 1
 
-    rm test_dir/ -rf
-    mkdir test_dir/
 
-    cp ../files/TEMPLATE.PKGBUILD test_dir/PKGBUILD
-    cd test_dir/
+    cp ../files/TEMPLATE.PKGBUILD "${BATS_TEST_TMPDIR}/PKGBUILD"
+    cd "${BATS_TEST_TMPDIR}" || exit 1
 
     lsb_release() {
         echo "jammy"
