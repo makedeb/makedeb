@@ -77,3 +77,6 @@ package:
     asciidoctor -b manpage man/makedeb.8.adoc -o "${DESTDIR}/usr/share/man/man8/makedeb.8"
     asciidoctor -b manpage man/makedeb-extension.5.adoc -o "${DESTDIR}/usr/share/man/man5/makedeb-extension.5"
     asciidoctor -b manpage man/pkgbuild.5.adoc -o "${DESTDIR}/usr/share/man/man5/pkgbuild.5"
+
+gen-po:
+    find -iname '*.sh' -exec xgettext --add-comments --sort-output --package-name='makedeb' -o po/makedeb.pot '{}' +
