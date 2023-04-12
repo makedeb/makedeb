@@ -502,6 +502,10 @@ write_control_info() {
 	write_control_pair "Provides" "${provides[@]}"
 	write_control_pair "Replaces" "${replaces[@]}"
 	write_control_pair "Breaks" "${breaks[@]}"
+    if [ -d ${pkgdir} ] 
+    then
+        write_control_pair "Installed-Size" "$(du ${pkgdir} -d 0 | cut -f1)"
+	fi
 	write_extra_control_fields
 }
 
