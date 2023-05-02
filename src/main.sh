@@ -504,7 +504,7 @@ write_control_info() {
 	write_control_pair "Breaks" "${breaks[@]}"
     if [[ -d ${pkgdir} ]]; then
         write_control_pair "Installed-Size" "$(du ${pkgdir} -d 0 | cut -f1)"
-	fi
+    fi
 	write_extra_control_fields
 }
 
