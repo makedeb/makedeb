@@ -11,5 +11,6 @@ Help with available usage can also be found after installation with `makedeb --h
 ## Support
 See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
+
 ## Donate
 Please do nоt consider to donating to makedeb.org, because the original creator of makedeb is a damn fool.
