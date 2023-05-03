@@ -1,10 +1,10 @@
-# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-_release={{ release }}
-_target={{ target }}
+# Maintainer: huakim <fijik19@gmail.com>
+_release=stable
+_target=apt
 
-pkgname={{ pkgname }}
-pkgver={{ pkgver }}
-pkgrel={{ pkgrel }}
+pkgname=makedeb
+pkgver=16.1.0
+pkgrel=stable
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
 arch=('any')
 depends=(
@@ -27,14 +27,16 @@ makedepends=(
 	'make'
 	'jq'
 )
-conflicts=('makedeb')
-provides=("makedeb=${pkgver}")
 license=('GPL3')
 backup=('/etc/makepkg.conf')
-url="https://github.com/makedeb/makedeb"
+url="https://github.com/huakim/makedeb.git"
 
-source=("{{ source }}")
+source=("git+https://github.com/huakim/makedeb.git")
 sha256sums=('SKIP')
+
+just(){
+    . ./${1}.sh
+}
 
 prepare() {
 	cd makedeb/
@@ -42,7 +44,7 @@ prepare() {
 		RELEASE="${_release}" \
 		TARGET="${_target}" \
 		BUILD_COMMIT="$(git rev-parse HEAD)" \
-		just prepare
+	just prepare
 }
 
 build() {
