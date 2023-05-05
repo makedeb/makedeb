@@ -4,9 +4,28 @@ bats_require_minimum_version 1.9.0
 load '../util/bats-support/load.bash'
 load '../util/bats-file/load.bash'
 
-apt-get () {
-    echo "apt-get $*"
+lsb_release() {
+    echo "jammy"
 }
+export -f lsb_release
+
+sudo() {
+    if [[ "${BATS_SUDO_OVERRIDE}x" != 'x' ]]; then
+        echo "sudo: $*"
+    else
+        /usr/bin/sudo "$@"
+    fi
+}
+export -f sudo
+
+apt-get () {
+    if [[ "${BATS_SUDO_OVERRIDE}x" != 'x' ]]; then
+        echo "apt-get: $*"
+    else
+        DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get "$@" -qq
+    fi
+}
+export -f apt-get
 
 # Setup function run before each test.
 setup() {
@@ -14,12 +33,6 @@ setup() {
 
     cp ../files/TEMPLATE.PKGBUILD "${BATS_TEST_TMPDIR}/PKGBUILD"
     cd "${BATS_TEST_TMPDIR}" || exit 1
-
-    lsb_release() {
-        echo "jammy"
-    }
-
-    export -f lsb_release
 }
 
 # Utilities to format a templated PKGBUILD.

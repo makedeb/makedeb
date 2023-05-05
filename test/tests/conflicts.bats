@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct conflicts - all valid characters" {
+    export BATS_SUDO_OVERRIDE=
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0

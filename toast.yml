@@ -141,6 +141,7 @@ tasks:
     user: makedeb
     environment:
       TESTS: "./"
+      BATS_SUDO_OVERRIDE: 1
     cache: false
     input_paths:
       - test

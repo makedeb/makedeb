@@ -1,6 +1,7 @@
 load ../util/util
 
 @test "correct vcs - missing vcs package" {
+    BATS_SUDO_OVERRIDE=
     sudo apt-get purge git -y
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg

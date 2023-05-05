@@ -9,3 +9,4 @@ src/src/
 src/pkg/
 src/*.deb
 target/
+test/wip.bats

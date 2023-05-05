@@ -14,6 +14,7 @@ load ../util/util
 }
 
 @test "correct depends - install missing dependencies" {
+    BATS_SUDO_OVERRIDE=
     sudo_check
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -27,6 +28,7 @@ load ../util/util
 }
 
 @test "correct depends - satisfy a build dependency via a provided package" {
+    BATS_SUDO_OVERRIDE=
     sudo_check
     sudo apt-get satisfy mawk -y
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
@@ -42,6 +44,7 @@ load ../util/util
 
 # bats test_tags=lint
 @test "correct depends - valid dependency prefixes" {
+    BATS_SUDO_OVERRIDE=
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
