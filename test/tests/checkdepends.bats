@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct checkdepends - all valid characters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -12,6 +13,7 @@ load ../util/util
     makedeb -s --no-confirm --allow-downgrades
 }
 
+# bats test_tags=lint
 @test "correct checkdepends - don't add to 'Depends' in control file" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg

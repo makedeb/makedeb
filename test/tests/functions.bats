@@ -12,6 +12,7 @@ load ../util/util
     makedeb --lint
 }
 
+# bats test_tags=lint
 @test "incorrect prepare() - bad exit code" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -23,7 +24,6 @@ load ../util/util
     echo -e '\nprepare() { false; }' >> PKGBUILD
     pkgbuild clean
     run -4 makedeb -d
-    # [[ "${status}" == "4" ]]
 }
 
 # bats test_tags=lint
@@ -41,7 +41,6 @@ load ../util/util
     pkgbuild function pkgver
     pkgbuild clean
     run -12 makedeb -d
-    # [[ "${status}" == "12" ]]
 }
 
 # bats test_tags=lint
@@ -59,5 +58,4 @@ load ../util/util
     pkgbuild function build
     pkgbuild clean
     run -12 makedeb --lint
-    # [[ "${status}" == "12" ]]
 }

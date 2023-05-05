@@ -81,7 +81,8 @@ load ../util/util
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] pkgbase contains invalid characters: '#'" ]]
 }
-    
+
+# bats test_tags=lint
 @test "incorrect pkgbase - array" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild array pkgbase test-pkg test-pkg2

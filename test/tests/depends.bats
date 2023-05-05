@@ -21,7 +21,7 @@ load ../util/util
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
-    pkgbuild array depends 'zsh' 'yash>=0.0.1'
+    pkgbuild array depends 'sox' 'yash>=0.0.1'
     pkgbuild clean
     makedeb -s --no-confirm --allow-downgrades
 }

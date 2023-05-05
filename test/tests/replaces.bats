@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct replaces - all valid characters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg

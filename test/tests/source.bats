@@ -29,6 +29,7 @@ load ../util/util
     makedeb --lint
 }
 
+# bats test_tags=lint
 @test "correct source - noextract" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg

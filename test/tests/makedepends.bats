@@ -12,6 +12,7 @@ load ../util/util
     makedeb -s --no-confirm --allow-downgrades
 }
 
+# bats test_tags=lint
 @test "correct makedepends - don't add to 'Depends' in control file" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -19,10 +20,10 @@ load ../util/util
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
-    pkgbuild array makedepends 'zsh' 'yash>=0.0.1'
+    pkgbuild array makedepends 'sox' 'yash>=0.0.1'
     pkgbuild clean
-    makedeb -d
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep 'Depends:')" == "" ]]
+    run makedeb --print-control
+    [[ "$(echo "$output" | grep 'Depends:')" == "" ]]
 }
 
 @test "correct makedepends - remove installed build dependencies" {
@@ -52,7 +53,6 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array makedepends 'z!bats'
     pkgbuild clean
-    run makedeb --lint
-    [[ "${status}" == "12" ]]
+    run -12 makedeb --lint
     [[ "${output}" == "[!] Dependency 'z!bats' under 'makedepends' contains an invalid prefix: 'z'" ]]
 }

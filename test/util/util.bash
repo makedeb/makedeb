@@ -9,7 +9,6 @@ apt-get () {
 setup() {
     cd "${BATS_TEST_DIRNAME}" || exit 1
 
-
     cp ../files/TEMPLATE.PKGBUILD "${BATS_TEST_TMPDIR}/PKGBUILD"
     cd "${BATS_TEST_TMPDIR}" || exit 1
 
