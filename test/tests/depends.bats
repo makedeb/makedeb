@@ -22,22 +22,24 @@ load ../util/util
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
-    pkgbuild array depends 'sox' 'yash>=0.0.1'
+    pkgbuild array depends 'libao-common' 'libaudit-common>=0.0.1'
     pkgbuild clean
     makedeb -s --no-confirm --allow-downgrades
+    assert_exists /etc/libaudit.conf
+    assert_exists /etc/libao.conf
 }
 
 @test "correct depends - satisfy a build dependency via a provided package" {
     BATS_SUDO_OVERRIDE=
     sudo_check
-    sudo apt-get satisfy mawk -y
+    sudo apt-get satisfy libpthread-stubs0-dev -y
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
     pkgbuild string pkgrel 1
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
-    pkgbuild array depends 'awk'
+    pkgbuild array depends 'libpthread-stubs0-dev'
     pkgbuild clean
     makedeb
 }
