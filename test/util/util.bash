@@ -1,6 +1,9 @@
 # shellcheck shell=bash
 bats_require_minimum_version 1.9.0
 
+load '../util/bats-support/load.bash'
+load '../util/bats-file/load.bash'
+
 apt-get () {
     echo "apt-get $*"
 }
