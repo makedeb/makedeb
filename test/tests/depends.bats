@@ -61,6 +61,7 @@ load ../util/util
     [[ "$(echo "${output}" | grep '^Depends:')" == "Depends: bash" ]]
 }
 
+# bats test_tags=lint
 @test "correct depends - valid dependency prefixes in package()" {
     package() {
         depends=('bats2>0' 'p!bash2')
@@ -75,10 +76,9 @@ load ../util/util
     pkgbuild array depends 'p!bats>0' 'bash'
     pkgbuild function package
     pkgbuild clean
-    makedeb -d
-
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Pre-Depends')" == "Pre-Depends: bash2" ]]
-    [[ "$(cat pkg/testpkg/DEBIAN/control | grep '^Depends:')" == "Depends: bats2 (>> 0)" ]]
+    run makedeb --print-control
+    [[ "$(echo "$output" | grep '^Pre-Depends')" == "Pre-Depends: bash2" ]]
+    [[ "$(echo "$output" | grep '^Depends:')" == "Depends: bats2 (>> 0)" ]]
 }
 
 # bats test_tags=lint
