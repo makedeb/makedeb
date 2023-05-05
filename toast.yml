@@ -146,5 +146,9 @@ tasks:
     input_paths:
       - test
     command: |
-      bats -j $(nproc) --filter-tags lint test/tests/
-      bats --filter-tags !lint test/tests/
+      if [[ -f test/wip.bats ]]; then
+        bats $(realpath test/wip.bats) --show-output-of-passing-tests
+      else
+        bats -j $(nproc) --filter-tags lint test/tests/
+        bats --filter-tags !lint test/tests/
+      fi
