@@ -30,7 +30,7 @@ tasks:
       - po/
       - src/extensions/
       - src/functions/
-      - src/makedeb-rs/
+#      - src/makedeb-rs/
       - src/main.sh
       - src/makepkg.conf
       - test/

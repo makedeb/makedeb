@@ -1,0 +1,69 @@
+# Maintainer: huakim <fijik19@gmail.com>
+_release=stable
+_target=apt
+
+pkgname=makedeb
+
+pkgver=17.0.0
+pkgrel=debian
+pkgdesc="A simplicity-focused packaging tool for Debian archives"
+arch=('all')
+depends=(
+'git'
+'coreutils'
+'apt' 
+'perl'
+'libdpkg-perl'
+'libapt-pkg-perl'
+'bash>4'
+'curl'
+'fakeroot'
+'file'
+'gettext'
+'gawk'
+'libarchive-tools'
+'lsb-release'
+'zstd'
+)
+makedepends=(
+'asciidoctor'
+'jq'
+)
+
+license=('GPL3')
+backup=('/etc/makepkg.conf')
+url="https://github.com/huakim/${pkgname}.git"
+
+source=("git+${url}")
+sha256sums=('SKIP')
+
+pkgver(){
+    dir="${srcdir}/${pkgname}/"
+    if [[ -d "${dir}" ]]; then
+        cd "${dir}"
+    fi
+    
+    pkgrel=$(git rev-parse HEAD)
+    echo $(git rev-list --count --all)-"${pkgrel}"
+}
+
+prepare(){
+    export VERSION="${pkgver}-${pkgrel}" 
+    export RELEASE="${_release}" 
+    export NAME="${pkgname}"
+    export TARGET="${_target}" 
+    export DESTDIR="${srcdir}/build"
+} 
+    
+
+build(){
+    cd "${srcdir}/${pkgname}/"
+	. ./package.sh
+}
+
+package() {
+    cd "${srcdir}/build"
+	find ./ -type f -exec install -Dm 755 "{}" "${pkgdir}/{}" \;
+}
+
+# vim: set syntax=bash sw=4 expandtab:

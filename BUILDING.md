@@ -4,39 +4,31 @@ The following instructions are for people who want to create their own packaging
 ## Cloning the makedeb repository.
 First, you need to clone the makedeb repository:
 
-```sh
-git clone 'https://github.com/makedeb/makedeb'
 ```
-
-Note that the `alpha` branch is the default branch that is cloned. If you are packaging makedeb for a production environment, you should checkout and use the `stable` branch:
-
-```sh
-git checkout stable
+git clone 'https://github.com/makedeb/makedeb'
 ```
 
 ## Building makedeb
 ### Prerequisites
 You need a few packages in order to build makedeb. These can change quickly as new releases are made, so you can find the list of build dependencies by running the following from the `PKGBUILD/` directory in your cloned repository (note that the listed dependencies will apply to that of Debian/Ubuntu - if you're packaging for a different distribution, you may need to change them):
 
-```sh
-TARGET=apt RELEASE=stable ./pkgbuild.sh | grep 'makedepends'
+```
+. ./src/PKGBUILD; echo make ${makedepends[@]}
 ```
 
 In addition, [just](https://github.com/casey/just) needs to be installed in order to build.
 
 makedeb also has some runtime dependencies. You can find those by running the following in the same `PKGBUILD/` directory (these packages are also listed as their Debian/Ubuntu package names):
 
-```sh
-TARGET=apt RELEASE=stable ./pkgbuild.sh | grep '^depends'
+```
+. ./src/PKGBUILD; echo ${depends[@]}
 ```
 
 ### Building
 After you have the needed build dependencies installed, run the following command from the root of your repository:
 
-```sh
-VERSION='{version}' RELEASE='{release}' TARGET='{target}' FILESYSTEM_PREFIX='{filesystem_prefix}' BUILD_COMMIT='{build_commit}' just prepare
-DPKG_ARCHITECTURE='{arch}' just build
-DESTDIR='{destdir}' just package
+```
+make build
 ```
 
 #### `{version}`

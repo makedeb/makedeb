@@ -1,33 +1,3 @@
-#!/usr/bin/env bash
-#
-#   makepkg - make packages compatible for use with pacman
-#
-#   Copyright (c) 2006-2021 Pacman Development Team <pacman-dev@archlinux.org>
-#   Copyright (c) 2002-2006 by Judd Vinet <jvinet@zeroflux.org>
-#   Copyright (c) 2005 by Aurelien Foret <orelien@chez.com>
-#   Copyright (c) 2006 by Miklos Vajna <vmiklos@frugalware.org>
-#   Copyright (c) 2005 by Christian Hamar <krics@linuxforum.hu>
-#   Copyright (c) 2006 by Alex Smith <alex@alex-smith.me.uk>
-#   Copyright (c) 2006 by Andras Voroskoi <voroskoi@frugalware.org>
-#
-#   This program is free software; you can redistribute it and/or modify
-#   it under the terms of the GNU General Public License as published by
-#   the Free Software Foundation; either version 2 of the License, or
-#   (at your option) any later version.
-#
-#   This program is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU General Public License for more details.
-#
-#   You should have received a copy of the GNU General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-
-# makepkg uses quite a few external programs during its execution. You
-# need to have at least the following installed for makepkg to function:
-#   awk, bsdtar (libarchive), bzip2, coreutils, fakeroot, file, find (findutils),
-#   gettext, gpg, grep, gzip, sed, tput (ncurses), xz
 
 # gettext initialization
 export TEXTDOMAIN='pacman-scripts'
@@ -43,44 +13,39 @@ unset CDPATH
 # Ensure GREP_OPTIONS doesn't screw with our grep calls
 unset GREP_OPTIONS
 
-declare -r makepkg_program_name="makedeb"
-declare -r confdir='/etc'
-declare -r BUILDSCRIPT='PKGBUILD'
-declare -r startdir="$(pwd -P)"
+#declare -r makepkg_program_name="makepkg"
+#declare -r confdir="${FILESYSTEM_PREFIX}/etc"
+#declare -r BUILDSCRIPT='PKGBUILD'
+#declare -r startdir="$(pwd -P)"
 
-# Values in the '{}' format here are automatically substituted at build time in 'justfile'.
-declare -r MAKEDEB_VERSION='{{MAKEDEB_VERSION}}'
-declare -r MAKEDEB_RELEASE='{{MAKEDEB_RELEASE}}'
-declare -r MAKEDEB_INSTALLATION_SOURCE='{{MAKEDEB_INSTALLATION_SOURCE}}'
-declare -r MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-"$(dpkg --print-architecture)"}"
-declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-"$(lsb_release -cs)"}"
-declare -r MAKEDEB_BUILD_COMMIT='{{MAKEDEB_BUILD_COMMIT}}'
+#declare -r MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-"$(dpkg --print-architecture)"}"
+#declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-"$(lsb_release -cs)"}"
 
-LIBRARY="${LIBRARY:-"{{FILESYSTEM_PREFIX}}/usr/share/makedeb"}"
-MAKEPKG_CONF="${MAKEPKG_CONF:-"{{FILESYSTEM_PREFIX}}/etc/makepkg.conf"}"
-EXTENSIONS_DIR='{{FILESYSTEM_PREFIX}}/usr/lib/makedeb'
+#LIBRARY="${LIBRARY:-"${FILESYSTEM_PREFIX}/usr/share/makedeb"}"
+#MAKEPKG_CONF="${MAKEPKG_CONF:-"${FILESYSTEM_PREFIX}/etc/makepkg.conf"}"
+#EXTENSIONS_DIR="${FILESYSTEM_PREFIX}/usr/lib/makedeb"
 
 MAKEDEB_BINARY="${0}"
 
 # A variable declaring if makedeb is being ran from a packaged release or directly from the Git repository.
 # This is used to set up makedeb to be able to run from the local files when needed.
-MAKEDEB_PACKAGED=0
+#MAKEDEB_PACKAGED=0
 
-if ! (( MAKEDEB_PACKAGED )); then
-	set -e
-	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
+#if ! (( MAKEDEB_PACKAGED )); then
+#	set -e
+#	if [[ "${IN_MAKEDEB_RS:+x}" == "" ]]; then
 		# Cargo appears to be leaking memory when using the libgit2 library, so use the Git CLI for registry updates.
-		cargo build
-		export IN_MAKEDEB_RS=1
-	fi
+#		cargo build
+#		export IN_MAKEDEB_RS=1
+#	fi
 
-	cd "$(dirname "${MAKEDEB_BINARY}")"
-	LIBRARY="$(git rev-parse --show-toplevel)/src/functions"
-	MAKEPKG_CONF="$(git rev-parse --show-toplevel)/src/makepkg.conf"
-	EXTENSIONS_DIR="$(git rev-parse --show-toplevel)/src/extensions"
-	MAKEDEB_BINARY="$(git rev-parse --show-toplevel)/src/main.sh"
-	set +e
-fi
+#	cd "$(dirname "${MAKEDEB_BINARY}")"
+#	LIBRARY="$(git rev-parse --show-toplevel)/src/functions"
+#	MAKEPKG_CONF="$(git rev-parse --show-toplevel)/src/makepkg.conf"
+#	EXTENSIONS_DIR="$(git rev-parse --show-toplevel)/src/extensions"
+#	MAKEDEB_BINARY="$(git rev-parse --show-toplevel)/src/main.sh"
+#	set +e
+#fi
 
 # Options
 APTARGS=()
@@ -131,6 +96,7 @@ CONTROL_FIELDS=()
 extensions=(
 	'strip'
 	'zipman'
+    'pkgsize'
 )
 
 if [[ -n $SOURCE_DATE_EPOCH ]]; then
@@ -232,17 +198,8 @@ enter_fakeroot() {
 	msg "$(gettext "Entering %s environment...")" "fakeroot"
 	fakeroot -- bash -$- "${BASH_SOURCE[0]}" --in-fakeroot "${ARGLIST[@]}" || exit $?
 }
-
-# Run a makedeb-rs command.
-makedeb_rs() {
-	local args=()
-
-	if (( SUDO )); then
-		sudo MAKEDEB_BINARY="${MAKEDEB_BINARY}" "${LIBRARY}/makedeb-rs" "${@}"
-	else
-		MAKEDEB_BINARY="${MAKEDEB_BINARY}" "${LIBRARY}/makedeb-rs" "${@}"
-	fi
-}
+ 
+#makedeb_rs="${LIBRARY}/makedeb_rs"
 
 # Automatically update pkgver variable if a pkgver() function is provided
 # Re-sources the PKGBUILD afterwards to allow for other variables that use $pkgver
@@ -260,9 +217,20 @@ update_pkgver() {
 	if [[ -n $newpkgver && $newpkgver != "$pkgver" ]]; then
 		if [[ -w $BUILDFILE ]]; then
 			mapfile -t buildfile < "$BUILDFILE"
-			buildfile=("${buildfile[@]/#pkgver=*([^ ])/pkgver=$newpkgver}")
-			buildfile=("${buildfile[@]/#pkgrel=*([^ ])/pkgrel=1}")
-			if ! printf '%s\n' "${buildfile[@]}" > "$BUILDFILE"; then
+            arrIN=(${newpkgver//-/ })
+            ver="${arrIN[0]}"
+            rel="${arrIN[1]}"
+            if [ -z "${ver}" ]; then
+                ver="${pkgver}"
+            fi            
+            if [ -z "${rel}" ]; then
+                rel="${pkgrel}"
+            fi
+            buildfile=("${buildfile[@]/#pkgver=*([^ ])/pkgver=${ver}}")
+			buildfile=("${buildfile[@]/#pkgrel=*([^ ])/pkgrel=${rel}}")
+			
+            
+            if ! printf '%s\n' "${buildfile[@]}" > "$BUILDFILE"; then
 				error "$(gettext "Failed to update %s from %s to %s")" \
 						"pkgver" "$pkgver" "$newpkgver"
 				exit $E_PKGBUILD_ERROR
@@ -412,10 +380,10 @@ write_pkginfo() {
 
 	check_distro_variables
 
-	printf "# Generated by makedeb-makepkg %s\n" "$makepkg_version"
+	printf "# Generated by ${makepkg_program_name} %s\n" "$makepkg_version"
 	printf "# using %s\n" "$(fakeroot -v)"
 
-	write_kv_pair "generated-by" "makedeb-makepkg"
+	write_kv_pair "generated-by" "${makepkg_program_name}"
 	write_kv_pair "pkgname" "$pkgname"
 	write_kv_pair "pkgbase" "$pkgbase"
 
@@ -479,7 +447,6 @@ write_extra_control_fields() {
 	for control_field in "${MERGED_CONTROL_FIELDS[@]}"; do
 		control_key="$(echo "${control_field}" | grep -o '^[^:]*')"
 		control_value="$(echo "${control_field}" | grep -o '[^:]*$' | sed 's|^ ||')"
-
 		write_control_pair "${control_key}" "${control_value}"
 	done
 }
@@ -549,7 +516,6 @@ create_package() {
 	fi
 
 	# Generate package metadata.
-	pkgarch=$(get_pkg_arch)
 	msg2 "$(gettext "Setting up package metadata...")"
 	mkdir "${pkgdir}/DEBIAN/"
 
@@ -717,7 +683,7 @@ install_package() {
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
 	done
 
-	if ! SUDO=1 makedeb_rs install "${APTARGS[@]}" "${pkglist[@]}"; then
+	if ! sudo apt-get install "${APTARGS[@]}" "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
@@ -889,40 +855,58 @@ check_distro_variables() {
 }
 
 usage() {
-	printf "makedeb (%s)\n" "${MAKEDEB_VERSION}"
+	printf "(%s) (%s)\n" "${makepkg_program_name}" "${MAKEDEB_VERSION}"
 	echo
-	printf -- "$(gettext "makedeb takes PKGBUILD files and creates archives installable via APT")\n"
+	printf -- "$(gettext "(%s) takes PKGBUILD files and creates archives installable via APT")\n" "${makepkg_program_name}"
 	echo
-	printf -- "$(gettext "Usage: %s [options]")\n" "makedeb"
+	printf -- "$(gettext "Usage: %s [options]")\n" "${makepkg_program_name}"
 	echo
+    
 	printf -- "$(gettext "Common options:")\n"
-	printf -- "$(gettext "  -A, --ignore-arch     Ignore errors about mismatching architectures")\n"
-	printf -- "$(gettext "  -d, --no-deps         Skip all dependency checks")\n"
-	printf -- "$(gettext "  -F, --file, -p        Specify a location to the build file (defaults to 'PKGBUILD')")\n"
-	printf -- "$(gettext "  -g, --gen-integ       Generate hashes for source files")\n"
+	printf -- "$(gettext "  -A, --ignorearch      Ignore errors about mismatching architectures")\n"
+	printf -- "$(gettext "  -c, --clean           Clean up work files after build")\n"
+	printf -- "$(gettext "  -C, --cleanbuild      Remove %s dir before building the package")\n" "\$srcdir/"
+	printf -- "$(gettext "  -d, --nodeps          Skip all dependency checks")\n"
+	printf -- "$(gettext "  -e, --noextract       Do not extract source files (use existing %s dir)")\n" "\$srcdir/"
+	printf -- "$(gettext "  -f, --force           Overwrite existing package")\n"
+	printf -- "$(gettext "  -g, --geninteg        Generate hashes for source files")\n"
 	printf -- "$(gettext "  -h, --help            Show this help menu and exit")\n"
-	printf -- "$(gettext "  -H, --field           Append the packaged control file with custom control fields")\n"
+	printf -- "$(gettext "  -H, --field <field>   Append the packaged control file with custom control fields")\n"
 	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
 	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build")\n"
-	printf -- "$(gettext "  -s, --sync-deps       Install missing dependencies")\n"
-	printf -- "$(gettext "  --lint                Link the PKGBUILD for conformity requirements")\n"
-	printf -- "$(gettext "  --no-build            Skip running of the 'build()' function in the PKGBUILD")\n"
-	printf -- "$(gettext "  --no-check            Skip running of the 'check()' function in the PKGBUILD")\n"
-	printf -- "$(gettext "  --no-color            Disable colored output")\n"
-	printf -- "$(gettext "  --print-control       Print a generated control file and exit")\n"
-	printf -- "$(gettext "  --print-srcinfo       Print a generated .SRCINFO file and exit")\n"
-	printf -- "$(gettext "  --skip-pgp-check      Do not verify source files against PGP signatures")\n"
-	echo
+	printf -- "$(gettext "  -r, --rmdeps          Run 'apt-get autoremove' after a succesfull build")\n"
+	printf -- "$(gettext "  -R, --repackage       Repackage contents of the package without rebuilding")\n"
+	printf -- "$(gettext "  -s, --syncdeps        Install missing dependencies")\n"
+	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
+    printf -- "$(gettext "  --config <file>       Use an alternate config file (instead of '%s')")\n" "$confdir/makepkg.conf"
+	printf -- "$(gettext "  --lint                Link the (%s) for conformity requirements")\n" "$BUILDSCRIPT"
+    printf -- "$(gettext "  -m --nocolor          Disable colored output")\n"
+	printf -- "$(gettext "  -o --nobuild          Skip running of the 'build()' function in the '%s'")\n" "$BUILDSCRIPT"
+	printf -- "$(gettext "  -p --file <file>      Use an alternate build script (instead of '%s')")\n" "$BUILDSCRIPT"
+	printf -- "$(gettext "  --nocheck             Skip running of the 'check()' function in the '%s'")\n" "$BUILDSCRIPT"
+	printf -- "$(gettext "  --noarchive           Do not create package archive")\n"
+	printf -- "$(gettext "  --noprepare           Do not run the %s function in the %s")\n" "prepare()" "$BUILDSCRIPT"
+	printf -- "$(gettext "  --nosign              Do not create a signature for the package")\n"
+    printf -- "$(gettext "  --printcontrol        Print a generated control file and exit")\n"
+	printf -- "$(gettext "  --printsrcinfo        Print a generated .SRCINFO file and exit")\n"
+	printf -- "$(gettext "  --sign                Sign the resulting package with %s")\n" "gpg"
+    printf -- "$(gettext "  --skipchecksums       Do not verify checksums of the source files")\n"
+	printf -- "$(gettext "  --skipinteg           Do not perform any verification checks on source files")\n"
+	printf -- "$(gettext "  --skippgpcheck        Do not verify source files with PGP signatures")\n"
+	printf -- "$(gettext "  --verifysource        Download source files (if needed) and perform integrity checks")\n"
+    echo
 	printf -- "$(gettext "The following options can modify the behavior of APT during package and dependency installation:")\n"
-	printf -- "$(gettext "  --as-deps             Mark built packages as automatically installed")\n"
-	printf -- "$(gettext "  --allow-downgrades    Allow packages to be downgraded")\n"
-	printf -- "$(gettext "  --no-confirm          Don't ask before installing packages")\n"
-	echo
+	printf -- "$(gettext "  --asdeps              Mark built packages as automatically installed")\n"
+	printf -- "$(gettext "  --allowdowngrades     Allow packages to be downgraded")\n"
+	printf -- "$(gettext "  --noconfirm           Don't ask before installing packages")\n"
+	printf -- "$(gettext "  --reinstall           Automatically reinstall the built package(s) after building")\n"
+    printf -- "$(gettext "  --passenv             sudo option (pass environment)")\n"
+    
+    echo
 	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
-	printf -- "$(gettext "  --pass-env            Pass the current user's environment variables")\n"
+	#printf -- "$(gettext "  --passenv             Pass the current user's environment variables")\n"
 	echo
-	printf -- "$(gettext "The following can be used to print makedeb-styled messages:")\n"
+	printf -- "$(gettext "The following can be used to print (%s)-styled messages:")\n" "${makepkg_program_name}"
 	printf -- "$(gettext "  --msg                 Print a msg message to stdout")\n"
 	printf -- "$(gettext "  --msg2                Print a msg2 message to stdout")\n"
 	printf -- "$(gettext "  --warning             Print a warning message to stderr")\n"
@@ -930,14 +914,14 @@ usage() {
 	printf -- "$(gettext "  --error               Print an error message to stderr")\n"
 	printf -- "$(gettext "  --error2              Print an error2 message to stderr")\n"
 	echo
-	printf -- "$(gettext "See makedeb(8) for information on all available options and links for obtaining support.")\n"
+	printf -- "$(gettext "See (%s)(8) for information on all available options and links for obtaining support.")\n" "${makepkg_program_name}"
 }
 
 version() {
-	printf "makedeb ${MAKEDEB_VERSION}\n"
-	printf "${MAKEDEB_RELEASE^} Release\n"
-	printf "Installed from ${MAKEDEB_INSTALLATION_SOURCE^^}\n"
-	printf "Built from ${MAKEDEB_BUILD_COMMIT}\n"
+	printf "${makepkg_program_name} ${MAKEDEB_VERSION}\n" "${makepkg_program_name}"
+	printf "${MAKEDEB_RELEASE^} $(gettext "Release")\n"
+	printf "$(gettext "Installed from") ${MAKEDEB_INSTALLATION_SOURCE^^}\n"
+	printf "$(gettext "Built from") ${MAKEDEB_BUILD_COMMIT}\n"
 }
 
 mpr_check() {
@@ -969,17 +953,49 @@ fi
 ARGLIST=("$@")
 
 # Parse Command Line Options.
-OPT_SHORT='AdF:p:ghH:ivrs'
-OPT_LONG=('ignore-arch' 'no-deps' 'file:' 'gen-integ'
-	  'help' 'field:' 'install' 'version' 'rm-deps'
-	  'sync-deps' 'print-control' 'print-srcinfo' 'printsrcinfo'
-	  'skip-pgp-check' 'as-deps' 'no-confirm' 'no-build' 'no-check'
-	  'in-fakeroot' 'lint' 'mpr-check' 'dur-check' 'pass-env' 'allow-downgrades'
-	  'msg:' 'msg2:' 'warning:' 'warning2:' 'error:' 'error2:' 'question:' 'no-style:' 'print-function-dir'
-	  'no-color'
-	  # Sorry not sorry.
-	  'why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious')
-
+OPT_SHORT='AcCdefghH:iVrRsVmop:'
+OPT_LONG=(
+"ignorearch" "ignore-arch"
+"clean"
+"cleanbuild" "clean-build"
+"nodeps" "no-deps"
+"noextract" "no-extras"
+"force" 
+"geninteg" "gen-integ"
+"help"
+"field:"
+"install"
+"version"
+"rmdeps" "rm-deps"
+"repackage" "re-package"
+"syncdeps" "sync-deps"
+"version"
+"config:"
+"lint"
+"nocolor" "no-color"
+"nobuild" "no-build"
+"file:"
+"nocheck" "no-check"
+"noarchive" "no-archive"
+"noprepare" "no-prepare"
+"nosign" "no-sign"
+"printcontrol" "print-control"
+"printsrcinfo" "print-srcinfo"
+"sign" 
+"skipchecksums" "skip-checksums"
+"skippgpcheck" "skip-pgp-check"
+"verifysource" "verify-source"
+"asdeps" "as-deps"
+"allowdowngrades" "allow-downgrades"
+"noconfirm" "no-confirm"
+"reinstall" "re-install"
+"in-fakeroot"
+"mprcheck" "durcheck"
+"mpr-check" "dur-check"
+"passenv" "pass-env" 
+"msg" "msg2" "warning" "warning2" "error" "error2"
+)
+	  
 CLI_ARGS=("${@}")
 
 if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "${CLI_ARGS[@]}"; then
@@ -991,34 +1007,64 @@ unset OPT_SHORT OPT_LONG OPTRET
 while true; do
 	case "$1" in
 		# makedeb options.
-		-A|--ignore-arch)        IGNOREARCH=1 ;;
+        --ignorearch|\
+		-A|--ignorearch)         IGNOREARCH=1 ;;
+		-c|--clean)              CLEANUP=1 ;;
+		-C|--cleanbuild)         CLEANBUILD=1 ;;
+        --nodeps|\
 		-d|--no-deps)            NODEPS=1 ;;
-		-F|-p|--file)            shift; BUILDFILE="${1}" ;;
+        --noextract|\
+        -e|--no-extract)         NOEXTRACT=1 ;;
+        -f|--force)              FORCE=1 ;;
+        --geninteg|\
 		-g|--gen-integ)          BUILDPKG=0 GENINTEG=1 IGNOREARCH=1 ;;
 		-h|--help)               usage; exit $E_OK ;;
 		-H|--field)              shift; CONTROL_FIELDS+=("${1}") ;;
 		-i|--install)            INSTALL=1 ;;
+        --reinstall)             INSTALL=1; APTARGS+=('--reinstall');;
 		-V|--version)            version; exit $E_OK ;;
+        --rmdeps|\
 		-r|--rm-deps)            RMDEPS=1 ;;
+        --syncdeps|\
 		-s|--sync-deps)          SYNCDEPS=1 ;;
 		--lint)                  LINTPKGBUILD=1 ;;
+		-p|--file)               shift; BUILDFILE="${1}" ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
+        --no-archive|\
+		--noarchive)      NOARCHIVE=1 ;;
+        --no-check|\
+		--nocheck)        RUN_CHECK='n' ;;
+        --no-prepare|\
+		--noprepare)      RUN_PREPARE='n' ;;
+        --repackage|\
+		-R|--re-package)   REPKG=1 ;;
+        --nobuild|\
 		--no-build)              NOBUILD=1 ;;
+        --nocheck|\
 		--no-check)              NOCHECK=1 ;;
+        --nocolor|\
 		--no-color)              NO_COLOR=1 ;;
+        --no-sign|\
+		--nosign)         SIGNPKG='n' ;;
+        --printcontrol |\
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
-		--print-srcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
-		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
-		--skip-pgp-check)        SKIPPGPCHECK=1 ;;
+		--print-srcinfo| \
+        --printsrcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+#		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+		--skippgpcheck|\
+        --skip-pgp-check)        SKIPPGPCHECK=1 ;;
 		--)                      shift; break ;;
 
 		# APT options.
+        --asdeps|\
 		--as-deps)               ASDEPS=1 ;;
+        --allowdowngrades|\
 		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
-		--no-confirm)            APTARGS+=('--no-confirm') ;;
-
+        --noconfirm|\
+		--no-confirm)            APTARGS+=('--yes') ;;
 		# Sudo options.
+        --passenv|\
 		--pass-env)              SUDOARGS+=('-E') ;;
 
 		# Message options.
@@ -1035,7 +1081,7 @@ while true; do
 		--in-fakeroot)           INFAKEROOT=1 ;;
 
 		# Pacstall is trash options.
-		--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious) DESTROYSYSTEM=1 ;;
+		#--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious) DESTROYSYSTEM=1 ;;
 	esac
 	shift
 done
@@ -1305,7 +1351,7 @@ check_distro_dependencies
 
 # Convert needed dependencies.
 convert_dependencies
-
+pkgarch=$(get_pkg_arch)
 remove_optdepends_description recommends "${recommends[@]}"
 remove_optdepends_description suggests "${suggests[@]}"
 
@@ -1399,42 +1445,28 @@ if (( NODEPS || ( VERIFYSOURCE && !SYNCDEPS ) )); then
 	if (( NODEPS )); then
 		warning "$(gettext "Skipping dependency checks.")"
 	fi
-else
+else 
 	msg "$(gettext "Checking for missing dependencies...")"
-
-	# Build a dummy deb to resolve the debs with makedeb-rs.
-	tmpdir="$(mktemp -d)"
-	cd "${tmpdir}"
-	dummy_deb_name="$(openssl rand -hex 8)"
-
-	while apt_cache show "${dummy_deb_name}" &> /dev/null; do
-		dummy_deb_name="$(openssl rand -hex 8)"
-	done
-
-	mkdir -p "${dummy_deb_name}/DEBIAN"
-	pkgname="${dummy_deb_name}" pkgarch="$(get_pkg_arch)" write_control_info | grep -E '^Package:|^Version:|^Architecture:|^Description:|^Depends:|^Pre-Depends:' > "${dummy_deb_name}/DEBIAN/control"
-	cd "${dummy_deb_name}"
-	create_deb "../${dummy_deb_name}.deb"
-	cd ../
-
-	# We only care about the dependencies of the package, so include the bare minimum to generate a dep with only dependencies listed.
-	if ! (
-		options=('--deps-only')
-
-		for arg in '--allow-downgrades' '--no-confirm'; do
-			if in_array "${arg}" "${APTARGS[@]}"; then
-				options+=("${arg}")
-			fi
-		done
-
-		if (( !SYNCDEPS )); then
-			options+=('--fail-on-change')
-		fi
-
-		SUDO=1 makedeb_rs install "${dummy_deb_name}.deb" "${options[@]}"
-	); then
-		exit "${E_INSTALL_DEPS_FAILED}"
-	fi
+	# We need to tell our call to the Python script where makedeb is located because we might need to call it in order to print messages.
+	#
+	# TODO: perl script works fine, nothing to do
+	# On Ubuntu 20.04, do *not* have libgcc1 installed, but *do* have libgcc-s1 installed.
+	# Running 'apt-get satisfy libgcc1' works as expected, as libgcc-s1 provides libgcc1.
+	# On the other hand, attempting to view the provided package list for libgcc1 isn't showing
+	# libgcc-s1 anywhere. On that note, we gotta be a bit more cautious with the results of our
+	# script, and put more checks into place, such as checking if we actually installed any new
+	# packages before running 'apt-mark auto'.    
+	if (( "${SYNCDEPS}" )); then
+        install_missing_dependencies "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"
+    else
+        verify_no_missing_dependencies "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"
+    fi
+    
+    if (( $? != 0 )); then 
+        exit "${E_INSTALL_DEPS_FAILED}"
+    fi
+    
+	unset missing_deps dep
 fi
 
 # Load up extensions for use by 'build()'.
@@ -1501,18 +1533,18 @@ create_package_signatures || exit $E_PRETTY_BAD_PRIVACY
 # if inhibiting archive creation, go no further
 if (( NOARCHIVE )); then
 	msg "$(gettext "Package directory is ready.")"
-	exit $E_OK
+#	exit $E_OK
+else 
+    msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
 fi
-
-msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
-
 # Remove installed build dependencies.
 if (( "${RMDEPS}" )); then
 	msg "$(gettext "Removing unneeded dependencies...")"
-	if ! SUDO=1 makedeb_rs autoremove "${APTARGS[@]}"; then
+	if ! sudo apt-get autoremove "${APTARGS[@]}"; then
 		error "$(gettext "Failed to remove dependencies.")"
 		exit "${E_REMOVE_DEPS_FAILED}"
 	fi
 fi
 
-install_package && exit $E_OK || exit $E_INSTALL_FAILED
+
+install_package #&& exit $E_OK || exit $E_INSTALL_FAILED
