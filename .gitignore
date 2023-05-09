@@ -9,3 +9,6 @@ src/src/
 src/pkg/
 src/*.deb
 target/
+*.deb
+build/
+

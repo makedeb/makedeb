@@ -1,66 +1,43 @@
-# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
-_release={{ release }}
-_target={{ target }}
+# Maintainer:
+_release=stable
+_target=apt
 
-pkgname={{ pkgname }}
-pkgver={{ pkgver }}
-pkgrel={{ pkgrel }}
+pkgname=makedeb
+pkgver=17.0.0
+pkgrel=${_release}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
-arch=('any')
-depends=(
-	'apt'
-	'binutils'
-	'build-essential'
-	'curl'
-	'fakeroot'
-	'file'
-	'gettext'
-	'gawk'
-	'libarchive-tools'
-	'lsb-release'
-	'zstd'
-)
-makedepends=(
-	'asciidoctor'
-	'cargo'
-	'git'
-	'make'
-	'jq'
-)
-conflicts=('makedeb')
-provides=("makedeb=${pkgver}")
+arch=('all')
+depends=('git' 'coreutils' 'apt' 'perl' 'libdpkg-perl' 'libapt-pkg-perl' 'bash>4' 'curl' 'fakeroot' 'file' 'gettext' 'gawk' 'libarchive-tools' 'lsb-release' 'zstd')
+makedepends=('asciidoctor')
+
 license=('GPL3')
 backup=('/etc/makepkg.conf')
-url="https://github.com/makedeb/makedeb"
+url="https://github.com/makedeb/${pkgname}.git"
 
-source=("{{ source }}")
+source=("git+${url}")
 sha256sums=('SKIP')
 
-prepare() {
-	cd makedeb/
-	VERSION="${pkgver}-${pkgrel}" \
-		RELEASE="${_release}" \
-		TARGET="${_target}" \
-		BUILD_COMMIT="$(git rev-parse HEAD)" \
-		just prepare
-}
-
-build() {
-	cd makedeb/
-	local no_worker_sizes_distros=('bionic')
-	export DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE}"
-
-	if ! in_array "${MAKEDEB_DISTRO_CODENAME}" "${no_worker_sizes_distros[@]}"; then
-		export RUST_APT_WORKER_SIZES=1
-	fi
-
-	just build
-}
+#pkgver(){
+#    dir="${srcdir}/${pkgname}/"
+#    if [[ -d "${dir}" ]]; then
+#        cd "${dir}"
+#    fi
+#    {
+#	ver=$(git rev-list --count --all 2>/dev/null)
+#	echo "${ver}"	
+#    } | {
+#	echo ${pkgver}
+#    }
+#}
 
 package() {
-	cd makedeb/
-	DESTDIR="${pkgdir}" \
-		just package
+    cd "${srcdir}/${pkgname}/"
+    VERSION="${pkgver}-${pkgrel}"   \
+    RELEASE="${_release}"           \
+    NAME="${pkgname}"               \
+    TARGET="${_target}"             \
+    DESTDIR="${pkgdir}"             \
+    . ./package.sh
 }
 
 # vim: set syntax=bash sw=4 expandtab:

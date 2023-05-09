@@ -278,7 +278,7 @@ msgstr ""
 
 #: src/functions/lint_pkgbuild/maintainer.sh:7
 msgid ""
-"A maintainer must be specified. This will be an error in a future release."
+"A maintainer must be specified."
 msgstr ""
 
 #: src/main.sh:705
@@ -677,8 +677,12 @@ msgstr ""
 
 #: src/functions/lint_pkgbuild/maintainer.sh:9
 msgid ""
-"More than one maintainer was specified. This will be an error in a future "
+"More than one maintainer was specified."
 "release."
+msgstr ""
+
+#: src/extensions/fields/main.sh
+msgid "Writing control field '%s'"
 msgstr ""
 
 #: src/functions/lint_pkgbuild/depends.sh:93

@@ -645,12 +645,12 @@ msgstr ""
 
 #: src/functions/lint_pkgbuild/maintainer.sh:7
 msgid ""
-"A maintainer must be specified. This will be an error in a future release."
+"A maintainer must be specified."
 msgstr ""
 
 #: src/functions/lint_pkgbuild/maintainer.sh:9
 msgid ""
-"More than one maintainer was specified. This will be an error in a future "
+"More than one maintainer was specified."
 "release."
 msgstr ""
 
@@ -665,6 +665,10 @@ msgstr ""
 #: src/functions/lint_pkgbuild/arch.sh:59
 #: src/functions/lint_pkgbuild/arch.sh:68
 msgid "%s is not available for the '%s' architecture."
+msgstr ""
+
+#: src/extensions/fields/main.sh
+msgid "Writing control field '%s'"
 msgstr ""
 
 #: src/functions/lint_pkgbuild/arch.sh:78

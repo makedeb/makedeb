@@ -4,8 +4,9 @@ main() {
     local file_iter
     local files
 
+    
     if [[ "${MAKEDEB_POST_PACKAGE:+x}" != 'x' ]]; then
-        error2 "Don't call '${MAKEDEB_EXTENSION_NAME}' from the PKGBUILD."
+        error2 $(printf $(gettext "Don't call '(%s)' from the PKGBUILD.") ${MAKEDEB_EXTENSION_NAME})
         exit 1
     fi
     

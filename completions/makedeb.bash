@@ -1,41 +1,70 @@
 _makedeb() {
-    shortopts=(
-        '-A'
-        '-d'
-        '-F'
-        '-p'
-        '-g'
-        '-h'
-        '-H'
-        '-i'
-        '-V'
-        '-r'
-        '-s'
-    )
+shortopts=(
+'-A'
+'-c'
+'-C'
+'-d'
+'-e'
+'-f'
+'-g'
+'-h'
+'-H'
+'-i'
+'-V'
+'-r'
+'-R'
+'-s'
+'-V'
+'-m'
+'-o'
+'-p'
+)
 
-    longopts=(
-        '--allow-downgrades'
-        '--as-deps'
-        '--field'
-        '--file'
-        '--gen-integ'
-        '--help'
-        '--ignore-arch'
-        '--install'
-        '--lint'
-        '--no-build'
-        '--no-check'
-        '--no-color'
-        '--no-confirm'
-        '--no-deps'
-        '--pass-env'
-        '--print-control'
-        '--print-srcinfo'
-        '--print-pgp-check'
-        '--rm-deps'
-        '--sync-deps'
-        '--version'
-    )
+longopts=(
+"--ignorearch"
+"--clean"
+"--cleanbuild" 
+"--nodeps"
+"--noextract" 
+"--force" 
+"--geninteg" 
+"--help"
+"--field"
+"--install"
+"--version"
+"--rmdeps" 
+"--repackage"
+"--syncdeps" 
+"--version"
+"--config:"
+"--lint"
+"--nocolor" 
+"--nobuild" 
+"--file:"
+"--nocheck" 
+"--noarchive" 
+"--noprepare" 
+"--nosign" 
+"--printcontrol" 
+"--printsrcinfo" 
+"--sign" 
+"--skipchecksums" 
+"--skippgpcheck" 
+"--verifysource" 
+"--asdeps" 
+"--allowdowngrades" 
+"--noconfirm" 
+"--reinstall" 
+"--in-fakeroot"
+"--mprcheck" "durcheck"
+"--passenv"
+"--msg" 
+"--msg2" 
+"--warning" 
+"--warning2" 
+"--error" 
+"--error2"
+)
 
     local cur prev words cword
     _init_completion || return

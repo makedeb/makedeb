@@ -1,25 +1,34 @@
 install_missing_dependencies() {
-    if [[ "${#missing_dependencies}" == "0" && "${#missing_build_dependencies}" == "0" ]]; then
-        return 0
-    fi
+    if [[ "${#@}" != 0 ]]; then
+	#	if (( "${SYNCDEPS}" )); then
+			# Get a list of currently installed packages.
+#			mapfile -t prev_installed_packages < <(dpkg-query -Wf '${Package}\n' | sort)
+			
+			# Install the missing deps.
+			msg "$(gettext "Installing missing dependencies...")"
 
-    msg2 "Installing required build dependencies..."
-    
-    if ! sudo "${SUDOARGS[@]}" -- apt-get satisfy "${APTARGS[@]}" -- "${missing_dependencies[@]}" "${missing_build_dependencies[@]}"; then
-        error "There was an error installing build dependencies."
-        return 1
-    fi
+			if ! sudo "${SUDOARGS[@]}" -- "${LIBRARY}/binary/apt_satisfy.pl"  "${APTARGS[@]}"  "${@}" ; then
+				error "$(gettext "Failed to install missing dependencies.")"
+	#			exit "${E_INSTALL_DEPS_FAILED}"
+                return 1
+			fi
 
-    if ! sudo "${SUDOARGS[@]}" -- apt-mark auto -- "${missing_dependencies_no_relations[@]}" "${missing_build_dependencies_no_relations[@]}" 1> /dev/null; then
-        error "There was an error marking installed build dependencies as automatically installed."
-        error "You may need to mark the following packages as automatically installed via 'apt-mark auto':"
+			# Get the list of packages that were just installed.
+#			mapfile -t cur_installed_packages < <(dpkg-query -Wf '${Package}\n')
+#			mapfile -t newly_installed_packages < <(comm -13 --nocheck-order <(printf '%s\n' "${prev_installed_packages[@]}") <(dpkg-query -Wf '${Package}\n' | sort))
 
-        for i in "${missing_dependencies_no_relations[@]}" "${missing_build_dependencies_no_relations[@]}"; do
-            msg2 "${i}"
-        done
+#			unset prev_installed_packages cur_installed_packages newly_installed_packages
+#		else
+#			error "$(gettext "The following build dependencies are missing:")"
+#			for dep in "${missing_deps[@]}"; do
+#				error2 "${dep}"
+#			done
 
-        return 1
-    fi
+#			args=("${0}" "${CLI_ARGS[@]}" '-s')
+#			error "$(gettext "Try running '%s'.")" "${args[*]}"
+#			exit "${E_INSTALL_DEPS_FAILED}"
+#		fi
+	fi
 }
 
 # vim: set syntax=bash ts=4 sw=4 expandtab:
