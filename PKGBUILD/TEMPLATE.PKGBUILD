@@ -1,4 +1,4 @@
-# Maintainer:
+# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
 _release=stable
 _target=apt
 
