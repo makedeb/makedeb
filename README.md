@@ -1,5 +1,3 @@
-[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
-
 # makedeb
 [![Deployment - Stable](https://img.shields.io/drone/build/makedeb/makedeb/stable?label=stable&logo=drone&server=https%3A%2F%2Fdrone.hunterwittenborn.com)](https://drone.hunterwittenborn.com/makedeb/makedeb/branches)
 [![Deployment - Beta](https://img.shields.io/drone/build/makedeb/makedeb/beta?label=beta&logo=drone&server=https%3A%2F%2Fdrone.hunterwittenborn.com)](https://drone.hunterwittenborn.com/makedeb/makedeb/branches)
@@ -33,6 +31,8 @@ Help with available usage can also be found after installation with `makedeb --h
 See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
 ## Donate
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-personal-page.svg)](https://stand-with-ukraine.pp.ua)
+
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
 [Inedo](https://inedo.com/): For their universal package manager and Docker registry tool, [ProGet](https://inedo.com/proget). ProGet is used in the makedeb project to manage both Debian packages and Docker images. In addition, ProGet also supports private repositories and registries, as well as numerous package formats, including RPM, NuGet, and npm.
