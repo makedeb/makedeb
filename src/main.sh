@@ -130,6 +130,7 @@ SUDOARGS=()
 SYNCDEPS=0
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
+REINSTALL=0
 
 # A default list of extensions to load, these extensions are included with makedeb. This is a publically-exposed variable for PKGBUILDs that can be overwritten.
 extensions=(
@@ -705,6 +706,7 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
+    (( REINSTALL )) && APTARGS+=('--reinstall')
 
 	if (( ! SPLITPKG )); then
 		msg "$(gettext "Installing package %s...")" "$pkgname"
@@ -1058,7 +1060,7 @@ while true; do
 		-h|--help)               usage; exit $E_OK ;;
 		-H|--field)              shift; CONTROL_FIELDS+=("${1}") ;;
 		-i|--install)            INSTALL=1 ;;
-        --reinstall)             INSTALL=1; APTARGS+=('--reinstall');;
+        --reinstall)             INSTALL=1; REINSTALL=1;;
 		-V|--version)            version; exit $E_OK ;;
         --rmdeps|\
 		-r|--rm-deps)            RMDEPS=1 ;;
