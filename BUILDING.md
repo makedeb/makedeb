@@ -4,7 +4,14 @@ The following instructions are for people who want to create their own packaging
 ## Cloning the makedeb repository.
 First, you need to clone the makedeb repository:
 
-```git clone 'https://github.com/makedeb/makedeb'
+```sh
+git clone 'https://github.com/makedeb/makedeb'
+```
+
+Note that the `alpha` branch is the default branch that is cloned. If you are packaging makedeb for a production environment, you should checkout and use the `stable` branch:
+
+```sh
+git checkout stable
 ```
 
 ## Building makedeb
