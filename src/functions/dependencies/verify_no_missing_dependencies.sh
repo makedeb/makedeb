@@ -1,5 +1,5 @@
 verify_no_missing_dependencies() {
-    if ! mapfile -t missing_deps < <(MAKEDEB="${0}" "${LIBRARY}/binary/missing_apt_dependencies.pl" "${@}"); then
+    if ! mapfile -t missing_deps < <(MAKEDEB="${0}" perl "${LIBRARY}/binary/missing_apt_dependencies.pl" "${@}"); then
 		error "$(gettext "Failed to check missing dependencies.")"
 		return 1
 	fi
