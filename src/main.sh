@@ -89,6 +89,7 @@ MAKEDEB_BINARY="${0}"
 # Options
 APTARGS=()
 ASDEPS=0
+ALLOW_DOWNGRADES=0
 BUILDFUNC=0
 BUILDPKG=1
 CHECKFUNC=0
@@ -107,6 +108,8 @@ MPR_CHECK=0
 MAKEDEB_MESSAGES=()
 MAKEDEB_MESSAGE_TYPES=()
 NEEDED=0
+RECOMMENDS_PACKAGES='D'
+SUGGESTS_PACKAGES='D'
 NOARCHIVE=0
 NOBUILD=0
 NOCHECK=0
@@ -939,6 +942,10 @@ usage() {
 	printf -- "$(gettext "The following options can modify the behavior of APT during package and dependency installation:")\n"
 	printf -- "$(gettext "  --asdeps              Mark built packages as automatically installed")\n"
 	printf -- "$(gettext "  --allowdowngrades     Allow packages to be downgraded")\n"
+	printf -- "$(gettext "  --noinstallrecommends Do not look at recommends packages")\n"
+	printf -- "$(gettext "  --noinstallsuggests   Do not look at suggests packages")\n"
+	printf -- "$(gettext "  --installrecommends   Look at recommends packages")\n"
+	printf -- "$(gettext "  --installsuggests     Look at suggests packages")\n"
 	printf -- "$(gettext "  --noconfirm           Don't ask before installing packages")\n"
 	printf -- "$(gettext "  --reinstall           Automatically reinstall the built package(s) after building")\n"
     printf -- "$(gettext "  --passenv             sudo option (pass environment)")\n"
@@ -1034,6 +1041,10 @@ OPT_LONG=(
 "mprcheck" "durcheck"
 "mpr-check" "dur-check"
 "passenv" "pass-env" 
+"noinstallrecommends" "no-install-recommends"
+"installrecommends" "install-recommends"
+"noinstallsuggests" "no-install-suggests"
+"installsuggests" "install-suggests"
 "msg" "msg2" "warning" "warning2" "error" "error2"
 )
 	  
@@ -1102,9 +1113,23 @@ while true; do
         --asdeps|\
 		--as-deps)               ASDEPS=1 ;;
         --allowdowngrades|\
-		--allow-downgrades)      APTARGS+=('--allow-downgrades') ;;
+		--allow-downgrades)      ALLOW_DOWNGRADES=1 ;;
         --noconfirm|\
-		--no-confirm)            APTARGS+=('--yes') ;;
+		--no-confirm)            NOCONFIRM=1 ;;#
+        
+        
+        --noinstallrecommends|\
+        --no-install-recommends) RECOMMENDS_PACKAGES='N';;
+        
+        --installrecommends|\
+        --install-recommends) RECOMMENDS_PACKAGES='Y';;
+        
+        --noinstallsuggests|\
+        --no-install-suggests) SUGGESTS_PACKAGES='N';;
+        
+        --installsuggests|\
+        --install-suggests) SUGGESTS_PACKAGES='Y';;
+        
 		# Sudo options.
         --passenv|\
 		--pass-env)              SUDOARGS+=('-E') ;;
@@ -1128,6 +1153,29 @@ while true; do
 	shift
 done
 
+if (( NOCONFIRM == 1 )); then
+    APTARGS+=('--yes') 
+fi
+
+if (( ALLOW_DOWNGRADES == 1 )); then
+    APTARGS+=('--allow-downgrades')
+fi
+
+if (( RECOMMENDS_PACKAGES == "Y" )); then
+    APTARGS+=('--install-recommends') 
+fi
+
+if (( RECOMMENDS_PACKAGES == "N" )); then
+    APTARGS+=('--no-install-recommends')
+fi
+
+if (( SUGGESTS_PACKAGES == "Y" )); then
+    APTARGS+=('--install-suggests') 
+fi
+
+if (( SUGGESTS_PACKAGES == "N" )); then
+    APTARGS+=('--no-install-suggests')
+fi
 # attempt to consume any extra argv as environment variables. this supports
 # overriding (e.g. CC=clang) as well as overriding (e.g. CFLAGS+=' -g').
 extra_environment=()
@@ -1499,7 +1547,15 @@ else
 	# script, and put more checks into place, such as checking if we actually installed any new
 	# packages before running 'apt-mark auto'.    
 	if (( "${SYNCDEPS}" )); then
-        install_missing_dependencies "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"
+        additional=()
+        if (( RECOMMENDS_PACKAGES == "Y" )); then
+            additional+=("${recommends[@]}")
+        fi
+        
+        if (( SUGGESTS_PACKAGES == "Y" )); then
+            additional+=("${suggests[@]}")
+        fi
+        install_missing_dependencies "${additional[@]}" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"
     else
         verify_no_missing_dependencies "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"
     fi
