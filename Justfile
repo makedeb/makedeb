@@ -1,5 +1,3 @@
-.PHONY: build
-
 build: clean
 	bash ./build.sh
 
