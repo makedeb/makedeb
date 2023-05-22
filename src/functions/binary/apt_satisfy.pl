@@ -3,7 +3,7 @@ my @prev_installed_packages = split('\n', `dpkg-query -Wf '\${Package}\\n'`);
 
 # Install the missing deps.
 
-if (system("apt-get", satisfy, @ARGV) != 0) {
+if (system("apt-get", "satisfy", @ARGV) != 0) {
         #error "$(gettext "Failed to install missing dependencies.")"
      exit 1;
 }
