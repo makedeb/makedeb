@@ -131,6 +131,7 @@ SYNCDEPS=0
 VERIFYSOURCE=0
 CONTROL_FIELDS=()
 REINSTALL=0
+DANGER=0
 
 # A default list of extensions to load, these extensions are included with makedeb. This is a publically-exposed variable for PKGBUILDs that can be overwritten.
 extensions=(
@@ -905,6 +906,7 @@ usage() {
 	printf -- "$(gettext "  -A, --ignorearch      Ignore errors about mismatching architectures")\n"
 	printf -- "$(gettext "  -c, --clean           Clean up work files after build")\n"
 	printf -- "$(gettext "  -C, --cleanbuild      Remove %s dir before building the package")\n" "\$srcdir/"
+	printf -- "$(gettext "  --danger              Run makedeb in dangerous mode")\n"
 	printf -- "$(gettext "  -d, --nodeps          Skip all dependency checks")\n"
 	printf -- "$(gettext "  -e, --noextract       Do not extract source files (use existing %s dir)")\n" "\$srcdir/"
 	printf -- "$(gettext "  -f, --force           Overwrite existing package")\n"
@@ -1004,7 +1006,7 @@ OPT_LONG=(
 "help"
 "field:"
 "install"
-"version"
+"version" "danger"
 "rmdeps" "rm-deps"
 "repackage" "re-package"
 "syncdeps" "sync-deps"
@@ -1048,6 +1050,7 @@ while true; do
 		# makedeb options.
         --ignorearch|\
 		-A|--ignorearch)         IGNOREARCH=1 ;;
+        --danger)                DANGER=1 ;;
 		-c|--clean)              CLEANUP=1 ;;
 		-C|--cleanbuild)         CLEANBUILD=1 ;;
         --nodeps|\
@@ -1211,7 +1214,7 @@ if (( LOGGING )) && ! ensure_writable_dir "LOGDEST" "$LOGDEST"; then
 fi
 
 if (( ! INFAKEROOT )); then
-	if (( EUID == 0 )); then
+	if (( EUID == 0 && DANGER == 0 )); then
 		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\ncatastrophic damage to your system.")" "makepkg"
 		exit $E_ROOT
 	fi

@@ -1,7 +1,7 @@
 .PHONY: build
 
 build: clean
-	bash ./build.sh
+	bash ./build.sh --danger
 
 fixmod:
 	bash ./fixmod.sh
@@ -18,6 +18,6 @@ pkgbuild:
 	bash ./PKGBUILD/pkgbuild.sh > ./PKGBUILD/TEMPLATE.PKGBUILD
 
 install: clean
-	bash ./build.sh --reinstall
+	bash ./build.sh --reinstall --danger
 
 
