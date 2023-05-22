@@ -477,7 +477,7 @@ write_buildinfo() {
 	write_kv_pair "builddate" "${SOURCE_DATE_EPOCH}"
 	write_kv_pair "builddir"  "${BUILDDIR}"
 	write_kv_pair "startdir"  "${startdir}"
-	write_kv_pair "buildtool" "${BUILDTOOL:-makepkg}"
+	write_kv_pair "buildtool" "${BUILDTOOL:-${makepkg_program_name}}"
 	write_kv_pair "buildtoolver" "${BUILDTOOLVER:-$makepkg_version}"
 	write_kv_pair "buildenv" "${BUILDENV[@]}"
 	write_kv_pair "options" "${OPTIONS[@]}"
@@ -1262,13 +1262,18 @@ if (( LOGGING )) && ! ensure_writable_dir "LOGDEST" "$LOGDEST"; then
 fi
 
 if (( ! INFAKEROOT )); then
-	if (( EUID == 0 && DANGER == 0 )); then
-		error "$(gettext "Running %s as root is not allowed as it can cause permanent,\ncatastrophic damage to your system.")" "makepkg"
-		exit $E_ROOT
+	if (( EUID == 0 )); then
+		M10="$(gettext "Running %s as root is not allowed as it can cause permanent,\ncatastrophic damage to your system.")" 
+		if (( DANGER == 0 )); then
+            error "${M10}" "${makepkg_program_name}"
+            exit $E_ROOT
+        else 
+            warning "${M10}" "${makepkg_program_name}"
+        fi
 	fi
 else
 	if [[ -z $FAKEROOTKEY ]]; then
-		error "$(gettext "Do not use the %s option. This option is only for internal use by %s.")" "'--in-fakeroot'" "makepkg"
+		error "$(gettext "Do not use the %s option. This option is only for internal use by %s.")" "'--in-fakeroot'" "${makepkg_program_name}"
 		exit $E_INVALID_OPTION
 	fi
 fi
