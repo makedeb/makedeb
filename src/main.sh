@@ -88,6 +88,7 @@ MAKEDEB_BINARY="${0}"
 
 # Options
 APTARGS=()
+INSTALLED=()
 ASDEPS=0
 ALLOW_DOWNGRADES=0
 BUILDFUNC=0
@@ -1347,15 +1348,15 @@ fi
 
 # If pkgbase=pacstall or pacstall is in 'pkgname', abort.
 # Who would want to ever use Pacstall???
-if ! (( "${DESTROYSYSTEM}" )); then
-	if [[ "${pkgbase}" == "pacstall" ]] || in_array 'pacstall' "${pkgname[@]}"; then
-		error "$(gettext "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'.")"
-		error "$(gettext "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom.")"
-		error "$(gettext "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:")"
-		error "'--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious'"
-		exit 1
-	fi
-fi
+#if ! (( "${DESTROYSYSTEM}" )); then
+#	if [[ "${pkgbase}" == "pacstall" ]] || in_array 'pacstall' "${pkgname[@]}"; then
+#		error "$(gettext "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'.")"
+#		error "$(gettext "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom.")"
+#		error "$(gettext "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:")"
+#		error "'--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious'"
+#		exit 1
+#	fi
+#fi
 
 # Exit regardless of sucess status if '--lint' was passed.
 (( "${LINTPKGBUILD}" )) && exit
