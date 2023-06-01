@@ -12,4 +12,5 @@ colored = "2.0.0"
 exitcode = "1.1.2"
 quit = "1.1.4"
 rust-apt = { git = "https://gitlab.com/volian/rust-apt", branch = "fix/no-debfile-headers" }
+tempfile = "3.5.0"
 users = "0.11.0"

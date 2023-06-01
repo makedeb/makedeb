@@ -1,6 +1,8 @@
 use crate::{cache, message::Message, util};
 use rust_apt::cache::Cache;
 use std::process::Command;
+use tempfile::TempPath;
+
 struct Package {
     pkgname: String,
     version: String,
@@ -27,7 +29,19 @@ pub(crate) fn install(
     let mut debs = vec![];
 
     for deb in &deblist {
-        let args = ["-f", deb.as_str()];
+        let deb_tmp = format!(
+            "/tmp/{}",
+            std::path::PathBuf::from(deb)
+                .file_name()
+                .to_owned()
+                .unwrap()
+                .to_str()
+                .unwrap()
+        );
+        std::fs::copy(&deb, &deb_tmp).unwrap();
+        let deb = TempPath::from_path(deb_tmp);
+
+        let args = ["-f", deb.to_str().unwrap()];
         let pkgname_bare = std::str::from_utf8(
             &Command::new("dpkg-deb")
                 .args(args)
@@ -67,7 +81,13 @@ pub(crate) fn install(
         debs.push(deb);
     }
 
-    let mut apt_cache = Cache::debs(&debs).unwrap_or_else(|err| {
+    let mut apt_cache = Cache::debs(
+        debs.iter()
+            .map(|deb| deb.to_str().unwrap())
+            .collect::<Vec<_>>()
+            .as_slice(),
+    )
+    .unwrap_or_else(|err| {
         util::handle_errors(err);
         Message::new()
             .error("Unable to open cache in dependency resolver")
@@ -132,7 +152,10 @@ pub(crate) fn install(
     util::unlock_cache();
     cache::run_transaction(
         &apt_cache,
-        &debs,
+        debs.iter()
+            .map(|deb| deb.to_str().unwrap())
+            .collect::<Vec<_>>()
+            .as_slice(),
         fail_on_change,
         allow_downgrades,
         no_confirm,
