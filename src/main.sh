@@ -714,7 +714,7 @@ install_package() {
 	for pkg in ${pkgname[@]}; do
 		fullver=$(NOEPOCH=1 get_full_version)
 		pkgarch=$(get_pkg_arch $pkg)
-		tmpfile=$(mktemp "/tmp/${pkg}_${fullver}_${pkgarch}_XXXXXX.deb")
+		tmpfile="$(mktemp "/tmp/${pkg}_${fullver}_${pkgarch}_XXXXXX.deb")"
 		cp "${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb" "${tmpfile}"
 		pkglist+=("${tmpfile}")
 	done
@@ -724,7 +724,10 @@ install_package() {
 		return $E_INSTALL_FAILED
 	fi
 	for pkg in ${pkglist[@]}; do
-		rm "${pkg}"
+		if ! rm "${pkg}"; then
+      error "$(gettext "Failed to remove temporary package file.")"
+      return $E_INSTALL_FAILED
+    fi
 	done
 
 	if (( "${ASDEPS}" )); then
