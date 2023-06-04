@@ -725,9 +725,9 @@ install_package() {
 	fi
 	for pkg in ${pkglist[@]}; do
 		if ! rm "${pkg}"; then
-      error "$(gettext "Failed to remove temporary package file.")"
-      return $E_INSTALL_FAILED
-    fi
+			error "$(gettext "Failed to remove temporary package file.")"
+			return $E_INSTALL_FAILED
+		fi
 	done
 
 	if (( "${ASDEPS}" )); then
@@ -1524,3 +1524,4 @@ if (( "${RMDEPS}" )); then
 fi
 
 install_package && exit $E_OK || exit $E_INSTALL_FAILED
+# vim: set ts=2 sw=2 noexpandtab:
