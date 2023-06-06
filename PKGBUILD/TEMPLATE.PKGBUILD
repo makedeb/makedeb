@@ -7,7 +7,22 @@ pkgver=17.0.2
 pkgrel=${_release}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
 arch=('all')
-depends=('git' 'coreutils' 'apt' 'perl' 'libdpkg-perl' 'libapt-pkg-perl' 'bash>4' 'curl' 'fakeroot' 'file' 'gettext' 'gawk' 'libarchive-tools' 'lsb-release' 'zstd')
+depends=(
+	'git' 
+	'coreutils' 
+	'apt' 
+	'python3' 
+	'python3-apt'
+	'bash>4' 
+	'curl' 
+	'fakeroot' 
+	'file' 
+	'gettext' 
+	'gawk' 
+	'libarchive-tools' 
+	'lsb-release' 
+	'zstd'
+)
 makedepends=('asciidoctor')
 
 license=('GPL3')

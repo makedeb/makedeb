@@ -1440,9 +1440,9 @@ fi
 
 if (( GITCOMMIT )); then
 	write_srcinfo > .SRCINFO
-	git add --all
-	git commit -m update
-	git push;
+	git add --all || :
+	git commit -m update || :
+	git push || :
 	exit $E_OK
 fi
 
