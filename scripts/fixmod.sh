@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 shopt -s globstar
+shopt -s dotglob
 chmod 644 .gitignore
 for i in ./**; do
     if [ -d "$i" ]; then
