@@ -8,7 +8,7 @@ install_missing_dependencies() {
 			msg "$(gettext "Installing missing dependencies...")"
 
 
-			if ! sudo "${SUDOARGS[@]}" -- perl "${LIBRARY}/binary/apt_satisfy.pl"  "${APTARGS[@]}"  "${@}" ; then
+			if ! sudo "${SUDOARGS[@]}" -- python3 "${LIBRARY}/binary/apt_satisfy.py"  "${APTARGS[@]}"  "${@}" ; then
 				error "$(gettext "Failed to install missing dependencies.")"
 	#			exit "${E_INSTALL_DEPS_FAILED}"
                 return 1
