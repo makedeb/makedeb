@@ -9,3 +9,13 @@ for i in ./**; do
         chmod 644 "$i";
     fi;
 done
+
+for i in ./.drone/scripts/**; do
+    if [ -d "$i" ]; then
+        chmod 755 "$i";
+    else
+        chmod 755 "$i";
+    fi;
+done
+
+chmod 755 ./.githooks/pre-commit
