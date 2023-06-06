@@ -1,13 +1,18 @@
-build:
-	bash ./scripts.sh build --noextract --nodeps --danger
-install: 
-	bash ./scripts.sh build --noextract --nodeps --danger --reinstall
+build: clean
+	bash ./scripts/build.sh --noextract --nodeps --danger
+install: clean
+	bash ./scripts/build.sh --noextract --nodeps --danger --reinstall
 clean:
-	bash ./scripts.sh clean
+	rm -fR ./build
 fixmod:
-	bash ./scripts.sh fixmod
-commit:
-	bash ./scripts.sh commit
+	bash ./scripts/fixmod.sh
+gen-po:
+	bash ./scripts/gen-po.sh
+commit: fixmod
+	git add --all
+	git commit -m "update"
+	git push
 pkgbuild:
-	bash ./scripts.sh pkgbuild
+	bash ./PKGBUILD/pkgbuild.sh > ./PKGBUILD/TEMPLATE.PKGBUILD
+
 
