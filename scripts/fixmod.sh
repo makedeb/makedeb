@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 shopt -s globstar
 chmod 644 .gitignore
 for i in ./**; do
