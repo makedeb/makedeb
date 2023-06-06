@@ -19,3 +19,4 @@ for i in ./.drone/scripts/**; do
 done
 
 chmod 755 ./.githooks/pre-commit
+chmod 755 ./src/main.sh
