@@ -122,6 +122,7 @@ PKGVERFUNC=0
 PREPAREFUNC=0
 PRINTCONTROL=0
 PRINTSRCINFO=0
+GITCOMMIT=0
 REPKG=0
 REPRODUCIBLE=0
 RMDEPS=0
@@ -915,6 +916,7 @@ usage() {
 	printf -- "$(gettext "  -e, --noextract       Do not extract source files (use existing %s dir)")\n" "\$srcdir/"
 	printf -- "$(gettext "  -f, --force           Overwrite existing package")\n"
 	printf -- "$(gettext "  -g, --geninteg        Generate hashes for source files")\n"
+	printf -- "$(gettext "  --gitcommit           Make git commit")\n"
 	printf -- "$(gettext "  -h, --help            Show this help menu and exit")\n"
 	printf -- "$(gettext "  -H, --field <field>   Append the packaged control file with custom control fields")\n"
 	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
@@ -1011,6 +1013,7 @@ OPT_LONG=(
 "noextract" "no-extras"
 "force" 
 "geninteg" "gen-integ"
+"gitcommit" "git-commit"
 "help"
 "field:"
 "install"
@@ -1103,6 +1106,8 @@ while true; do
         --printcontrol |\
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
+		--git-commit |\
+		--gitcommit)             BUILDPKG=0 GITCOMMIT=1 IGNOREARCH=1 ;;
 		--print-srcinfo| \
         --printsrcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 #		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
@@ -1430,6 +1435,15 @@ if { [[ -z $SIGNPKG ]] && check_buildenv "sign" "y"; } || [[ $SIGNPKG == 'y' ]];
 		fi
 		exit $E_PRETTY_BAD_PRIVACY
 	fi
+fi
+
+
+if (( GITCOMMIT )); then
+	write_srcinfo > .SRCINFO
+	git add --all
+	git commit -m update
+	git push;
+	exit $E_OK
 fi
 
 if (( PACKAGELIST )); then
