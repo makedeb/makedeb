@@ -1,21 +1,13 @@
-build: clean
-	bash ./build.sh --danger
-
-fixmod:
-	bash ./fixmod.sh
-
-commit: fixmod
-	git add --all
-	git commit -m "update"
-	git push
-
+build:
+	bash ./scripts.sh build --noextract --nodeps --danger
+install: 
+	bash ./scripts.sh build --noextract --nodeps --danger --reinstall
 clean:
-	rm -fR ./build
-
+	bash ./scripts.sh clean
+fixmod:
+	bash ./scripts.sh fixmod
+commit:
+	bash ./scripts.sh commit
 pkgbuild:
-	bash ./PKGBUILD/pkgbuild.sh > ./PKGBUILD/TEMPLATE.PKGBUILD
-
-install: clean
-	bash ./build.sh --reinstall --danger
-
+	bash ./scripts.sh pkgbuild
 
