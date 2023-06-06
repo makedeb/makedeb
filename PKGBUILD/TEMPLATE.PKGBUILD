@@ -3,7 +3,7 @@ _release=stable
 _target=apt
 
 pkgname=makedeb
-pkgver=17.0.2
+pkgver=17.1.2
 pkgrel=${_release}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
 arch=('all')
