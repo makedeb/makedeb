@@ -37,7 +37,7 @@ package() {
     NAME="${pkgname}"               \
     TARGET="${_target}"             \
     DESTDIR="${pkgdir}"             \
-    . ./package.sh
+    . ./scripts/package.sh
 }
 
 # vim: set syntax=bash sw=4 expandtab:
