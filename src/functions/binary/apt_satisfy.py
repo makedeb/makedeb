@@ -26,7 +26,11 @@ if (len(newly_installed_packages) > 0):
           exit 1;
 
 """
-my @prev_installed_packages = split('\n', `dpkg-query -Wf '\${Package}\\n'`);
+sub runquery{
+	return split('\n', `dpkg-query -Wf '\${Package}\\n'`);
+}
+
+my @prev_installed_packages = runquery();
 
 # Install the missing deps.
 
@@ -35,14 +39,14 @@ if (system("apt-get", "satisfy", @ARGV) != 0) {
      exit 1;
 }
 
-my @cur_installed_packages = split('\n', `dpkg-query -Wf '\${Package}\\n'`);
+my @cur_installed_packages = runquery();
 
 my @newly_installed_packages = grep { my $f = $_;
                       ! grep $_ eq $f, @prev_installed_packages }
                @cur_installed_packages;
 
 if (scalar @newly_installed_packages > 0){
-     if (system("apt-mark", "-qqqq", auto, @newly_installed_packages) != 0) {
+     if (system("apt-mark", "-qqqq", "auto", @newly_installed_packages) != 0) {
         #error "$(gettext "Failed to install missing dependencies.")"
           print "some strange error";
           exit 1;
