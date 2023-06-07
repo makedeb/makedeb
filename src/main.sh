@@ -1273,8 +1273,8 @@ if (( ! INFAKEROOT )); then
 		if (( DANGER == 0 )); then
             error "${M10}" "${makepkg_program_name}"
             exit $E_ROOT
-        else 
-            warning "${M10}" "${makepkg_program_name}"
+        #else 
+        #   warning "${M10}" "${makepkg_program_name}"
         fi
 	fi
 else
