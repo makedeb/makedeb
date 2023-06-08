@@ -17,10 +17,10 @@ svg|a:link, svg|a:visited {
 }
 .message {
   fill: white;
-  font-size: 20px;
+  font-size: 32px;
 }
 .call {
-  fill: black;
+  fill: white;
   font-size: 32px;
 }
 .mobile-only {
