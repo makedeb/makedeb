@@ -56,9 +56,9 @@ svg|a:link, svg|a:visited {
       <tspan x="25" dy="1.2em">with many more raped or tortured. It's a <tspan font-weight="bold">genocide</tspan>. We need your help.</tspan>
     </text>
 
-    <text x="50%" y="78.5%" dominant-baseline="middle" text-anchor="middle" class="call">
+    <!--text x="50%" y="78.5%" dominant-baseline="middle" text-anchor="middle" class="call">
       Help Ukraine Now <tspan dominant-baseline="middle" class="arrow">➔</tspan>
-    </text>
+    </text-->
   </a>
 
 </svg>
