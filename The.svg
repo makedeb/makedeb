@@ -13,7 +13,7 @@ svg|a:link, svg|a:visited {
   fill: #0057b7;
 }
 .flag-yellow {
-  fill: #ffd700;
+  fill: #0057b7;
 }
 .message {
   fill: white;
