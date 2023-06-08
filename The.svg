@@ -32,7 +32,7 @@ svg|a:link, svg|a:visited {
 @media (max-width: 770px) {
   .message {
     display: none;
-    font-size: 29px;
+    font-size: 32px;
   }
   .mobile-only {
     display: inherit;
