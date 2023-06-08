@@ -31,7 +31,7 @@ Help with available usage can also be found after installation with `makedeb --h
 See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
 ## Donate
-[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://stand-with-ukraine.pp.ua)
+[![Stand With Ukraine](https://raw.githubusercontent.com/bunnylo1/makedeb/alpha/The)](https://stand-with-ukraine.pp.ua)
 
 Thank you to the following companies who have generously given resources to help the makedeb project:
 
