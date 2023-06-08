@@ -20,7 +20,7 @@ svg|a:link, svg|a:visited {
   font-size: 20px;
 }
 .call {
-  fill: black;
+  fill: white;
   font-size: 32px;
 }
 .mobile-only {
