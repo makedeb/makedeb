@@ -109,8 +109,8 @@ MPR_CHECK=0
 MAKEDEB_MESSAGES=()
 MAKEDEB_MESSAGE_TYPES=()
 NEEDED=0
-RECOMMENDS_PACKAGES='D'
-SUGGESTS_PACKAGES='D'
+RECOMMENDS_PACKAGES=0
+SUGGESTS_PACKAGES=0
 NOARCHIVE=0
 NOBUILD=0
 NOCHECK=0
@@ -1125,16 +1125,16 @@ while true; do
         
         
         --noinstallrecommends|\
-        --no-install-recommends) RECOMMENDS_PACKAGES='N';;
+        --no-install-recommends) RECOMMENDS_PACKAGES=2;;
         
         --installrecommends|\
-        --install-recommends) RECOMMENDS_PACKAGES='Y';;
+        --install-recommends) RECOMMENDS_PACKAGES=1;;
         
         --noinstallsuggests|\
-        --no-install-suggests) SUGGESTS_PACKAGES='N';;
+        --no-install-suggests) SUGGESTS_PACKAGES=2;;
         
         --installsuggests|\
-        --install-suggests) SUGGESTS_PACKAGES='Y';;
+        --install-suggests) SUGGESTS_PACKAGES=1;;
         
 		# Sudo options.
         --passenv|\
@@ -1152,9 +1152,6 @@ while true; do
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
-
-		# Pacstall is trash options.
-		#--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious) DESTROYSYSTEM=1 ;;
 	esac
 	shift
 done
@@ -1167,19 +1164,19 @@ if (( ALLOW_DOWNGRADES == 1 )); then
     APTARGS+=('--allow-downgrades')
 fi
 
-if (( RECOMMENDS_PACKAGES == "Y" )); then
+if (( RECOMMENDS_PACKAGES == 1 )); then
     APTARGS+=('--install-recommends') 
 fi
 
-if (( RECOMMENDS_PACKAGES == "N" )); then
+if (( RECOMMENDS_PACKAGES == 2 )); then
     APTARGS+=('--no-install-recommends')
 fi
 
-if (( SUGGESTS_PACKAGES == "Y" )); then
+if (( SUGGESTS_PACKAGES == 1 )); then
     APTARGS+=('--install-suggests') 
 fi
 
-if (( SUGGESTS_PACKAGES == "N" )); then
+if (( SUGGESTS_PACKAGES == 2 )); then
     APTARGS+=('--no-install-suggests')
 fi
 # attempt to consume any extra argv as environment variables. this supports
@@ -1350,18 +1347,6 @@ if ! in_array pkgbase "${env_keys[@]}"; then
 	env_vars+=("pkgbase=${pkgbase}")
 	env_keys+=('pkgbase')
 fi
-
-# If pkgbase=pacstall or pacstall is in 'pkgname', abort.
-# Who would want to ever use Pacstall???
-#if ! (( "${DESTROYSYSTEM}" )); then
-#	if [[ "${pkgbase}" == "pacstall" ]] || in_array 'pacstall' "${pkgname[@]}"; then
-#		error "$(gettext "How dare you! The enemy, the forefront of our demise, the bitter trash that one calls 'Pacstall'.")"
-#		error "$(gettext "It's sad to see that you've resorted to this, best of wishes as you reach your ultimatum of doom.")"
-#		error "$(gettext "Since you apparently want to go and use Pacstall, go ahead and pass the following to confirm your actions:")"
-#		error "'--why-yes-please-i-would-very-much-like-to-use-pacstall-why-would-i-want-to-use-anything-else-i-know-my-taste-is-absolutely-hideous-but-im-fine-with-that-as-i-like-my-programs-being-absolutely-atrocious'"
-#		exit 1
-#	fi
-#fi
 
 # Exit regardless of sucess status if '--lint' was passed.
 (( "${LINTPKGBUILD}" )) && exit
@@ -1568,11 +1553,11 @@ else
 	# packages before running 'apt-mark auto'.    
 	if (( "${SYNCDEPS}" )); then
         additional=()
-        if (( RECOMMENDS_PACKAGES == "Y" )); then
+        if (( RECOMMENDS_PACKAGES == 1 )); then
             additional+=("${recommends[@]}")
         fi
         
-        if (( SUGGESTS_PACKAGES == "Y" )); then
+        if (( SUGGESTS_PACKAGES == 1 )); then
             additional+=("${suggests[@]}")
         fi
         install_missing_dependencies "${additional[@]}" "${predepends[@]}" "${depends[@]}" "${makedepends[@]}" "${checkdepends[@]}"
