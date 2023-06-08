@@ -27,12 +27,12 @@ svg|a:link, svg|a:visited {
   display: none;
 }
 .arrow {
-  font-size: 24px;
+  font-size: 32px;
 }
 @media (max-width: 770px) {
   .message {
     display: none;
-    font-size: 29px;
+    font-size: 32px;
   }
   .mobile-only {
     display: inherit;
