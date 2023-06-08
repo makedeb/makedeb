@@ -58,9 +58,9 @@ svg|a:link, svg|a:visited {
       <tspan x="25" dy="1.15em">It's a genocide. We need your help. Let's fight back against the Russian regime.</tspan>
     </text>
 
-    <!--text x="50%" y="78.5%" dominant-baseline="middle" text-anchor="middle" class="call">
-      Help Ukraine Now <tspan dominant-baseline="middle" class="arrow">➔</tspan>
-    </text-->
+    <text x="50%" y="78.5%" dominant-baseline="middle" text-anchor="middle" class="call">
+      click here for more information <tspan dominant-baseline="middle" class="arrow">➔</tspan>
+    </text>
   </a>
 
 </svg>
