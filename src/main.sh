@@ -1028,8 +1028,9 @@ fi
 ARGLIST=("$@")
 
 # Parse Command Line Options.
-OPT_SHORT='AcCdefghH:iVrRsVmop:'
+OPT_SHORT='Aa:cCdefghH:iVrRsVmop:'
 OPT_LONG=(
+"arch:" "architecture:"
 "ignorearch" "ignore-arch"
 "clean"
 "cleanbuild" "clean-build"
@@ -1083,10 +1084,13 @@ if ! parseopts "$OPT_SHORT" "${OPT_LONG[@]}" -- "${CLI_ARGS[@]}"; then
 fi
 set -- "${OPTRET[@]}"
 unset OPT_SHORT OPT_LONG OPTRET
+declare MAKEDEB_DPKG_ARCHITECTURE
 
 while true; do
 	case "$1" in
 		# makedeb options.
+        -a|--arch|\
+        --architecture)          shift; MAKEDEB_DPKG_ARCHITECTURE="${1}" ;;
         --ignorearch|\
 		-A|--ignorearch)         IGNOREARCH=1 ;;
         --danger)                DANGER=1 ;;
@@ -1181,9 +1185,9 @@ while true; do
 done
 
 
-declare MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
+MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
 declare MAKEDEB_HOST_MULTIARCH="${MAKEDEB_HOST_MULTIARCH:-$(dpkg-architecture -a ${MAKEDEB_DPKG_ARCHITECTURE} -q DEB_HOST_MULTIARCH)}"
-
+declare -n DEB_HOST_MULTIARCH=MAKEDEB_HOST_MULTIARCH
 
 if (( NOCONFIRM == 1 )); then
     APTARGS+=('--yes') 

@@ -1,5 +1,6 @@
 _makedeb() {
 shortopts=(
+    '-a'
 	'-A'
 	'-c'
 	'-C'
@@ -21,6 +22,7 @@ shortopts=(
 )
 
 longopts=(
+    "--arch"
 	"--ignorearch"
 	"--clean"
 	"--cleanbuild"
