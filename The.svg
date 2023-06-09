@@ -10,17 +10,17 @@ svg|a:link, svg|a:visited {
   cursor: pointer;
 }
 .flag-blue {
-  fill: #FFFF00;
+  fill: #0000FF;
 }
 .flag-yellow {
-  fill: #0000FF;
+  fill: #FFFF00;
 }
 .message {
   fill: #FFFFFF;
   font-size: 32px;
 }
 .call {
-  fill: #FFFFFF;
+  fill: #000000;
   font-size: 32px;
 }
 .mobile-only {
@@ -50,14 +50,14 @@ svg|a:link, svg|a:visited {
     <text x="0" y="25" class="message">
       <tspan x="25" dy="1.30em">Russia has invaded Ukraine and already killed tens of thousands of civilians,</tspan>
       <tspan x="25" dy="1.30em">with many more raped or tortured. The death toll keeps climbing. </tspan>
-      <tspan x="25" dy="1.30em">It's a <tspan fill="red" font-weight="bold">genocide</tspan>. We need your help. Let's fight back against the Russian regime.</tspan>
-      <tspan x="30%" dy="1.30em">Click here for more information➔</tspan>
+      <tspan x="25" dy="1.30em" class="call">It's a <tspan fill="red" font-weight="bold">genocide</tspan>. We need your help. Let's fight back against the Russian regime.</tspan>
+      <tspan x="30%" dy="1.30em" class="call">Click here for more information➔</tspan>
     </text>
     <text x="0" y="25" class="message mobile-only">
       <tspan x="25" dy="1.30em">Russia has invaded Ukraine and already killed tens of thousands of civilians,</tspan>
       <tspan x="25" dy="1.30em">with many more raped or tortured. The death toll keeps climbing. </tspan>
-      <tspan x="25" dy="1.30em">It's a <tspan fill="red" font-weight="bold">genocide</tspan>. We need your help. Let's fight back against the Russian regime.</tspan>
-      <tspan x="30%" dy="1.30em">Click here for more information➔</tspan>
+      <tspan x="25" dy="1.30em" class="call">It's a <tspan fill="red" font-weight="bold">genocide</tspan>. We need your help. Let's fight back against the Russian regime.</tspan>
+      <tspan x="30%" dy="1.30em" class="call">Click here for more information➔</tspan>
     </text>
   </a>
 
