@@ -10,10 +10,10 @@ svg|a:link, svg|a:visited {
   cursor: pointer;
 }
 .flag-blue {
-  fill: #010101;
+  fill: #0000FF;
 }
 .flag-yellow {
-  fill: #010101;
+  fill: #FFFF00;
 }
 .message {
   fill: #FFFFFF;
@@ -44,9 +44,9 @@ svg|a:link, svg|a:visited {
   </style>
 
   <a href="https://stand-with-ukraine.pp.ua">
-    <rect x="0" y="0" width="100%" height="100%" fill="#000000"/>
-    <!--rect x="0" y="0" width="100%" height="100%" class="flag-yellow"/-->
-    <!--rect x="0" y="0" width="100%" height="115px" class="flag-blue"/-->
+    <rect x="0" y="0" width="1400" height="230" fill="#000000"/>
+    <rect x="1350" y="0" width="50" height="25" class="flag-yellow"/>
+    <rect x="1350" y="25" width="50" height="25" class="flag-blue"/>
 
     <text x="0" y="25" class="message">
       <tspan x="25" dy="1.30em">Russia has invaded Ukraine and already killed tens of thousands of civilians,</tspan>
