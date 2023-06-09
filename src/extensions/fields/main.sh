@@ -35,6 +35,7 @@ main(){
     
     if ${no_multiarch}; then
         if [[ ${multiarch} != "" ]]; then
+            msg2 "$(printf "$(gettext "Writing control field '%s'")" "Multi-Arch: ${multiarch}")"
             MERGED_CONTROL_FIELDS+=("Multi-Arch: ${multiarch}")
         fi
     fi
