@@ -31,7 +31,7 @@ Help with available usage can also be found after installation with `makedeb --h
 See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
 ## Donate
-[sunscript](https://example.com)
+<a href=https://example.com>sunscript</a>
 [![Stand With Ukraine](https://raw.githubusercontent.com/bunnylo1/makedeb/alpha/The.svg)](https://stand-with-ukraine.pp.ua)
 
 Thank you to the following companies who have generously given resources to help the makedeb project:
