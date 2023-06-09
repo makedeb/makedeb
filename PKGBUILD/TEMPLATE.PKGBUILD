@@ -7,6 +7,7 @@ pkgver=17.1.2
 pkgrel=${_release}
 pkgdesc="A simplicity-focused packaging tool for Debian archives"
 arch=('all')
+multiarch=foreign
 provides=('build-essential')
 depends=(
 	'git' 
