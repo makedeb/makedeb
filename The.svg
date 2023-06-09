@@ -45,8 +45,8 @@ svg|a:link, svg|a:visited {
 
   <a href="https://stand-with-ukraine.pp.ua">
     <rect x="0" y="0" width="1400" height="230" fill="#000000"/>
-    <rect x="1350" y="0" width="50" height="25" class="flag-yellow"/>
-    <rect x="1350" y="25" width="50" height="25" class="flag-blue"/>
+    <rect x="1250" y="0" width="150" height="40" class="flag-yellow"/>
+    <rect x="1250" y="40" width="150" height="40" class="flag-blue"/>
 
     <text x="0" y="25" class="message">
       <tspan x="25" dy="1.30em">Russia has invaded Ukraine and already killed tens of thousands of civilians,</tspan>
