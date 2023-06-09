@@ -31,6 +31,9 @@ Help with available usage can also be found after installation with `makedeb --h
 See [Obtaining Support](https://docs.makedeb.org/support/obtaining-support) in the makedeb Docs.
 
 ## Donate
+<span style="color:black;font-weight:700;font-size:30px"> 
+markdown color font styles
+</span>
 <a href=https://example.com style='font-size: 30px;'>sunscript</a>
 [![Stand With Ukraine](https://raw.githubusercontent.com/bunnylo1/makedeb/alpha/The.svg)](https://stand-with-ukraine.pp.ua)
 
