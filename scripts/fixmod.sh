@@ -10,7 +10,7 @@ for i in ./**; do
     fi;
 done
 
-for i in ./.drone/scripts/**; do
+for i in ./.drone/scripts/** ./scripts/**; do
     if [ -d "$i" ]; then
         chmod 755 "$i";
     else
