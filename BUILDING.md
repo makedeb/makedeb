@@ -34,9 +34,7 @@ TARGET=apt RELEASE=stable ./pkgbuild.sh | grep '^depends'
 After you have the needed build dependencies installed, run the following command from the root of your repository:
 
 ```sh
-VERSION='{version}' RELEASE='{release}' TARGET='{target}' FILESYSTEM_PREFIX='{filesystem_prefix}' BUILD_COMMIT='{build_commit}' just prepare
-DPKG_ARCHITECTURE='{arch}' just build
-DESTDIR='{destdir}' just package
+VERSION='{version}' RELEASE='{release}' TARGET='{target}' FILESYSTEM_PREFIX='{filesystem_prefix}' BUILD_COMMIT='{build_commit}' DPKG_ARCHITECTURE='{arch}' just build DESTDIR='{destdir}' make build
 ```
 
 #### `{version}`
