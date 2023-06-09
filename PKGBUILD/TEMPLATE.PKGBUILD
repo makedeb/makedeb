@@ -13,7 +13,7 @@ depends=(
 	'git' 
 	'coreutils' 
 	'apt'
-	'bash>4' 
+	'bash>4.2' 
 	'curl' 
 	'fakeroot' 
 	'file' 
@@ -21,6 +21,9 @@ depends=(
 	'gawk' 
 	'libarchive-tools' 
 	'lsb-release' 
+    'libapt-pkg-perl'
+    'libdpkg-perl'
+    'libarray-diff-perl'
 	'zstd'
 )
 makedepends=('asciidoctor')
