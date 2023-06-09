@@ -32,7 +32,6 @@ declare FILESYSTEM_PREFIX="$(realpath $(dirname $0)/)"
 declare MAKEDEB_BUILD_COMMIT=default
 declare BUILDSCRIPT='PKGBUILD'
 declare startdir="$(pwd -P)"
-declare MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
 declare MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-$(lsb_release -cs)}"
 declare LIBRARY="${LIBRARY:-${FILESYSTEM_PREFIX}/functions}"
 declare MAKEPKG_CONF="${MAKEPKG_CONF:-${FILESYSTEM_PREFIX}/makepkg.conf}"
@@ -1180,6 +1179,11 @@ while true; do
 	esac
 	shift
 done
+
+
+declare MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
+declare MAKEDEB_HOST_MULTIARCH="${MAKEDEB_HOST_MULTIARCH:-$(dpkg-architecture -a ${MAKEDEB_DPKG_ARCHITECTURE} -q DEB_HOST_MULTIARCH)}"
+
 
 if (( NOCONFIRM == 1 )); then
     APTARGS+=('--yes') 
