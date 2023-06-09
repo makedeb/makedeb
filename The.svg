@@ -16,11 +16,11 @@ svg|a:link, svg|a:visited {
   fill: #FFFF00;
 }
 .message {
-  fill: #000000;
+  fill: #FFFFFF;
   font-size: 32px;
 }
 .call {
-  fill: #000000;
+  fill: #FFFFFF;
   font-size: 32px;
 }
 .mobile-only {
