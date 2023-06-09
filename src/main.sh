@@ -44,11 +44,22 @@ declare -A ARCH_ALIASES=(
 ['armhf']='armv7h'
 )
 
-declare -A DEB_ALIASES;
-for i in "${!ARCH_ALIASES[@]}"
-do
-  DEB_ALIASES["$i"]="${array[$i]}"
-done
+declare -A DEB_ALIASES=(
+['x86_64']='amd64'
+['i686']='i386'
+['aarch64']='arm64'
+['armv7h']='armhf'
+)
+
+check_deb_aliases() {
+    local norm_arch=$1
+    local deb_arch="${DEB_ALIASES[$norm_arch]}"
+    if [[ -z $deb_arch ]]; then
+        echo $norm_arch
+    else 
+        echo $deb_arch
+    fi
+}
 
 # gettext initialization
 export TEXTDOMAIN='pacman-scripts'

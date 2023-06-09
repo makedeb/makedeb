@@ -46,7 +46,8 @@ pkgbuild_schema_arch_strings=(preinst postinst prerm postrm)
 pkgbuild_schema_package_overrides=(pkgdesc arch url license groups depends
                                    optdepends provides conflicts replaces
                                    backup options install preinst postinst
-                                   prerm postrm changelog control_fields)
+                                   prerm postrm changelog control_fields
+                                   pkgarch multiarch)
 
 readonly -a known_hash_algos pkgbuild_schema_arrays \
 	pkgbuild_schema_strings pkgbuild_schema_arch_arrays \

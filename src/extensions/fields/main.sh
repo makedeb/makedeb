@@ -1,4 +1,5 @@
 post_package=true
+
 main(){
     local no_size
     local no_main
@@ -33,6 +34,14 @@ main(){
 	#	write_control_pair "${control_key}" "${control_value}"
 	done
     
+    
+    
+    local DEBARCH="${DEB_ALIASES[${pkgarch}]}"
+    if ! [[ -z $DEBARCH ]]; then 
+        msg2 "$(printf "$(gettext "Convert '%s' architecture name to '%s'")" ${pkgarch} ${DEBARCH})"
+        pkgarch=$DEBARCH
+    fi
+
     if ${no_multiarch}; then
         if [[ ${multiarch} != "" ]]; then
             msg2 "$(printf "$(gettext "Writing control field '%s'")" "Multi-Arch: ${multiarch}")"
