@@ -16,11 +16,11 @@ svg|a:link, svg|a:visited {
   fill: #FFFF00;
 }
 .message {
-  fill: #000000;
+  fill: #FFFFFF;
   font-size: 32px;
 }
 .call {
-  fill: #000000;
+  fill: #FFFFFF;
   font-size: 32px;
 }
 .mobile-only {
@@ -44,7 +44,7 @@ svg|a:link, svg|a:visited {
   </style>
 
   <a href="https://stand-with-ukraine.pp.ua">
-    <rect x="0" y="0" width="1400" height="230" fill="#FFFFFF"/>
+    <rect x="0" y="0" width="1400" height="230" fill="#000000"/>
     <rect x="1280" y="0" width="120" height="30" class="flag-yellow"/>
     <rect x="1280" y="30" width="120" height="30" class="flag-blue"/>
 
