@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-#   makepkg - make packages compatible for use with apt
+#   makepkg - make packages compatible for use with pacman
 #
 #   Copyright (c) 2006-2021 Pacman Development Team <pacman-dev@archlinux.org>
 #   Copyright (c) 2002-2006 by Judd Vinet <jvinet@zeroflux.org>
@@ -538,6 +538,7 @@ create_deb() {
 }
 
 create_package() {
+    local backup_multiarch = $multiarch
 	if [[ ! -d $pkgdir ]]; then
 		error "$(gettext "Missing %s directory.")" "\$pkgdir/"
 		plainerr "$(gettext "Aborting...")"
@@ -611,6 +612,7 @@ create_package() {
 
 	msg2 "$(gettext "Compressing package...")"
 	create_deb "${pkg_file}"
+    multiarch = $backup_multiarch
 }
 
 create_debug_package() {
