@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use Array::Diff;
+
 #libarray-diff-perl
 
 if (scalar @ARGV == 0){
@@ -7,26 +8,23 @@ if (scalar @ARGV == 0){
 }
 
 sub runquery{
-	return split('\n', `dpkg-query -Wf '\${Package}\\n'`);
+	return [split('\n', `dpkg-query -Wf '\${Package}\\n'`)];
 }
 
 # Install the missing deps.
-my @prev_installed_packages = runquery();
+my $prev_installed_packages = runquery();
 
-if (system("apt-get", "satisfy", @ARGV) != 0) {
-        #error "$(gettext "Failed to install missing dependencies.")"
-     exit 1;
-}
+system("apt-get", "satisfy", @ARGV);
 
-my @cur_installed_packages = runquery();
+my $cur_installed_packages = runquery();
 
-my @newly_installed_packages = 
+my $newly_installed_packages = 
 Array::Diff->diff(
-    \@prev_installed_packages, 
-    \@cur_installed_packages)->added;
+    $prev_installed_packages, 
+    $cur_installed_packages)->added;
 
-if (scalar @newly_installed_packages > 0){
-     if (system("apt-mark", "-qqqq", "auto", @newly_installed_packages) != 0) {
+if (scalar @$newly_installed_packages > 0){
+     if (system("apt-mark", "-qqqq", "auto", @$newly_installed_packages) != 0) {
         #error "$(gettext "Failed to install missing dependencies.")"
           print "some strange error";
           exit 1;
