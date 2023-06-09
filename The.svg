@@ -10,17 +10,17 @@ svg|a:link, svg|a:visited {
   cursor: pointer;
 }
 .flag-blue {
-  fill: #111111;
+  fill: #010101;
 }
 .flag-yellow {
-  fill: #111111;
+  fill: #010101;
 }
 .message {
-  fill: #110000;
+  fill: #FF0F0F;
   font-size: 32px;
 }
 .call {
-  fill: #110000;
+  fill: #FF0F0F;
   font-size: 32px;
 }
 .mobile-only {
