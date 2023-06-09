@@ -1,1 +1,0 @@
-../scripts/pkgbuild.sh

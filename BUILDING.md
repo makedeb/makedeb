@@ -19,7 +19,7 @@ git checkout stable
 You need a few packages in order to build makedeb. These can change quickly as new releases are made, so you can find the list of build dependencies by running the following from the `PKGBUILD/` directory in your cloned repository (note that the listed dependencies will apply to that of Debian/Ubuntu - if you're packaging for a different distribution, you may need to change them):
 
 ```sh
-TARGET=apt RELEASE=stable ./pkgbuild.sh | grep 'makedepends'
+TARGET=apt RELEASE=stable eval "$(./pkgbuild.sh)"; echo "${makedepends[@]}"
 ```
 
 In addition, [just](https://github.com/casey/just) needs to be installed in order to build.
@@ -27,7 +27,7 @@ In addition, [just](https://github.com/casey/just) needs to be installed in orde
 makedeb also has some runtime dependencies. You can find those by running the following in the same `PKGBUILD/` directory (these packages are also listed as their Debian/Ubuntu package names):
 
 ```sh
-TARGET=apt RELEASE=stable ./pkgbuild.sh | grep '^depends'
+TARGET=apt RELEASE=stable eval "$(./pkgbuild.sh)"; echo "${depends[@]}"
 ```
 
 ### Building
