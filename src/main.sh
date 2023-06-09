@@ -538,7 +538,7 @@ create_deb() {
 }
 
 create_package() {
-    local backup_multiarch = $multiarch
+    local backup_multiarch=$multiarch
 	if [[ ! -d $pkgdir ]]; then
 		error "$(gettext "Missing %s directory.")" "\$pkgdir/"
 		plainerr "$(gettext "Aborting...")"
@@ -612,7 +612,7 @@ create_package() {
 
 	msg2 "$(gettext "Compressing package...")"
 	create_deb "${pkg_file}"
-    multiarch = $backup_multiarch
+    multiarch=$backup_multiarch
 }
 
 create_debug_package() {
