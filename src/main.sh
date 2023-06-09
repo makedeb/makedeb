@@ -37,6 +37,18 @@ declare MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-$(lsb_release -cs)}"
 declare LIBRARY="${LIBRARY:-${FILESYSTEM_PREFIX}/functions}"
 declare MAKEPKG_CONF="${MAKEPKG_CONF:-${FILESYSTEM_PREFIX}/makepkg.conf}"
 declare EXTENSIONS_DIR="${FILESYSTEM_PREFIX}/extensions"
+declare -A ARCH_ALIASES=(
+['amd64']='x86_64'
+['i386']='i686'
+['arm64']='aarch64'
+['armhf']='armv7h'
+)
+
+declare -A DEB_ALIASES;
+for i in "${!ARCH_ALIASES[@]}"
+do
+  DEB_ALIASES["$i"]="${array[$i]}"
+done
 
 # gettext initialization
 export TEXTDOMAIN='pacman-scripts'

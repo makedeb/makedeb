@@ -174,6 +174,7 @@ get_full_version() {
 #  usage : get_pkg_arch( [$pkgname] )
 # return : architecture of the package
 ##
+
 get_pkg_arch() {
 	if [[ -z $1 ]]; then
 		if [[ $arch = "all" ]]; then
