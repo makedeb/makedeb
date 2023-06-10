@@ -1186,8 +1186,7 @@ done
 
 
 MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
-declare MAKEDEB_HOST_MULTIARCH="${MAKEDEB_HOST_MULTIARCH:-$(dpkg-architecture -a ${MAKEDEB_DPKG_ARCHITECTURE} -q DEB_HOST_MULTIARCH)}"
-declare -n DEB_HOST_MULTIARCH=MAKEDEB_HOST_MULTIARCH
+eval `dpkg-architecture -A "${MAKEDEB_DPKG_ARCHITECTURE}"`
 
 if (( NOCONFIRM == 1 )); then
     APTARGS+=('--yes') 
