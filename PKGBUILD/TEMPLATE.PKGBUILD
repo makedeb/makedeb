@@ -21,7 +21,7 @@ depends=(
 	'gawk' 
 	'libarchive-tools' 
 	'lsb-release' 
-    'libapt-pkg-perl'
+    'libdpkg-parse-perl'
     'libdpkg-perl'
     'libarray-diff-perl'
 	'zstd'
