@@ -5,11 +5,12 @@ install_missing_dependencies() {
 #			mapfile -t prev_installed_packages < <(dpkg-query -Wf '${Package}\n' | sort)
 			
 			# Install the missing deps.
-			msg "$(gettext "Installing missing dependencies...")"
             
             readarray -t array_dependencies < <(perl "${LIBRARY}/binary/missing_apt_dependencies.pl" "${@}")
             
             if (( ${#array_dependencies[@]} )); then
+            
+			msg "$(gettext "Installing missing dependencies...")"
 			if ! sudo "${SUDOARGS[@]}" -- perl "${LIBRARY}/binary/apt_satisfy.pl"  "${APTARGS[@]}"  "${@}" ; then
 				error "$(gettext "Failed to install missing dependencies.")"
 	#			exit "${E_INSTALL_DEPS_FAILED}"
