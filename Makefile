@@ -1,7 +1,7 @@
 build: clean
-	bash ./scripts/build.sh --noextract --nodeps --danger
+	bash ./scripts/build.sh --noextract --nodeps --danger --allow-downgrades
 install: clean
-	bash ./scripts/build.sh --noextract --nodeps --danger --reinstall --noconfirm
+	bash ./scripts/build.sh --noextract --nodeps --danger --reinstall --noconfirm --allow-downgrades
 clean:
 	rm -fR ./build
 fixmod:
