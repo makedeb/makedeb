@@ -8,7 +8,7 @@ verify_no_missing_dependencies() {
         error "The following build dependencies are missing:"
 
         for i in "${missing_deps[@]}"; do
-            msg "${i}"
+            error2 "${i}"
         done
 
         return 1

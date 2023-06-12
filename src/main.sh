@@ -1626,6 +1626,8 @@ if (( !REPKG )); then
 			rm -rf "$srcdir"/*
 		fi
 
+    
+        msg "$(gettext "Extracting sources...")"
 		extract_sources
 		if (( PREPAREFUNC )); then
 			run_prepare
