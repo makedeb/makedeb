@@ -15,6 +15,7 @@ shortopts=(
 	'-r'
 	'-R'
 	'-s'
+    '-S'
 	'-V'
 	'-m'
 	'-o'
@@ -22,11 +23,14 @@ shortopts=(
 )
 
 longopts=(
+    "--allsources"
     "--arch"
 	"--ignorearch"
 	"--clean"
 	"--cleanbuild"
 	"--danger" 
+    "--holdver"
+    "--key"
 	"--nodeps"
 	"--noextract" 
 	"--force" 
@@ -39,6 +43,7 @@ longopts=(
 	"--rmdeps" 
 	"--repackage"
 	"--syncdeps" 
+    "--source"
 	"--version"
 	"--config:"
 	"--lint"

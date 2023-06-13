@@ -948,9 +948,14 @@ usage() {
 	printf -- "$(gettext "  -r, --rmdeps          Run 'apt-get autoremove' after a succesfull build")\n"
 	printf -- "$(gettext "  -R, --repackage       Repackage contents of the package without rebuilding")\n"
 	printf -- "$(gettext "  -s, --syncdeps        Install missing dependencies")\n"
-	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
+    printf -- "$(gettext "  -S, --source          Generate a source-only tarball without downloaded sources")\n"
+    printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
+    printf -- "$(gettext "  --allsource           Generate a source-only tarball including downloaded sources")\n"
+	printf -- "$(gettext "  --check               Run the %s function in the %s")\n" "check()" "$BUILDSCRIPT"
     printf -- "$(gettext "  --config <file>       Use an alternate config file (instead of '%s')")\n" "${MAKEPKG_CONF}"
-	printf -- "$(gettext "  --lint                Link the (%s) for conformity requirements")\n" "$BUILDSCRIPT"
+    printf -- "$(gettext "  --holdver             Do not update VCS sources")\n"
+	printf -- "$(gettext "  --key <key>           Specify a key to use for %s signing instead of the default")\n" "gpg"
+    printf -- "$(gettext "  --lint                Link the (%s) for conformity requirements")\n" "$BUILDSCRIPT"
     printf -- "$(gettext "  -m --nocolor          Disable colored output")\n"
 	printf -- "$(gettext "  -o --nobuild          Skip running of the 'build()' function in the '%s'")\n" "$BUILDSCRIPT"
 	printf -- "$(gettext "  -p --file <file>      Use an alternate build script (instead of '%s')")\n" "$BUILDSCRIPT"
@@ -1001,7 +1006,7 @@ version() {
 
 mpr_check() {
 	printf "
- .--.                  Pacman v6.0.0 - libalpm v13.0.0
+ .--.                  makedeb (apt) $makepkg_version
 / _.-' .-.  .-.  .-.   Copyright (C) 2006-2021 Pacman Development Team
 \  '-. '-'  '-'  '-'   Copyright (C) 2002-2006 Judd Vinet
  '--'
@@ -1028,12 +1033,15 @@ fi
 ARGLIST=("$@")
 
 # Parse Command Line Options.
-OPT_SHORT='Aa:cCdefghH:iVrRsVmop:'
+OPT_SHORT='Aa:cCdefghH:iVrRsVmop:S'
 OPT_LONG=(
+"all-source" "allsource"
 "arch:" "architecture:"
 "ignorearch" "ignore-arch"
 "clean"
 "cleanbuild" "clean-build"
+"holdver" "holdversion"
+"key:"
 "nodeps" "no-deps"
 "noextract" "no-extras"
 "force" 
@@ -1061,6 +1069,7 @@ OPT_LONG=(
 "sign" 
 "skipchecksums" "skip-checksums"
 "skippgpcheck" "skip-pgp-check"
+"source"
 "verifysource" "verify-source"
 "asdeps" "as-deps"
 "allowdowngrades" "allow-downgrades"
@@ -1091,13 +1100,18 @@ while true; do
 		# makedeb options.
         -a|--arch|\
         --architecture)          shift; MAKEDEB_DPKG_ARCHITECTURE="${1}" ;;
+		--all-source|\
+        --allsource)             BUILDPKG=0 SOURCEONLY=2 ;;
         --ignorearch|\
 		-A|--ignorearch)         IGNOREARCH=1 ;;
         --danger)                DANGER=1 ;;
 		-c|--clean)              CLEANUP=1 ;;
 		-C|--cleanbuild)         CLEANBUILD=1 ;;
+        --config)                shift; MAKEPKG_CONF="${1}" ;;
         --nodeps|\
 		-d|--no-deps)            NODEPS=1 ;;
+        --holdversion|\
+        --holdver)               HOLDVER=1 ;;
         --noextract|\
         -e|--no-extract)         NOEXTRACT=1 ;;
         -f|--force)              FORCE=1 ;;
@@ -1110,19 +1124,21 @@ while true; do
 		-V|--version)            version; exit $E_OK ;;
         --rmdeps|\
 		-r|--rm-deps)            RMDEPS=1 ;;
+        --key)                   shift; GPGKEY=$1 ;;
         --syncdeps|\
 		-s|--sync-deps)          SYNCDEPS=1 ;;
+        -S|--source)             BUILDPKG=0 SOURCEONLY=1 ;;
 		--lint)                  LINTPKGBUILD=1 ;;
 		-p|--file)               shift; BUILDFILE="${1}" ;;
 		--mpr-check|--dur-check) mpr_check; exit $E_OK ;;
         --no-archive|\
-		--noarchive)      NOARCHIVE=1 ;;
+		--noarchive)             NOARCHIVE=1 ;;
         --no-check|\
-		--nocheck)        RUN_CHECK='n' ;;
+		--nocheck)               RUN_CHECK='n' ;;
         --no-prepare|\
-		--noprepare)      RUN_PREPARE='n' ;;
+		--noprepare)             RUN_PREPARE='n' ;;
         --repackage|\
-		-R|--re-package)   REPKG=1 ;;
+		-R|--re-package)         REPKG=1 ;;
         --nobuild|\
 		--no-build)              NOBUILD=1 ;;
         --nocheck|\
@@ -1130,14 +1146,14 @@ while true; do
         --nocolor|\
 		--no-color)              NO_COLOR=1 ;;
         --no-sign|\
-		--nosign)         SIGNPKG='n' ;;
+		--nosign)                SIGNPKG='n' ;;
         --printcontrol |\
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--git-commit |\
 		--gitcommit)             BUILDPKG=0 GITCOMMIT=1 IGNOREARCH=1 ;;
 		--print-srcinfo| \
-        --printsrcinfo)         BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
+        --printsrcinfo)          BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 #		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skippgpcheck|\
         --skip-pgp-check)        SKIPPGPCHECK=1 ;;
