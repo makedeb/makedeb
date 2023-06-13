@@ -112,6 +112,7 @@ MAKEDEB_BINARY="${0}"
 APTARGS=()
 INSTALLED=()
 ASDEPS=0
+COMMIT=0
 ALLOW_DOWNGRADES=0
 BUILDFUNC=0
 BUILDPKG=1
@@ -144,7 +145,6 @@ PKGVERFUNC=0
 PREPAREFUNC=0
 PRINTCONTROL=0
 PRINTSRCINFO=0
-GITCOMMIT=0
 REPKG=0
 REPRODUCIBLE=0
 RMDEPS=0
@@ -678,11 +678,10 @@ create_srcpackage() {
 	write_srcinfo > "$srclinks/$pkgbase"/.SRCINFO
 
 	local file all_sources
-
 	get_all_sources 'all_sources'
+    
 	for file in "${all_sources[@]}"; do
 		if [[ "$file" = "$(get_filename "$file")" ]] || (( SOURCEONLY == 2 )); then
-			echo "$file"
             local absfile
 			absfile=$(get_filepath "$file") || missing_source_file "$file"
 			msg2 "$(gettext "Adding %s...")" "${absfile##*/}"
@@ -720,19 +719,22 @@ create_srcpackage() {
 	msg2 "$(gettext "Compressing source package...")"
 	cd_safe "${srclinks}"
 
+    if (( COMMIT )); then
 	# TODO: Maybe this can be set globally for robustness
-	shopt -s -o pipefail
-	LANG=C bsdtar --no-fflags -cLf - ${pkgbase} | compress_as "$SRCEXT" > "${pkg_file}" || ret=$?
+        shopt -s -o pipefail
+        LANG=C bsdtar --no-fflags -cLf - ${pkgbase} | compress_as "$SRCEXT" > "${pkg_file}" || ret=$?
+        shopt -u -o pipefail
+    
+        if (( ret )); then
+            error "$(gettext "Failed to create source package file.")"
+            exit $E_PACKAGE_FAILED
+        fi
 
-	shopt -u -o pipefail
-
-	if (( ret )); then
-		error "$(gettext "Failed to create source package file.")"
-		exit $E_PACKAGE_FAILED
-	fi
-
-	cd_safe "${startdir}"
-	rm -rf "${srclinks}"
+        cd_safe "${startdir}"
+        rm -rf "${srclinks}"
+    else 
+        ls "${srclinks}"
+    fi
 }
 
 install_package() {
@@ -1152,7 +1154,7 @@ while true; do
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--git-commit |\
-		--gitcommit)             BUILDPKG=0 GITCOMMIT=1 IGNOREARCH=1 ;;
+		--gitcommit)             BUILDPKG=0 SOURCEONLY=1 COMMIT=1 ;;
 		--print-srcinfo| \
         --printsrcinfo)          BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 #		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
@@ -1469,15 +1471,6 @@ if { [[ -z $SIGNPKG ]] && check_buildenv "sign" "y"; } || [[ $SIGNPKG == 'y' ]];
 		fi
 		exit $E_PRETTY_BAD_PRIVACY
 	fi
-fi
-
-
-if (( GITCOMMIT )); then
-	write_srcinfo > .SRCINFO
-	git add --all || :
-	git commit -m update || :
-	git push || :
-	exit $E_OK
 fi
 
 if (( PACKAGELIST )); then
