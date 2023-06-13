@@ -112,7 +112,7 @@ MAKEDEB_BINARY="${0}"
 APTARGS=()
 INSTALLED=()
 ASDEPS=0
-COMMIT=0
+COMMIT=''
 ALLOW_DOWNGRADES=0
 BUILDFUNC=0
 BUILDPKG=1
@@ -672,10 +672,10 @@ create_srcpackage() {
 	mkdir "${srclinks}"/${pkgbase}
 
 	msg2 "$(gettext "Adding %s...")" "$BUILDSCRIPT"
-	ln -s "${BUILDFILE}" "${srclinks}/${pkgbase}/${BUILDSCRIPT}"
+	ln  "${BUILDFILE}" "${srclinks}/${pkgbase}/${BUILDSCRIPT}"
 
 	msg2 "$(gettext "Generating %s file...")" .SRCINFO
-	write_srcinfo > "$srclinks/$pkgbase"/.SRCINFO
+	write_srcinfo > "${srclinks}/${pkgbase}"/.SRCINFO
 
 	local file all_sources
 	get_all_sources 'all_sources'
@@ -685,7 +685,7 @@ create_srcpackage() {
             local absfile
 			absfile=$(get_filepath "$file") || missing_source_file "$file"
 			msg2 "$(gettext "Adding %s...")" "${absfile##*/}"
-			ln -s "$absfile" "$srclinks/$pkgbase"
+			ln  "$absfile" "$srclinks/$pkgbase"
 		fi
 	done
 
@@ -704,9 +704,9 @@ create_srcpackage() {
 		done
 
 		for file in "${files[@]}"; do
-			if [[ $file && ! -f "${srclinks}/${pkgbase}/$file" ]]; then
+			if [[ $file && ! -f "${srclinks}/${pkgbase}/$file" ]] || (( SOURCEONLY == 2)); then
 				msg2 "$(gettext "Adding %s file (%s)...")" "$i" "${file}"
-				ln -s "${startdir}/$file" "${srclinks}/${pkgbase}/"
+				ln  "${startdir}/$file" "${srclinks}/${pkgbase}/"
 			fi
 		done
 	done
@@ -715,12 +715,12 @@ create_srcpackage() {
 	local fullver=$(get_full_version)
 	local pkg_file="$SRCPKGDEST/${pkgbase}-${fullver}${SRCEXT}"
 
-	# tar it up
-	msg2 "$(gettext "Compressing source package...")"
 	cd_safe "${srclinks}"
 
-    if (( COMMIT )); then
+    if [[ "${COMMIT}" == "" ]]; then
 	# TODO: Maybe this can be set globally for robustness
+        # tar it up
+        msg2 "$(gettext "Compressing source package...")"
         shopt -s -o pipefail
         LANG=C bsdtar --no-fflags -cLf - ${pkgbase} | compress_as "$SRCEXT" > "${pkg_file}" || ret=$?
         shopt -u -o pipefail
@@ -729,12 +729,13 @@ create_srcpackage() {
             error "$(gettext "Failed to create source package file.")"
             exit $E_PACKAGE_FAILED
         fi
-
-        cd_safe "${startdir}"
-        rm -rf "${srclinks}"
     else 
-        ls "${srclinks}"
+        commit_"${COMMIT}"
     fi
+    
+    
+    cd_safe "${startdir}"
+    rm -rf "${srclinks}"
 }
 
 install_package() {
@@ -1154,10 +1155,9 @@ while true; do
 		--print-control)         BUILDPKG=0 PRINTCONTROL=1 IGNOREARCH=1 ;;
 		--print-function-dir)    echo "${LIBRARY}"; exit 0 ;;
 		--git-commit |\
-		--gitcommit)             BUILDPKG=0 SOURCEONLY=1 COMMIT=1 ;;
+		--gitcommit)             BUILDPKG=0 COMMIT='git' ;;
 		--print-srcinfo| \
         --printsrcinfo)          BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
-#		--printsrcinfo)          warning "'--printsrcinfo' will be removed in a future release. Please use '--print-srcinfo' instead.'"; BUILDPKG=0 PRINTSRCINFO=1 IGNOREARCH=1 ;;
 		--skippgpcheck|\
         --skip-pgp-check)        SKIPPGPCHECK=1 ;;
 		--)                      shift; break ;;
@@ -1206,6 +1206,12 @@ done
 
 MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
 eval `dpkg-architecture -A "${MAKEDEB_DPKG_ARCHITECTURE}"`
+
+if ! (( SOURCEONLY )); then 
+    if [[ "${COMMIT}" != '' ]]; then
+        SOURCEONLY=1;
+    fi
+fi
 
 if (( NOCONFIRM == 1 )); then
     APTARGS+=('--yes') 
