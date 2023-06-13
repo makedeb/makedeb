@@ -730,6 +730,9 @@ create_srcpackage() {
             exit $E_PACKAGE_FAILED
         fi
     else 
+        msg2 "$(gettext "Committing source package with %s...")", "${COMMIT}"
+        cd "${pkgbase}"
+        ls -A
         commit_"${COMMIT}"
     fi
     
@@ -1527,12 +1530,6 @@ fi
 
 # Run the bare minimum in fakeroot
 if (( INFAKEROOT )); then
-	if (( SOURCEONLY )); then
-		create_srcpackage
-		msg "$(gettext "Leaving %s environment.")" "fakeroot"
-		exit $E_OK
-	fi
-	
 	# Load up extensions for use by 'package()' and post-install scripts.
 	load_extensions
 
@@ -1572,7 +1569,14 @@ if (( SOURCEONLY )); then
 	check_source_integrity all
 	cd_safe "$startdir"
 
-	enter_fakeroot
+#	enter_fakeroot
+    INFAKEROOT=1
+    
+    #if (( SOURCEONLY )); then
+		create_srcpackage
+	#	msg "$(gettext "Leaving %s environment.")" "fakeroot"
+	#	exit $E_OK
+	#fi
 
 	if [[ $SIGNPKG = 'y' ]]; then
 		msg "$(gettext "Signing package...")"
