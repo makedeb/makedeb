@@ -32,8 +32,8 @@ license=('GPL3')
 backup=('/etc/makepkg.conf')
 url="https://github.com/makedeb/${pkgname}.git"
 
-source=("git+${url}" superifle)
-sha256sums=('SKIP' 'SKIP')
+source=("git+${url}")
+sha256sums=('SKIP')
 
 #pkgver(){
 #    dir="${srcdir}/${pkgname}/"

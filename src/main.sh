@@ -682,7 +682,8 @@ create_srcpackage() {
 	get_all_sources 'all_sources'
 	for file in "${all_sources[@]}"; do
 		if [[ "$file" = "$(get_filename "$file")" ]] || (( SOURCEONLY == 2 )); then
-			local absfile
+			echo "$file"
+            local absfile
 			absfile=$(get_filepath "$file") || missing_source_file "$file"
 			msg2 "$(gettext "Adding %s...")" "${absfile##*/}"
 			ln -s "$absfile" "$srclinks/$pkgbase"
