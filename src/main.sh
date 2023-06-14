@@ -845,7 +845,8 @@ run_single_packaging() {
 	
 	# Run the 'package()/package_{pkgname}()' function for this pkgname.
 	local pkgdir="$pkgdirbase/$pkgname"
-	mkdir "$pkgdir"
+	mkdir -p "$pkgdir"/DEBIAN
+    
 	if [[ -n $1 ]] || (( PKGFUNC )); then
 		run_package $1
 	fi
