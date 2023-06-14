@@ -415,18 +415,18 @@ run_package() {
 }
 
 write_control_pair() {
-    local target_var="${1}"
-    local values=()
-
-    for value in "${@:2}"; do
-        values+=("${value},")
-    done
-
-    if [[ "${#values[@]}" == 0 ]] || [[ "${#values[@]}" == 1 && "${values}" == "," ]]; then
-        return
+    local -i val_len="${#@}" 
+    if (( val_len > 1)); then
+        echo -n "${1}: ${2}" | sed -z 's/\n/\n /g' |  sed 's/^[ \t]$/ ./' 
+        local -i index=2;
+        local val;
+        while (( index < val_len )); do
+            index+=1
+            val="${!index}"
+            echo -n ", ${val}" | sed -z 's/\n/\n /g' |  sed 's/^[ \t]$/ ./'
+        done
+        echo
     fi
-
-    echo "${target_var}: ${values[@]}" | sed 's|,$||'
 }
 
 write_kv_pair() {

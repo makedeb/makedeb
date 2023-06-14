@@ -1,11 +1,12 @@
-# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+# Maintainer: bunnylo1 <bunnylo12@yahoo.com>
 _release=stable
 _target=apt
 
 pkgname=makedeb
 pkgver=17.1.3
 pkgrel=${_release}
-pkgdesc="A simplicity-focused packaging tool for Debian archives"
+pkgdesc="A simplicity-focused packaging tool for Debian archives
+Rewriten from original repository with major bug fixes"
 arch=('all')
 multiarch=foreign
 provides=('build-essential')
@@ -49,6 +50,7 @@ sha256sums=('SKIP')
 #}
 
 package() {
+    echo "${pkgdesc}"
     cd "${srcdir}/${pkgname}/"
     VERSION="${pkgver}-${pkgrel}"   \
     RELEASE="${_release}"           \
