@@ -129,7 +129,7 @@ INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
 MPR_CHECK=0
-NOCHECKPKGDESC=0
+CHECKPKGDESC=0
 MAKEDEB_MESSAGES=()
 MAKEDEB_MESSAGE_TYPES=()
 NEEDED=0
@@ -1092,7 +1092,7 @@ OPT_LONG=(
 "noinstallsuggests" "no-install-suggests"
 "installsuggests" "install-suggests"
 "msg" "msg2" "warning" "warning2" "error" "error2"
-"nocheckdesc" "no-check-desc"
+"checkdesc" "check-desc"
 )
 	  
 CLI_ARGS=("${@}")
@@ -1206,8 +1206,8 @@ while true; do
 		--in-fakeroot)           INFAKEROOT=1 ;;
         
         # decoration functions
-        --no-check-pkgdesc|\
-        --nocheckpkgdesc)        NOCHECKPKGDESC=1;;
+        --check-pkgdesc|\
+        --checkpkgdesc)          CHECKPKGDESC=1;;
 	esac
 	shift
 done
