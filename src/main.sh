@@ -514,8 +514,7 @@ write_extra_control_fields() {
 	local control_value
 
 	for control_field in "${MERGED_CONTROL_FIELDS[@]}"; do
-		echo -n "${control_field}" | sed -z 's/\n/\n /g' | sed 's/^[ \t]$/ ./'
-        echo 
+		echo -n "${control_field}"
 	done
 }
 
