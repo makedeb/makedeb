@@ -129,6 +129,7 @@ INSTALL=0
 LOGGING=0
 LINTPKGBUILD=0
 MPR_CHECK=0
+NOCHECKPKGDESC=0
 MAKEDEB_MESSAGES=()
 MAKEDEB_MESSAGE_TYPES=()
 NEEDED=0
@@ -987,6 +988,7 @@ usage() {
 	printf -- "$(gettext "  --noconfirm           Don't ask before installing packages")\n"
 	printf -- "$(gettext "  --reinstall           Automatically reinstall the built package(s) after building")\n"
     printf -- "$(gettext "  --passenv             sudo option (pass environment)")\n"
+    printf -- "$(gettext "  --nocheckdesc         check if description is defined")\n"
     
     echo
 	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
@@ -1090,6 +1092,7 @@ OPT_LONG=(
 "noinstallsuggests" "no-install-suggests"
 "installsuggests" "install-suggests"
 "msg" "msg2" "warning" "warning2" "error" "error2"
+"nocheckdesc" "no-check-desc"
 )
 	  
 CLI_ARGS=("${@}")
@@ -1201,6 +1204,10 @@ while true; do
 
 		# Internal options.
 		--in-fakeroot)           INFAKEROOT=1 ;;
+        
+        # decoration functions
+        --no-check-pkgdesc|\
+        --nocheckpkgdesc)        NOCHECKPKGDESC=1;;
 	esac
 	shift
 done

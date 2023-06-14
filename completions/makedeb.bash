@@ -73,6 +73,7 @@ longopts=(
 	"--warning2" 
 	"--error" 
 	"--error2"
+    "--nocheckdesc"
 )
 
     local cur prev words cword
