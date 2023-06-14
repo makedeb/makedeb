@@ -50,7 +50,6 @@ sha256sums=('SKIP')
 #}
 
 package() {
-    echo "${pkgdesc}"
     cd "${srcdir}/${pkgname}/"
     VERSION="${pkgver}-${pkgrel}"   \
     RELEASE="${_release}"           \
