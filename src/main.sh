@@ -732,7 +732,6 @@ create_srcpackage() {
     else 
         msg2 "$(gettext "Committing source package with %s...")", "${COMMIT}"
         cd "${pkgbase}"
-        ls -A
         commit_"${COMMIT}"
     fi
     
