@@ -1015,7 +1015,7 @@ version() {
 
 mpr_check() {
 	printf "
- .--.                  makedeb (apt) $makepkg_version
+ .--.                  Pacman v6.0.0 - libalpm v13.0.0
 / _.-' .-.  .-.  .-.   Copyright (C) 2006-2021 Pacman Development Team
 \  '-. '-'  '-'  '-'   Copyright (C) 2002-2006 Judd Vinet
  '--'
