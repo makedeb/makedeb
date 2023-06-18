@@ -57,7 +57,7 @@ main(){
     fi
     
     if ${no_main}; then
-        warning2 "$(gettext "A Maintainer must be specified." )"
+        warning2 "$(gettext "A maintainer must be specified." )"
         maintainer=(Unknown)
     fi
     
