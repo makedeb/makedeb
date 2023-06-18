@@ -11,21 +11,22 @@ arch=('all')
 multiarch=foreign
 provides=('build-essential')
 depends=(
-	'git' 
-	'coreutils' 
-	'apt'
-	'bash>4.2' 
-	'curl' 
-	'fakeroot' 
-	'file' 
-	'gettext' 
-	'gawk' 
-	'libarchive-tools' 
-	'lsb-release' 
-    'libdpkg-parse-perl'
-    'libdpkg-perl'
-    'libarray-diff-perl'
-	'zstd'
+'git' 
+'coreutils' 
+'apt'
+'bash>4.2' 
+'curl'
+'dpkg-dev'
+'fakeroot' 
+'file' 
+'gettext' 
+'gawk' 
+'libarchive-tools' 
+'lsb-release' 
+'libdpkg-parse-perl'
+'libdpkg-perl'
+'libarray-diff-perl'
+'zstd'
 )
 makedepends=('asciidoctor')
 
