@@ -36,6 +36,7 @@ declare MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-$(lsb_release -cs)}"
 declare LIBRARY="${LIBRARY:-${FILESYSTEM_PREFIX}/functions}"
 declare MAKEPKG_CONF="${MAKEPKG_CONF:-${FILESYSTEM_PREFIX}/makepkg.conf}"
 declare EXTENSIONS_DIR="${FILESYSTEM_PREFIX}/extensions"
+
 declare -A ARCH_ALIASES=(
 ['amd64']='x86_64'
 ['i386']='i686'
@@ -417,13 +418,13 @@ run_package() {
 write_control_pair() {
     local -i val_len="${#@}" 
     if (( val_len > 1)); then
-        echo -n "${1}: ${2}" | sed -z 's/\n/\n /g' |  sed 's/^[ \t]$/ ./' 
+        echo -n "${1}: ${2}"   | sed -z 's/\n/\n /g' |  sed 's/^[[:space:]]*$/ ./g'
         local -i index=2;
         local val;
         while (( index < val_len )); do
             index+=1
             val="${!index}"
-            echo -n ", ${val}" | sed -z 's/\n/\n /g' |  sed 's/^[ \t]$/ ./'
+            echo -n ", ${val}" | sed -z 's/\n/\n /g' | sed 's/^[[:space:]]*$/ ./g'
         done
         echo
     fi
@@ -585,7 +586,7 @@ create_package() {
 
 	# Generate package metadata.
 	msg2 "$(gettext "Setting up package metadata...")"
-	mkdir "${pkgdir}/DEBIAN/"
+#	mkdir "${pkgdir}/DEBIAN/" 2>/dev/null
 
 	msg2 "$(gettext "Generating %s file...")" "control"
 	write_control_info > "${pkgdir}/DEBIAN/control"
@@ -845,7 +846,7 @@ run_single_packaging() {
 	
 	# Run the 'package()/package_{pkgname}()' function for this pkgname.
 	local pkgdir="$pkgdirbase/$pkgname"
-	mkdir -p "$pkgdir"/DEBIAN
+	mkdir -p "${pkgdir}/DEBIAN"
     
 	if [[ -n $1 ]] || (( PKGFUNC )); then
 		run_package $1
