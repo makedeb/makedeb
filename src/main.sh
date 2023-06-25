@@ -562,7 +562,7 @@ create_deb() {
 }
 
 create_package() {
-    local backup_multiarch=$multiarch
+#    local backup_multiarch=$multiarch
 	if [[ ! -d $pkgdir ]]; then
 		error "$(gettext "Missing %s directory.")" "\$pkgdir/"
 		plainerr "$(gettext "Aborting...")"
@@ -586,20 +586,29 @@ create_package() {
 
 	# Generate package metadata.
 	msg2 "$(gettext "Setting up package metadata...")"
-#	mkdir "${pkgdir}/DEBIAN/" 2>/dev/null
-
-	msg2 "$(gettext "Generating %s file...")" "control"
-	write_control_info > "${pkgdir}/DEBIAN/control"
-
-	if in_array backup "${env_keys[@]}"; then
-		printf '%s\n' "${backup[@]}" > "${pkgdir}/DEBIAN/conffiles"
-	fi
+	if [[ ! -e "${pkgdir}/DEBIAN/" ]]; then
+        mkdir "${pkgdir}/DEBIAN/" -p
+    fi
+    if [[ ! -e "${pkgdir}/DEBIAN/control" ]]; then
+        msg2 "$(gettext "Generating %s file...")" "control"
+        write_control_info > "${pkgdir}/DEBIAN/control"
+    fi
+    
+    if [[ ! -e "${pkgdir}/DEBIAN/conffiles" ]]; then
+        if in_array backup "${env_keys[@]}"; then
+            printf '%s\n' "${backup[@]}" > "${pkgdir}/DEBIAN/conffiles"
+        fi
+    fi
 
 	# Maintainer scripts.
 	for file in preinst postinst prerm postrm; do
 		if [[ -z "${!file}" ]]; then
 			continue
 		fi
+        
+        if [[ -e  "${pkgdir}/DEBIAN/${file}" ]]; then
+            continue
+        fi
 
 		msg2 "$(gettext "Adding %s file to package...")" "${file}"
 
@@ -636,7 +645,7 @@ create_package() {
 
 	msg2 "$(gettext "Compressing package...")"
 	create_deb "${pkg_file}"
-    multiarch=$backup_multiarch
+#    multiarch=$backup_multiarch
 }
 
 create_debug_package() {
@@ -695,7 +704,7 @@ create_srcpackage() {
 	# the right value in extract_function_variable
 	local pkgname_backup=(${pkgname[@]})
 	local i pkgname
-	for i in 'changelog' 'install'; do
+	for i in 'changelog' preinst postinst prerm postrm; do
 		local file files
 
 		[[ ${!i} ]] && files+=("${!i}")
@@ -1218,11 +1227,13 @@ done
 MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
 eval `dpkg-architecture -A "${MAKEDEB_DPKG_ARCHITECTURE}"`
 
-if ! (( SOURCEONLY )); then 
-    if [[ "${COMMIT}" != '' ]]; then
+if [[ "${COMMIT}" != '' ]]; then
+    if ! (( SOURCEONLY )); then 
         SOURCEONLY=1;
     fi
 fi
+
+if
 
 if (( NOCONFIRM == 1 )); then
     APTARGS+=('--yes') 
