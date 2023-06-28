@@ -999,7 +999,7 @@ usage() {
 	printf -- "$(gettext "  --noconfirm           Don't ask before installing packages")\n"
 	printf -- "$(gettext "  --reinstall           Automatically reinstall the built package(s) after building")\n"
     printf -- "$(gettext "  --passenv             sudo option (pass environment)")\n"
-    printf -- "$(gettext "  --nocheckdesc         check if description is defined")\n"
+    printf -- "$(gettext "  --checkdesc           check if description is defined")\n"
     
     echo
 	printf -- "$(gettext "The following options can modify the behavior of 'sudo' when it is called:")\n"
@@ -1217,8 +1217,8 @@ while true; do
 		--in-fakeroot)           INFAKEROOT=1 ;;
         
         # decoration functions
-        --check-pkgdesc|\
-        --checkpkgdesc)          CHECKPKGDESC=1;;
+        --check-desc|\
+        --checkdesc)          CHECKPKGDESC=1;;
 	esac
 	shift
 done
@@ -1232,8 +1232,6 @@ if [[ "${COMMIT}" != '' ]]; then
         SOURCEONLY=1;
     fi
 fi
-
-if
 
 if (( NOCONFIRM == 1 )); then
     APTARGS+=('--yes') 
