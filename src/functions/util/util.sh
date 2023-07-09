@@ -22,10 +22,10 @@
 [[ -n "$LIBMAKEPKG_UTIL_UTIL_SH" ]] && return
 LIBMAKEPKG_UTIL_UTIL_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in message error; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
-source "$LIBRARY/util/error.sh"
-source "$LIBRARY/util/message.sh"
 
 ##
 #  usage : in_array( $needle, $haystack )

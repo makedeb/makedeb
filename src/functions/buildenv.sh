@@ -24,7 +24,7 @@ LIBMAKEPKG_BUILDENV_SH=1
 
 declare -a buildenv_functions build_options
 
-for lib in "$LIBRARY/buildenv/"*.sh; do
+for lib in "${LIBRARY:-/usr/share/makepkg}/buildenv/"*.sh; do
 	source "$lib"
 done
 

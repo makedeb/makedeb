@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_UTIL_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_UTIL_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 
 check_files_exist() {

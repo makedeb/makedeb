@@ -21,11 +21,9 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_ARCH_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_ARCH_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-
+for i in message pkgbuild; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 lint_pkgbuild_functions+=('lint_arch')
 

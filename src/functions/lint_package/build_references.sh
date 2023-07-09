@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_LINT_PACKAGE_BUILD_REFERENCES_SH" ]] && return
 LIBMAKEPKG_LINT_PACKAGE_BUILD_REFERENCES_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 lint_package_functions+=('warn_build_references')
 

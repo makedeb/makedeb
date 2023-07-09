@@ -23,7 +23,7 @@ LIBMAKEPKG_EXECUTABLE_SH=1
 
 declare -a executable_functions
 
-for lib in "$LIBRARY/executable/"*.sh; do
+for lib in "${LIBRARY:-'/usr/share/makepkg'}/executable/"*.sh; do
 	source "$lib"
 done
 

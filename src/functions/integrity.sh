@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_INTEGRITY_SH" ]] && return
 LIBMAKEPKG_INTEGRITY_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 for lib in "$LIBRARY/integrity/"*.sh; do
 	source "$lib"

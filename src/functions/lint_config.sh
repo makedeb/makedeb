@@ -21,11 +21,9 @@
 [[ -n "$LIBMAKEPKG_LINT_CONFIG_SH" ]] && return
 LIBMAKEPKG_LINT_CONFIG_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/util.sh"
-
+for i in message util; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 declare -a lint_config_functions
 

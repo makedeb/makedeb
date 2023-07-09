@@ -22,9 +22,8 @@
 [[ -n "$LIBMAKEPKG_BUILDENV_LTO_SH" ]] && return
 LIBMAKEPKG_BUILDENV_LTO_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
 
-source "$LIBRARY/util/option.sh"
+source "${LIBRARY:-/usr/share/makepkg}/util/option.sh"
 
 build_options+=('lto')
 buildenv_functions+=('buildenv_lto')

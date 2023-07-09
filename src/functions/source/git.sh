@@ -22,10 +22,10 @@
 LIBMAKEPKG_SOURCE_GIT_SH=1
 
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in pkgbuild message; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
 
 commit_git(){
     if ! [[ -e '.git' ]]; then

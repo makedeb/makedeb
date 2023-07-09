@@ -21,10 +21,11 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_PKGLIST_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_PKGLIST_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/util.sh"
+for i in message util; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
+#source "$LIBRARY/util/util.sh"
 
 
 lint_pkgbuild_functions+=('lint_pkglist')

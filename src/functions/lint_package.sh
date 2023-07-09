@@ -21,11 +21,9 @@
 [[ -n "$LIBMAKEPKG_LINT_PACKAGE_SH" ]] && return
 LIBMAKEPKG_LINT_PACKAGE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/util.sh"
-
+for i in message util; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 lint_package_functions=(
 	'lint_control_fields'
@@ -35,7 +33,7 @@ lint_package_functions=(
 	'lint_provides'
 )
 
-for lib in "$LIBRARY/lint_package/"*.sh; do
+for lib in "${LIBRARY:-'/usr/share/makepkg'}/lint_package/"*.sh; do
 	source "$lib"
 done
 

@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_LINT_CONFIG_VARIABLE_SH" ]] && return
 LIBMAKEPKG_LINT_CONFIG_VARIABLE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 lint_config_functions+=('lint_config_variables')
 

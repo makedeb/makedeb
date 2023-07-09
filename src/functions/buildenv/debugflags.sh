@@ -22,9 +22,7 @@
 [[ -n "$LIBMAKEPKG_BUILDENV_DEBUGFLAGS_SH" ]] && return
 LIBMAKEPKG_BUILDENV_DEBUGFLAGS_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/option.sh"
+source "${LIBRARY:-/usr/share/makepkg}/util/option.sh"
 
 buildenv_functions+=('buildenv_debugflags')
 

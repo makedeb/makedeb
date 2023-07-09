@@ -1,6 +1,4 @@
 #!/bin/bash
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-for lib in "$LIBRARY/dependencies/"*.sh; do
+for lib in "${LIBRARY:-'/usr/share/makepkg'}/dependencies/"*.sh; do
 	source "$lib"
 done

@@ -21,11 +21,10 @@
 [[ -n "$LIBMAKEPKG_SOURCE_SH" ]] && return
 LIBMAKEPKG_SOURCE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in pkgbuild message source; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-source "$LIBRARY/util/source.sh"
 
 
 for lib in "$LIBRARY/source/"*.sh; do

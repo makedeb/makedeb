@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 
 declare -a lint_pkgbuild_functions

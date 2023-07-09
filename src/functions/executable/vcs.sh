@@ -21,10 +21,10 @@
 [[ -n "$LIBMAKEPKG_EXECUTABLE_VCS_SH" ]] && return
 LIBMAKEPKG_EXECUTABLE_VCS_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in message error; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done 
 
-source "$LIBRARY/util/error.sh"
-source "$LIBRARY/util/message.sh"
 
 executable_functions+=('executable_vcs')
 

@@ -21,12 +21,10 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_PROVIDES_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_PROVIDES_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/lint_pkgbuild/fullpkgver.sh"
-source "$LIBRARY/lint_pkgbuild/pkgname.sh"
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/lint_pkgbuild/fullpkgver.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/lint_pkgbuild/pkgname.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/pkgbuild.sh"
 
 
 lint_pkgbuild_functions+=('lint_provides')
