@@ -11,7 +11,7 @@ install_missing_dependencies() {
             
             if (( ${#array_dependencies[@]} )); then
                 msg "$(gettext "Installing missing dependencies...")"
-                if ! sudo "${SUDOARGS[@]}" -- bash -c "
+                if ! sudo "${SUDOARGS[@]}" bash -c "
                 $(typeset -p 'array_dependencies')
                 $(typeset -p 'APTARGS')
                 $(typeset -p 'temp')
