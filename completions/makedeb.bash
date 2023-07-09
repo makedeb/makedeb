@@ -51,6 +51,7 @@ longopts=(
 	"--nobuild" 
 	"--file:"
 	"--nocheck" 
+    "--needed"
 	"--noarchive" 
 	"--noprepare" 
 	"--nosign" 
