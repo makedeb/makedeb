@@ -264,6 +264,8 @@ clean_up() {
 	fi
 }
 
+
+
 enter_fakeroot() {
 	msg "$(gettext "Entering %s environment...")" "fakeroot"
 	fakeroot -- bash -$- "${BASH_SOURCE[0]}" --in-fakeroot "${ARGLIST[@]}" || exit $?
