@@ -885,7 +885,7 @@ usage() {
 	printf -- "$(gettext "  -H, --field <field>   Append the packaged control file with custom control fields")\n"
 	printf -- "$(gettext "  -i, --install         Automatically install the built package(s) after building")\n"
 	printf -- "$(gettext "  -V, --version         Show version information and exit")\n"
-	printf -- "$(gettext "  -r, --rmdeps          Run 'apt-get autoremove' after a succesfull build")\n"
+	printf -- "$(gettext "  -r, --rmdeps          Remove installed dependencies after a succesfull build")\n"
 	printf -- "$(gettext "  -R, --repackage       Repackage contents of the package without rebuilding")\n"
 	printf -- "$(gettext "  -s, --syncdeps        Install missing dependencies")\n"
     printf -- "$(gettext "  -S, --source          Generate a source-only tarball without downloaded sources")\n"
@@ -1637,9 +1637,9 @@ else
     msg "$(gettext "Finished making: %s")" "$pkgbase $basever ($(date +%c))"
 fi
 # Remove installed build dependencies.
-if (( "${RMDEPS}" )); then
+if (( "${RMDEPS}" && "${#array_dependencies_installed[@]}" )); then
 	msg "$(gettext "Removing unneeded dependencies...")"
-	if ! sudo apt-get autoremove "${APTARGS[@]}"; then
+	if ! sudo apt-get remove "${APTARGS[@]}" "${array_dependencies_installed[@]}"; then
 		error "$(gettext "Failed to remove dependencies.")"
 		exit "${E_REMOVE_DEPS_FAILED}"
 	fi

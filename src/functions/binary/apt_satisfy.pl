@@ -3,10 +3,6 @@ use Array::Diff;
 
 #libarray-diff-perl
 
-if (scalar @ARGV == 0){
-	exit 0;
-}
-
 sub runquery{
 	return [split('\n', `dpkg-query -Wf '\${Package}\\n'`)];
 }
@@ -29,4 +25,9 @@ if (scalar @$newly_installed_packages > 0){
           print "some strange error";
           exit 1;
      }
+     
+    for (@$newly_installed_packages){
+        print "$_\n";
+    }
 }
+exit 0;
