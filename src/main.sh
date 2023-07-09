@@ -1142,7 +1142,7 @@ done
 
 
 MAKEDEB_DPKG_ARCHITECTURE="${MAKEDEB_DPKG_ARCHITECTURE:-$(dpkg --print-architecture)}"
-eval `dpkg-architecture -A "${MAKEDEB_DPKG_ARCHITECTURE}"`
+#eval `dpkg-architecture -A "${MAKEDEB_DPKG_ARCHITECTURE}"`
 
 if [[ "${COMMIT}" != '' ]]; then
     if ! (( SOURCEONLY )); then 
