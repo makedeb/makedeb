@@ -18,13 +18,16 @@ install_missing_dependencies() {
                 old_deps=\$(dpkg-query -Wf '\${Package}\\n')
                 
                 if ! apt-get satisfy \"\${APTARGS[@]}\"  \"\${array_dependencies[@]}\" ; then
-                    return 1
+                    exit 1
                 fi
                 
                 cur_deps=\$(dpkg-query -Wf '\${Package}\\n')
+                new_deps=\$(echo \"\$old_deps\" \"\$old_deps\" \"\$cur_deps\" | sort | uniq -u)
                 
-                echo \"\$old_deps\" \"\$old_deps\" \"\$cur_deps\" | sort | uniq -u > \"\$temp\"
+                echo \"\${new_deps[@]}\" > \"\$temp\"
                 
+                apt-mark auto -q -q -q -q \"\${new_deps[@]}\"
+                exit 0
                 "  ; then 
                 
                     error "$(gettext "Failed to install missing dependencies.")"

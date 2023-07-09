@@ -24,18 +24,19 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-declare makepkg_program_name=makedeb
-declare MAKEDEB_VERSION='version'
-declare MAKEDEB_RELEASE='release'
-declare MAKEDEB_INSTALLATION_SOURCE=apt
-declare FILESYSTEM_PREFIX="$(realpath $(dirname $0)/)"
-declare MAKEDEB_BUILD_COMMIT=default
-declare BUILDSCRIPT='PKGBUILD'
-declare startdir="$(pwd -P)"
-declare MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-$(lsb_release -cs)}"
-declare LIBRARY="${LIBRARY:-${FILESYSTEM_PREFIX}/functions}"
-declare MAKEPKG_CONF="${MAKEPKG_CONF:-${FILESYSTEM_PREFIX}/makepkg.conf}"
-declare EXTENSIONS_DIR="${FILESYSTEM_PREFIX}/extensions"
+declare -r makepkg_program_name=makedeb
+declare -r MAKEDEB_VERSION='version'
+declare -r MAKEDEB_RELEASE='release'
+declare -r MAKEDEB_INSTALLATION_SOURCE=apt
+declare -r FILESYSTEM_PREFIX="$(realpath $(dirname $0)/)"
+declare -r MAKEDEB_BUILD_COMMIT=default
+declare -r BUILDSCRIPT='PKGBUILD'
+declare -r PKG_EXTENSION='deb'
+declare -r startdir="$(pwd -P)"
+declare -r MAKEDEB_DISTRO_CODENAME="${MAKEDEB_DISTRO_CODENAME:-$(lsb_release -cs)}"
+declare -r LIBRARY="${LIBRARY:-${FILESYSTEM_PREFIX}/functions}"
+declare -r MAKEPKG_CONF="${MAKEPKG_CONF:-${FILESYSTEM_PREFIX}/makepkg.conf}"
+declare -r EXTENSIONS_DIR="${FILESYSTEM_PREFIX}/extensions"
 
 declare -A ARCH_ALIASES=(
 ['amd64']='x86_64'
@@ -263,8 +264,6 @@ clean_up() {
 		fi
 	fi
 }
-
-
 
 enter_fakeroot() {
 	msg "$(gettext "Entering %s environment...")" "fakeroot"
@@ -551,7 +550,7 @@ create_package() {
 	if [[ "${1:+x}" == "x" ]]; then
 		local pkg_file="${1}"
 	else
-		local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.deb"
+		local pkg_file="${PKGDEST}/${pkgname}_${fullver}_${pkgarch}.$PKG_EXTENSION"
 	fi
 
 	local ret=0
@@ -684,26 +683,17 @@ install_package() {
 	else
 		msg "$(gettext "Installing %s package group...")" "$pkgbase"
 	fi
-
-	local fullver pkgarch pkg pkglist
+    local -a pkglist
+	local fullver pkgarch pkg
 
 	for pkg in ${pkgname[@]}; do
 		fullver=$(NOEPOCH=1 get_full_version)
 		pkgarch=$(get_pkg_arch $pkg)
-		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
+		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.$PKG_EXTENSION")
 	done
-
 	if ! sudo apt-get install "${APTARGS[@]}" "${pkglist[@]}"; then
-		warning "$(gettext "Failed to install built package(s).")"
+        error "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
-	fi
-
-	if (( "${ASDEPS}" )); then
-		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
-
-		if ! sudo "${SUDOARGS[@]}" -- apt-mark auto "${pkgname[@]}"; then
-			warning "$(gettext "Failed to mark built package(s) as automatically installed.")"
-		fi
 	fi
 }
 
