@@ -13,14 +13,15 @@ main_file="${DESTDIR}/usr/bin/${NAME}"
 install -Dm 755 ./main.sh "${main_file}"
 
 define(){
-    sed -i 's,^\(declare '${1}'[ ]*=\).*,\1'"${2}"',g' "${main_file}"
+    sed -i 's,^\(declare.*\+'"${1}"'[^[:space:]]*=\).*,\1'"${2}"',g' "${main_file}"
 }
 
 define makepkg_program_name "${NAME}"
 define MAKEDEB_VERSION "${VERSION}"
 define MAKEDEB_RELEASE "${RELEASE}"
 define MAKEDEB_INSTALLATION_SOURCE "${TARGET}"
-define FILESYSTEM_PREFIX '"$(realpath $(dirname $0)/../../)"'
+define FILESYSTEM_PREFIX ''
+#'"$(realpath $(dirname $0)/../../)"'
 define MAKEDEB_BUILD_COMMIT "${BUILD_COMMIT}"
 define LIBRARY '"${LIBRARY:-${FILESYSTEM_PREFIX}/usr/share/'"${NAME}"'}"'
 define MAKEPKG_CONF '"${MAKEPKG_CONF:-${FILESYSTEM_PREFIX}/etc/makepkg.conf}"'
