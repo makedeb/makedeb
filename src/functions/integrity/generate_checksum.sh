@@ -21,11 +21,9 @@
 [[ -n "$LIBMAKEPKG_INTEGRITY_GENERATE_CHECKSUM_SH" ]] && return
 LIBMAKEPKG_INTEGRITY_GENERATE_CHECKSUM_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-source "$LIBRARY/util/schema.sh"
+for i in message pkgbuild schema; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 generate_one_checksum() {
 	local integ=$1 arch=$2 distro="${3}" sources numsrc indentsz idx

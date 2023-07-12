@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_SCHEMA_SH" ]] && return
 LIBMAKEPKG_SCHEMA_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/util.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/util.sh"
 
 
 known_hash_algos=({ck,md5,sha{1,224,256,384,512},b2})
@@ -46,7 +44,8 @@ pkgbuild_schema_arch_strings=(preinst postinst prerm postrm)
 pkgbuild_schema_package_overrides=(pkgdesc arch url license groups depends
                                    optdepends provides conflicts replaces
                                    backup options install preinst postinst
-                                   prerm postrm changelog control_fields)
+                                   prerm postrm changelog control_fields
+                                   pkgarch multiarch)
 
 readonly -a known_hash_algos pkgbuild_schema_arrays \
 	pkgbuild_schema_strings pkgbuild_schema_arch_arrays \

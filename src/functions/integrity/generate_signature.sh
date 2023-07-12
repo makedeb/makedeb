@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_INTEGRITY_GENERATE_SIGNATURE_SH" ]] && return
 LIBMAKEPKG_INTEGRITY_GENERATE_SIGNATURE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 create_signature() {
 	local ret=0

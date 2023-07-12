@@ -21,8 +21,6 @@
 [[ -n "$LIBMAKEPKG_LINT_CONFIG_EXT_SH" ]] && return
 LIBMAKEPKG_LINT_CONFIG_EXT_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
 source "$LIBRARY/util/message.sh"
 
 lint_config_functions+=('lint_ext')

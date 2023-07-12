@@ -21,12 +21,9 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_FULLPKGVER_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_FULLPKGVER_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/lint_pkgbuild/epoch.sh"
-source "$LIBRARY/lint_pkgbuild/pkgrel.sh"
-source "$LIBRARY/lint_pkgbuild/pkgver.sh"
-
+for i in epoch pkgrel pkgver; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/lint_pkgbuild/${i}.sh"
+done
 
 check_fullpkgver() {
 	local fullver=$1 type=$2

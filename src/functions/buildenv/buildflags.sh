@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_BUILDENV_BUILDFLAGS_SH" ]] && return
 LIBMAKEPKG_BUILDENV_BUILDFLAGS_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/option.sh"
+source "${LIBRARY:-/usr/share/makepkg}/util/option.sh"
 
 build_options+=('buildflags')
 buildenv_functions+=('buildenv_buildflags')

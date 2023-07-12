@@ -10,12 +10,12 @@ error() {
 
 # Make sure needed variables are set.
 failed_checks=0
-
+declare PKGBUILD="${PKGBUILD:-PKGBUILD/TEMPLATE.PKGBUILD}"
 declare TARGET="${TARGET:-apt}"
 declare RELEASE="${RELEASE:-stable}"
 
 # Make sure needed software is installed.
-for prgm in curl jq cat; do
+for prgm in cat; do #curl jq cat; do
 	if ! type -t "${prgm}" 1> /dev/null; then
 		error "Program '${prgm}' isn't installed."
 		failed_checks=1
@@ -27,8 +27,11 @@ if (( "${failed_checks}" )); then
 fi
 
 # Get needed variables.
-new_pkgver="$(cat .data.json | jq -r '.current_pkgver')"
-releases="$(curl 'https://api.github.com/repos/makedeb/makedeb/releases?per_page=100' | jq -r '.[].name')"
+if [[ ! ( -v new_pkgver && -v releases ) ]]; then 
+    source "${VERSIONS:-scripts/versions.sh}"; 
+fi
+#new_pkgver="$(cat .data.json | jq -r '.current_pkgver')"
+#releases="$(curl 'https://api.github.com/repos/makedeb/makedeb/releases?per_page=100' | jq -r '.[].name')"
 
 case "${RELEASE}" in
 	stable)
@@ -69,7 +72,7 @@ fi
 # 's,^\(declare '${1}'[ ]*=\).*,\1'"${2}"',g'
 # Print out the generated PKGBUILD.
 
-cat PKGBUILD/TEMPLATE.PKGBUILD | sed \
+cat $PKGBUILD | sed \
     -e 's,^\(_release[ ]*=\).*,\1'"${RELEASE}"',g'\
     -e 's,^\(_target[ ]*=\).*,\1'"${TARGET}"',g'\
     -e 's,^\(pkgname[ ]*=\).*,\1'"${pkgname}"',g'\

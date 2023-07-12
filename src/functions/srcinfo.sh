@@ -21,10 +21,10 @@
 [[ -n "$LIBMAKEPKG_SRCINFO_SH" ]] && return
 LIBMAKEPKG_SRCINFO_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in pkgbuild schema; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
-source "$LIBRARY/util/pkgbuild.sh"
-source "$LIBRARY/util/schema.sh"
 
 srcinfo_write_value() {
 	if [[ "${2-x}" == 'x' ]]; then

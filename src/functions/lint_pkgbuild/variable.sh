@@ -21,11 +21,11 @@
 [[ -n "$LIBMAKEPKG_LINT_PKGBUILD_VARIABLE_SH" ]] && return
 LIBMAKEPKG_LINT_PKGBUILD_VARIABLE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-source "$LIBRARY/util/schema.sh"
+for i in pkgbuild message schema; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
+
 
 lint_pkgbuild_functions+=('lint_variable')
 

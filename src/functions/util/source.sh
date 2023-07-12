@@ -21,9 +21,7 @@
 [[ -n "$LIBMAKEPKG_UTIL_SOURCE_SH" ]] && return
 LIBMAKEPKG_UTIL_SOURCE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 
 # a source entry can have two forms :

@@ -22,21 +22,19 @@
 [[ -n "$LIBMAKEPKG_UTIL_CONFIG_SH" ]] && return
 LIBMAKEPKG_UTIL_CONFIG_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/error.sh"
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/util.sh"
+for i in error message util; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 # correctly source makepkg.conf, respecting user precedence and the system conf
 source_makepkg_config() {
 	# $1: override system config file
 
-	local MAKEPKG_CONF=${1:-${MAKEPKG_CONF}}
+	local MAKEPKG_CONF1=${1:-${MAKEPKG_CONF}}
 
 	# Source the config file; fail if it is not found
-	if [[ -r $MAKEPKG_CONF ]]; then
-		source_safe "$MAKEPKG_CONF"
+	if [[ -r $MAKEPKG_CONF1 ]]; then
+		source_safe "$MAKEPKG_CONF1"
 	else
 		error "$(gettext "%s not found.")" "$MAKEPKG_CONF"
 		plainerr "$(gettext "Aborting...")"
@@ -46,7 +44,7 @@ source_makepkg_config() {
 	# Source user-specific makepkg.conf overrides, but only if no override config
 	# file was specified
 	XDG_PACMAN_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/pacman"
-	if [[ $MAKEPKG_CONF = "/etc/makepkg.conf" ]]; then
+	if [[ $MAKEPKG_CONF1 = "/etc/makepkg.conf" ]]; then
 		if [[ -r $XDG_PACMAN_DIR/makepkg.conf ]]; then
 			source_safe "$XDG_PACMAN_DIR/makepkg.conf"
 		elif [[ -r $HOME/.makepkg.conf ]]; then
@@ -60,7 +58,7 @@ source_makepkg_config() {
 load_makepkg_config() {
 	# $1: override system config file
 
-	local MAKEPKG_CONF=${1:-${MAKEPKG_CONF:-/etc/makepkg.conf}}
+	local MAKEPKG_CONF1=${1:-${MAKEPKG_CONF:-/etc/makepkg.conf}}
 
 	# preserve environment variables to override makepkg.conf
 	local restore_envvars=$(
@@ -70,7 +68,7 @@ load_makepkg_config() {
 		done
 	)
 
-	source_makepkg_config "$MAKEPKG_CONF"
+	source_makepkg_config "$MAKEPKG_CONF1"
 
 	eval "$restore_envvars"
 }

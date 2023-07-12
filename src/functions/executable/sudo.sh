@@ -21,16 +21,29 @@
 [[ -n "$LIBMAKEPKG_EXECUTABLE_SUDO_SH" ]] && return
 LIBMAKEPKG_EXECUTABLE_SUDO_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
 
 executable_functions+=('executable_sudo')
 
 executable_sudo() {
-    if (( DEP_BIN || RMDEPS || INSTALL )); then
-        if (( ${#PACMAN_AUTH[@]} == 0 )) && ! type -p sudo >/dev/null; then
-            warning "$(gettext "Cannot find the %s binary. Will use %s to acquire root privileges.")" "sudo" "su"
+    if (( DEP_BIN || RMDEPS || INSTALL || SYNCDEPS)); then
+        if (( ${#PACMAN_AUTH[@]} == 0 )); then
+            if ! type -p sudo >/dev/null; then
+                warning "$(gettext "Cannot find the %s binary. Will use %s to acquire root privileges.")" "sudo" "su"
+                sudo() {
+                    su root -c "$(printf '%q ' "${@}")"
+                }
+            fi
+        else 
+            if in_array '%c' "${PACMAN_AUTH[@]}"; then
+				sudo (){
+                    "${PACMAN_AUTH[@]/\%c/$(printf '%q ' "${@}")}"
+                }
+			else
+				sudo (){
+                    "${PACMAN_AUTH[@]}" "${@}"
+                }
+			fi
         fi
     fi
 }

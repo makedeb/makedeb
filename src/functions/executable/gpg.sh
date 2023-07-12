@@ -21,10 +21,10 @@
 [[ -n "$LIBMAKEPKG_EXECUTABLE_GPG_SH" ]] && return
 LIBMAKEPKG_EXECUTABLE_GPG_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in message option; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done 
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/option.sh"
 
 executable_functions+=('executable_gpg')
 

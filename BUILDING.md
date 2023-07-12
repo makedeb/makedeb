@@ -18,19 +18,23 @@ git checkout stable
 ### Prerequisites
 You need a few packages in order to build makedeb. These can change quickly as new releases are made, so you can find the list of build dependencies by running the following from the `PKGBUILD/` directory in your cloned repository (note that the listed dependencies will apply to that of Debian/Ubuntu - if you're packaging for a different distribution, you may need to change them):
 
-```. ./PKGBUILD/PKGBUILD; echo "${makedepends[@]}"
+```sh
+TARGET=apt RELEASE=stable eval "$(./pkgbuild.sh)"; echo "${makedepends[@]}" "${depends[@]}"
 ```
+
+In addition, [just](https://github.com/casey/just) needs to be installed in order to build.
 
 makedeb also has some runtime dependencies. You can find those by running the following in the same `PKGBUILD/` directory (these packages are also listed as their Debian/Ubuntu package names):
 
-
-```. ./PKGBUILD/PKGBUILD; echo "${depends[@]}"
+```sh
+TARGET=apt RELEASE=stable eval "$(./pkgbuild.sh)"; echo "${depends[@]}"
 ```
 
 ### Building
 After you have the needed build dependencies installed, run the following command from the root of your repository:
 
-```make build
+```sh
+VERSION='{version}' RELEASE='{release}' TARGET='{target}' FILESYSTEM_PREFIX='{filesystem_prefix}' BUILD_COMMIT='{build_commit}' DPKG_ARCHITECTURE='{arch}' just build DESTDIR='{destdir}' make build
 ```
 
 #### `{version}`
@@ -53,7 +57,7 @@ In most cases you don't need to set this.
 `{build_commit}` is the commit that the built package is marked as being built from. In most cases you can just set this to the output of `$(git rev-parse HEAD)`.
 
 #### `{arch}`
-The architecture (it being one from the output of `dpkg --print-architecture`) to build makedeb for.
+The architecture (it being one from the output of `dpkg --print-architecture`) to build makedeb for. Currently supported values are `amd64`, `i386`, `arm64`, and `armhf`. If you need to build makedeb for an architecture outside of those, please open an issue.
 
 #### `{destdir}`
 The directory prefix to place built files into.

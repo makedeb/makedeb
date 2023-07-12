@@ -21,11 +21,10 @@
 [[ -n "$LIBMAKEPKG_UTIL_COMPRESS_SH" ]] && return
 LIBMAKEPKG_UTIL_COMPRESS_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-
+for i in pkgbuild message; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 # Wrapper around many stream compression formats, for use in the middle of a
 # pipeline. A tar archive is passed on stdin and compressed to stdout.

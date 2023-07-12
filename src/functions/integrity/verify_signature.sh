@@ -21,10 +21,8 @@
 [[ -n "$LIBMAKEPKG_INTEGRITY_VERIFY_SIGNATURE_SH" ]] && return
 LIBMAKEPKG_INTEGRITY_VERIFY_SIGNATURE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/message.sh"
+source "${LIBRARY:-'/usr/share/makepkg'}/util/pkgbuild.sh"
 
 check_pgpsigs() {
 	(( SKIPPGPCHECK )) && return 0

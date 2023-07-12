@@ -21,8 +21,6 @@
 [[ -n "$LIBMAKEPKG_UTIL_SH" ]] && return
 LIBMAKEPKG_UTIL_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-for lib in "$LIBRARY/util/"*.sh; do
+for lib in "${LIBRARY:-'/usr/share/makepkg'}/util/"*.sh; do
 	source "$lib"
 done

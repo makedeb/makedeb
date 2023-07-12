@@ -1,69 +1,80 @@
 _makedeb() {
 shortopts=(
-'-A'
-'-c'
-'-C'
-'-d'
-'-e'
-'-f'
-'-g'
-'-h'
-'-H'
-'-i'
-'-V'
-'-r'
-'-R'
-'-s'
-'-V'
-'-m'
-'-o'
-'-p'
+    '-a'
+	'-A'
+	'-c'
+	'-C'
+	'-d'
+	'-e'
+	'-f'
+	'-g'
+	'-h'
+	'-H'
+	'-i'
+	'-V'
+	'-r'
+	'-R'
+	'-s'
+    '-S'
+	'-V'
+	'-m'
+	'-o'
+	'-p'
 )
 
 longopts=(
-"--ignorearch"
-"--clean"
-"--cleanbuild" 
-"--nodeps"
-"--noextract" 
-"--force" 
-"--geninteg" 
-"--help"
-"--field"
-"--install"
-"--version"
-"--rmdeps" 
-"--repackage"
-"--syncdeps" 
-"--version"
-"--config:"
-"--lint"
-"--nocolor" 
-"--nobuild" 
-"--file:"
-"--nocheck" 
-"--noarchive" 
-"--noprepare" 
-"--nosign" 
-"--printcontrol" 
-"--printsrcinfo" 
-"--sign" 
-"--skipchecksums" 
-"--skippgpcheck" 
-"--verifysource" 
-"--asdeps" 
-"--allowdowngrades" 
-"--noconfirm" 
-"--reinstall" 
-"--in-fakeroot"
-"--mprcheck" "durcheck"
-"--passenv"
-"--msg" 
-"--msg2" 
-"--warning" 
-"--warning2" 
-"--error" 
-"--error2"
+    "--allsources"
+    "--arch"
+	"--ignorearch"
+	"--clean"
+	"--cleanbuild"
+	"--danger" 
+    "--holdver"
+    "--key"
+	"--nodeps"
+	"--noextract" 
+	"--force" 
+	"--geninteg"
+	"--gitcommit" 
+	"--help"
+	"--field"
+	"--install"
+	"--version"
+	"--rmdeps" 
+	"--repackage"
+	"--syncdeps" 
+    "--source"
+	"--version"
+	"--config:"
+	"--lint"
+	"--nocolor" 
+	"--nobuild" 
+	"--file:"
+	"--nocheck" 
+    "--needed"
+	"--noarchive" 
+	"--noprepare" 
+	"--nosign" 
+	"--printcontrol" 
+	"--printsrcinfo" 
+	"--sign" 
+	"--skipchecksums" 
+	"--skippgpcheck" 
+	"--verifysource" 
+	"--asdeps" 
+	"--allowdowngrades" 
+	"--noconfirm" 
+	"--reinstall" 
+	"--in-fakeroot"
+	"--mprcheck" "durcheck"
+	"--passenv"
+	"--msg" 
+	"--msg2" 
+	"--warning" 
+	"--warning2" 
+	"--error" 
+	"--error2"
+    "--checkdesc"
 )
 
     local cur prev words cword

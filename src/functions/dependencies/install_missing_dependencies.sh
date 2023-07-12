@@ -5,30 +5,39 @@ install_missing_dependencies() {
 #			mapfile -t prev_installed_packages < <(dpkg-query -Wf '${Package}\n' | sort)
 			
 			# Install the missing deps.
-			msg "$(gettext "Installing missing dependencies...")"
-
-
-			if ! sudo "${SUDOARGS[@]}" -- perl "${LIBRARY}/binary/apt_satisfy.pl"  "${APTARGS[@]}"  "${@}" ; then
-				error "$(gettext "Failed to install missing dependencies.")"
-	#			exit "${E_INSTALL_DEPS_FAILED}"
-                return 1
-			fi
-
-			# Get the list of packages that were just installed.
-#			mapfile -t cur_installed_packages < <(dpkg-query -Wf '${Package}\n')
-#			mapfile -t newly_installed_packages < <(comm -13 --nocheck-order <(printf '%s\n' "${prev_installed_packages[@]}") <(dpkg-query -Wf '${Package}\n' | sort))
-
-#			unset prev_installed_packages cur_installed_packages newly_installed_packages
-#		else
-#			error "$(gettext "The following build dependencies are missing:")"
-#			for dep in "${missing_deps[@]}"; do
-#				error2 "${dep}"
-#			done
-
-#			args=("${0}" "${CLI_ARGS[@]}" '-s')
-#			error "$(gettext "Try running '%s'.")" "${args[*]}"
-#			exit "${E_INSTALL_DEPS_FAILED}"
-#		fi
+            
+            readarray -t array_dependencies < <(perl "${LIBRARY}/binary/missing_apt_dependencies.pl" "${@}")
+            temp=$(mktemp)
+            
+            if (( ${#array_dependencies[@]} )); then
+                msg "$(gettext "Installing missing dependencies...")"
+                if ! sudo "${SUDOARGS[@]}" bash -c "
+                $(typeset -p 'array_dependencies')
+                $(typeset -p 'APTARGS')
+                $(typeset -p 'temp')
+                old_deps=\$(dpkg-query -Wf '\${Package}\\n')
+                
+                if ! apt-get satisfy \"\${APTARGS[@]}\"  \"\${array_dependencies[@]}\" ; then
+                    exit 1
+                fi
+                
+                cur_deps=\$(dpkg-query -Wf '\${Package}\\n')
+                new_deps=\$(echo \"\$old_deps\" \"\$old_deps\" \"\$cur_deps\" | sort | uniq -u)
+                
+                echo \"\${new_deps[@]}\" > \"\$temp\"
+                
+                apt-mark auto -q -q -q -q \"\${new_deps[@]}\"
+                exit 0
+                "  ; then 
+                
+                    error "$(gettext "Failed to install missing dependencies.")"
+	#			    exit "${E_INSTALL_DEPS_FAILED}"
+                    return 1
+                else 
+                    readarray -t array_dependencies_installed < <(cat "$temp")
+                    rm "$temp"
+                fi
+            fi
 	fi
 }
 

@@ -21,10 +21,11 @@
 [[ -n "$LIBMAKEPKG_EXECUTABLE_GZIP_SH" ]] && return
 LIBMAKEPKG_EXECUTABLE_GZIP_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/option.sh"
+for i in message option; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done 
+
 
 executable_functions+=('executable_gzip')
 

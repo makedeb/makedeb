@@ -21,11 +21,9 @@
 [[ -n "$LIBMAKEPKG_SOURCE_SVN_SH" ]] && return
 LIBMAKEPKG_SOURCE_SVN_SH=1
 
-
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
-
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
+for i in pkgbuild message; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
 
 download_svn() {

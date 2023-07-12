@@ -21,11 +21,10 @@
 [[ -n "$LIBMAKEPKG_SOURCE_SH" ]] && return
 LIBMAKEPKG_SOURCE_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
+for i in pkgbuild message source; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-source "$LIBRARY/util/source.sh"
 
 
 for lib in "$LIBRARY/source/"*.sh; do
@@ -69,10 +68,24 @@ download_sources() {
 	done
 }
 
-extract_sources() {
-	msg "$(gettext "Extracting sources...")"
-	local netfile all_sources
+#get_all_local_sources_for_arch() {
+#    local netfile all_sources
+#    local local_sources=()
+    
+#	get_all_sources_for_arch 'all_sources'
+#	for netfile in "${all_sources[@]}"; do
+#		local proto=$(get_protocol "$netfile")
+#		if declare -f extract_$proto > /dev/null; then
+	#		extract_$proto "$netfile"
+#		else
+#			local_sources+=("$netfile")
+#		fi
+#	done
+#}
 
+extract_sources() {
+	local netfile all_sources
+    
 	get_all_sources_for_arch 'all_sources'
 	for netfile in "${all_sources[@]}"; do
 		local proto=$(get_protocol "$netfile")

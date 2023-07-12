@@ -21,11 +21,11 @@
 [[ -n "$LIBMAKEPKG_INTEGRITY_VERIFY_CHECKSUM_SH" ]] && return
 LIBMAKEPKG_INTEGRITY_CHECKSUM_SH=1
 
-LIBRARY=${LIBRARY:-'/usr/share/makepkg'}
 
-source "$LIBRARY/util/message.sh"
-source "$LIBRARY/util/pkgbuild.sh"
-source "$LIBRARY/util/schema.sh"
+for i in message pkgbuild schema; do
+    source "${LIBRARY:-'/usr/share/makepkg'}/util/${i}.sh"
+done
+
 
 check_checksums() {
 	(( SKIPCHECKSUMS )) && return 0

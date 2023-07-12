@@ -1,13 +1,33 @@
-# Maintainer: Hunter Wittenborn <hunter@hunterwittenborn.com>
+# Maintainer: bunnylo1 <bunnylo12@yahoo.com>
 _release=stable
 _target=apt
 
 pkgname=makedeb
-pkgver=17.0.2
+pkgver=17.1.3
 pkgrel=${_release}
-pkgdesc="A simplicity-focused packaging tool for Debian archives"
+pkgdesc="A simplicity-focused packaging tool for Debian archives
+Rewriten from original repository with major bug fixes"
 arch=('all')
-depends=('git' 'coreutils' 'apt' 'perl' 'libdpkg-perl' 'libapt-pkg-perl' 'bash>4' 'curl' 'fakeroot' 'file' 'gettext' 'gawk' 'libarchive-tools' 'lsb-release' 'zstd')
+multiarch=foreign
+provides=('build-essential')
+depends=(
+'git' 
+'coreutils' 
+'apt'
+'bash>4.2' 
+'curl'
+'dpkg-dev'
+'fakeroot' 
+'file' 
+'gettext' 
+'gawk' 
+'libarchive-tools' 
+'lsb-release' 
+'libdpkg-parse-perl'
+'libdpkg-perl'
+'libarray-diff-perl'
+'zstd'
+)
 makedepends=('asciidoctor')
 
 license=('GPL3')
@@ -37,7 +57,7 @@ package() {
     NAME="${pkgname}"               \
     TARGET="${_target}"             \
     DESTDIR="${pkgdir}"             \
-    . ./package.sh
+    . ./scripts/package.sh
 }
 
 # vim: set syntax=bash sw=4 expandtab:
