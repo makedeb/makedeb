@@ -676,9 +676,7 @@ create_srcpackage() {
 
 install_package() {
 	(( ! INSTALL )) && return 0
-    (( REINSTALL )) && APTARGS+=('--reinstall')
-    (( ASDEPS )) && APTARGS+=('--mark-auto')
-
+    
 	if (( ! SPLITPKG )); then
 		msg "$(gettext "Installing package %s...")" "$pkgname"
 	else
@@ -692,7 +690,7 @@ install_package() {
 		pkgarch=$(get_pkg_arch $pkg)
 		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.$PKG_EXTENSION")
 	done
-	if ! sudo apt-get install "${APTARGS[@]}" "${pkglist[@]}"; then
+	if ! install_package_files "${pkglist[@]}"; then
         error "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
@@ -1632,7 +1630,7 @@ fi
 # Remove installed build dependencies.
 if (( "${RMDEPS}" && "${#array_dependencies_installed[@]}" )); then
 	msg "$(gettext "Removing unneeded dependencies...")"
-	if ! sudo apt-get remove "${APTARGS[@]}" "${array_dependencies_installed[@]}"; then
+	if ! remove_packages "${array_dependencies_installed[@]}"; then
 		error "$(gettext "Failed to remove dependencies.")"
 		exit "${E_REMOVE_DEPS_FAILED}"
 	fi
