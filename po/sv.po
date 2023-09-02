@@ -1,0 +1,1064 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-09 14:50-0500\n"
+"PO-Revision-Date: 2023-04-11 02:02+0000\n"
+"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
+"Language-Team: Swedish <https://weblate.makedeb.org/projects/makedeb/makedeb/"
+"sv/>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.16.4\n"
+
+#: src/main.sh:882
+msgid "  --allow-downgrades    Allow packages to be downgraded"
+msgstr "  --allow-downgrades Tillåt att paket nedgraderas"
+
+#: src/main.sh:881
+msgid "  --as-deps             Mark built packages as automatically installed"
+msgstr "  --as-deps Markera byggda paket som automatiskt installerade"
+
+#: src/main.sh:893
+msgid "  --error               Print an error message to stderr"
+msgstr "  --error Skriv ut ett felmeddelande till stderr"
+
+#: src/main.sh:894
+msgid "  --error2              Print an error2 message to stderr"
+msgstr "  --error2 Skriv ut ett fel2-meddelande till stderr"
+
+#: src/main.sh:872
+msgid "  --lint                Link the PKGBUILD for conformity requirements"
+msgstr "  --lint Länka PKGBUILD för överensstämmelsekrav"
+
+#: src/main.sh:889
+msgid "  --msg                 Print a msg message to stdout"
+msgstr "  --msg Skriv ut ett meddelande till stdout"
+
+#: src/main.sh:890
+msgid "  --msg2                Print a msg2 message to stdout"
+msgstr "  --msg2 Skriv ut ett msg2-meddelande till stdout"
+
+#: src/main.sh:873
+msgid ""
+"  --no-build            Skip running of the 'build()' function in the "
+"PKGBUILD"
+msgstr "  --no-build Hoppa över körningen av 'build()'-funktionen i PKGBUILD"
+
+#: src/main.sh:874
+msgid ""
+"  --no-check            Skip running of the 'check()' function in the "
+"PKGBUILD"
+msgstr "  --no-check Hoppa över körningen av 'check()'-funktionen i PKGBUILD"
+
+#: src/main.sh:875
+msgid "  --no-color            Disable colored output"
+msgstr "  --no-color Inaktivera färgad utdata"
+
+#: src/main.sh:883
+msgid "  --no-confirm          Don't ask before installing packages"
+msgstr "  --no-confirm Fråga inte innan du installerar paket"
+
+#: src/main.sh:886
+msgid "  --pass-env            Pass the current user's environment variables"
+msgstr "  --pass-env Skicka med den aktuella användarens miljövariabler"
+
+#: src/main.sh:876
+msgid "  --print-control       Print a generated control file and exit"
+msgstr "  --print-control Skriv ut en genererad kontrollfil och avsluta"
+
+#: src/main.sh:877
+msgid "  --print-srcinfo       Print a generated .SRCINFO file and exit"
+msgstr "  --print-srcinfo Skriv ut en genererad .SRCINFO-fil och avsluta"
+
+#: src/main.sh:878
+msgid ""
+"  --skip-pgp-check      Do not verify source files against PGP signatures"
+msgstr "  --skip-pgp-check Verifiera inte källfiler mot PGP-signaturer"
+
+#: src/main.sh:891
+msgid "  --warning             Print a warning message to stderr"
+msgstr "  --warning Skriv ut ett varningsmeddelande till stderr"
+
+#: src/main.sh:892
+msgid "  --warning2            Print a warning2 message to stderr"
+msgstr "  --warning2 Skriv ut ett varning2 meddelande till stderr"
+
+#: src/main.sh:862
+msgid "  -A, --ignore-arch     Ignore errors about mismatching architectures"
+msgstr "  -A, --ignore-arch Ignorera fel om felaktiga arkitekturer"
+
+#: src/main.sh:864
+msgid ""
+"  -F, --file, -p        Specify a location to the build file (defaults to "
+"'PKGBUILD')"
+msgstr "  -F, --file, -p Ange en plats för byggfilen (standard är 'PKGBUILD')"
+
+#: src/main.sh:867
+msgid ""
+"  -H, --field           Append the packaged control file with custom control "
+"fields"
+msgstr ""
+"  -H, --field Lägg till den paketerade kontrollfilen med anpassade "
+"kontrollfält"
+
+#: src/main.sh:869
+msgid "  -V, --version         Show version information and exit"
+msgstr "  -V, --version Visa versionsinformation och avsluta"
+
+#: src/main.sh:863
+msgid "  -d, --no-deps         Skip all dependency checks"
+msgstr "  -d, --no-deps Hoppa över alla beroendekontroller"
+
+#: src/main.sh:865
+msgid "  -g, --gen-integ       Generate hashes for source files"
+msgstr "  -g, --gen-integ Generera hash för källfiler"
+
+#: src/main.sh:866
+msgid "  -h, --help            Show this help menu and exit"
+msgstr "  -h, --help Visa denna hjälpmeny och avsluta"
+
+#: src/main.sh:868
+msgid ""
+"  -i, --install         Automatically install the built package(s) after "
+"building"
+msgstr ""
+"  -i, --install Installera automatiskt det/de byggda paketet/paketen efter "
+"byggandet"
+
+#: src/main.sh:870
+msgid ""
+"  -r, --rm-deps         Run 'apt-get autoremove' after a succesfull build"
+msgstr "  -r, --rm-deps Kör 'apt-get autoremove' efter ett lyckat bygge"
+
+#: src/main.sh:871
+msgid "  -s, --sync-deps       Install missing dependencies"
+msgstr "  -s, --sync-deps Installera saknade beroenden"
+
+#: src/functions/lint_pkgbuild/arch_specific.sh:53
+#: src/functions/lint_pkgbuild/arch_specific.sh:74
+msgid "%s can not be architecture specific: %s"
+msgstr "%s kan inte vara arkitekturspecifik: %s"
+
+#: src/functions/lint_pkgbuild/package_function_variable.sh:46
+#: src/functions/lint_pkgbuild/package_function_variable.sh:55
+msgid "%s can not be set inside a package function"
+msgstr "%s kan inte ställas in inuti i en paketfunktion"
+
+#: src/main.sh:1128
+msgid "%s contains %s characters and cannot be sourced."
+msgstr "%s innehåller %s tecken och kan inte skaffas."
+
+#: src/functions/lint_pkgbuild/pkgname.sh:60
+msgid "%s contains an invalid prefix: '%s'"
+msgstr "%s innehåller ett ogiltigt prefix: '%s'"
+
+#: src/functions/lint_pkgbuild/pkgver.sh:45
+msgid "%s contains invalid characters."
+msgstr "%s innehåller ogiltiga tecken."
+
+#: src/functions/lint_config/source_date_epoch.sh:33
+msgid "%s contains invalid characters: %s"
+msgstr "%s innehåller ogiltiga tecken: %s"
+
+#: src/functions/lint_pkgbuild/arch.sh:47
+#: src/functions/lint_pkgbuild/pkgname.sh:73
+#: src/functions/lint_config/paths.sh:39
+msgid "%s contains invalid characters: '%s'"
+msgstr "%s innehåller ogiltiga tecken: '%s'"
+
+#: src/functions/lint_config/ext.sh:38
+msgid "%s does not contain a valid package suffix (needs '%s', got '%s')"
+msgstr "%s innehåller inte ett giltigt paketsuffix (behöver '%s', har '%s')"
+
+#: src/main.sh:1123
+msgid "%s does not exist."
+msgstr "%s existerar inte."
+
+#: src/functions/lint_pkgbuild/pkgver.sh:50
+msgid "%s doesn't start with a digit."
+msgstr "%s börjar inte med en siffra."
+
+#: src/functions/lint_package/missing_backup.sh:35
+msgid "%s entry file not in package : %s"
+msgstr "%s-ingångsfilen finns inte i paketet: %s"
+
+#: src/functions/lint_pkgbuild/backup.sh:45
+msgid "%s entry should start with a foward slash : %s"
+msgstr "%s-ingång bör börja med ett snedstreck : %s"
+
+#: src/functions/lint_pkgbuild/util.sh:34
+msgid "%s file (%s) does not exist or is not a regular file."
+msgstr "%s fil (%s) finns inte eller är inte en vanlig fil."
+
+#: src/functions/source/git.sh:85
+msgid "%s is not a clone of %s"
+msgstr "%s är inte en klon av %s"
+
+#: src/functions/lint_pkgbuild/pkgver.sh:38
+#: src/functions/lint_pkgbuild/pkgname.sh:38
+#: src/functions/lint_pkgbuild/pkgname.sh:85
+#: src/functions/lint_pkgbuild/pkgrel.sh:35
+msgid "%s is not allowed to be empty."
+msgstr "%s får inte vara tomt."
+
+#: src/functions/lint_pkgbuild/pkgname.sh:48
+msgid "%s is not allowed to start with a dot."
+msgstr "%s får inte börja med en punkt."
+
+#: src/functions/lint_pkgbuild/pkgname.sh:43
+msgid "%s is not allowed to start with a hyphen."
+msgstr "%s får inte börja med ett bindestreck."
+
+#: src/functions/lint_pkgbuild/arch.sh:59
+#: src/functions/lint_pkgbuild/arch.sh:68
+msgid "%s is not available for the '%s' architecture."
+msgstr "%s är inte tillgängligt för '%s'-arkitekturen."
+
+#: src/main.sh:254
+msgid "%s is not writeable -- pkgver will not be updated"
+msgstr "%s är inte skrivbart -- pkgver kommer inte att uppdateras"
+
+#: src/functions/lint_pkgbuild/pkgname.sh:53
+msgid "%s may only contain ascii characters."
+msgstr "%s får bara innehålla ascii-tecken."
+
+#: src/functions/lint_pkgbuild/epoch.sh:36
+msgid "%s must be an integer, not %s."
+msgstr "%s måste vara ett heltal, inte %s."
+
+#: src/main.sh:1133
+msgid "%s must be in the current working directory."
+msgstr "%s måste finnas i den aktuella arbetskatalogen."
+
+#: src/functions/util/config.sh:41
+msgid "%s not found."
+msgstr "%s hittades inte."
+
+#: src/functions/lint_pkgbuild/variable.sh:40
+#: src/functions/lint_pkgbuild/variable.sh:52
+#: src/functions/lint_pkgbuild/variable.sh:72
+#: src/functions/lint_pkgbuild/variable.sh:82
+#: src/functions/lint_config/variable.sh:47
+msgid "%s should be an array"
+msgstr "%s ska vara en array"
+
+#: src/functions/lint_pkgbuild/variable.sh:62
+#: src/functions/lint_pkgbuild/variable.sh:90
+#: src/functions/lint_config/variable.sh:57
+msgid "%s should not be an array"
+msgstr "%s ska inte vara en array"
+
+#: src/main.sh:1016
+msgid "%s signal caught. Exiting..."
+msgstr "%s signal fångades. Avslutar..."
+
+#: src/functions/source/local.sh:39
+msgid "%s was not found in the build directory and is not a URL."
+msgstr "%s hittades inte i byggkatalogen och är inte en URL."
+
+#: src/functions/lint_pkgbuild/options.sh:34
+msgid ""
+"'%s' has been deprecated, and will no longer function. Please use the '%s' "
+"variable (PKGBUILD(5)) instead."
+msgstr ""
+"'%s' har fasats ut och kommer inte längre att fungera. Använd variabeln '%s' "
+"(PKGBUILD(5)) istället."
+
+#: src/functions/util/compress.sh:38
+msgid "'%s' is not a valid archive extension."
+msgstr "'%s' är inte ett giltigt arkivtillägg."
+
+#: src/functions/lint_pkgbuild/extensions.sh:20
+msgid "'%s' under '%s' contains invalid characters: '%s'."
+msgstr "'%s' under '%s' innehåller ogiltiga tecken: '%s'."
+
+#: src/main.sh:270
+msgid "A failure occurred in %s()."
+msgstr "Ett fel inträffade i %s()."
+
+#: src/functions/lint_pkgbuild/maintainer.sh:7
+msgid ""
+"A maintainer must be specified. This will be an error in a future release."
+msgstr ""
+"En underhållare måste anges. Detta kommer att vara ett fel i en framtida "
+"version."
+
+#: src/main.sh:705
+msgid "A package has already been built, installing existing package..."
+msgstr "Ett paket har redan byggts, installerar befintligt paket..."
+
+#: src/main.sh:709
+msgid "A package has already been built. (use %s to overwrite)"
+msgstr "Ett paket har redan byggts. (använd %s för att skriva över)"
+
+#: src/main.sh:1326
+msgid "A source package has already been built. (use %s to overwrite)"
+msgstr "Ett källkodspaket har redan byggts. (använd %s för att skriva över)"
+
+#: src/main.sh:263 src/main.sh:271 src/main.sh:477 src/main.sh:1054
+#: src/main.sh:1059 src/main.sh:1064 src/main.sh:1070 src/main.sh:1080
+#: src/functions/executable/vcs.sh:46 src/functions/source/git.sh:61
+#: src/functions/source/git.sh:71 src/functions/source/git.sh:77
+#: src/functions/source/git.sh:86 src/functions/source/git.sh:115
+#: src/functions/source/git.sh:121 src/functions/source/svn.sh:63
+#: src/functions/source/svn.sh:73 src/functions/source/file.sh:75
+#: src/functions/source/file.sh:145 src/functions/util/source.sh:156
+#: src/functions/util/source.sh:165 src/functions/util/util.sh:115
+#: src/functions/util/config.sh:42
+msgid "Aborting..."
+msgstr "Avbryter..."
+
+#: src/main.sh:637
+msgid "Adding %s file (%s)..."
+msgstr "Lägger till %s fil (%s)..."
+
+#: src/main.sh:515
+msgid "Adding %s file to package..."
+msgstr "Lägger till %s fil till paket..."
+
+#: src/main.sh:603 src/main.sh:616
+msgid "Adding %s..."
+msgstr "Lägger till %s..."
+
+#: src/functions/lint_pkgbuild/arch.sh:78
+msgid "Architecture '%s' cannot contain PKGBUILD variable reference '%s'."
+msgstr "Arkitekturen '%s' kan inte innehålla PKGBUILD-variabelreferens '%s'."
+
+#: src/main.sh:539
+msgid "Built package %s exists. Removing..."
+msgstr "Byggt paket %s existerar. Tar bort..."
+
+#: src/functions/lint_pkgbuild/arch_specific.sh:43
+#: src/functions/lint_pkgbuild/arch_specific.sh:65
+msgid ""
+"Can not provide architecture specific variables for the '%s' architecture: %s"
+msgstr ""
+"Kan inte tillhandahålla arkitekturspecifika variabler för '%s'-arkitekturen: "
+"%s"
+
+#: src/functions/lint_pkgbuild/arch.sh:40
+msgid "Can not use '%s' architecture with other architectures"
+msgstr "Kan inte använda '%s' arkitektur med andra arkitekturer"
+
+#: src/functions/executable/ccache.sh:34
+msgid "Cannot find the %s binary required for compiler cache usage."
+msgstr ""
+"Kan inte hitta den binära filen %s som krävs för användning av kompilatorns "
+"cache."
+
+#: src/functions/executable/gzip.sh:34
+msgid "Cannot find the %s binary required for compressing man and info pages."
+msgstr "Kan inte hitta %s binär som krävs för att komprimera man och infosidor."
+
+#: src/functions/executable/distcc.sh:34
+msgid "Cannot find the %s binary required for distributed compilation."
+msgstr ""
+"Kan inte hitta den binära filen %s som krävs för distribuerad kompilering."
+
+#: src/functions/executable/strip.sh:34
+msgid "Cannot find the %s binary required for object file stripping."
+msgstr ""
+"Kan inte hitta den binära filen %s som krävs för borttagning av objektfil."
+
+#: src/functions/executable/gpg.sh:36
+msgid "Cannot find the %s binary required for signing packages."
+msgstr "Kan inte hitta %s binär som krävs för att signera paket."
+
+#: src/functions/executable/checksum.sh:38
+msgid ""
+"Cannot find the %s binary required for source file checksums operations."
+msgstr ""
+"Kan inte hitta den binära filen %s som krävs för källfilens kontrollsummor."
+
+#: src/functions/executable/gpg.sh:43
+msgid "Cannot find the %s binary required for verifying source files."
+msgstr ""
+"Kan inte hitta den binära filen %s som krävs för att verifiera källfiler."
+
+#: src/functions/executable/fakeroot.sh:33
+msgid "Cannot find the %s binary."
+msgstr "Kan inte hitta %s binär."
+
+#: src/functions/executable/sudo.sh:33
+msgid "Cannot find the %s binary. Will use %s to acquire root privileges."
+msgstr ""
+"Kan inte hitta %s binär. Kommer att använda %s för att skaffa root "
+"privilegier."
+
+#: src/main.sh:1360
+msgid "Checking for missing dependencies..."
+msgstr "Söker efter saknade beroenden..."
+
+#: src/functions/lint_package.sh:47
+msgid "Checking for packaging issues..."
+msgstr "Söker efter Paketeringsproblem..."
+
+#. If it's a clean exit and -c/--clean has been passed...
+#: src/main.sh:185
+msgid "Cleaning up..."
+msgstr "Rensar upp..."
+
+#: src/functions/source/git.sh:67 src/functions/source/svn.sh:69
+msgid "Cloning %s %s repo..."
+msgstr "Klonar %s %s arkiv..."
+
+#: src/main.sh:861
+msgid "Common options:"
+msgstr "Vanliga alternativ:"
+
+#: src/main.sh:548
+msgid "Compressing package..."
+msgstr "Komprimerar paket..."
+
+#. tar it up
+#: src/main.sh:648
+msgid "Compressing source package..."
+msgstr "Komprimerar källpaket..."
+
+#: src/functions/lint_pkgbuild/package_function.sh:38
+msgid "Conflicting %s and %s functions in %s"
+msgstr "Motstridiga %s och %s funktioner i %s"
+
+#: src/functions/lint_pkgbuild/control_fields.sh:30
+msgid "Control field '%s' was found more than once."
+msgstr "Kontrollfältet '%s' hittades mer än en gång."
+
+#: src/functions/lint_pkgbuild/source.sh:105
+msgid "Couldn't find enough hashsums for '%s' under '%s'."
+msgstr ""
+"Det gick inte att hitta tillräckligt många hashsummor för '%s' under '%s'."
+
+#: src/functions/integrity/generate_signature.sh:41
+msgid "Created signature file %s."
+msgstr "Skapade signaturfil %s."
+
+#: src/main.sh:482
+msgid "Creating package \"%s\"..."
+msgstr "Skapar paket \"%s\"..."
+
+#: src/main.sh:599
+msgid "Creating source package..."
+msgstr "Skapar källkodspaket..."
+
+#: src/functions/source/git.sh:106 src/functions/source/svn.sh:95
+msgid "Creating working copy of %s %s repo..."
+msgstr "Skapar arbetskopia av %s %s arkiv..."
+
+#: src/functions/lint_pkgbuild/depends.sh:75
+msgid "Dependency '%s' under '%s' contains an invalid prefix: '%s'"
+msgstr "Beroende '%s' under '%s' innehåller ett ogiltigt prefix: '%s'"
+
+#: src/functions/lint_pkgbuild/depends.sh:69
+msgid "Dependency '%s' under '%s' contains more than one '!'."
+msgstr "Beroende '%s' under '%s' innehåller mer än ett '!'."
+
+#: src/functions/lint_pkgbuild/arch.sh:56
+msgid "Detected invalid architecture '%s'. Please use '%s' instead."
+msgstr "Upptäckte ogiltig arkitektur '%s'. Använd '%s' istället."
+
+#: src/main.sh:1091
+msgid "Do not use the %s option. This option is only for internal use by %s."
+msgstr ""
+"Använd inte alternativet %s. Det här alternativet är endast för internt bruk "
+"av %s."
+
+#: src/functions/lint_package/dotfiles.sh:34
+msgid "Dotfile found in package root '%s'"
+msgstr "Dotfil hittades i paketroten '%s'"
+
+#: src/functions/source/file.sh:55
+msgid "Downloading %s..."
+msgstr "Laddar ner %s..."
+
+#: src/main.sh:223
+msgid "Entering %s environment..."
+msgstr "Går in i %s miljön..."
+
+#: src/functions/util/extensions.sh:35
+msgid "Extension '%s' didn't declare an entrypoint."
+msgstr "Tillägget '%s' deklarerade inte en ingångspunkt."
+
+#: src/functions/util/extensions.sh:22
+msgid "Extension '%s' is missing an 'init.sh'."
+msgstr "Tillägget '%s' saknar en 'init.sh'."
+
+#: src/functions/util/extensions.sh:19
+msgid "Extension '%s' isn't a directory."
+msgstr "Tillägget '%s' är inte en katalog."
+
+#: src/functions/util/extensions.sh:16
+msgid "Extension '%s' was unable to be found."
+msgstr "Det gick inte att hitta tillägget '%s'."
+
+#: src/functions/lint_pkgbuild/package_function.sh:46
+msgid "Extra %s function for split package '%s'"
+msgstr "Extra %s-funktion för delat paket '%s'"
+
+#: src/functions/source/file.sh:136
+msgid "Extracting %s with %s"
+msgstr "Packar upp %s med %s"
+
+#: src/functions/source.sh:73
+msgid "Extracting sources..."
+msgstr "Extraherar källor..."
+
+#: src/functions/integrity/verify_checksum.sh:77
+#: src/functions/integrity/verify_signature.sh:66
+#: src/functions/integrity/verify_signature.sh:84
+#: src/functions/integrity/verify_signature.sh:87
+msgid "FAILED"
+msgstr "MISSLYCKADES"
+
+#: src/main.sh:518
+msgid "Failed to add %s file to package."
+msgstr "Misslyckades att lägga till %s-fil till paketet."
+
+#: src/functions/util/util.sh:114
+msgid "Failed to change to directory %s"
+msgstr "Misslyckades att ändra till katalog %s"
+
+#: src/main.sh:1371
+msgid "Failed to check missing dependencies."
+msgstr "Misslyckades att kontrollera saknade beroenden."
+
+#: src/main.sh:658
+msgid "Failed to create source package file."
+msgstr "Misslyckades att skapa källpaketfilen."
+
+#: src/functions/util/util.sh:127
+msgid "Failed to create the directory $%s (%s)."
+msgstr "Misslyckades att skapa katalog $%s (%s)."
+
+#: src/functions/source/file.sh:144
+msgid "Failed to extract %s"
+msgstr "Misslyckades att extrahera %s"
+
+#: src/main.sh:684
+msgid "Failed to install built package(s)."
+msgstr "Misslyckades att installera paket som har byggts."
+
+#: src/main.sh:1384
+msgid "Failed to install missing dependencies."
+msgstr "Misslyckades att installera saknade beroenden."
+
+#: src/functions/util/extensions.sh:27
+msgid "Failed to load extension '%s'."
+msgstr "Misslyckades att ladda tillägg '%s'."
+
+#: src/main.sh:692
+msgid "Failed to mark built package(s) as automatically installed."
+msgstr "Misslyckades att markera byggda paket som automatiskt installerade."
+
+#: src/main.sh:1397
+msgid "Failed to mark installed dependencies as automatically installed."
+msgstr ""
+"Misslyckades att markera installerade beroenden som automatiskt installerade."
+
+#: src/main.sh:1493
+msgid "Failed to remove dependencies."
+msgstr "Misslyckades att ta bort beroenden."
+
+#: src/functions/integrity/generate_signature.sh:43
+msgid "Failed to sign package file %s."
+msgstr "Misslyckades att signera paketfil %s."
+
+#: src/functions/util/util.sh:143
+msgid "Failed to source %s"
+msgstr "Det gick inte att källa %s"
+
+#: src/main.sh:246
+msgid "Failed to update %s from %s to %s"
+msgstr "Misslyckades att uppdatera %s från %s till %s"
+
+#: src/functions/source/git.sh:120
+msgid "Failure while creating working copy of %s %s repo"
+msgstr "Fel vid skapandet av arbetskopia av %s %s arkiv"
+
+#: src/functions/source/file.sh:74
+msgid "Failure while downloading %s"
+msgstr "Misslyckades vid nedladdning av %s"
+
+#: src/functions/source/git.sh:70 src/functions/source/git.sh:76
+#: src/functions/source/svn.sh:72
+msgid "Failure while downloading %s %s repo"
+msgstr "Fel vid nerladdning av %s %s arkiv"
+
+#. only warn on failure to allow offline builds
+#: src/functions/source/git.sh:92 src/functions/source/svn.sh:81
+msgid "Failure while updating %s %s repo"
+msgstr "Misslyckades vid uppdatering av %s %s arkiv"
+
+#: src/functions/source/git.sh:114
+msgid "Failure while updating working copy of %s %s repo"
+msgstr "Misslyckades vid uppdatering av arbetskopia av %s %s arkiv"
+
+#: src/main.sh:1487
+msgid "Finished making: %s"
+msgstr "Byggt färdigt: %s"
+
+#: src/functions/source/file.sh:36 src/functions/source/local.sh:36
+msgid "Found %s"
+msgstr "Hittade %s"
+
+#: src/functions/lint_pkgbuild/source.sh:108
+msgid "Found too many hashsums for '%s' under '%s'."
+msgstr "Hittade för många hashsummor för '%s' under '%s'."
+
+#: src/functions/lint_pkgbuild/source.sh:131
+#: src/functions/lint_pkgbuild/source.sh:133
+#: src/functions/lint_pkgbuild/source.sh:135
+#: src/functions/lint_pkgbuild/source.sh:137
+msgid "Found unused hash variable '%s'. Maybe add '%s'?"
+msgstr "Hittade oanvänd hashvariabel '%s'. Kanske lägg till '%s'?"
+
+#: src/main.sh:502 src/main.sh:606
+msgid "Generating %s file..."
+msgstr "Generar %s fil..."
+
+#: src/functions/integrity/generate_checksum.sh:90
+msgid "Generating checksums for source files..."
+msgstr "Genererar kontrollsummor för källfiler..."
+
+#: src/main.sh:1167
+msgid ""
+"How dare you! The enemy, the forefront of our demise, the bitter trash that "
+"one calls 'Pacstall'."
+msgstr ""
+"Hur vågar du! Fienden, spetsen för vår bortgång, det bittra skräpet som man "
+"kallar \"Pacstall\"."
+
+#: src/main.sh:672
+msgid "Installing %s package group..."
+msgstr "Installerar %s paketgrupp..."
+
+#. Install the missing deps.
+#: src/main.sh:1381
+msgid "Installing missing dependencies..."
+msgstr "Installerar saknade beroenden..."
+
+#: src/main.sh:670
+msgid "Installing package %s..."
+msgstr "Installerar paket %s..."
+
+#: src/functions/lint_pkgbuild/pkgrel.sh:40
+msgid "Invalid characters in %s."
+msgstr "Ogiltiga tecken i %s."
+
+#: src/functions/integrity/generate_checksum.sh:105
+msgid "Invalid integrity algorithm '%s' specified."
+msgstr "Ogiltig integritetsalgoritm '%s' har angetts."
+
+#: src/main.sh:366
+msgid "Invalid value for %s: %s"
+msgstr "Ogiltigt värde för %s: %s"
+
+#: src/main.sh:1168
+msgid ""
+"It's sad to see that you've resorted to this, best of wishes as you reach "
+"your ultimatum of doom."
+msgstr ""
+"Det är tråkigt att se att du har tillgripit detta, med vänliga hälsningar "
+"när du når ditt undergångsultimatum."
+
+#: src/main.sh:1299 src/main.sh:1316
+msgid "Leaving %s environment."
+msgstr "Lämnar %s miljön."
+
+#. Load up extensions.
+#: src/main.sh:1304
+msgid "Loading extensions..."
+msgstr "Laddar tillägg..."
+
+#: src/main.sh:1320
+msgid "Making package: %s"
+msgstr "Skapar paket: %s"
+
+#: src/main.sh:689
+msgid "Marking built package(s) as automatically installed..."
+msgstr "Markerar byggda paket som automatiskt installerade..."
+
+#. Mark newly installed packages as automatically installed.
+#. We have to make sure 'newly_installed_packages' isn't empty due to the aformentioned bug above the Python script call.
+#: src/main.sh:1394
+msgid "Marking newly installed packages as automatically installed..."
+msgstr "Markerar nyinstallerade paket som automatiskt installerade..."
+
+#: src/main.sh:476
+msgid "Missing %s directory."
+msgstr "Saknar %s katalog."
+
+#: src/functions/lint_pkgbuild/package_function.sh:51
+msgid "Missing %s function for split package '%s'"
+msgstr "Saknar %s funktion för delat paket '%s'"
+
+#: src/functions/lint_pkgbuild/package_function.sh:41
+msgid "Missing %s function in %s"
+msgstr "Saknar %s funktion i %s"
+
+#: src/functions/lint_pkgbuild/maintainer.sh:9
+msgid ""
+"More than one maintainer was specified. This will be an error in a future "
+"release."
+msgstr ""
+"Mer än en underhållare specificerades. Detta kommer att vara ett fel i en "
+"framtida version."
+
+#: src/functions/lint_pkgbuild/depends.sh:93
+msgid "More than one version restrictor was specified for %s: %s"
+msgstr "Mer än en versionsbegränsare har angetts för %s: %s"
+
+#: src/functions/integrity/verify_checksum.sh:68
+msgid "NOT FOUND"
+msgstr "HITTADES INTE"
+
+#: src/functions/integrity/verify_signature.sh:109
+msgid "One or more PGP signatures could not be verified!"
+msgstr "En eller flera PGP-signaturer kunde inte verifieras!"
+
+#: src/functions/integrity/verify_checksum.sh:101
+msgid "One or more files did not pass the validity check!"
+msgstr "En eller flera filer klarade inte giltighetskontrollen!"
+
+#: src/functions/lint_package/file_names.sh:36
+msgid "Package contains paths with newlines"
+msgstr "Paketet innehåller sökvägar med nya rader"
+
+#: src/functions/lint_package/build_references.sh:36
+msgid "Package contains reference to %s"
+msgstr "Paketet innehåller referens till %s"
+
+#: src/functions/lint_pkgbuild/depends.sh:100
+msgid "Package dependency '%s' contains more than one ':'."
+msgstr "Paketberoendet '%s' innehåller mer än ett ':'."
+
+#: src/main.sh:1483
+msgid "Package directory is ready."
+msgstr "Paketkatalogen är redo."
+
+#: src/main.sh:737
+msgid "Part of the package group has already been built. (use %s to overwrite)"
+msgstr "Delar av paketgruppen är redan byggda. (använd %s för att skriva över)"
+
+#: src/functions/integrity/verify_checksum.sh:75
+#: src/functions/integrity/verify_signature.sh:90
+msgid "Passed"
+msgstr "Passerad"
+
+#: src/functions/integrity/verify_signature.sh:115
+msgid "Please make sure you really trust them."
+msgstr "Se till att du verkligen litar på dem."
+
+#: src/functions/tidy/purge.sh:35
+msgid "Purging unwanted files..."
+msgstr "Rensar oönskade filer..."
+
+#: src/functions/tidy/libtool.sh:35
+msgid "Removing %s files..."
+msgstr "Tar bort %s filer..."
+
+#: src/functions/tidy/docs.sh:34
+msgid "Removing doc files..."
+msgstr "Tar bort dokumentfiler..."
+
+#: src/functions/tidy/emptydirs.sh:35
+msgid "Removing empty directories..."
+msgstr "Tar bort tomma kataloger..."
+
+#: src/main.sh:1438 src/main.sh:1462
+msgid "Removing existing %s directory..."
+msgstr "Tar bort befintlig %s-katalog..."
+
+#: src/functions/tidy/staticlibs.sh:35
+msgid "Removing static library files..."
+msgstr "Tar bort statiska biblioteksfiler..."
+
+#: src/main.sh:1491
+msgid "Removing unneeded dependencies..."
+msgstr "Tar bort onödiga beroenden..."
+
+#: src/functions/lint_pkgbuild/pkglist.sh:38
+msgid "Requested package %s is not provided in %s"
+msgstr "Det begärda paketet %s tillhandahålls inte i %s"
+
+#: src/functions/source.sh:40
+msgid "Retrieving sources..."
+msgstr "Hämtar källor..."
+
+#: src/main.sh:1086
+msgid ""
+"Running %s as root is not allowed as it can cause permanent,\\ncatastrophic "
+"damage to your system."
+msgstr ""
+"Att köra %s som root är inte tillåtet eftersom det kan orsaka permanent,\\n"
+"katastrofal skada på ditt system."
+
+#: src/main.sh:489
+msgid "Running post-packaging hooks..."
+msgstr "Kör efterförpackningskrokar..."
+
+#: src/functions/integrity/verify_signature.sh:131
+#: src/functions/integrity/verify_signature.sh:194
+msgid "SIGNATURE NOT FOUND"
+msgstr "SIGNATUR HITTADES INTE"
+
+#: src/functions/integrity/verify_signature.sh:144
+msgid "SOURCE FILE NOT FOUND"
+msgstr "KÄLLFILEN HITTADES INTE"
+
+#: src/main.sh:896
+msgid ""
+"See makedeb(8) for information on all available options and links for "
+"obtaining support."
+msgstr ""
+"Se makedeb(8) för information om alla tillgängliga alternativ och länkar för "
+"att få support."
+
+#: src/main.sh:498
+msgid "Setting up package metadata..."
+msgstr "Ställer in paketmetadata..."
+
+#: src/functions/integrity/generate_signature.sh:58
+msgid "Signing package(s)..."
+msgstr "Signerar paket..."
+
+#: src/main.sh:1346
+msgid "Signing package..."
+msgstr "Signerar paket..."
+
+#: src/main.sh:1169
+msgid ""
+"Since you apparently want to go and use Pacstall, go ahead and pass the "
+"following to confirm your actions:"
+msgstr ""
+"Eftersom du tydligen vill gå och använda Pacstall, gå vidare och skicka "
+"följande för att bekräfta dina handlingar:"
+
+#: src/functions/integrity/verify_checksum.sh:63
+msgid "Skipped"
+msgstr "Hoppade över"
+
+#: src/functions/integrity.sh:34
+msgid "Skipping all source file integrity checks."
+msgstr "Hoppade över alla kontroller av källfilens integritet."
+
+#: src/main.sh:1357
+msgid "Skipping dependency checks."
+msgstr "Hoppade över beroendekontroller."
+
+#: src/functions/integrity.sh:39
+msgid "Skipping verification of source file PGP signatures."
+msgstr "Hoppade över verifiering av källfilens PGP-signaturer."
+
+#: src/functions/integrity.sh:36
+msgid "Skipping verification of source file checksums."
+msgstr "Hoppade över verifiering av källfilskontrollsummor."
+
+#: src/main.sh:1350
+msgid "Source package created: %s"
+msgstr "Källpaket skapat: %s"
+
+#: src/functions/lint_pkgbuild/source.sh:74
+msgid "Sources were listed but no hashes could be found."
+msgstr "Källor listades men inga hash kunde hittas."
+
+#: src/functions/lint_pkgbuild/source.sh:45
+msgid "Sparse arrays are not allowed for source"
+msgstr "Sparse arrays är inte tillåtna för källa"
+
+#: src/main.sh:230 src/main.sh:329
+msgid "Starting %s()..."
+msgstr "Startar %s()..."
+
+#: src/functions/util/source.sh:164
+msgid "The download program %s is not installed."
+msgstr "Nedladdningsprogrammet %s är inte installerat."
+
+#: src/main.sh:1410
+msgid "The following build dependencies are missing:"
+msgstr "Följande byggberoenden saknas:"
+
+#: src/main.sh:888
+msgid "The following can be used to print makedeb-styled messages:"
+msgstr "Följande kan användas för att skriva ut makedeb-stilade meddelanden:"
+
+#: src/main.sh:885
+msgid ""
+"The following options can modify the behavior of 'sudo' when it is called:"
+msgstr "Följande alternativ kan ändra beteendet för \"sudo\" när det anropas:"
+
+#: src/main.sh:880
+msgid ""
+"The following options can modify the behavior of APT during package and "
+"dependency installation:"
+msgstr ""
+"Följande alternativ kan ändra beteendet hos APT under paket och "
+"beroendeinstallation:"
+
+#: src/main.sh:1241
+msgid "The key %s does not exist in your keyring."
+msgstr "Nyckeln %s finns inte i din nyckelring."
+
+#: src/main.sh:728
+msgid ""
+"The package group has already been built, installing existing packages..."
+msgstr "Paketgruppen har redan byggts, installerar befintliga paket..."
+
+#: src/main.sh:732
+msgid "The package group has already been built. (use %s to overwrite)"
+msgstr "Paketgruppen har redan byggts. (använd %s för att skriva över)"
+
+#: src/main.sh:1243
+msgid "There is no key in your keyring."
+msgstr "Det finns ingen nyckel i din nyckelring."
+
+#: src/functions/tidy.sh:41
+msgid "Tidying install..."
+msgstr "Städar installationen..."
+
+#: src/main.sh:1416
+msgid "Try running '%s'."
+msgstr "Prova att köra '%s'."
+
+#: src/main.sh:262
+msgid "Unable to find source file %s."
+msgstr "Det gick inte att hitta källfil %s."
+
+#: src/functions/executable/vcs.sh:45 src/functions/util/source.sh:155
+msgid "Unknown download protocol: %s"
+msgstr "Okänt nedladdningsprotokoll: %s"
+
+#: src/functions/source/git.sh:60 src/functions/source/svn.sh:62
+msgid "Unrecognized reference: %s"
+msgstr "Okänd referens: %s"
+
+#: src/main.sh:252
+msgid "Updated version: %s"
+msgstr "Uppdaterad version: %s"
+
+#: src/functions/source/git.sh:89 src/functions/source/svn.sh:77
+msgid "Updating %s %s repo..."
+msgstr "Uppdaterar %s %s arkiv..."
+
+#: src/main.sh:859
+msgid "Usage: %s [options]"
+msgstr "Användning: %s [flaggor]"
+
+#: src/main.sh:1431
+msgid "Using existing %s tree"
+msgstr "Använd existerande %s träd"
+
+#: src/functions/integrity/verify_checksum.sh:94
+msgid "Validating %s files with %s..."
+msgstr "Validerar %s filer med %s..."
+
+#: src/functions/lint_pkgbuild/distro_dependencies.sh:13
+msgid "Variable '%s' is not allowed to appear in PKGBUILDs."
+msgstr "Variabeln '%s' är inte tillåten i PKGBUILDs."
+
+#: src/functions/integrity/verify_signature.sh:33
+msgid "Verifying source file signatures with %s..."
+msgstr "Verifierar källfilsignaturer med %s..."
+
+#: src/functions/lint_pkgbuild/depends.sh:124
+msgid "Version restrictor %s in %s isn't allowed on %s."
+msgstr "Versionsbegränsning %s i %s är inte tillåten på %s."
+
+#: src/functions/integrity/verify_signature.sh:93
+#: src/functions/integrity/verify_signature.sh:97
+msgid "WARNING:"
+msgstr "VARNING:"
+
+#: src/functions/integrity/verify_signature.sh:114
+msgid "Warnings have occurred while verifying the signatures."
+msgstr "Varningar har inträffat under verifieringen av signaturerna."
+
+#: src/functions/util/util.sh:130
+msgid "You do not have write permission for the directory $%s (%s)."
+msgstr "Du har inte skrivbehörighet för katalogen $%s (%s)."
+
+#: src/main.sh:1398
+msgid "You may need to run 'apt-mark auto' with the following packages:"
+msgstr "Du kan behöva köra 'apt-mark auto' med följande paket:"
+
+#: src/functions/integrity/verify_signature.sh:75
+msgid "bad signature from public key"
+msgstr "dålig signatur från publik nyckel"
+
+#: src/functions/integrity/verify_signature.sh:78
+msgid "error during signature verification"
+msgstr "fel under signaturverifiering"
+
+#. parse failure
+#: src/functions/util/parseopts.sh:134 src/functions/util/parseopts.sh:187
+msgid "invalid option"
+msgstr "ogiltigt alternativ"
+
+#: src/functions/integrity/verify_signature.sh:87
+msgid "invalid public key"
+msgstr "ogiltig publik nyckel"
+
+#: src/main.sh:857
+msgid "makedeb takes PKGBUILD files and creates archives installable via APT"
+msgstr "makedeb tar PKGBUILD-filer och skapar arkiv som kan installeras via APT"
+
+#: src/functions/util/parseopts.sh:148
+msgid "option '%s' does not allow an argument"
+msgstr "alternativ '%s' tillåter inte ett argument"
+
+#. fail, ambiguous match
+#: src/functions/util/parseopts.sh:81
+msgid "option '%s' is ambiguous; possibilities:"
+msgstr "alternativ '%s' är tvetydigt; möjligheter:"
+
+#: src/functions/util/parseopts.sh:166
+msgid "option '%s' requires an argument"
+msgstr "alternativ '%s' kräver ett argument"
+
+#: src/functions/util/parseopts.sh:112
+msgid "option requires an argument"
+msgstr "alternativ kräver ett argument"
+
+#: src/functions/lint_pkgbuild/pkgdesc.sh:10
+msgid "pkgdesc cannot be empty."
+msgstr "pkgdesc kan inte vara tom."
+
+#: src/functions/lint_pkgbuild/pkgdesc.sh:5
+msgid "pkgdesc must be set."
+msgstr "pkgdesc måste vara inställt."
+
+#: src/functions/lint_pkgbuild/pkgdesc.sh:15
+msgid "pkgdesc must contain characters other than spaces."
+msgstr "pkgdesc måste innehålla andra tecken än mellanslag."
+
+#: src/main.sh:236
+msgid "pkgver() generated an invalid version: %s"
+msgstr "pkgver() genererade en ogiltig version: %s"
+
+#: src/functions/integrity/verify_signature.sh:72
+msgid "public key %s has been revoked"
+msgstr "publik nyckel %s har återkallats"
+
+#: src/functions/integrity/verify_signature.sh:97
+msgid "the key has expired."
+msgstr "nyckeln har gått ut."
+
+#: src/functions/integrity/verify_signature.sh:84
+msgid "the public key %s is not trusted"
+msgstr "den publika nyckeln %s är inte pålitlig"
+
+#: src/functions/integrity/verify_signature.sh:93
+msgid "the signature has expired."
+msgstr "signaturen har gått ut."
+
+#: src/functions/integrity/verify_signature.sh:69
+msgid "unknown public key"
+msgstr "okänd publik nyckel"
