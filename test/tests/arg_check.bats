@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "run makedeb with singled short options" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -11,6 +12,7 @@ load ../util/util
     makedeb -d -r
 }
 
+# bats test_tags=lint
 @test "run makedeb with singled long options" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -22,6 +24,7 @@ load ../util/util
     makedeb --no-deps --rm-deps
 }
 
+# bats test_tags=lint
 @test "run makedeb with grouped short options" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -33,6 +36,7 @@ load ../util/util
     makedeb -dr
 }
 
+# bats test_tags=lint
 @test "run makedeb with long options and singled short options" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -44,6 +48,7 @@ load ../util/util
     makedeb -d --rm-deps
 }
 
+# bats test_tags=lint
 @test "run makedeb with long options and grouped short options" {
     sudo_check
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
@@ -56,6 +61,7 @@ load ../util/util
     makedeb -dr --install --no-confirm
 }
 
+# bats test_tags=lint
 @test "run makedeb with invalid singled short option" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -67,6 +73,7 @@ load ../util/util
     run ! makedeb -d -z
 }
 
+# bats test_tags=lint
 @test "run makedeb with invalid grouped short option" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg

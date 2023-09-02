@@ -1,55 +1,154 @@
+---
 image: ubuntu:22.04
-command_prefix: set -e
+command_prefix: |
+  # Make Bash not silently ignore errors.
+  set -euo pipefail
+
+  # Load the Rust startup file, if it exists.
+  if [ -f "$HOME/.cargo/env" ]; then
+    source "$HOME/.cargo/env"
+  fi
+
+  export DEBIAN_FRONTEND=noninteractive
+
+  # Use this wrapper for `cargo` if network access is needed.
+  cargo-online () { cargo --locked "$@"; }
+  # Use this wrapper for `cargo` unless network access is needed.
+  cargo-offline () { cargo --frozen --offline "$@"; }
+
 tasks:
   install_dependencies:
-    description: Install needed dependencies.
-    environment:
-      hw_url: hunterwittenborn.com
+    description: Install needed dependencies
+    user: root
     input_paths:
-      - .drone/scripts/install-deps.sh
+      - PKGBUILD/TEMPLATE.PKGBUILD
     command: |
-      DEBIAN_FRONTEND=noninteractive NO_SUDO=1 .drone/scripts/install-deps.sh
-      useradd -m makedeb
+      sed -e "s|{{.\+}}||g" \
+        PKGBUILD/TEMPLATE.PKGBUILD > PKGBUILD/PKGBUILD
+
+      source PKGBUILD/PKGBUILD
+
+      apt-get update
+      apt-get install -y curl rsync bats make apt-utils parallel \
+        ${depends[*]} ${makedepends[*]}
+
+      git clone --depth 1 --branch v1.9.0 https://github.com/bats-core/bats-core.git
+      pushd bats-core
+      ./install.sh /usr/local
+
+  setup_user:
+    description: Install needed dependencies
+    user: root
+    command: |
+      apt-get update
+      apt-get install -y sudo
+      useradd -m makedeb -s /bin/bash
       echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+  rustup_and_tools:
+    description: Install rust and tools
+    dependencies:
+      - install_dependencies
+      - setup_user
+    user: makedeb
+    command: |
+      curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+        -o rustup-init.sh
+      chmod +x rustup-init.sh
+
+      RUSTUP_INIT_SKIP_PATH_CHECK=yes ./rustup-init.sh -y --no-modify-path
+      source "${HOME}/.cargo/env"
+
+      # Install needed packages from crates.io.
+      cargo install just
+
+  fetch_crates:
+    user: makedeb
+    dependencies:
+      - rustup_and_tools
+    input_paths:
+      - Cargo.lock
+      - src/makedeb-rs/Cargo.toml
+    command: |
+      # Create a "hello world" project with the dependencies we want to fetch.
+      mv Cargo.lock Cargo.lock.og
+      cargo-offline init --vcs none
+      mv Cargo.lock.og Cargo.lock
+      mv src/makedeb-rs/Cargo.toml Cargo.toml
+      rm -rf src/makedeb-rs/
+      # Ask Cargo to build the project in order to fetch the dependencies.
+      cargo-online build
+      cargo-online build --release
+      cargo-online clippy --all-features --all-targets --workspace
+      # Delete the build artifacts.
+      cargo-offline clean --package makedeb-rs
+      cargo-offline clean --release --package makedeb-rs
+      # Delete the "hello world" code.
+      rm -rf src
+
+  build_makedeb-rs:
+    user: makedeb
+    dependencies:
+      - fetch_crates
+    input_paths:
+      - Cargo.lock
+      - src/makedeb-rs/
+      - Cargo.toml
+      - justfile
+    output_paths:
+      - target/release/makedeb-rs
+    environment:
+      DPKG_ARCHITECTURE: amd64
+    command: |
+      cargo fmt --check
+      cargo clippy -- -D warnings
+      just build
+
+  build:
+    description: Build and install `makedeb`
+    user: makedeb
+    dependencies:
+      - install_dependencies
+      - build_makedeb-rs
+    input_paths:
+      - .git/
+      - completions/
+      - target/
+      - src/
+      - man/
+      - justfile
+    excluded_input_paths:
+      - test/
+      - toast.yml
+    environment:
+      RELEASE: alfa
+      TARGET: apt
+      DPKG_ARCHITECTURE: amd64
+      DESTDIR: /scratch/pkg
+    command: |
+      git config --global --add safe.directory /scratch
+      export VERSION=$(git describe)
+      export BUILD_COMMIT=$(git rev-parse HEAD)
+      just prepare
+      just package
+
+      sudo rsync -rp "${DESTDIR}/" /
 
   run_unit_tests:
     description: Run unit tests.
+    dependencies:
+      - build
+    user: makedeb
     environment:
       TESTS: "./"
-      DEBIAN_FONTEND: noninterative
-      hw_url: hunterwittenborn.com
-      makedeb_url: makedeb.org
+      BATS_SUDO_OVERRIDE: 1
+    cache: false
     input_paths:
-      - .cargo/
-      - .drone/scripts/
-      - .git/
-      - completions/
-      - justfile
-      - man/
-      - PKGBUILD/
-      - po/
-      - src/extensions/
-      - src/functions/
-      - src/makedeb-rs/
-      - src/main.sh
-      - src/makepkg.conf
-      - test/
-      - .data.json
-      - Cargo.lock
-      - Cargo.toml
-
+      - test
     command: |
-      # Set up the Git user.
-      git config --global user.email 'makedeb@example.com'
-      git config --global user.name 'makedeb User'
-
-      # Commit everything in case the user has stuff they didn't commit. Otherwise those changes won't be picked up when building makedeb.
-      git add .
-      git commit -m "Include any remaining changes" --allow-empty
-
-      . "${HOME}/.cargo/env"
-      git remote set-url origin 'https://github.com/makedeb/makedeb'
-      # It takes a lot longer to run these two commands if we recursively chown '/root', so only target the needed directories.
-      sudo chown 'makedeb:makedeb' /root
-      sudo chown 'makedeb:makedeb' ./ /root/.cargo -R
-      sudo -Eu makedeb release_type=alpha .drone/scripts/run-unit-tests.sh
+      if [[ -f test/wip.bats ]]; then
+        bats $(realpath test/wip.bats) --show-output-of-passing-tests
+      else
+        bats -j $(nproc) --filter-tags lint test/tests/
+        bats --filter-tags !lint test/tests/
+      fi

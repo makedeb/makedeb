@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct preinst - valid path" {
     touch file
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
@@ -23,6 +24,7 @@ load ../util/util
     done
 }
 
+# bats test_tags=lint
 @test "incorrect preinst - invalid path" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
