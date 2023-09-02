@@ -714,13 +714,21 @@ install_package() {
 	for pkg in ${pkgname[@]}; do
 		fullver=$(NOEPOCH=1 get_full_version)
 		pkgarch=$(get_pkg_arch $pkg)
-		pkglist+=("${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb")
+		tmpfile="$(mktemp "/tmp/${pkg}_${fullver}_${pkgarch}_XXXXXX.deb")"
+		cp "${PKGDEST}/${pkg}_${fullver}_${pkgarch}.deb" "${tmpfile}"
+		pkglist+=("${tmpfile}")
 	done
 
 	if ! SUDO=1 makedeb_rs install "${APTARGS[@]}" "${pkglist[@]}"; then
 		warning "$(gettext "Failed to install built package(s).")"
 		return $E_INSTALL_FAILED
 	fi
+	for pkg in ${pkglist[@]}; do
+		if ! rm "${pkg}"; then
+			error "$(gettext "Failed to remove temporary package file.")"
+			return $E_INSTALL_FAILED
+		fi
+	done
 
 	if (( "${ASDEPS}" )); then
 		msg "$(gettext "Marking built package(s) as automatically installed...")" "${pkgbase}"
@@ -1516,3 +1524,4 @@ if (( "${RMDEPS}" )); then
 fi
 
 install_package && exit $E_OK || exit $E_INSTALL_FAILED
+# vim: set ts=2 sw=2 noexpandtab:
