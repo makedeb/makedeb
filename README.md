@@ -1,3 +1,6 @@
+> [!WARNING]
+> makedeb is currently unmaintained: https://hunterwittenborn.com/blog/stepping-back-from-open-source/
+
 # makedeb
 makedeb is a packaging tool for Debian and Ubuntu based systems that aims to be simple and easy to use, whilst still remaining just as powerful as standard Debian tooling.
 
