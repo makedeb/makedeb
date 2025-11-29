@@ -5,6 +5,7 @@ package() {
     touch "${pkgdir}/etc/config.conf"
 }
 
+# bats test_tags=lint
 @test "correct backup" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -15,12 +16,13 @@ package() {
     pkgbuild array backup '/etc/hi'
     pkgbuild function package
     pkgbuild clean
-    makedeb
+    run makedeb
     mapfile -t conffiles < <(cat pkg/testpkg/DEBIAN/conffiles)
     [[ "${#conffiles[@]}" == 1 ]]
     [[ "${conffiles}" == "/etc/hi" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect backup - doesn't start with forward slash" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -31,7 +33,5 @@ package() {
     pkgbuild array backup 'etc/hi'
     pkgbuild function package
     pkgbuild clean
-    run makedeb
-
-    [[ "{status}" != "0" ]]
+    run ! makedeb
 }

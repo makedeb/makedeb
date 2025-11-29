@@ -11,8 +11,8 @@ apt_update_cmd=('apt-get' 'update')
 apt_upgrade_cmd=('apt-get' 'upgrade' '-y')
 
 
-if [[ "${NO_SUDO:+x}" == 'x' ]]; then
-    apt update
+if ! command -v sudo > /dev/null; then
+    apt-get update
     apt-get install sudo -y
 fi
 

@@ -77,7 +77,7 @@ local buildAndPublish(pkgname, tag, image, distro) = {
                 github_api_key: {from_secret: "github_api_key"}
             },
             commands: [
-                "NO_SUDO=1 .drone/scripts/install-deps.sh",
+                ".drone/scripts/install-deps.sh",
                 "useradd -m makedeb",
                 "echo 'makedeb ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers",
                 "sudo chown 'makedeb:makedeb' ../ /root -R",

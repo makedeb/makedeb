@@ -12,6 +12,7 @@ load ../util/util
     makedeb -i --allow-downgrades
 }
 
+# bats test_tags=lint
 @test "correct epoch - all allowed characters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -21,9 +22,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
+# bats test_tags=lint
 @test "incorrect epoch - negative number" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -33,11 +35,12 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == '[!] epoch must be an integer, not -50.' ]]
 }
 
+# bats test_tags=lint
 @test "incorrect epoch - decimal" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -47,11 +50,12 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == '[!] epoch must be an integer, not 20.1.' ]]
 }
 
+# bats test_tags=lint
 @test "incorrect epoch - letter" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -61,7 +65,7 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
 }
 

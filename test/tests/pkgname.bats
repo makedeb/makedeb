@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct pkgname - lowercase letters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -8,9 +9,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
+# bats test_tags=lint
 @test "correct pkgname - digits and minus sign" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -19,9 +21,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
 }
 
+# bats test_tags=lint
 @test "correct pkgname - plus sign" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -30,9 +33,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
 }
 
+# bats test_tags=lint
 @test "correct pkgname - period" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname test-pkg
@@ -41,9 +45,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
 }
 
+# bats test_tags=lint
 @test "incorrect pkgname - capital letters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname Test-pkg
@@ -52,11 +57,12 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] 'pkgname' contains capital letters" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect pkgname - disallowed character" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgbase testpkg
@@ -66,7 +72,7 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] pkgname contains invalid characters: '#'" ]]
 }

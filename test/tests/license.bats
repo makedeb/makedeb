@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct license - all valid characters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -9,5 +10,5 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array license "custom: It's a % whaccky : what is this ? mess#!"
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }

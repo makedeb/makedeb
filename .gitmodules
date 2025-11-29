@@ -1,0 +1,9 @@
+[submodule "test/util/bats-support"]
+	path = test/util/bats-support
+	url = https://github.com/ztombol/bats-support
+[submodule "test/utils/bats-file"]
+	path = test/utils/bats-file
+	url = https://github.com/bats-core/bats-file
+[submodule "test/util/bats-file"]
+	path = test/util/bats-file
+	url = https://github.com/bats-core/bats-file

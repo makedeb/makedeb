@@ -1,7 +1,8 @@
 load ../util/util
 
 @test "correct vcs - missing vcs package" {
-    sudo apt purge git -y
+    BATS_SUDO_OVERRIDE=
+    sudo apt-get purge git -y
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
     pkgbuild string pkgver 1.0.0
@@ -11,7 +12,6 @@ load ../util/util
     pkgbuild array source 'git+https://github.com'
     pkgbuild array sha256sums 'SKIP'
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "8" ]]
+    run -8 makedeb -d
     [[ "${output}" == "[!] Couldn't find the 'git' package needed to handle 'git' sources." ]]
 }

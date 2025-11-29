@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct pkgver - all allowed characters" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -8,9 +9,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
+# bats test_tags=lint
 @test "incorrect pkgver - starts with a letter" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -19,11 +21,12 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == "12" ]]
     [[ "${output}" == "[!] pkgver doesn't start with a digit." ]]
 }
 
+# bats test_tags=lint
 @test "incorrect pkgver - invalid character" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -32,7 +35,7 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    run makedeb -d
+    run makedeb --lint
     [[ "${status}" == '12' ]]
     [[ "${output}" == "[!] pkgver contains invalid characters." ]]
 }

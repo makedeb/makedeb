@@ -26,6 +26,7 @@ makedepends=(
 	'git'
 	'make'
 	'jq'
+	'libapt-pkg-dev'
 )
 conflicts=('makedeb')
 provides=("makedeb=${pkgver}")

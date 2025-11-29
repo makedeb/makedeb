@@ -1303,6 +1303,14 @@ fi
 # Process distro-specific dependencies.
 check_distro_dependencies
 
+if (( PRINTCONTROL )); then
+    if have_function "package"; then run_function_safe 'package'; fi
+
+	for pkg in "${pkgname[@]}"; do
+        if have_function "package_$pkg"; then run_package "$pkg"; fi
+    done
+fi
+
 # Convert needed dependencies.
 convert_dependencies
 

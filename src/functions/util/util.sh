@@ -110,7 +110,7 @@ dir_is_empty() {
 }
 
 cd_safe() {
-	if ! cd "$1"; then
+    if ! (( PRINTCONTROL )) && ! cd "$1"; then
 		error "$(gettext "Failed to change to directory %s")" "$1"
 		plainerr "$(gettext "Aborting...")"
 		exit 1

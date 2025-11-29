@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct source - valid URL" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -10,9 +11,10 @@ load ../util/util
     pkgbuild array source 'https://mpr.hunterwittenborn.com'
     pkgbuild array sha256sums 'SKIP'
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
+# bats test_tags=lint
 @test "correct source - valid hashsum" {
     touch file
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
@@ -24,9 +26,10 @@ load ../util/util
     pkgbuild array source "file://${PWD}/file"
     pkgbuild array sha256sums "$(sha256sum file | awk '{print $1}')"
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
+# bats test_tags=lint
 @test "correct source - noextract" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -42,6 +45,7 @@ load ../util/util
     [[ "$(find src/ -maxdepth 1 | wc -l)" == "2" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect source - invalid URL" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -52,10 +56,11 @@ load ../util/util
     pkgbuild array source 'https://mpr.hunterwittenborn.corn'
     pkgbuild array sha256sums 'SKIP'
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "1" ]]
+    run -1 makedeb -d
+    # [[ "${status}" == "1" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect source - missing hashsum" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -65,10 +70,11 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild array source 'https://mpr.hunterwittenborn.com'
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "12" ]]
+    run -12 makedeb --lint
+    # [[ "${status}" == "12" ]]
 }
 
+# bats test_tags=lint
 @test "incorrect source - incorrect hashsum" {
     touch file
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
@@ -80,8 +86,8 @@ load ../util/util
     pkgbuild array source "file://${PWD}/file"
     pkgbuild array sha256sums 'no_way_this_is_the_hashsum_man'
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "1" ]]
+    run -1 makedeb -d
+    # [[ "${status}" == "1" ]]
 }
 
 @test "correct source - ensure tags are cloned" {

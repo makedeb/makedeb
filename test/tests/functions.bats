@@ -1,5 +1,6 @@
 load ../util/util
 
+# bats test_tags=lint
 @test "correct prepare()" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -8,9 +9,10 @@ load ../util/util
     pkgbuild string pkgdesc "package description"
     pkgbuild array arch any
     pkgbuild clean
-    makedeb -d
+    makedeb --lint
 }
 
+# bats test_tags=lint
 @test "incorrect prepare() - bad exit code" {
     pkgbuild string maintainer1 'Foo Bar <foo@bar.com>'
     pkgbuild string pkgname testpkg
@@ -21,10 +23,10 @@ load ../util/util
     remove_function "prepare"
     echo -e '\nprepare() { false; }' >> PKGBUILD
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "4" ]]
+    run -4 makedeb -d
 }
 
+# bats test_tags=lint
 @test "incorrect pkgver() - incorrect syntax for returned version" {
     pkgver() {
         echo "hi me"
@@ -38,10 +40,10 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild function pkgver
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "12" ]]
+    run -12 makedeb -d
 }
 
+# bats test_tags=lint
 @test "incorrect package() - missing 'package()' function" {
     build() {
         true
@@ -55,6 +57,5 @@ load ../util/util
     pkgbuild array arch any
     pkgbuild function build
     pkgbuild clean
-    run makedeb -d
-    [[ "${status}" == "12" ]]
+    run -12 makedeb --lint
 }
